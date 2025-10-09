@@ -346,6 +346,7 @@ export interface DateRange {
     }
 
     .day-cell.in-range, .day-cell.start-date, .day-cell.end-date, .day-cell.preview-range {
+      /* Ensure the light background covers the entire cell for connected look */
       background-color: var(--datepicker-range-background);
     }
 
@@ -596,15 +597,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.valueChange.emit(this.selectedDate);
     } else {
       if (!this.startDate || (this.startDate && this.endDate)) {
-        // Start a new range
         this.startDate = day;
         this.endDate = null;
       } else if (day >= this.startDate) {
-        // End the current range
         this.endDate = day;
         this.valueChange.emit({start: this.startDate, end: this.endDate});
       } else {
-        // Restart the range if the new click is before the current start date
         this.startDate = day;
         this.endDate = null;
       }
@@ -671,8 +669,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
   public isInRange(d: Date | null): boolean {
     if (!d || !this.startDate || !this.endDate) return false;
-    // To correctly highlight the range regardless of start/end order,
-    // we use Math.min and Math.max.
+
+    // This logic ensures highlighting works correctly regardless of the order the user clicked the dates.
     const startTime = Math.min(this.startDate.getTime(), this.endDate.getTime());
     const endTime = Math.max(this.startDate.getTime(), this.endDate.getTime());
 
