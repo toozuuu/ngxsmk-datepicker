@@ -14,7 +14,6 @@ import {
 } from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {animate, style, transition, trigger} from '@angular/animations';
 
 // #####################################################################
 // ## Reusable Custom Select Component
@@ -143,7 +142,7 @@ export class CustomSelectComponent {
 }
 
 // #####################################################################
-// ## Datepicker Component (SSR FIX APPLIED)
+// ## Datepicker Component
 // #####################################################################
 export type DateInput = Date | string | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };
 
@@ -188,7 +187,7 @@ export interface DateRange {
             </button>
           </div>
         </div>
-        <div class="days-grid-wrapper" [@slideInOut]="animationState">
+        <div class="days-grid-wrapper">
           <div class="days-grid">
             @for (day of weekDays; track day) {
               <div class="day-name">{{ day }}</div>
@@ -400,18 +399,6 @@ export interface DateRange {
       background-color: var(--datepicker-hover-background);
     }
   `],
-  animations: [
-    trigger('slideInOut', [
-      transition('* => next', [
-        style({position: 'absolute', width: '100%', transform: 'translateX(100%)', opacity: 0}),
-        animate('200ms ease-out', style({transform: 'translateX(0)', opacity: 1}))
-      ]),
-      transition('* => previous', [
-        style({position: 'absolute', width: '100%', transform: 'translateX(-100%)', opacity: 0}),
-        animate('200ms ease-out', style({transform: 'translateX(0)', opacity: 1}))
-      ])
-    ])
-  ]
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   @Input() mode: 'single' | 'range' = 'single';
@@ -420,6 +407,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
   // FIX: Use a private variable for locale with a fallback value.
   private _locale: string = 'en-US';
+
   @Input() set locale(value: string) {
     this._locale = value;
   }
@@ -437,16 +425,19 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   @Output() valueChange = new EventEmitter<Date | { start: Date; end: Date }>();
 
   private _minDate: Date | null = null;
+
   @Input() set minDate(value: DateInput | null) {
     this._minDate = this._normalizeDate(value);
   }
 
   private _maxDate: Date | null = null;
+
   @Input() set maxDate(value: DateInput | null) {
     this._maxDate = this._normalizeDate(value);
   }
 
   private _ranges: { [key: string]: [Date, Date] } | null = null;
+
   @Input() set ranges(value: DateRange | null) {
     if (!value) {
       this._ranges = null;
@@ -475,17 +466,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   public monthOptions: { label: string; value: number }[] = [];
   public yearOptions: { label: string; value: number }[] = [];
   private firstDayOfWeek: number = 0;
-  public animationState: 'next' | 'previous' | 'void' = 'void';
 
   // FIX: Inject PLATFORM_ID and conditionally access navigator
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    // This code runs on the server (SSR) AND the browser.
-    // We must check if we are in the browser before accessing 'navigator'.
+  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
       this._locale = navigator.language;
     }
-    // If the component receives an @Input() locale, the setter will overwrite this value.
-    // If it's SSR and no input is provided, it defaults to 'en-US', avoiding the crash.
   }
 
   get currentMonth(): number {
@@ -494,7 +480,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
   set currentMonth(month: number) {
     if (this._currentMonth !== month) {
-      this.animationState = month > this._currentMonth ? 'next' : 'previous';
       this._currentMonth = month;
       this.currentDate.setMonth(month);
       this.generateCalendar();
@@ -507,7 +492,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
   set currentYear(year: number) {
     if (this._currentYear !== year) {
-      this.animationState = year > this._currentYear ? 'next' : 'previous';
       this._currentYear = year;
       this.currentDate.setFullYear(year);
       this.generateCalendar();
@@ -638,11 +622,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   public changeMonth(delta: number): void {
-    this.animationState = delta > 0 ? 'next' : 'previous';
-    setTimeout(() => {
-      this.currentDate.setMonth(this.currentDate.getMonth() + delta);
-      this.generateCalendar();
-    }, 50); // A small delay to let the animation start
+    this.currentDate.setMonth(this.currentDate.getMonth() + delta);
+    this.generateCalendar();
   }
 
   public isSameDay(d1: Date | null, d2: Date | null): boolean {
