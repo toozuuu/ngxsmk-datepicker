@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve demo-app",
+    "start:demo": "ng serve demo-app",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:demo": "node dist/demo/server/server.mjs",
     "serve:ssr:demo-app": "node dist/demo-app/server/server.mjs"
   },
   "prettier": {
@@ -44,7 +44,6 @@
     "@angular/build": "^20.3.5",
     "@angular/cli": "^20.3.1",
     "@angular/compiler-cli": "^20.3.0",
-    "@ionic/angular-toolkit": "latest",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
@@ -58,3 +57,4 @@
     "typescript": "~5.9.2"
   }
 }
+

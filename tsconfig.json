@@ -44,18 +44,6 @@
       "path": "./projects/ngxsmk-datepicker/tsconfig.spec.json"
     },
     {
-      "path": "./projects/demo/tsconfig.app.json"
-    },
-    {
-      "path": "./projects/demo/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/demo-datepicker/tsconfig.app.json"
-    },
-    {
-      "path": "./projects/demo-datepicker/tsconfig.spec.json"
-    },
-    {
       "path": "./projects/demo-app/tsconfig.app.json"
     },
     {
