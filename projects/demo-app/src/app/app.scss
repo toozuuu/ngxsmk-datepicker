@@ -1,0 +1,104 @@
+/* Global styles for the demo application's host component */
+:host {
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  background-color: #f4f5f8;
+  min-height: 100vh;
+}
+
+/* Styling for the main header */
+.app-header {
+  background-color: #24292e;
+  color: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+/* Centered content area */
+.content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Styling for each example's container card */
+.example-container {
+  width: 100%;
+  max-width: 620px; /* Wide enough for the datepicker with ranges */
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+
+  h2 {
+    font-weight: 600;
+    margin-top: 0;
+    color: #333;
+  }
+
+  p {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 24px;
+    border-left: 4px solid #e1e4e8;
+    padding-left: 12px;
+    line-height: 1.5;
+  }
+}
+
+/* Styling for the output display box */
+.result-box {
+  margin-top: 24px;
+  padding: 1rem;
+  background-color: #f6f8fa;
+  border: 1px solid #d1d5da;
+  border-radius: 8px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+  color: #24292e;
+
+  strong {
+    font-weight: 600;
+  }
+}
+
+.locale-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+
+  button {
+    background-color: #04aa6d;
+    border: none;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+}
+
+/*
+ * === HOW TO THEME YOUR COMPONENT ===
+ * You can easily change the theme of the datepicker by overriding its
+ * CSS custom properties. Uncomment the block below to try it.
+*/
+/*
+ngxsmk-datepicker {
+  --datepicker-primary-color: #d9267d; // A nice magenta
+  --datepicker-range-background: #fdf2f8; // A light pink
+}
+*/
