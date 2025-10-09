@@ -1,0 +1,15 @@
+# This file configures the build settings for Netlify.
+
+[build]
+  # The command to build your specific demo application.
+  # Replace 'demo-app' if you used a different name.
+  command = "ng build demo-app"
+
+  # The directory where the final, static build output is located.
+  # For Angular SSR apps, this is typically in the 'browser' subfolder.
+  publish = "dist/demo-app/browser"
+
+[functions]
+  # Specifies the directory for Netlify serverless functions, which is
+  # where the Angular SSR server file will be placed.
+  directory = ".netlify/functions-internal"
