@@ -64,7 +64,7 @@ import {FormsModule} from '@angular/forms';
       color: var(--datepicker-text-color, #333);
       border-radius: 4px;
       padding: 4px 8px;
-      font-size: 1rem;
+      font-size: 14px;
       text-align: left;
     }
 
@@ -406,7 +406,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   @Input() showRanges: boolean = true;
 
-  // New Input for initial value
   @Input() value: Date | { start: Date, end: Date } | null = null;
 
   private _locale: string = 'en-US';
@@ -503,7 +502,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.today.setHours(0, 0, 0, 0);
     this.generateLocaleData();
-    // Initialize current date based on pre-selected value if available
     if (this.value) {
       this.initializeValue(this.value);
     }
@@ -516,10 +514,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.generateCalendar();
     }
 
-    // Handle external value change (e.g., when the modal is first opened)
     if (changes['value'] && changes['value'].currentValue !== changes['value'].previousValue) {
       this.initializeValue(changes['value'].currentValue);
-      this.generateCalendar(); // Regenerate to update highlights
+      this.generateCalendar();
     }
   }
 
@@ -599,12 +596,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.valueChange.emit(this.selectedDate);
     } else {
       if (!this.startDate || (this.startDate && this.endDate)) {
+        // Start a new range
         this.startDate = day;
         this.endDate = null;
       } else if (day >= this.startDate) {
+        // End the current range
         this.endDate = day;
         this.valueChange.emit({start: this.startDate, end: this.endDate});
       } else {
+        // Restart the range if the new click is before the current start date
         this.startDate = day;
         this.endDate = null;
       }
@@ -671,9 +671,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
   public isInRange(d: Date | null): boolean {
     if (!d || !this.startDate || !this.endDate) return false;
-    return (
-      d.getTime() > this.startDate.getTime() &&
-      d.getTime() < this.endDate.getTime()
-    );
+    // To correctly highlight the range regardless of start/end order,
+    // we use Math.min and Math.max.
+    const startTime = Math.min(this.startDate.getTime(), this.endDate.getTime());
+    const endTime = Math.max(this.startDate.getTime(), this.endDate.getTime());
+
+    return d.getTime() > startTime && d.getTime() < endTime;
   }
 }
