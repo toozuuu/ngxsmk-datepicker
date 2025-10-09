@@ -1,9 +1,9 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/common": ">=17.0.0",
+    "@angular/core": ">=17.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

@@ -335,6 +335,7 @@ export interface DateRange {
 
     .day-cell:not(.disabled):hover .day-number {
       background-color: var(--datepicker-hover-background);
+      color: var(--datepicker-primary-color);
     }
 
     .day-cell.start-date .day-number,
