@@ -406,7 +406,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   @Input() showRanges: boolean = true;
 
-  // FIX: Use a private variable for locale with a fallback value.
+  // New Input for initial value
+  @Input() value: Date | { start: Date, end: Date } | null = null;
+
   private _locale: string = 'en-US';
 
   @Input() set locale(value: string) {
@@ -468,7 +470,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   public yearOptions: { label: string; value: number }[] = [];
   private firstDayOfWeek: number = 0;
 
-  // FIX: Inject PLATFORM_ID and conditionally access navigator
   constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
       this._locale = navigator.language;
@@ -502,6 +503,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.today.setHours(0, 0, 0, 0);
     this.generateLocaleData();
+    // Initialize current date based on pre-selected value if available
+    if (this.value) {
+      this.initializeValue(this.value);
+    }
     this.generateCalendar();
   }
 
@@ -509,6 +514,35 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     if (changes['locale']) {
       this.generateLocaleData();
       this.generateCalendar();
+    }
+
+    // Handle external value change (e.g., when the modal is first opened)
+    if (changes['value'] && changes['value'].currentValue !== changes['value'].previousValue) {
+      this.initializeValue(changes['value'].currentValue);
+      this.generateCalendar(); // Regenerate to update highlights
+    }
+  }
+
+  private initializeValue(value: Date | { start: Date, end: Date } | null): void {
+    if (!value) {
+      this.selectedDate = null;
+      this.startDate = null;
+      this.endDate = null;
+      return;
+    }
+
+    if (this.mode === 'single' && value instanceof Date) {
+      this.selectedDate = this._normalizeDate(value);
+      if (this.selectedDate) {
+        this.currentDate = new Date(this.selectedDate);
+      }
+    } else if (this.mode === 'range' && typeof value === 'object' && 'start' in value && 'end' in value) {
+      this.startDate = this._normalizeDate(value.start);
+      this.endDate = this._normalizeDate(value.end);
+
+      if (this.startDate) {
+        this.currentDate = new Date(this.startDate);
+      }
     }
   }
 
@@ -526,7 +560,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       value: i,
     }));
     try {
-      // Use this.locale getter
       this.firstDayOfWeek = ((new Intl.Locale(this.locale) as any).weekInfo?.firstDay || 0) % 7;
     } catch (e) {
       this.firstDayOfWeek = 0;
