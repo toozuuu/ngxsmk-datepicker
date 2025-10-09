@@ -1,12 +1,17 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+  "homepage": "https://github.com/toozuuu/ngxsmk-datepicker#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toozuuu/ngxsmk-datepicker.git"
   },
   "sideEffects": false,
   "files": [

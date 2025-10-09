@@ -134,6 +134,22 @@ The locale input controls all internationalization. It automatically formats mon
 <!-- Renders the calendar in French -->    
 <ngxsmk-datepicker [locale]="'fr-FR'"></ngxsmk-datepicker>
 
+## **🤝 Contributions**
+We welcome and appreciate contributions from the community! Whether it's reporting a bug, suggesting a new feature, or submitting code, your help is valuable.
+
+Forking and Development
+* Fork the ngxsmk-datepicker repository on GitHub.
+
+* Clone your fork to your local machine.
+
+* Install dependencies and run the demo app to begin development.
+
+* Create a new feature branch for your specific changes.
+
+* Commit your changes following standard practices.
+
+* Submit a Pull Request (PR) to the main branch of the original repository.
+
 ## **📜 License**
 
-MIT#
+MIT
