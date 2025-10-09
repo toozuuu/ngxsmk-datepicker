@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0"
@@ -8,5 +8,25 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "files": [
+    "**/*.d.ts",
+    "**/*.metadata.json",
+    "**/*.js",
+    "README.md",
+    "LICENSE",
+    "docs"
+  ],
+  "keywords": [
+    "angular",
+    "datepicker",
+    "date-range-picker",
+    "calendar",
+    "standalone-component",
+    "angular-20",
+    "typescript",
+    "date-selection",
+    "i18n",
+    "localization"
+  ]
 }
