@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0"
@@ -13,7 +13,6 @@
   "es2020": "fesm2020/ngxsmk-datepicker.mjs",
   "esm2020": "fesm2020/ngxsmk-datepicker.mjs",
   "typings": "index.d.ts",
-
   "exports": {
     ".": {
       "esm2020": "./fesm2020/ngxsmk-datepicker.mjs",
@@ -51,5 +50,10 @@
     "date-selection",
     "i18n",
     "localization"
-  ]
+  ],
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^20.3.5",
+    "@angular/forms": "^20.3.4",
+    "ng-packagr": "^20.3.0"
+  }
 }
