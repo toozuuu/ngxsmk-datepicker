@@ -1,11 +1,12 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0"
   },
   "dependencies": {
+    "ngxsmk-datepicker": "^1.0.8",
     "tslib": "^2.3.0"
   },
   "main": "fesm2020/ngxsmk-datepicker.mjs",

@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0"
@@ -8,16 +8,18 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "main": "fesm2020/ngxsmk-datepicker.mjs",
-  "module": "fesm2020/ngxsmk-datepicker.mjs",
-  "es2020": "fesm2020/ngxsmk-datepicker.mjs",
-  "esm2020": "fesm2020/ngxsmk-datepicker.mjs",
+  "main": "fesm2022/ngxsmk-datepicker.mjs",
+  "module": "fesm2022/ngxsmk-datepicker.mjs",
+  "es2022": "fesm2022/ngxsmk-datepicker.mjs",
+  "esm2022": "fesm2022/ngxsmk-datepicker.mjs",
+  "types": "index.d.ts",
   "typings": "index.d.ts",
   "exports": {
     ".": {
-      "esm2020": "./fesm2020/ngxsmk-datepicker.mjs",
-      "es2020": "./fesm2020/ngxsmk-datepicker.mjs",
-      "node": "./fesm2020/ngxsmk-datepicker.mjs"
+      "import": "./fesm2022/ngxsmk-datepicker.mjs",
+      "default": "./fesm2022/ngxsmk-datepicker.mjs",
+      "require": "./fesm2022/ngxsmk-datepicker.mjs",
+      "node": "./fesm2022/ngxsmk-datepicker.mjs"
     }
   },
   "homepage": "https://github.com/toozuuu/ngxsmk-datepicker#readme",
@@ -27,6 +29,7 @@
   },
   "sideEffects": false,
   "files": [
+    "fesm2022/",
     "**/*.d.ts",
     "**/*.metadata.json",
     "**/*.js",
