@@ -87,7 +87,7 @@ Use the \<ngxsmk-datepicker\> selector in your HTML template.
       [locale]="'en-US'"    
       [theme]="'light'"    
       (valueChange)="onDateChange($event)"    
-    ></ngxsmk-datepicker\>  
+    ></ngxsmk-datepicker>  
 
 ## **⚙️ API Reference**
 
