@@ -1,9 +1,22 @@
-
 # **ngxsmk-datepicker**
 
 A powerful, modern, and highly customizable date range picker component for Angular 17+ applications.
 
+* Repository (GitHub): https://github.com/toozuuu/ngxsmk-datepicker
+* Live Demo (StackBlitz): https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker
+
 Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
+
+## Screenshots
+
+<p align="left">
+  <img src="https://unpkg.com/ngxsmk-tel-input@latest/docs/1.png" alt="Angular Advanced Date Range Picker" width="420" />
+  &nbsp;&nbsp;
+  <img src="https://unpkg.com/ngxsmk-tel-input@latest/docs/2.png" alt="Angular Localization" width="420" />
+  &nbsp;&nbsp;
+  <img src="https://unpkg.com/ngxsmk-tel-input@latest/docs/3.png" alt="Angular Single Date Selection" width="420" />
+</p>
+
 
 ## **✨ Features**
 
@@ -21,9 +34,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 
 Install the package using npm:
 
-
     npm install ngxsmk-datepicker  
-
 
 ## **Usage**
 
@@ -32,7 +43,6 @@ ngxsmk-datepicker is a standalone component, so you can import it directly into 
 #### **1\. Import the Component**
 
 In your component file (e.g., app.component.ts), import NgxsmkDatepickerComponent.
-
 
     import { Component } from '@angular/core';    
     import { NgxsmkDatepickerComponent, DateRange } from 'ngxsmk-datepicker';  
@@ -62,7 +72,6 @@ In your component file (e.g., app.component.ts), import NgxsmkDatepickerComponen
       }    
     }  
 
-
 #### **2\. Add it to Your Template**
 
 Use the \<ngxsmk-datepicker\> selector in your HTML template.
@@ -80,39 +89,36 @@ Use the \<ngxsmk-datepicker\> selector in your HTML template.
       (valueChange)="onDateChange($event)"    
     ></ngxsmk-datepicker\>  
 
-
 ## **⚙️ API Reference**
 
 ### **Inputs**
 
-| Property | Type | Default | Description |  
-| :---- | :---- | :---- | :---- |  
-| mode | 'single' | 'range' | 'single' |  
-| locale | string | navigator.language | Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE'). |  
-| theme | 'light' | 'dark' | 'light' |  
-| showRanges | boolean | true | If true, displays the predefined ranges panel when in 'range' mode. |  
-| minDate | DateInput | null | null | The earliest selectable date. Accepts Date, string, moment, or dayjs objects. |  
-| maxDate | DateInput | null | null | The latest selectable date. Accepts Date, string, moment, or dayjs objects. |  
-| isInvalidDate | (date: Date) \=\> boolean | () \=\> false | A function to programmatically disable specific dates. Returns true if the date should be disabled. |  
-| ranges | DateRange | null | null | An object of predefined date ranges. The key is the label, and the value is a \[start, end\] tuple. |  
+| Property      | Type                      | Default            | Description                                                                                         |  
+|:--------------|:--------------------------|:-------------------|:----------------------------------------------------------------------------------------------------|  
+| mode          | 'single'                  | 'range'            | 'single'                                                                                            |  
+| locale        | string                    | navigator.language | Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE').                      |  
+| theme         | 'light'                   | 'dark'             | 'light'                                                                                             |  
+| showRanges    | boolean                   | true               | If true, displays the predefined ranges panel when in 'range' mode.                                 |  
+| minDate       | DateInput                 | null               | null                                                                                                | The earliest selectable date. Accepts Date, string, moment, or dayjs objects. |  
+| maxDate       | DateInput                 | null               | null                                                                                                | The latest selectable date. Accepts Date, string, moment, or dayjs objects. |  
+| isInvalidDate | (date: Date) \=\> boolean | () \=\> false      | A function to programmatically disable specific dates. Returns true if the date should be disabled. |  
+| ranges        | DateRange                 | null               | null                                                                                                | An object of predefined date ranges. The key is the label, and the value is a \[start, end\] tuple. |  
 
 ### **Outputs**
 
-| Event | Payload | Description |  
-| :---- | :---- | :---- |  
-| valueChange | Date | { start: Date; end: Date } |  
+| Event       | Payload | Description                |  
+|:------------|:--------|:---------------------------|  
+| valueChange | Date    | { start: Date; end: Date } |  
 
 ## **🎨 Theming**
 
 You can easily customize the colors of the datepicker by overriding the CSS custom properties in your own stylesheet.
-
 
     ngxsmk-datepicker {    
       --datepicker-primary-color: #d9267d;      /* Main color for selected dates */    
       --datepicker-primary-contrast: #ffffff;  /* Text color on selected dates */    
       --datepicker-range-background: #fce7f3;  /* Background for the date range bar */    
     }  
-
 
 To enable the dark theme, simply bind the theme input:
 
