@@ -1,6 +1,6 @@
 {
   "name": "ionic-datepicker-workspace",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve demo-app",
