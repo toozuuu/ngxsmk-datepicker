@@ -4,13 +4,13 @@ import {
   EventEmitter,
   HostBinding,
   HostListener,
-  Inject,
   Input,
   OnChanges,
   OnInit,
   Output,
-  PLATFORM_ID,
   SimpleChanges,
+  PLATFORM_ID,
+  inject, // 👈 New: Import the inject function
 } from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -370,13 +370,6 @@ export interface DateRange {
       color: var(--datepicker-primary-color);
     }
 
-    .ngxsmk-day-cell.start-date .ngxsmk-day-number,
-    .ngxsmk-day-cell.end-date .ngxsmk-day-number,
-    .ngxsmk-day-cell.selected .ngxsmk-day-number {
-      background-color: var(--datepicker-primary-color);
-      color: var(--datepicker-primary-contrast);
-    }
-
     /* --- Range Highlight --- */
     .ngxsmk-day-cell.in-range,
     .ngxsmk-day-cell.start-date,
@@ -471,6 +464,10 @@ export interface DateRange {
   `],
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
+
+  // ⭐️ FIX: Inject PLATFORM_ID as a field initializer. This is a valid injection context.
+  private readonly platformId = inject(PLATFORM_ID);
+
   /** Sets the selection mode: 'single' date or 'range' selection. */
   @Input() mode: 'single' | 'range' = 'single';
   /** A function to programmatically disable specific dates. Returns true if the date should be disabled. */
@@ -565,12 +562,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     { label: 'PM', value: true }
   ];
 
-
-  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {
-    if (isPlatformBrowser(this.platformId)) {
-      this._locale = navigator.language;
-    }
-  }
+  // ⭐️ FIX: Constructor is now empty (or contains only non-injection code)
+  constructor() {}
 
   get currentMonth(): number {
     return this._currentMonth;
@@ -597,6 +590,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    // ⭐️ FIX: PLATFORM_ID check moved to ngOnInit where it's safe to use the injected value.
+    if (isPlatformBrowser(this.platformId)) {
+      this._locale = navigator.language;
+    }
+
     this.today.setHours(0, 0, 0, 0);
     this.generateLocaleData();
     this.generateTimeOptions();
