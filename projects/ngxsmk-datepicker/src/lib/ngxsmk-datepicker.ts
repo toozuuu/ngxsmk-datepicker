@@ -774,11 +774,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       label: new Date(2024, i, 1).toLocaleDateString(this.locale, {month: 'long'}),
       value: i,
     }));
-    try {
-      this.firstDayOfWeek = ((new Intl.Locale(this.locale) as any).weekInfo?.firstDay || 0) % 7;
-    } catch (e) {
+
+    // ⭐ FIX: Guarding Intl.Locale access with isPlatformBrowser to prevent SSR crash.
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        this.firstDayOfWeek = ((new Intl.Locale(this.locale) as any).weekInfo?.firstDay || 0) % 7;
+      } catch (e) {
+        this.firstDayOfWeek = 0;
+      }
+    } else {
       this.firstDayOfWeek = 0;
     }
+
     const day = new Date(2024, 0, 7 + this.firstDayOfWeek);
     this.weekDays = Array.from({length: 7}).map(() => {
       const weekDay = new Date(day).toLocaleDateString(this.locale, {weekday: 'short'});
