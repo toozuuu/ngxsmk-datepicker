@@ -1,27 +1,32 @@
 {
   "name": "ngxsmk-datepicker",
   "version": "1.1.6",
-  "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
+  "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular 17+ applications.",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "npx ng serve demo-app --open",
-    "build": "ng build ngxsmk-datepicker",
-    "build:demo": "ng build demo-app",
-    "watch": "ng build ngxsmk-datepicker --watch --configuration development",
-    "test": "ng test"
+    "prestart": "node ./node_modules/@angular/cli/bin/ng.js build ngxsmk-datepicker",
+    "start": "node ./node_modules/@angular/cli/bin/ng.js serve demo-app --host 0.0.0.0 --port 4200 --open",
+    "build": "node ./node_modules/@angular/cli/bin/ng.js build ngxsmk-datepicker",
+    "build:demo": "node ./node_modules/@angular/cli/bin/ng.js build demo-app",
+    "watch": "node ./node_modules/@angular/cli/bin/ng.js build ngxsmk-datepicker --watch --configuration development",
+    "test": "node ./node_modules/@angular/cli/bin/ng.js test"
   },
   "peerDependencies": {
-    "@angular/common": ">=17.0.0",
-    "@angular/core": ">=17.0.0"
+    "@angular/common": ">=17.0.0 <21.0.0",
+    "@angular/core": ">=17.0.0 <21.0.0"
   },
   "dependencies": {
-    "@angular/platform-server": "^20.3.4",
-    "@angular/ssr": "^20.3.5",
     "dayjs": "^1.11.18",
     "moment": "^2.30.1",
-    "ngxsmk-datepicker": "^1.0.8",
     "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/cli": "^17.3.0 || ^18.0.0 || ^19.0.0 || ^20.0.0",
+    "@angular-devkit/build-angular": "^17.3.0 || ^18.0.0 || ^19.0.0 || ^20.0.0",
+    "@angular/forms": "^17.3.0 || ^18.0.0 || ^19.0.0 || ^20.0.0",
+    "@types/jasmine": "^5.1.9",
+    "ng-packagr": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0"
   },
   "main": "fesm2020/ngxsmk-datepicker.mjs",
   "module": "fesm2020/ngxsmk-datepicker.mjs",
@@ -34,8 +39,8 @@
     "url": "git+https://github.com/toozuuu/ngxsmk-datepicker.git"
   },
   "author": {
-    "email": "sachindilshan040@gmail.com",
     "name": "Sachin Dilshan",
+    "email": "sachindilshan040@gmail.com",
     "url": "https://github.com/toozuuu"
   },
   "sideEffects": false,
@@ -53,16 +58,13 @@
     "date-range-picker",
     "calendar",
     "standalone-component",
+    "angular-17",
+    "angular-18",
+    "angular-19",
     "angular-20",
     "typescript",
     "date-selection",
     "i18n",
     "localization"
-  ],
-  "devDependencies": {
-    "@angular-devkit/build-angular": "^20.3.5",
-    "@angular/forms": "^20.3.4",
-    "@types/jasmine": "^5.1.9",
-    "ng-packagr": "^20.3.0"
-  }
+  ]
 }
