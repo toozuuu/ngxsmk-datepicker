@@ -271,13 +271,10 @@ export interface DateRange {
     }
 
     .ngxsmk-calendar-container {
-      width: 320px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      border: 1px solid var(--datepicker-border-color);
       border-radius: 10px;
       padding: 16px;
       background: var(--datepicker-background);
-      /* overflow: hidden; */
     }
 
     .ngxsmk-header {
@@ -287,11 +284,12 @@ export interface DateRange {
       margin-bottom: 12px;
       position: relative;
       z-index: 2;
+      gap: 5px;
     }
 
     .ngxsmk-month-year-selects {
       display: flex;
-      gap: 8px;
+      gap: 5px;
     }
 
     .ngxsmk-month-year-selects app-custom-select.month-select {
@@ -389,13 +387,13 @@ export interface DateRange {
 
     /* Apply radius to the edge cells */
     .ngxsmk-day-cell.start-date {
-      border-top-left-radius: 10px;
-      border-bottom-left-radius: 10px;
+      border-top-left-radius: 100%;
+      border-bottom-left-radius: 100%;
     }
 
     .ngxsmk-day-cell.end-date {
-      border-top-right-radius: 10px;
-      border-bottom-right-radius: 10px;
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
     }
 
     .ngxsmk-day-cell.start-date.end-date {
