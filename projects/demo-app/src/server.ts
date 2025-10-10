@@ -19,7 +19,7 @@ const angularApp = new AngularNodeAppEngine();
  * Example:
  * ```ts
  * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
+ * // Handle API request
  * });
  * ```
  */
@@ -53,11 +53,9 @@ app.use((req, res, next) => {
  */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
   const port = process.env['PORT'] || 4000;
-  app.listen(port, (error) => {
-    if (error) {
-      throw error;
-    }
-
+  // FIX: Removed the 'error' parameter to match the required '() => void' listeningListener overload.
+  app.listen(port, () => {
+    // The console log runs upon successful startup.
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }

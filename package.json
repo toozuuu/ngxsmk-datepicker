@@ -6,6 +6,10 @@
     "@angular/core": ">=17.0.0"
   },
   "dependencies": {
+    "@angular/platform-server": "^20.3.4",
+    "@angular/ssr": "^20.3.5",
+    "dayjs": "^1.11.18",
+    "moment": "^2.30.1",
     "ngxsmk-datepicker": "^1.0.8",
     "tslib": "^2.3.0"
   },
@@ -14,13 +18,6 @@
   "es2020": "fesm2020/ngxsmk-datepicker.mjs",
   "esm2020": "fesm2020/ngxsmk-datepicker.mjs",
   "typings": "index.d.ts",
-  "exports": {
-    ".": {
-      "esm2020": "./fesm2020/ngxsmk-datepicker.mjs",
-      "es2020": "./fesm2020/ngxsmk-datepicker.mjs",
-      "node": "./fesm2020/ngxsmk-datepicker.mjs"
-    }
-  },
   "homepage": "https://github.com/toozuuu/ngxsmk-datepicker#readme",
   "repository": {
     "type": "git",
@@ -55,6 +52,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.5",
     "@angular/forms": "^20.3.4",
+    "@types/jasmine": "^5.1.9",
     "ng-packagr": "^20.3.0"
   }
 }

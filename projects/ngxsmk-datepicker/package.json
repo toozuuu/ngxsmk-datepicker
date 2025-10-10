@@ -3,7 +3,8 @@
   "version": "1.1.3",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
-    "@angular/core": ">=17.0.0"
+    "@angular/core": ">=17.0.0",
+    "@angular/forms": ">=17.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
@@ -14,14 +15,6 @@
   "esm2022": "fesm2022/ngxsmk-datepicker.mjs",
   "types": "index.d.ts",
   "typings": "index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./fesm2022/ngxsmk-datepicker.mjs",
-      "default": "./fesm2022/ngxsmk-datepicker.mjs",
-      "require": "./fesm2022/ngxsmk-datepicker.mjs",
-      "node": "./fesm2022/ngxsmk-datepicker.mjs"
-    }
-  },
   "homepage": "https://github.com/toozuuu/ngxsmk-datepicker#readme",
   "repository": {
     "type": "git",
