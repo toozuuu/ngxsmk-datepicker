@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve demo-app --open",
+    "start": "npx ng serve demo-app --open",
     "build": "ng build ngxsmk-datepicker",
     "build:demo": "ng build demo-app",
     "watch": "ng build ngxsmk-datepicker --watch --configuration development",
