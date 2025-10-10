@@ -2,8 +2,7 @@
 
 A powerful, modern, and highly customizable date range picker component for Angular 17+ applications.
 
-* Repository (GitHub): https://github.com/toozuuu/ngxsmk-datepicker
-* Live Demo (StackBlitz): https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker
+* NPM: [https://github.com/toozuuu/ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
 
 Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
 
