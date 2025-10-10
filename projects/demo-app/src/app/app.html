@@ -11,12 +11,14 @@
 <main class="content">
   <!-- Example 1: Advanced Date Range Picker -->
   <section class="example-container">
-    <h2>Advanced Date Range Picker</h2>
+    <h2>Advanced Date Range Picker With Time Picker</h2>
     <p>This example demonstrates predefined ranges and disabled weekends.</p>
 
     <ngxsmk-datepicker
       mode="range"
       [ranges]="myRanges"
+      [showTime]="true"
+      [minuteInterval]="15"
       [isInvalidDate]="isWeekend"
       (valueChange)="handleRangeChange($event)"
       [theme]="currentTheme"
@@ -28,7 +30,7 @@
 
   <!-- Example 2: Localization Demo -->
   <section class="example-container">
-    <h2>Localization Demo</h2>
+    <h2>Localization with Dark Mode</h2>
     <p>
       Change the locale to see the month names, weekday names, and week start
       day update automatically.
@@ -41,9 +43,9 @@
     </div>
     <br />
 
-    <ngxsmk-datepicker 
-        [locale]="activeLocale" 
-        [theme]="currentTheme"
+    <ngxsmk-datepicker
+        [locale]="activeLocale"
+        [theme]="'dark'"
     ></ngxsmk-datepicker>
   </section>
 
