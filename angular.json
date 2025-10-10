@@ -62,9 +62,7 @@
             "outputMode": "server",
             "ssr": {
               "entry": "projects/demo-app/src/server.ts"
-            },
-            "prerender": false,
-            "externalDependencies": ["@angular/core", "@angular/common"]
+            }
           },
           "configurations": {
             "production": {
@@ -102,22 +100,6 @@
           },
           "defaultConfiguration": "development"
         },
-
-        "serve-ssr": {
-          "builder": "@angular/build:ssr-dev-server",
-          "configurations": {
-            "development": {
-              "browserTarget": "demo-app:build:development",
-              "serverTarget": "demo-app:build:development:server"
-            },
-            "production": {
-              "browserTarget": "demo-app:build:production",
-              "serverTarget": "demo-app:build:production:server"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },
@@ -145,3 +127,4 @@
     }
   }
 }
+
