@@ -4,13 +4,13 @@ import {
   EventEmitter,
   HostBinding,
   HostListener,
-  inject,
   Input,
   OnChanges,
   OnInit,
   Output,
   PLATFORM_ID,
   SimpleChanges,
+  inject,
 } from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -124,7 +124,7 @@ export class CustomSelectComponent {
   @Output() valueChange = new EventEmitter<any>();
   public isOpen = false;
 
-  /** Reference to the component's host element. */
+  /** Reference to the component's host element injected via modern method. */
   private readonly elementRef: ElementRef = inject(ElementRef);
 
   /** Closes the dropdown when a click occurs outside the component boundary. */
@@ -577,13 +577,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     {label: 'PM', value: true}
   ];
 
-
-  constructor() {
-    if (isPlatformBrowser(this.platformId)) {
-      // Set the locale to the browser's language if running in a browser environment
-      this._locale = navigator.language;
-    }
-  }
+  // NOTE: The explicit constructor has been removed to fix the NG0203 injection context error.
+  // All initialization logic is now safely in ngOnInit.
 
   /** Gets the current month index (0-11). */
   get currentMonth(): number {
@@ -614,6 +609,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    // Initializing locale based on platform is now done here
+    if (isPlatformBrowser(this.platformId)) {
+      this._locale = navigator.language;
+    }
+
     this.today.setHours(0, 0, 0, 0);
     this.generateLocaleData();
     this.generateTimeOptions();
