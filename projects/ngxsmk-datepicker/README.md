@@ -1,10 +1,8 @@
 # **ngxsmk-datepicker**
 
-A powerful, modern, and highly customizable date range picker component for Angular 17+ applications.
+ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
-* NPM: [https://github.com/toozuuu/ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
-
-Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
+* Github: [https://github.com/toozuuu/ngxsmk-datepicker](https://github.com/toozuuu/ngxsmk-datepicker)
 
 ## Screenshots
 
@@ -94,19 +92,19 @@ Use the \<ngxsmk-datepicker\> selector in your HTML template.
 
 ### **Inputs**
 
-| Property                              | Type                                       | Default                 | Description                                                                                                                                                                                                                                                                                         |  
-|:--------------------------------------|:-------------------------------------------|:------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|  
-| mode                                  | 'single'                                   | 'range'                 | 'single'                                                                                                                                                                                                                                                                                            |  
-| locale                                | string                                     | navigator.language      | Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE').                                                                                                                                                                                                                      |  
-| theme                                 | 'light'                                    | 'dark'                  | 'light'                                                                                                                                                                                                                                                                                             |  
-| showRanges                            | boolean                                    | true                    | If true, displays the predefined ranges panel when in 'range' mode.                                                                                                                                                                                                                                 |  
-| minDate                               | DateInput                                  | null                    | null                                                                                                                                                                                                                                                                                                | The earliest selectable date. Accepts Date, string, moment, or dayjs objects. |  
-| maxDate                               | DateInput                                  | null                    | null                                                                                                                                                                                                                                                                                                | The latest selectable date. Accepts Date, string, moment, or dayjs objects. |  
-| isInvalidDate                         | (date: Date) \=\> boolean                  | () \=\> false           | A function to programmatically disable specific dates. Returns true if the date should be disabled.                                                                                                                                                                                                 |  
-| ranges                                | DateRange                                  | null                    | null                                                                                                                                                                                                                                                                                                | An object of predefined date ranges. The key is the label, and the value is a \[start, end\] tuple. |  
-| minuteInterval                        | number                                     | 1                       | Interval for minute dropdown options (e.g., 5, 15, 30). Used for option generation and initial time rounding.                                                                                                                                                                                       |
-| showTime                              | boolean                                    | false                   | Enables the hour/minute/AM/PM selection section.                                                                                                                                                                                                                                                    |
-| value                                 | Date \| { start: Date; end: Date } \| null | null                    | The initial selected date or date range.                                                                                                                                                                                                                                                            |
+| Property       | Type                                       | Default            | Description                                                                                                   |  
+|:---------------|:-------------------------------------------|:-------------------|:--------------------------------------------------------------------------------------------------------------|  
+| mode           | 'single'                                   | 'range'            | 'single'                                                                                                      |  
+| locale         | string                                     | navigator.language | Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE').                                |  
+| theme          | 'light'                                    | 'dark'             | 'light'                                                                                                       |  
+| showRanges     | boolean                                    | true               | If true, displays the predefined ranges panel when in 'range' mode.                                           |  
+| minDate        | DateInput                                  | null               | null                                                                                                          | The earliest selectable date. Accepts Date, string, moment, or dayjs objects. |  
+| maxDate        | DateInput                                  | null               | null                                                                                                          | The latest selectable date. Accepts Date, string, moment, or dayjs objects. |  
+| isInvalidDate  | (date: Date) \=\> boolean                  | () \=\> false      | A function to programmatically disable specific dates. Returns true if the date should be disabled.           |  
+| ranges         | DateRange                                  | null               | null                                                                                                          | An object of predefined date ranges. The key is the label, and the value is a \[start, end\] tuple. |  
+| minuteInterval | number                                     | 1                  | Interval for minute dropdown options (e.g., 5, 15, 30). Used for option generation and initial time rounding. |
+| showTime       | boolean                                    | false              | Enables the hour/minute/AM/PM selection section.                                                              |
+| value          | Date \| { start: Date; end: Date } \| null | null               | The initial selected date or date range.                                                                      |
 
 ### **Outputs**
 
@@ -139,9 +137,11 @@ The locale input controls all internationalization. It automatically formats mon
 <ngxsmk-datepicker [locale]="'fr-FR'"></ngxsmk-datepicker>
 
 ## **🤝 Contributions**
+
 We welcome and appreciate contributions from the community! Whether it's reporting a bug, suggesting a new feature, or submitting code, your help is valuable.
 
 Forking and Development
+
 * Fork the ngxsmk-datepicker repository on GitHub.
 
 * Clone your fork to your local machine.

@@ -1,10 +1,7 @@
 # **ngxsmk-datepicker**
 
-A powerful, modern, and highly customizable date range picker component for Angular 17+ applications.
-
+ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 * NPM: [https://github.com/toozuuu/ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
-
-Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
 
 ## Screenshots
 
