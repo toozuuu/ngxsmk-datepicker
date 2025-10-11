@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@angular/platform-server": "^20.3.4",
-    "@angular/ssr": "^20.3.5",
+    "@angular/cli": "^20.3.5",
+    "ng-packagr": "^20.3.0",
     "dayjs": "^1.11.18",
     "moment": "^2.30.1",
     "ngxsmk-datepicker": "^1.2.2",
