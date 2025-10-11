@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "scripts": {
@@ -45,7 +45,7 @@
     "**/*.js",
     "README.md",
     "LICENSE",
-    "docs"
+    "docs/"
   ],
   "keywords": [
     "angular",
