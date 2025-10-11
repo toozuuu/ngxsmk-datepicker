@@ -9,13 +9,12 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 ## Screenshots
 
 <p align="left">
-  <img src="https://unpkg.com/ngxsmk-datepicker@latest/docs/1.png" alt="Angular Advanced Date Range Picker" width="420" />
+  <img src="https://github.com/toozuuu/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Advanced Date Range Picker" width="420" />
   &nbsp;&nbsp;
-  <img src="https://unpkg.com/ngxsmk-datepicker@latest/docs/2.png" alt="Angular Localization" width="420" />
+  <img src="https://github.com/toozuuu/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Angular Localization" width="420" />
   &nbsp;&nbsp;
-  <img src="https://unpkg.com/ngxsmk-datepicker@latest/docs/3.png" alt="Angular Single Date Selection" width="420" />
+  <img src="https://github.com/toozuuu/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Angular Single Date Selection" width="420" />
 </p>
-
 
 ## **✨ Features**
 
