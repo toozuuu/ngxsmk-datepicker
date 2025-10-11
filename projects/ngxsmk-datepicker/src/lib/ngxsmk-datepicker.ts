@@ -9,11 +9,9 @@ import {
   OnChanges,
   OnInit,
   Output,
-  PLATFORM_ID,
   SimpleChanges,
-  Inject,
 } from '@angular/core';
-import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 @Component({
@@ -386,8 +384,6 @@ export interface DateRange {
   `],
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
-  // Removed explicit public readonly platformId property declaration
-  // It is now defined by the constructor parameter below
 
   @Input() mode: 'single' | 'range' = 'single';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
@@ -455,9 +451,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     {label: 'PM', value: true}
   ];
 
-  // ✅ FINAL FIX: Use traditional parameter property injection.
-  // This automatically creates a 'private readonly platformId: Object' property on the class.
-  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {}
+  // Removed constructor
 
   get currentMonth(): number { return this._currentMonth; }
 
@@ -480,10 +474,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      if (this._locale === 'en-US') {
-        this._locale = navigator.language;
-      }
+    // Reverting to browser-only defaults, assuming this code is now only running in the browser
+    if (this._locale === 'en-US') {
+      this._locale = navigator.language;
     }
 
     this.today.setHours(0, 0, 0, 0);
@@ -597,13 +590,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       value: i,
     }));
 
-    this.firstDayOfWeek = 0;
-    if (isPlatformBrowser(this.platformId)) {
-      try {
-        this.firstDayOfWeek = ((new Intl.Locale(this.locale) as any).weekInfo?.firstDay || 0) % 7;
-      } catch (e) {
-        this.firstDayOfWeek = 0;
-      }
+    try {
+      this.firstDayOfWeek = ((new Intl.Locale(this.locale) as any).weekInfo?.firstDay || 0) % 7;
+    } catch (e) {
+      this.firstDayOfWeek = 0;
     }
 
     const day = new Date(2024, 0, 7 + this.firstDayOfWeek);
