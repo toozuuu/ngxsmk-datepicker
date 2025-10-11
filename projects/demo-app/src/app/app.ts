@@ -15,7 +15,7 @@ export class App {
   public singleDateResult: string = 'No date selected yet.';
   public selectedRange: string = 'No date range selected yet.';
   public minDate: Date = new Date();
-  public maxDate: string = '2025-12-31';
+  public maxDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); 
   public activeLocale: string = 'en-US';
 
   // NEW: Property to manage the current theme
