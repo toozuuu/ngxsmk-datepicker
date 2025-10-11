@@ -458,7 +458,7 @@ export interface DateRange {
   `],
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
-  private readonly platformId: Object = inject(PLATFORM_ID);
+  private readonly platformId: Object;
 
   @Input() mode: 'single' | 'range' = 'single';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
@@ -540,6 +540,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     {label: 'AM', value: false},
     {label: 'PM', value: true}
   ];
+
+  constructor() {
+    this.platformId = inject(PLATFORM_ID);
+  }
 
   get currentMonth(): number {
     return this._currentMonth;
