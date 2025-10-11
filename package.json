@@ -5,9 +5,9 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start": "ng serve demo-app",
+    "build": "ng build ngxsmk-datepicker",
+    "watch": "ng build ngxsmk-datepicker --watch --configuration development",
     "test": "ng test"
   },
   "peerDependencies": {
