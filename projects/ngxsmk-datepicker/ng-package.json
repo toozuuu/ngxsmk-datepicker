@@ -3,5 +3,6 @@
   "dest": "../../dist/ngxsmk-datepicker",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": []
 }

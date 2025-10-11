@@ -57,12 +57,7 @@
             ],
             "styles": [
               "projects/demo-app/src/styles.scss"
-            ],
-            "server": "projects/demo-app/src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "projects/demo-app/src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
