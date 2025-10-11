@@ -4,23 +4,17 @@ import {
   EventEmitter,
   HostBinding,
   HostListener,
+  inject,
   Input,
   OnChanges,
   OnInit,
   Output,
   PLATFORM_ID,
   SimpleChanges,
-  inject,
 } from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
-/**
- * #####################################################################
- * ## Reusable Custom Select Component
- * #####################################################################
- * A lightweight, standalone custom select implementation used for month/year and time selection.
- */
 @Component({
   selector: 'app-custom-select',
   standalone: true,
@@ -80,7 +74,7 @@ import {FormsModule} from '@angular/forms';
 
     .ngxsmk-options-panel {
       position: absolute;
-      top: 110%; /* Relative to the host element's height */
+      top: 110%;
       left: 0;
       width: 100%;
       background: var(--datepicker-background, #fff);
@@ -90,7 +84,7 @@ import {FormsModule} from '@angular/forms';
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       max-height: 200px;
       overflow-y: auto;
-      z-index: 9999; /* Highest Z-index for visibility */
+      z-index: 9999;
     }
 
     .ngxsmk-options-panel ul {
@@ -116,35 +110,27 @@ import {FormsModule} from '@angular/forms';
   `],
 })
 export class CustomSelectComponent {
-  /** The list of available options to display in the dropdown. */
   @Input() options: { label: string; value: any }[] = [];
-  /** The currently selected value. */
   @Input() value: any;
-  /** Emits the new value when an option is selected. */
   @Output() valueChange = new EventEmitter<any>();
   public isOpen = false;
 
-  /** Reference to the component's host element injected via modern method. */
   private readonly elementRef: ElementRef = inject(ElementRef);
 
-  /** Closes the dropdown when a click occurs outside the component boundary. */
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (!this.elementRef.nativeElement.contains(event.target)) this.isOpen = false;
   }
 
-  /** Gets the display label for the currently selected value. */
   get displayValue(): string {
     const selectedOption = this.options.find((opt) => opt.value === this.value);
     return selectedOption ? selectedOption.label : '';
   }
 
-  /** Toggles the visibility of the dropdown panel. */
   toggleDropdown(): void {
     this.isOpen = !this.isOpen;
   }
 
-  /** Handles the selection of a new option. */
   selectOption(option: { label: string; value: any }): void {
     this.value = option.value;
     this.valueChange.emit(this.value);
@@ -152,15 +138,8 @@ export class CustomSelectComponent {
   }
 }
 
-/**
- * #####################################################################
- * ## Datepicker Component
- * #####################################################################
- * A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.
- */
 export type DateInput = Date | string | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };
 
-/** Defines the structure for predefined date ranges. */
 export interface DateRange {
   [key: string]: [DateInput, DateInput];
 }
@@ -479,26 +458,18 @@ export interface DateRange {
   `],
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
-  /** The platform ID injected for environment checks (e.g., SSR). */
   private readonly platformId: Object = inject(PLATFORM_ID);
 
-  /** Sets the selection mode: 'single' date or 'range' selection. */
   @Input() mode: 'single' | 'range' = 'single';
-  /** A function to programmatically disable specific dates. Returns true if the date should be disabled. */
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
-  /** If true, displays the predefined ranges panel when in 'range' mode. */
   @Input() showRanges: boolean = true;
-  /** If true, displays the time selection controls (hour/minute). */
   @Input() showTime: boolean = false;
-  /** Sets the minute selection step/interval (e.g., 5, 15, 30). */
   @Input() minuteInterval: number = 1;
 
-  /** The initial selected date or date range. Accepts Date, or { start: Date, end: Date }. */
   @Input() value: Date | { start: Date, end: Date } | null = null;
 
   private _locale: string = 'en-US';
 
-  /** Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE'). */
   @Input() set locale(value: string) {
     this._locale = value;
   }
@@ -507,34 +478,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     return this._locale;
   }
 
-  /** Controls the visual theme: 'light' or 'dark'. */
   @Input() theme: 'light' | 'dark' = 'light';
 
-  /** Binds the 'dark-theme' class to the host element based on the 'theme' input. */
   @HostBinding('class.dark-theme') get isDarkMode() {
     return this.theme === 'dark';
   }
 
-  /** Emits the newly selected date or date range. */
   @Output() valueChange = new EventEmitter<Date | { start: Date; end: Date }>();
 
   private _minDate: Date | null = null;
 
-  /** The earliest selectable date. */
   @Input() set minDate(value: DateInput | null) {
     this._minDate = this._normalizeDate(value);
   }
 
   private _maxDate: Date | null = null;
 
-  /** The latest selectable date. */
   @Input() set maxDate(value: DateInput | null) {
     this._maxDate = this._normalizeDate(value);
   }
 
   private _ranges: { [key: string]: [Date, Date] } | null = null;
 
-  /** An object of predefined date ranges for quick selection. */
   @Input() set ranges(value: DateRange | null) {
     if (!value) {
       this._ranges = null;
@@ -564,11 +529,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   public yearOptions: { label: string; value: number }[] = [];
   private firstDayOfWeek: number = 0;
 
-  // Time selection state
-  public currentHour: number = 0; // Internal 24h format (0-23)
+  public currentHour: number = 0;
   public currentMinute: number = 0;
-  public currentDisplayHour: number = 12; // Display 12h format (1-12)
-  public isPm: boolean = false; // Tracks AM/PM status
+  public currentDisplayHour: number = 12;
+  public isPm: boolean = false;
 
   public hourOptions: { label: string; value: number }[] = [];
   public minuteOptions: { label: string; value: number }[] = [];
@@ -577,15 +541,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     {label: 'PM', value: true}
   ];
 
-  // NOTE: The explicit constructor has been removed to fix the NG0203 injection context error.
-  // The injection of platformId via 'inject(PLATFORM_ID)' as a field initializer is correct.
-
-  /** Gets the current month index (0-11). */
   get currentMonth(): number {
     return this._currentMonth;
   }
 
-  /** Sets the current month and regenerates the calendar. */
   set currentMonth(month: number) {
     if (this._currentMonth !== month) {
       this._currentMonth = month;
@@ -594,12 +553,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     }
   }
 
-  /** Gets the current year. */
   get currentYear(): number {
     return this._currentYear;
   }
 
-  /** Sets the current year and regenerates the calendar. */
   set currentYear(year: number) {
     if (this._currentYear !== year) {
       this._currentYear = year;
@@ -609,16 +566,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    // Initializing locale based on platform is now done here
     if (isPlatformBrowser(this.platformId)) {
-      this._locale = navigator.language;
+      if (this._locale === 'en-US') {
+        this._locale = navigator.language;
+      }
     }
 
     this.today.setHours(0, 0, 0, 0);
     this.generateLocaleData();
     this.generateTimeOptions();
 
-    // Set default time to current time if enabled and no initial value
     if (this.showTime && !this.value) {
       const now = new Date();
 
@@ -645,10 +602,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.generateCalendar();
     }
 
-    // Regenerate time options if the interval changes
     if (changes['minuteInterval']) {
       this.generateTimeOptions();
-      // Recalculate and round current minute to the new interval
       this.currentMinute = Math.floor(this.currentMinute / this.minuteInterval) * this.minuteInterval;
       this.onTimeChange();
     }
@@ -659,30 +614,25 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     }
   }
 
-  /** Converts the displayed 12h time (currentDisplayHour + isPm) into the 24h internal time (currentHour). */
   private get24Hour(displayHour: number, isPm: boolean): number {
     if (isPm) {
-      return displayHour === 12 ? 12 : displayHour + 12; // 12 PM is 12, 1-11 PM is 13-23
+      return displayHour === 12 ? 12 : displayHour + 12;
     } else {
-      return displayHour === 12 ? 0 : displayHour; // 12 AM is 0 (midnight), 1-11 AM is 1-11
+      return displayHour === 12 ? 0 : displayHour;
     }
   }
 
-  /** Updates the display time variables (12h format and AM/PM state) from the 24h internal time. */
   private update12HourState(fullHour: number): void {
     this.isPm = fullHour >= 12;
-    this.currentDisplayHour = fullHour % 12 || 12; // 0 (midnight) or 12 PM both become 12
+    this.currentDisplayHour = fullHour % 12 || 12;
   }
 
-  /** Applies the currently selected hour and minute to a given date object. */
   private applyCurrentTime(date: Date): Date {
-    // Convert 12h display state back to 24h format
     this.currentHour = this.get24Hour(this.currentDisplayHour, this.isPm);
     date.setHours(this.currentHour, this.currentMinute, 0, 0);
     return date;
   }
 
-  /** Initializes selection state and time controls from the provided input value. */
   private initializeValue(value: Date | { start: Date, end: Date } | null): void {
     if (!value) {
       this.selectedDate = null;
@@ -706,18 +656,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     if (initialDate) {
       this.currentDate = new Date(initialDate);
 
-      // Set time selectors based on 24h value from initial date
       this.currentHour = initialDate.getHours();
       this.currentMinute = initialDate.getMinutes();
 
       this.update12HourState(this.currentHour);
 
-      // Round minute to nearest interval, in case the initial value time doesn't match the current interval
       this.currentMinute = Math.floor(this.currentMinute / this.minuteInterval) * this.minuteInterval;
     }
   }
 
-  /** Normalizes a date input to a Date object, keeping time information. */
   private _normalizeDate(date: DateInput | null): Date | null {
     if (!date) return null;
     const d = (date instanceof Date) ? new Date(date.getTime()) : new Date(date as any);
@@ -725,12 +672,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     return d;
   }
 
-  /** Generates options for the hour and minute selectors based on the interval. */
   private generateTimeOptions(): void {
-    // Hours are 1 through 12 for 12h format display
     this.hourOptions = Array.from({length: 12}).map((_, i) => ({
       label: (i + 1).toString().padStart(2, '0'),
-      value: i + 1, // Values 1 through 12
+      value: i + 1,
     }));
 
     this.minuteOptions = [];
@@ -742,18 +687,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     }
   }
 
-  /** Generates locale-dependent month and weekday names. */
   private generateLocaleData(): void {
     this.monthOptions = Array.from({length: 12}).map((_, i) => ({
       label: new Date(2024, i, 1).toLocaleDateString(this.locale, {month: 'long'}),
       value: i,
     }));
-    try {
-      // Determine the first day of the week based on locale settings
-      this.firstDayOfWeek = ((new Intl.Locale(this.locale) as any).weekInfo?.firstDay || 0) % 7;
-    } catch (e) {
-      this.firstDayOfWeek = 0; // Default to Sunday (0) on error
+
+    this.firstDayOfWeek = 0;
+
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        this.firstDayOfWeek = ((new Intl.Locale(this.locale) as any).weekInfo?.firstDay || 0) % 7;
+      } catch (e) {
+        this.firstDayOfWeek = 0;
+      }
     }
+
     const day = new Date(2024, 0, 7 + this.firstDayOfWeek);
     this.weekDays = Array.from({length: 7}).map(() => {
       const weekDay = new Date(day).toLocaleDateString(this.locale, {weekday: 'short'});
@@ -762,30 +711,25 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     });
   }
 
-  /** Populates the internal array of predefined ranges from the input object. */
   private updateRangesArray(): void {
     this.rangesArray = this._ranges ? Object.entries(this._ranges).map(([key, value]) => ({key, value})) : [];
   }
 
-  /** Handles selection of a predefined date range. */
   public selectRange(range: [Date, Date]): void {
     this.startDate = this.applyCurrentTime(range[0]);
     this.endDate = this.applyCurrentTime(range[1]);
 
     if (this.startDate && this.endDate) {
-      /** Type assertion is safe here as both dates are explicitly set */
       this.valueChange.emit({start: this.startDate as Date, end: this.endDate as Date});
     }
 
     this.currentDate = new Date(this.startDate);
-    this.initializeValue({start: this.startDate, end: this.endDate}); // Update time selectors
+    this.initializeValue({start: this.startDate, end: this.endDate});
     this.generateCalendar();
   }
 
-  /** Checks if a specific date should be disabled based on minDate, maxDate, or custom function. */
   public isDateDisabled(date: Date | null): boolean {
     if (!date) return false;
-    // Check against minDate/maxDate, ensuring we compare only the date part
     const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
     if (this._minDate) {
@@ -801,7 +745,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     return false;
   }
 
-  /** Updates the time component of the selected date(s) when hour/minute selectors change. */
   public onTimeChange(): void {
     if (this.mode === 'single' && this.selectedDate) {
       this.selectedDate = this.applyCurrentTime(this.selectedDate);
@@ -812,16 +755,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.startDate = this.applyCurrentTime(this.startDate);
       this.endDate = this.applyCurrentTime(this.endDate);
 
-      /** Type assertion is safe here as both dates are confirmed */
       this.valueChange.emit({start: this.startDate as Date, end: this.endDate as Date});
 
     } else if (this.mode === 'range' && this.startDate && !this.endDate) {
-      // If range started but not completed, update time on the start date only (no emit)
       this.startDate = this.applyCurrentTime(this.startDate);
     }
   }
 
-  /** Handles the click event on a calendar day cell. */
   public onDateClick(day: Date | null): void {
     if (!day || this.isDateDisabled(day)) return;
 
@@ -830,13 +770,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.valueChange.emit(this.selectedDate);
 
     } else {
-      // Range selection logic
       if (!this.startDate || (this.startDate && this.endDate)) {
         this.startDate = this.applyCurrentTime(day);
         this.endDate = null;
       } else if (day >= this.startDate) {
         this.endDate = this.applyCurrentTime(day);
-        /** Type assertion is safe here as both dates are set when ending a range */
         this.valueChange.emit({start: this.startDate as Date, end: this.endDate as Date});
       } else {
         this.startDate = this.applyCurrentTime(day);
@@ -845,7 +783,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.hoveredDate = null;
     }
 
-    // Update time controls to reflect the time of the newly selected date
     if (this.mode === 'single' && this.selectedDate) {
       this.update12HourState(this.selectedDate.getHours());
       this.currentMinute = this.selectedDate.getMinutes();
@@ -855,14 +792,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     }
   }
 
-  /** Handles hover events for range preview when only the start date is selected. */
   public onDateHover(day: Date | null): void {
     if (this.mode === 'range' && this.startDate && !this.endDate && day) {
       this.hoveredDate = day;
     }
   }
 
-  /** Checks if a date is within the range being previewed (during hover). */
   public isPreviewInRange(day: Date | null): boolean {
     if (this.mode !== 'range' || !this.startDate || this.endDate || !this.hoveredDate || !day) return false;
     const start = this.startDate.getTime();
@@ -871,7 +806,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     return time > Math.min(start, end) && time < Math.max(start, end);
   }
 
-  /** Generates the calendar grid for the currently active month. */
   public generateCalendar(): void {
     this.daysInMonth = [];
     const year = this.currentDate.getFullYear();
@@ -892,7 +826,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     }
   }
 
-  /** Generates month and year options for dropdowns. */
   private generateDropdownOptions(): void {
     const startYear = this._currentYear - 10;
     const endYear = this._currentYear + 10;
@@ -902,13 +835,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     }
   }
 
-  /** Moves the calendar view forward or backward by one month. */
   public changeMonth(delta: number): void {
     this.currentDate.setMonth(this.currentDate.getMonth() + delta);
     this.generateCalendar();
   }
 
-  /** Utility function to check if two dates represent the same day (ignoring time). */
   public isSameDay(d1: Date | null, d2: Date | null): boolean {
     if (!d1 || !d2) return false;
     return (
@@ -918,11 +849,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     );
   }
 
-  /** Checks if a date is strictly between the start and end of a selected range (ignoring time). */
   public isInRange(d: Date | null): boolean {
     if (!d || !this.startDate || !this.endDate) return false;
 
-    // Use date-only comparison for highlighting the days
     const dTime = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
     const startDayTime = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate()).getTime();
     const endDayTime = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate()).getTime();
