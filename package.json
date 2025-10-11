@@ -19,7 +19,7 @@
     "@angular/ssr": "^20.3.5",
     "dayjs": "^1.11.18",
     "moment": "^2.30.1",
-    "ngxsmk-datepicker": "^1.0.8",
+    "ngxsmk-datepicker": "^1.2.2",
     "tslib": "^2.3.0"
   },
   "main": "fesm2020/ngxsmk-datepicker.mjs",
