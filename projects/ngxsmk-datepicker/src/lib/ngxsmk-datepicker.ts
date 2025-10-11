@@ -386,7 +386,8 @@ export interface DateRange {
   `],
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
-  public readonly platformId: Object;
+  // Removed explicit public readonly platformId property declaration
+  // It is now defined by the constructor parameter below
 
   @Input() mode: 'single' | 'range' = 'single';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
@@ -454,9 +455,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     {label: 'PM', value: true}
   ];
 
-  constructor(@Inject(PLATFORM_ID) platformId: Object) {
-    this.platformId = platformId;
-  }
+  // ✅ FINAL FIX: Use traditional parameter property injection.
+  // This automatically creates a 'private readonly platformId: Object' property on the class.
+  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {}
 
   get currentMonth(): number { return this._currentMonth; }
 
