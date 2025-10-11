@@ -578,7 +578,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   ];
 
   // NOTE: The explicit constructor has been removed to fix the NG0203 injection context error.
-  // All initialization logic is now safely in ngOnInit.
+  // The injection of platformId via 'inject(PLATFORM_ID)' as a field initializer is correct.
 
   /** Gets the current month index (0-11). */
   get currentMonth(): number {
