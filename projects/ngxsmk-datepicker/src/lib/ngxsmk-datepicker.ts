@@ -41,60 +41,26 @@ import {FormsModule} from '@angular/forms';
     </div>
   `,
   styles: [`
-    :host {
-      position: relative;
-      display: inline-block;
-    }
+    :host { position: relative; display: inline-block; }
     .ngxsmk-select-container { cursor: pointer; }
     .ngxsmk-select-display {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: var(--custom-select-width, 115px);
-      background: var(--datepicker-background, #fff);
-      border: 1px solid var(--datepicker-border-color, #ccc);
-      color: var(--datepicker-text-color, #333);
-      border-radius: 4px;
-      padding: 4px 8px;
-      font-size: 14px;
-      text-align: left;
-      height: 30px;
+      display: flex; align-items: center; justify-content: space-between;
+      width: var(--custom-select-width, 115px); background: var(--datepicker-background, #fff);
+      border: 1px solid var(--datepicker-border-color, #ccc); color: var(--datepicker-text-color, #333);
+      border-radius: 4px; padding: 4px 8px; font-size: 14px; text-align: left; height: 30px;
     }
-    .ngxsmk-arrow-icon {
-      width: 12px;
-      height: 12px;
-      margin-left: 8px;
-    }
+    .ngxsmk-arrow-icon { width: 12px; height: 12px; margin-left: 8px; }
     .ngxsmk-options-panel {
-      position: absolute;
-      top: 110%;
-      left: 0;
-      width: 100%;
-      background: var(--datepicker-background, #fff);
-      border: 1px solid var(--datepicker-border-color, #ccc);
-      color: var(--datepicker-text-color, #333);
-      border-radius: 4px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 9999;
+      position: absolute; top: 110%; left: 0; width: 100%;
+      background: var(--datepicker-background, #fff); border: 1px solid var(--datepicker-border-color, #ccc);
+      color: var(--datepicker-text-color, #333); border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-height: 200px; overflow-y: auto; z-index: 9999;
     }
-    .ngxsmk-options-panel ul {
-      list-style: none;
-      padding: 4px;
-      margin: 0;
-    }
-    .ngxsmk-options-panel li {
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .ngxsmk-options-panel li:hover {
-      background-color: var(--datepicker-hover-background, #f0f0f0);
-    }
+    .ngxsmk-options-panel ul { list-style: none; padding: 4px; margin: 0; }
+    .ngxsmk-options-panel li { padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+    .ngxsmk-options-panel li:hover { background-color: var(--datepicker-hover-background, #f0f0f0); }
     .ngxsmk-options-panel li.selected {
-      background-color: var(--datepicker-primary-color, #3880ff);
-      color: var(--datepicker-primary-contrast, #fff);
+      background-color: var(--datepicker-primary-color, #3880ff); color: var(--datepicker-primary-contrast, #fff);
     }
   `],
 })
@@ -222,185 +188,104 @@ export interface DateRange {
   `,
   styles: [`
     :host {
-      --datepicker-primary-color: #6d28d9;
-      --datepicker-primary-contrast: #ffffff;
-      --datepicker-range-background: #f5f3ff;
-      --datepicker-background: #ffffff;
-      --datepicker-text-color: #222428;
-      --datepicker-subtle-text-color: #9ca3af;
-      --datepicker-border-color: #e9e9e9;
-      --datepicker-hover-background: #f0f0f0;
+      --datepicker-primary-color: #6d28d9; --datepicker-primary-contrast: #ffffff;
+      --datepicker-range-background: #f5f3ff; --datepicker-background: #ffffff;
+      --datepicker-text-color: #222428; --datepicker-subtle-text-color: #9ca3af;
+      --datepicker-border-color: #e9e9e9; --datepicker-hover-background: #f0f0f0;
     }
     :host(.dark-theme) {
-      --datepicker-range-background: rgba(139, 92, 246, 0.2);
-      --datepicker-background: #1f2937;
-      --datepicker-text-color: #d1d5db;
-      --datepicker-subtle-text-color: #6b7280;
-      --datepicker-border-color: #4b5563;
-      --datepicker-hover-background: #374151;
+      --datepicker-range-background: rgba(139, 92, 246, 0.2); --datepicker-background: #1f2937;
+      --datepicker-text-color: #d1d5db; --datepicker-subtle-text-color: #6b7280;
+      --datepicker-border-color: #4b5563; --datepicker-hover-background: #374151;
     }
     .ngxsmk-datepicker-container { display: flex; }
     .ngxsmk-calendar-container {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      border-radius: 10px;
-      padding: 16px;
-      background: var(--datepicker-background);
+      border-radius: 10px; padding: 16px; background: var(--datepicker-background);
     }
     .ngxsmk-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      position: relative;
-      z-index: 2;
-      gap: 5px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px; position: relative; z-index: 2; gap: 5px;
     }
     .ngxsmk-month-year-selects { display: flex; gap: 5px; }
     .ngxsmk-month-year-selects app-custom-select.month-select { --custom-select-width: 120px; }
     .ngxsmk-month-year-selects app-custom-select.year-select { --custom-select-width: 90px; }
     .ngxsmk-nav-buttons { display: flex; }
     .ngxsmk-nav-button {
-      background: none;
-      border: none;
-      padding: 8px;
-      cursor: pointer;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--datepicker-text-color);
+      background: none; border: none; padding: 8px; cursor: pointer; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center; color: var(--datepicker-text-color);
     }
     .ngxsmk-nav-button:hover { background-color: var(--datepicker-hover-background); }
     .ngxsmk-nav-button svg { width: 18px; height: 18px; }
     .ngxsmk-days-grid-wrapper { position: relative; }
     .ngxsmk-days-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      text-align: center;
-      gap: 0;
+      display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 0;
     }
     .ngxsmk-day-name {
-      font-weight: 600;
-      font-size: 0.8rem;
-      color: var(--datepicker-subtle-text-color);
-      padding: 8px 0;
+      font-weight: 600; font-size: 0.8rem; color: var(--datepicker-subtle-text-color); padding: 8px 0;
     }
     .ngxsmk-day-cell {
-      position: relative;
-      height: 38px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 0;
+      position: relative; height: 38px; display: flex; justify-content: center;
+      align-items: center; cursor: pointer; border-radius: 0;
     }
     .ngxsmk-day-number {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
-      color: var(--datepicker-text-color);
-      position: relative;
-      z-index: 1;
+      width: 36px; height: 36px; display: flex; justify-content: center;
+      align-items: center; border-radius: 50%; color: var(--datepicker-text-color);
+      position: relative; z-index: 1;
     }
     .ngxsmk-day-cell:not(.disabled):hover .ngxsmk-day-number {
-      background-color: var(--datepicker-hover-background);
-      color: var(--datepicker-primary-color);
+      background-color: var(--datepicker-hover-background); color: var(--datepicker-primary-color);
     }
     .ngxsmk-day-cell.start-date .ngxsmk-day-number,
     .ngxsmk-day-cell.end-date .ngxsmk-day-number,
     .ngxsmk-day-cell.selected .ngxsmk-day-number {
-      background-color: var(--datepicker-primary-color);
-      color: var(--datepicker-primary-contrast);
+      background-color: var(--datepicker-primary-color); color: var(--datepicker-primary-contrast);
     }
-    .ngxsmk-day-cell.in-range,
-    .ngxsmk-day-cell.start-date,
-    .ngxsmk-day-cell.end-date,
-    .ngxsmk-day-cell.preview-range {
+    .ngxsmk-day-cell.in-range, .ngxsmk-day-cell.start-date,
+    .ngxsmk-day-cell.end-date, .ngxsmk-day-cell.preview-range {
       background-color: var(--datepicker-range-background);
     }
-    .ngxsmk-day-cell.start-date {
-      border-top-left-radius: 100%;
-      border-bottom-left-radius: 100%;
-    }
-    .ngxsmk-day-cell.end-date {
-      border-top-right-radius: 100%;
-      border-bottom-right-radius: 100%;
-    }
+    .ngxsmk-day-cell.start-date { border-top-left-radius: 100%; border-bottom-left-radius: 100%; }
+    .ngxsmk-day-cell.end-date { border-top-right-radius: 100%; border-bottom-right-radius: 100%; }
     .ngxsmk-day-cell.start-date.end-date { border-radius: 50px; }
     .ngxsmk-day-cell.disabled {
-      background-color: transparent !important;
-      color: #4b5563;
-      cursor: not-allowed;
-      pointer-events: none;
-      opacity: 0.5;
+      background-color: transparent !important; color: #4b5563;
+      cursor: not-allowed; pointer-events: none; opacity: 0.5;
     }
     .ngxsmk-day-cell.today .ngxsmk-day-number { border: 1px solid var(--datepicker-primary-color); }
     .ngxsmk-ranges-container {
-      width: 180px;
-      padding: 16px;
-      border-right: 1px solid var(--datepicker-border-color);
+      width: 180px; padding: 16px; border-right: 1px solid var(--datepicker-border-color);
       background: var(--datepicker-background);
     }
-    .ngxsmk-ranges-container ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+    .ngxsmk-ranges-container ul { list-style: none; padding: 0; margin: 0; }
     .ngxsmk-ranges-container li {
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      color: var(--datepicker-text-color);
+      padding: 10px; margin-bottom: 8px; border-radius: 6px; cursor: pointer; color: var(--datepicker-text-color);
     }
     .ngxsmk-ranges-container li:hover { background-color: var(--datepicker-hover-background); }
     .ngxsmk-time-selection {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      margin-top: 16px;
-      padding-top: 12px;
-      border-top: 1px solid var(--datepicker-border-color);
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--datepicker-border-color);
     }
-    .ngxsmk-time-label {
-      font-size: 0.9rem;
-      color: var(--datepicker-subtle-text-color);
-      margin-right: 4px;
-    }
-    .ngxsmk-time-selection app-custom-select {
-      --custom-select-width: 60px;
-      height: 30px;
-    }
+    .ngxsmk-time-label { font-size: 0.9rem; color: var(--datepicker-subtle-text-color); margin-right: 4px; }
+    .ngxsmk-time-selection app-custom-select { --custom-select-width: 60px; height: 30px; }
     .ngxsmk-time-selection app-custom-select.ampm-select { --custom-select-width: 70px; }
-    .ngxsmk-time-separator {
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: var(--datepicker-text-color);
-    }
+    .ngxsmk-time-separator { font-weight: 600; font-size: 1.1rem; color: var(--datepicker-text-color); }
   `],
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
-
   @Input() mode: 'single' | 'range' = 'single';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   @Input() showRanges: boolean = true;
   @Input() showTime: boolean = false;
   @Input() minuteInterval: number = 1;
-
   @Input() value: Date | { start: Date, end: Date } | null = null;
 
   private _locale: string = 'en-US';
-
   @Input() set locale(value: string) { this._locale = value; }
   get locale(): string { return this._locale; }
 
   @Input() theme: 'light' | 'dark' = 'light';
   @HostBinding('class.dark-theme') get isDarkMode() { return this.theme === 'dark'; }
-
   @Output() valueChange = new EventEmitter<Date | { start: Date; end: Date }>();
 
   private _minDate: Date | null = null;
@@ -433,8 +318,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   public endDate: Date | null = null;
   public hoveredDate: Date | null = null;
   public rangesArray: { key: string; value: [Date, Date] }[] = [];
-  private _currentMonth!: number;
-  private _currentYear!: number;
+
+  private _currentMonth: number = this.currentDate.getMonth();
+  private _currentYear: number = this.currentDate.getFullYear();
+
   public monthOptions: { label: string; value: number }[] = [];
   public yearOptions: { label: string; value: number }[] = [];
   private firstDayOfWeek: number = 0;
@@ -450,8 +337,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     {label: 'AM', value: false},
     {label: 'PM', value: true}
   ];
-
-  // Removed constructor
 
   get currentMonth(): number { return this._currentMonth; }
 
@@ -474,7 +359,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    // Reverting to browser-only defaults, assuming this code is now only running in the browser
     if (this._locale === 'en-US') {
       this._locale = navigator.language;
     }
@@ -537,16 +421,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
   private initializeValue(value: Date | { start: Date, end: Date } | null): void {
     if (!value) {
-      this.selectedDate = null;
-      this.startDate = null;
-      this.endDate = null;
+      this.selectedDate = null; this.startDate = null; this.endDate = null;
       return;
     }
 
     let initialDate: Date | null = null;
     if (this.mode === 'single' && value instanceof Date) {
-      this.selectedDate = this._normalizeDate(value);
-      initialDate = this.selectedDate;
+      this.selectedDate = this._normalizeDate(value); initialDate = this.selectedDate;
     } else if (this.mode === 'range' && typeof value === 'object' && 'start' in value && 'end' in value) {
       this.startDate = this._normalizeDate(value.start);
       this.endDate = this._normalizeDate(value.end);
