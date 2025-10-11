@@ -4,7 +4,7 @@ import {
   EventEmitter,
   HostBinding,
   HostListener,
-  Inject,
+  inject,
   Input,
   OnChanges,
   OnInit,
@@ -15,9 +15,12 @@ import {
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
-// #####################################################################
-// ## Reusable Custom Select Component
-// #####################################################################
+/**
+ * #####################################################################
+ * ## Reusable Custom Select Component
+ * #####################################################################
+ * A lightweight, standalone custom select implementation used for month/year and time selection.
+ */
 @Component({
   selector: 'app-custom-select',
   standalone: true,
@@ -121,8 +124,8 @@ export class CustomSelectComponent {
   @Output() valueChange = new EventEmitter<any>();
   public isOpen = false;
 
-  constructor(private readonly elementRef: ElementRef) {
-  }
+  /** Reference to the component's host element. */
+  private readonly elementRef: ElementRef = inject(ElementRef);
 
   /** Closes the dropdown when a click occurs outside the component boundary. */
   @HostListener('document:click', ['$event'])
@@ -149,11 +152,15 @@ export class CustomSelectComponent {
   }
 }
 
-// #####################################################################
-// ## Datepicker Component
-// #####################################################################
+/**
+ * #####################################################################
+ * ## Datepicker Component
+ * #####################################################################
+ * A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.
+ */
 export type DateInput = Date | string | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };
 
+/** Defines the structure for predefined date ranges. */
 export interface DateRange {
   [key: string]: [DateInput, DateInput];
 }
@@ -399,6 +406,7 @@ export interface DateRange {
     .ngxsmk-day-cell.start-date.end-date {
       border-radius: 50px;
     }
+
     /* --- End Range Highlight --- */
 
     .ngxsmk-day-cell.disabled {
@@ -471,6 +479,9 @@ export interface DateRange {
   `],
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
+  /** The platform ID injected for environment checks (e.g., SSR). */
+  private readonly platformId: Object = inject(PLATFORM_ID);
+
   /** Sets the selection mode: 'single' date or 'range' selection. */
   @Input() mode: 'single' | 'range' = 'single';
   /** A function to programmatically disable specific dates. Returns true if the date should be disabled. */
@@ -499,6 +510,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   /** Controls the visual theme: 'light' or 'dark'. */
   @Input() theme: 'light' | 'dark' = 'light';
 
+  /** Binds the 'dark-theme' class to the host element based on the 'theme' input. */
   @HostBinding('class.dark-theme') get isDarkMode() {
     return this.theme === 'dark';
   }
@@ -561,21 +573,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   public hourOptions: { label: string; value: number }[] = [];
   public minuteOptions: { label: string; value: number }[] = [];
   public ampmOptions: { label: string; value: boolean }[] = [
-    { label: 'AM', value: false },
-    { label: 'PM', value: true }
+    {label: 'AM', value: false},
+    {label: 'PM', value: true}
   ];
 
 
-  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
+      // Set the locale to the browser's language if running in a browser environment
       this._locale = navigator.language;
     }
   }
 
+  /** Gets the current month index (0-11). */
   get currentMonth(): number {
     return this._currentMonth;
   }
 
+  /** Sets the current month and regenerates the calendar. */
   set currentMonth(month: number) {
     if (this._currentMonth !== month) {
       this._currentMonth = month;
@@ -584,10 +599,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     }
   }
 
+  /** Gets the current year. */
   get currentYear(): number {
     return this._currentYear;
   }
 
+  /** Sets the current year and regenerates the calendar. */
   set currentYear(year: number) {
     if (this._currentYear !== year) {
       this._currentYear = year;
@@ -711,7 +728,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   /** Generates options for the hour and minute selectors based on the interval. */
   private generateTimeOptions(): void {
     // Hours are 1 through 12 for 12h format display
-    this.hourOptions = Array.from({ length: 12 }).map((_, i) => ({
+    this.hourOptions = Array.from({length: 12}).map((_, i) => ({
       label: (i + 1).toString().padStart(2, '0'),
       value: i + 1, // Values 1 through 12
     }));
@@ -732,9 +749,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       value: i,
     }));
     try {
+      // Determine the first day of the week based on locale settings
       this.firstDayOfWeek = ((new Intl.Locale(this.locale) as any).weekInfo?.firstDay || 0) % 7;
     } catch (e) {
-      this.firstDayOfWeek = 0;
+      this.firstDayOfWeek = 0; // Default to Sunday (0) on error
     }
     const day = new Date(2024, 0, 7 + this.firstDayOfWeek);
     this.weekDays = Array.from({length: 7}).map(() => {
@@ -744,7 +762,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     });
   }
 
-  /** Populates the internal array of predefined ranges. */
+  /** Populates the internal array of predefined ranges from the input object. */
   private updateRangesArray(): void {
     this.rangesArray = this._ranges ? Object.entries(this._ranges).map(([key, value]) => ({key, value})) : [];
   }
