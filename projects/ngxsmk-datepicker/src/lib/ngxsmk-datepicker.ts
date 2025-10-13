@@ -436,6 +436,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
     if (initialDate) {
       this.currentDate = new Date(initialDate);
+      this._currentMonth = initialDate.getMonth();
+      this._currentYear = initialDate.getFullYear();
       this.currentHour = initialDate.getHours();
       this.currentMinute = initialDate.getMinutes();
       this.update12HourState(this.currentHour);
