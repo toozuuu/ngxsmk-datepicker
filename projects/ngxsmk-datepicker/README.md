@@ -92,19 +92,20 @@ Use the \<ngxsmk-datepicker\> selector in your HTML template.
 
 ### **Inputs**
 
-| Property       | Type                                       | Default            | Description                                                                                                   |  
-|:---------------|:-------------------------------------------|:-------------------|:--------------------------------------------------------------------------------------------------------------|  
-| mode           | 'single'                                   | 'range'            | 'single'                                                                                                      |  
-| locale         | string                                     | navigator.language | Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE').                                |  
-| theme          | 'light'                                    | 'dark'             | 'light'                                                                                                       |  
-| showRanges     | boolean                                    | true               | If true, displays the predefined ranges panel when in 'range' mode.                                           |  
-| minDate        | DateInput                                  | null               | null                                                                                                          | The earliest selectable date. Accepts Date, string, moment, or dayjs objects. |  
-| maxDate        | DateInput                                  | null               | null                                                                                                          | The latest selectable date. Accepts Date, string, moment, or dayjs objects. |  
-| isInvalidDate  | (date: Date) \=\> boolean                  | () \=\> false      | A function to programmatically disable specific dates. Returns true if the date should be disabled.           |  
-| ranges         | DateRange                                  | null               | null                                                                                                          | An object of predefined date ranges. The key is the label, and the value is a \[start, end\] tuple. |  
-| minuteInterval | number                                     | 1                  | Interval for minute dropdown options (e.g., 5, 15, 30). Used for option generation and initial time rounding. |
-| showTime       | boolean                                    | false              | Enables the hour/minute/AM/PM selection section.                                                              |
-| value          | Date \| { start: Date; end: Date } \| null | null               | The initial selected date or date range.                                                                      |
+| Property       | Type                                               | Default               | Description                                                                                                   |  
+|:---------------|:---------------------------------------------------|:----------------------|:--------------------------------------------------------------------------------------------------------------|  
+| mode           | 'single'                                           | 'range'               | 'single'                                                                                                      |  
+| locale         | string                                             | navigator.language    | Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE').                                |  
+| theme          | 'light'                                            | 'dark'                | 'light'                                                                                                       |  
+| showRanges     | boolean                                            | true                  | If true, displays the predefined ranges panel when in 'range' mode.                                           |  
+| minDate        | DateInput                                          | null                  | null                                                                                                          | The earliest selectable date. Accepts Date, string, moment, or dayjs objects. |  
+| maxDate        | DateInput                                          | null                  | null                                                                                                          | The latest selectable date. Accepts Date, string, moment, or dayjs objects. |  
+| isInvalidDate  | (date: Date) \=\> boolean                          | () \=\> false         | A function to programmatically disable specific dates. Returns true if the date should be disabled.           |  
+| ranges         | DateRange                                          | null                  | null                                                                                                          | An object of predefined date ranges. The key is the label, and the value is a \[start, end\] tuple. |  
+| minuteInterval | number                                             | 1                     | Interval for minute dropdown options (e.g., 5, 15, 30). Used for option generation and initial time rounding. |
+| showTime       | boolean                                            | false                 | Enables the hour/minute/AM/PM selection section.                                                              |
+| value          | Date \| { start: Date; end: Date } \| null         | null                  | The initial selected date or date range.                                                                      |
+| startAt        | DateInput                                          | null                  |      null                                                                                                     |
 
 ### **Outputs**
 

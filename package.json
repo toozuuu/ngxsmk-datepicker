@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "scripts": {
@@ -15,11 +15,8 @@
     "@angular/core": ">=17.0.0"
   },
   "dependencies": {
-    "@angular/platform-server": "^20.3.4",
-    "@angular/ssr": "^20.3.5",
     "dayjs": "^1.11.18",
-    "moment": "^2.30.1",
-    "tslib": "^2.3.0"
+    "moment": "^2.30.1"
   },
   "main": "fesm2020/ngxsmk-datepicker.mjs",
   "module": "fesm2020/ngxsmk-datepicker.mjs",

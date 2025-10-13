@@ -280,6 +280,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   @Input() minuteInterval: number = 1;
   @Input() value: Date | { start: Date, end: Date } | null = null;
 
+  private _startAtDate: Date | null = null;
+  @Input() set startAt(value: DateInput | null) { this._startAtDate = this._normalizeDate(value); }
+
   private _locale: string = 'en-US';
   @Input() set locale(value: string) { this._locale = value; }
   get locale(): string { return this._locale; }
@@ -381,6 +384,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
     if (this.value) {
       this.initializeValue(this.value);
+    } else if (this._startAtDate) {
+      this.initializeValue(null);
     }
     this.generateCalendar();
   }
@@ -401,6 +406,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.initializeValue(changes['value'].currentValue);
       this.generateCalendar();
     }
+
+    if (changes['startAt']) {
+      if (!this.value && this._startAtDate) {
+        this.currentDate = new Date(this._startAtDate);
+        this._currentMonth = this.currentDate.getMonth();
+        this._currentYear = this.currentDate.getFullYear();
+        this.generateCalendar();
+      }
+    }
   }
 
   private get24Hour(displayHour: number, isPm: boolean): number {
@@ -420,26 +434,32 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   private initializeValue(value: Date | { start: Date, end: Date } | null): void {
-    if (!value) {
-      this.selectedDate = null; this.startDate = null; this.endDate = null;
-      return;
-    }
 
     let initialDate: Date | null = null;
-    if (this.mode === 'single' && value instanceof Date) {
-      this.selectedDate = this._normalizeDate(value); initialDate = this.selectedDate;
-    } else if (this.mode === 'range' && typeof value === 'object' && 'start' in value && 'end' in value) {
-      this.startDate = this._normalizeDate(value.start);
-      this.endDate = this._normalizeDate(value.end);
-      initialDate = this.startDate;
+
+    if (value) {
+      if (this.mode === 'single' && value instanceof Date) {
+        this.selectedDate = this._normalizeDate(value);
+        initialDate = this.selectedDate;
+      } else if (this.mode === 'range' && typeof value === 'object' && 'start' in value && 'end' in value) {
+        this.startDate = this._normalizeDate(value.start);
+        this.endDate = this._normalizeDate(value.end);
+        initialDate = this.startDate;
+      }
+    } else {
+      this.selectedDate = null;
+      this.startDate = null;
+      this.endDate = null;
     }
 
-    if (initialDate) {
-      this.currentDate = new Date(initialDate);
-      this._currentMonth = initialDate.getMonth();
-      this._currentYear = initialDate.getFullYear();
-      this.currentHour = initialDate.getHours();
-      this.currentMinute = initialDate.getMinutes();
+    const viewCenterDate = initialDate || this._startAtDate || new Date();
+
+    if (viewCenterDate) {
+      this.currentDate = new Date(viewCenterDate);
+      this._currentMonth = viewCenterDate.getMonth();
+      this._currentYear = viewCenterDate.getFullYear();
+      this.currentHour = viewCenterDate.getHours();
+      this.currentMinute = viewCenterDate.getMinutes();
       this.update12HourState(this.currentHour);
       this.currentMinute = Math.floor(this.currentMinute / this.minuteInterval) * this.minuteInterval;
     }
@@ -468,8 +488,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   private generateLocaleData(): void {
+    const year = new Date().getFullYear();
     this.monthOptions = Array.from({length: 12}).map((_, i) => ({
-      label: new Date(2024, i, 1).toLocaleDateString(this.locale, {month: 'long'}),
+      label: new Date(year, i, 1).toLocaleDateString(this.locale, {month: 'long'}),
       value: i,
     }));
 
@@ -479,7 +500,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.firstDayOfWeek = 0;
     }
 
-    const day = new Date(2024, 0, 7 + this.firstDayOfWeek);
+    const day = new Date(year, 0, 7 + this.firstDayOfWeek);
     this.weekDays = Array.from({length: 7}).map(() => {
       const weekDay = new Date(day).toLocaleDateString(this.locale, {weekday: 'short'});
       day.setDate(day.getDate() + 1);

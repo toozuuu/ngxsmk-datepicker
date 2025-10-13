@@ -19,6 +19,7 @@ export class App {
   public activeLocale: string = 'en-US';
 
   public currentTheme: 'light' | 'dark' = 'light';
+  public startViewDate: Date = new Date('2025-10-12');
 
   @HostBinding('class.dark-theme') get isDarkMode() {
     return this.currentTheme === 'dark';
