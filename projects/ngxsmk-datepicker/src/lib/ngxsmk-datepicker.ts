@@ -198,38 +198,125 @@ export interface DateRange {
       --datepicker-text-color: #d1d5db; --datepicker-subtle-text-color: #6b7280;
       --datepicker-border-color: #4b5563; --datepicker-hover-background: #374151;
     }
-    .ngxsmk-datepicker-container { display: flex; }
+
+    /* --- MOBILE-FIRST STYLES (Default) --- */
+    .ngxsmk-datepicker-container { display: flex; flex-direction: column; }
     .ngxsmk-calendar-container {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      border-radius: 10px; padding: 16px; background: var(--datepicker-background);
+      border-radius: 10px; padding: 12px; background: var(--datepicker-background);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for mobile */
+      width: 100%; /* Take full width on mobile */
+    }
+    .ngxsmk-ranges-container {
+      width: 100%; /* Take full width on mobile */
+      padding: 12px;
+      border-right: none;
+      border-bottom: 1px solid var(--datepicker-border-color); /* Add bottom border on mobile */
+      background: var(--datepicker-hover-background); /* Highlight ranges area */
+      border-radius: 10px 10px 0 0;
+    }
+    .ngxsmk-ranges-container ul {
+      display: flex;
+      flex-wrap: wrap; /* Allow wrapping for many ranges */
+      justify-content: center;
+      gap: 8px; /* Space between range buttons */
+      list-style: none; padding: 0; margin: 0;
+    }
+    .ngxsmk-ranges-container li {
+      padding: 6px 10px;
+      margin-bottom: 0; /* Remove vertical margin from list item */
+      font-size: 0.85rem; /* Smaller font on mobile */
+      border: 1px solid var(--datepicker-border-color);
+      transition: background-color 0.15s ease;
     }
     .ngxsmk-header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 12px; position: relative; z-index: 2; gap: 5px;
+      margin-bottom: 8px; position: relative; z-index: 2; gap: 4px;
     }
-    .ngxsmk-month-year-selects { display: flex; gap: 5px; }
-    .ngxsmk-month-year-selects app-custom-select.month-select { --custom-select-width: 120px; }
-    .ngxsmk-month-year-selects app-custom-select.year-select { --custom-select-width: 90px; }
+    .ngxsmk-month-year-selects { display: flex; gap: 4px; }
+    .ngxsmk-month-year-selects app-custom-select.month-select { --custom-select-width: 100px; }
+    .ngxsmk-month-year-selects app-custom-select.year-select { --custom-select-width: 75px; }
     .ngxsmk-nav-buttons { display: flex; }
     .ngxsmk-nav-button {
-      background: none; border: none; padding: 8px; cursor: pointer; border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center; color: var(--datepicker-text-color);
+      padding: 6px; /* Smaller padding */
     }
-    .ngxsmk-nav-button:hover { background-color: var(--datepicker-hover-background); }
-    .ngxsmk-nav-button svg { width: 18px; height: 18px; }
-    .ngxsmk-days-grid-wrapper { position: relative; }
+    .ngxsmk-nav-button svg { width: 16px; height: 16px; /* Smaller icon */ }
     .ngxsmk-days-grid {
       display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 0;
     }
     .ngxsmk-day-name {
-      font-weight: 600; font-size: 0.8rem; color: var(--datepicker-subtle-text-color); padding: 8px 0;
+      font-size: 0.75rem; /* Smaller font for day names */
+      padding: 6px 0;
+    }
+    .ngxsmk-day-cell { height: 32px; /* Smaller cell height */ }
+    .ngxsmk-day-number {
+      width: 30px; height: 30px; /* Smaller day number circle */
+      font-size: 0.9rem;
+    }
+    .ngxsmk-time-selection {
+      display: flex;
+      align-content: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 12px; padding-top: 8px;
+    }
+    .ngxsmk-time-selection app-custom-select { --custom-select-width: 55px; height: 28px; }
+    .ngxsmk-time-selection app-custom-select.ampm-select { --custom-select-width: 65px; }
+    .ngxsmk-time-separator { font-size: 1rem; }
+
+
+    /* --- DESKTOP/TABLET STYLES (Min-width 600px) --- */
+    @media (min-width: 600px) {
+      .ngxsmk-datepicker-container { display: flex; flex-direction: row; }
+      .ngxsmk-calendar-container {
+        padding: 16px;
+        box-shadow: none; /* Remove redundant shadow on desktop */
+        width: auto;
+      }
+      .ngxsmk-ranges-container {
+        width: 180px;
+        padding: 16px;
+        border-right: 1px solid var(--datepicker-border-color);
+        border-bottom: none;
+        background: var(--datepicker-background);
+        border-radius: 10px 0 0 10px;
+      }
+      .ngxsmk-ranges-container ul {
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 0;
+      }
+      .ngxsmk-ranges-container li {
+        padding: 10px;
+        margin-bottom: 8px;
+        border: none;
+        font-size: 1rem;
+      }
+      .ngxsmk-header { margin-bottom: 12px; gap: 5px; }
+      .ngxsmk-month-year-selects app-custom-select.month-select { --custom-select-width: 120px; }
+      .ngxsmk-month-year-selects app-custom-select.year-select { --custom-select-width: 90px; }
+      .ngxsmk-nav-button { padding: 8px; }
+      .ngxsmk-nav-button svg { width: 18px; height: 18px; }
+      .ngxsmk-day-name { font-size: 0.8rem; padding: 8px 0; }
+      .ngxsmk-day-cell { height: 38px; }
+      .ngxsmk-day-number { width: 36px; height: 36px; font-size: 1rem; }
+      .ngxsmk-time-selection { margin-top: 16px; padding-top: 12px; }
+      .ngxsmk-time-selection app-custom-select { --custom-select-width: 60px; height: 30px; }
+      .ngxsmk-time-selection app-custom-select.ampm-select { --custom-select-width: 70px; }
+    }
+
+    /* Common Styles (for clarity, kept below the responsive adjustments) */
+    .ngxsmk-nav-button:hover { background-color: var(--datepicker-hover-background); }
+    .ngxsmk-nav-button {
+      background: none; border: none; cursor: pointer; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center; color: var(--datepicker-text-color);
     }
     .ngxsmk-day-cell {
-      position: relative; height: 38px; display: flex; justify-content: center;
+      position: relative; display: flex; justify-content: center;
       align-items: center; cursor: pointer; border-radius: 0;
     }
     .ngxsmk-day-number {
-      width: 36px; height: 36px; display: flex; justify-content: center;
+      display: flex; justify-content: center;
       align-items: center; border-radius: 50%; color: var(--datepicker-text-color);
       position: relative; z-index: 1;
     }
@@ -253,23 +340,9 @@ export interface DateRange {
       cursor: not-allowed; pointer-events: none; opacity: 0.5;
     }
     .ngxsmk-day-cell.today .ngxsmk-day-number { border: 1px solid var(--datepicker-primary-color); }
-    .ngxsmk-ranges-container {
-      width: 180px; padding: 16px; border-right: 1px solid var(--datepicker-border-color);
-      background: var(--datepicker-background);
-    }
-    .ngxsmk-ranges-container ul { list-style: none; padding: 0; margin: 0; }
-    .ngxsmk-ranges-container li {
-      padding: 10px; margin-bottom: 8px; border-radius: 6px; cursor: pointer; color: var(--datepicker-text-color);
-    }
     .ngxsmk-ranges-container li:hover { background-color: var(--datepicker-hover-background); }
-    .ngxsmk-time-selection {
-      display: flex; align-items: center; justify-content: center; gap: 4px;
-      margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--datepicker-border-color);
-    }
     .ngxsmk-time-label { font-size: 0.9rem; color: var(--datepicker-subtle-text-color); margin-right: 4px; }
-    .ngxsmk-time-selection app-custom-select { --custom-select-width: 60px; height: 30px; }
-    .ngxsmk-time-selection app-custom-select.ampm-select { --custom-select-width: 70px; }
-    .ngxsmk-time-separator { font-weight: 600; font-size: 1.1rem; color: var(--datepicker-text-color); }
+    .ngxsmk-time-separator { font-weight: 600; color: var(--datepicker-text-color); }
   `],
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
