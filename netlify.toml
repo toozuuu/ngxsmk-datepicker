@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build:demo"
+  publish = "dist/demo-app/browser"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

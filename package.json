@@ -8,6 +8,7 @@
     "start": "ng serve",
     "start:demo": "ng build ngxsmk-datepicker && ng serve demo-app",
     "build": "ng build",
+    "build:demo": "ng build ngxsmk-datepicker && ng build demo-app --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
