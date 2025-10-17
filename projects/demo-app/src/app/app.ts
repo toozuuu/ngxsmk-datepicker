@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  forwardRef,
   HostBinding,
   HostListener,
   inject,
@@ -11,8 +12,15 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {CommonModule, DatePipe} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {CommonModule, DatePipe, JsonPipe} from '@angular/common';
+import {
+  ControlValueAccessor,
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+  FormControl,
+  FormGroup
+} from '@angular/forms';
 
 // --- DATE UTILITY FUNCTIONS ---
 function getStartOfDay(d: Date): Date {
@@ -44,6 +52,9 @@ export interface DateRange {
   [key: string]: [DateInput, DateInput];
 }
 
+export type DatepickerValue = Date | { start: Date, end: Date } | null;
+
+
 // --- 1. CUSTOM SELECT COMPONENT ---
 @Component({
   selector: 'app-custom-select',
@@ -51,7 +62,7 @@ export interface DateRange {
   imports: [CommonModule],
   template: `
     <div class="ngxsmk-select-container" (click)="toggleDropdown()">
-      <button type="button" class="ngxsmk-select-display">
+      <button type="button" class="ngxsmk-select-display" [disabled]="disabled">
         <span>{{ displayValue }}</span>
         <svg class="ngxsmk-arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
@@ -80,6 +91,11 @@ export interface DateRange {
       border: 1px solid var(--datepicker-border-color, #ccc); color: var(--datepicker-text-color, #333);
       border-radius: 4px; padding: 4px 8px; font-size: 14px; text-align: left; height: 30px;
     }
+    .ngxsmk-select-display:disabled {
+      background-color: var(--datepicker-hover-background, #f0f0f0);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
     .ngxsmk-arrow-icon { width: 12px; height: 12px; margin-left: 8px; }
     .ngxsmk-options-panel {
       position: absolute; top: 110%; left: 0; width: 100%;
@@ -98,6 +114,7 @@ export interface DateRange {
 export class CustomSelectComponent {
   @Input() options: { label: string; value: any }[] = [];
   @Input() value: any;
+  @Input() disabled: boolean = false;
   @Output() valueChange = new EventEmitter<any>();
   public isOpen = false;
 
@@ -114,6 +131,7 @@ export class CustomSelectComponent {
   }
 
   toggleDropdown(): void {
+    if (this.disabled) return;
     this.isOpen = !this.isOpen;
   }
 
@@ -128,14 +146,19 @@ export class CustomSelectComponent {
 @Component({
   selector: 'ngxsmk-datepicker',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomSelectComponent, DatePipe],
+  imports: [CommonModule, FormsModule, CustomSelectComponent, DatePipe, ReactiveFormsModule],
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => NgxsmkDatepickerComponent),
+    multi: true
+  }],
   template: `
     <div class="ngxsmk-datepicker-container">
       @if (showRanges && rangesArray.length > 0 && mode === 'range') {
         <div class="ngxsmk-ranges-container">
           <ul>
             @for (range of rangesArray; track range.key) {
-              <li (click)="selectRange(range.value)">{{ range.key }}</li>
+              <li (click)="selectRange(range.value)" [class.disabled]="disabled">{{ range.key }}</li>
             }
           </ul>
         </div>
@@ -144,17 +167,17 @@ export class CustomSelectComponent {
         <div class="ngxsmk-header">
           <div class="ngxsmk-month-year-selects">
             <app-custom-select class="month-select" [options]="monthOptions"
-                               [(value)]="currentMonth"></app-custom-select>
-            <app-custom-select class="year-select" [options]="yearOptions" [(value)]="currentYear"></app-custom-select>
+                               [(value)]="currentMonth" [disabled]="disabled"></app-custom-select>
+            <app-custom-select class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled"></app-custom-select>
           </div>
           <div class="ngxsmk-nav-buttons">
-            <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)">
+            <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
                       d="M328 112L184 256l144 144"/>
               </svg>
             </button>
-            <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(1)">
+            <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(1)" [disabled]="disabled">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
                       d="M184 112l144 144-144 144"/>
@@ -192,6 +215,7 @@ export class CustomSelectComponent {
               [options]="hourOptions"
               [(value)]="currentDisplayHour"
               (valueChange)="onTimeChange()"
+              [disabled]="disabled"
             ></app-custom-select>
             <span class="ngxsmk-time-separator">:</span>
             <app-custom-select
@@ -199,12 +223,14 @@ export class CustomSelectComponent {
               [options]="minuteOptions"
               [(value)]="currentMinute"
               (valueChange)="onTimeChange()"
+              [disabled]="disabled"
             ></app-custom-select>
             <app-custom-select
               class="ampm-select"
               [options]="ampmOptions"
               [(value)]="isPm"
               (valueChange)="onTimeChange()"
+              [disabled]="disabled"
             ></app-custom-select>
           </div>
         }
@@ -259,6 +285,8 @@ export class CustomSelectComponent {
       flex-shrink: 0;
     }
     .ngxsmk-ranges-container li:hover { background-color: var(--datepicker-hover-background); }
+    .ngxsmk-ranges-container li.disabled { cursor: not-allowed; opacity: 0.5; background-color: transparent !important; color: var(--datepicker-subtle-text-color, #9ca3af); }
+
 
     .ngxsmk-header {
       display: flex; justify-content: space-between; align-items: center;
@@ -273,7 +301,8 @@ export class CustomSelectComponent {
       background: none; border: none; cursor: pointer; border-radius: 50%;
       display: inline-flex; align-items: center; justify-content: center; color: var(--datepicker-text-color);
     }
-    .ngxsmk-nav-button:hover { background-color: var(--datepicker-hover-background); }
+    .ngxsmk-nav-button:hover:not(:disabled) { background-color: var(--datepicker-hover-background); }
+    .ngxsmk-nav-button:disabled { cursor: not-allowed; opacity: 0.5; }
     .ngxsmk-nav-button svg { width: 16px; height: 16px; }
 
     .ngxsmk-days-grid {
@@ -374,13 +403,13 @@ export class CustomSelectComponent {
     }
   `],
 })
-export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
+export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input() mode: 'single' | 'range' = 'single';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   @Input() showRanges: boolean = true;
   @Input() showTime: boolean = false;
   @Input() minuteInterval: number = 1;
-  @Input() value: Date | { start: Date, end: Date } | null = null;
+  public _internalValue: DatepickerValue = null;
 
   private _startAtDate: Date | null = null;
   @Input() set startAt(value: DateInput | null) { this._startAtDate = this._normalizeDate(value); }
@@ -391,7 +420,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
   @Input() theme: 'light' | 'dark' = 'light';
   @HostBinding('class.dark-theme') get isDarkMode() { return this.theme === 'dark'; }
-  @Output() valueChange = new EventEmitter<Date | { start: Date; end: Date }>();
+
+  private onChange = (_: any) => {};
+  private onTouched = () => {};
+  public disabled = false;
+  @Input() set disabledState(isDisabled: boolean) { this.disabled = isDisabled; }
+
+  @Output() valueChange = new EventEmitter<DatepickerValue>();
 
   private _minDate: Date | null = null;
   @Input() set minDate(value: DateInput | null) { this._minDate = this._normalizeDate(value); }
@@ -417,7 +452,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   public currentDate: Date = new Date();
   public daysInMonth: (Date | null)[] = [];
   public weekDays: string[] = [];
-  public readonly today: Date = new Date();
+  public readonly today: Date = getStartOfDay(new Date());
   public selectedDate: Date | null = null;
   public startDate: Date | null = null;
   public endDate: Date | null = null;
@@ -443,9 +478,35 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     {label: 'PM', value: true}
   ];
 
+  writeValue(val: DatepickerValue): void {
+    this._internalValue = val;
+    this.initializeValue(val);
+    this.generateCalendar();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
+  private emitValue(val: DatepickerValue) {
+    this._internalValue = val;
+    this.valueChange.emit(val);
+    this.onChange(val);
+    this.onTouched();
+  }
+
   get currentMonth(): number { return this._currentMonth; }
 
   set currentMonth(month: number) {
+    if (this.disabled) return;
     if (this._currentMonth !== month) {
       this._currentMonth = month;
       this.currentDate.setMonth(month);
@@ -456,6 +517,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   get currentYear(): number { return this._currentYear; }
 
   set currentYear(year: number) {
+    if (this.disabled) return;
     if (this._currentYear !== year) {
       this._currentYear = year;
       this.currentDate.setFullYear(year);
@@ -464,7 +526,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    if (this._locale === 'en-US') {
+    if (this._locale === 'en-US' && typeof navigator !== 'undefined') {
       this._locale = navigator.language;
     }
 
@@ -472,7 +534,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     this.generateLocaleData();
     this.generateTimeOptions();
 
-    if (this.showTime && !this.value) {
+    if (this.showTime && !this._internalValue) {
       const now = new Date();
       this.currentHour = now.getHours();
       this.currentMinute = Math.floor(now.getMinutes() / this.minuteInterval) * this.minuteInterval;
@@ -484,8 +546,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.update12HourState(this.currentHour);
     }
 
-    if (this.value) {
-      this.initializeValue(this.value);
+    if (this._internalValue) {
+      this.initializeValue(this._internalValue);
     } else if (this._startAtDate) {
       this.initializeValue(null);
     }
@@ -505,12 +567,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     }
 
     if (changes['value'] && changes['value'].currentValue !== changes['value'].previousValue) {
-      this.initializeValue(changes['value'].currentValue);
-      this.generateCalendar();
+      this.writeValue(changes['value'].currentValue);
     }
 
     if (changes['startAt']) {
-      if (!this.value && this._startAtDate) {
+      if (!this._internalValue && this._startAtDate) {
         this.currentDate = new Date(this._startAtDate);
         this._currentMonth = this.currentDate.getMonth();
         this._currentYear = this.currentDate.getFullYear();
@@ -535,8 +596,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
     return date;
   }
 
-  private initializeValue(value: Date | { start: Date, end: Date } | null): void {
-
+  private initializeValue(value: DatepickerValue): void {
     let initialDate: Date | null = null;
 
     if (value) {
@@ -615,11 +675,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   public selectRange(range: [Date, Date]): void {
+    if (this.disabled) return;
     this.startDate = this.applyCurrentTime(range[0]);
     this.endDate = this.applyCurrentTime(range[1]);
 
     if (this.startDate && this.endDate) {
-      this.valueChange.emit({start: this.startDate as Date, end: this.endDate as Date});
+      this.emitValue({start: this.startDate as Date, end: this.endDate as Date});
     }
 
     this.currentDate = new Date(this.startDate);
@@ -629,45 +690,47 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
   public isDateDisabled(date: Date | null): boolean {
     if (!date) return false;
-    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+    const dateOnly = getStartOfDay(date);
 
     if (this._minDate) {
-      const minDateOnly = new Date(this._minDate.getFullYear(), this._minDate.getMonth(), this._minDate.getDate());
-      if (dateOnly < minDateOnly) return true;
+      const minDateOnly = getStartOfDay(this._minDate);
+      if (dateOnly.getTime() < minDateOnly.getTime()) return true;
     }
     if (this._maxDate) {
-      const maxDateOnly = new Date(this._maxDate.getFullYear(), this._maxDate.getMonth(), this._maxDate.getDate());
-      if (dateOnly > maxDateOnly) return true;
+      const maxDateOnly = getStartOfDay(this._maxDate);
+      if (dateOnly.getTime() > maxDateOnly.getTime()) return true;
     }
     return this.isInvalidDate(date);
   }
 
   public onTimeChange(): void {
+    if (this.disabled) return;
     if (this.mode === 'single' && this.selectedDate) {
       this.selectedDate = this.applyCurrentTime(this.selectedDate);
-      this.valueChange.emit(this.selectedDate);
+      this.emitValue(this.selectedDate);
     } else if (this.mode === 'range' && this.startDate && this.endDate) {
       this.startDate = this.applyCurrentTime(this.startDate);
       this.endDate = this.applyCurrentTime(this.endDate);
-      this.valueChange.emit({start: this.startDate as Date, end: this.endDate as Date});
+      this.emitValue({start: this.startDate as Date, end: this.endDate as Date});
     } else if (this.mode === 'range' && this.startDate && !this.endDate) {
       this.startDate = this.applyCurrentTime(this.startDate);
     }
   }
 
   public onDateClick(day: Date | null): void {
-    if (!day || this.isDateDisabled(day)) return;
+    if (!day || this.isDateDisabled(day) || this.disabled) return;
 
     if (this.mode === 'single') {
       this.selectedDate = this.applyCurrentTime(day);
-      this.valueChange.emit(this.selectedDate);
+      this.emitValue(this.selectedDate);
     } else {
       if (!this.startDate || (this.startDate && this.endDate)) {
         this.startDate = this.applyCurrentTime(day);
         this.endDate = null;
       } else if (day >= this.startDate) {
         this.endDate = this.applyCurrentTime(day);
-        this.valueChange.emit({start: this.startDate as Date, end: this.endDate as Date});
+        this.emitValue({start: this.startDate as Date, end: this.endDate as Date});
       } else {
         this.startDate = this.applyCurrentTime(day);
         this.endDate = null;
@@ -675,12 +738,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       this.hoveredDate = null;
     }
 
-    if (this.mode === 'single' && this.selectedDate) {
-      this.update12HourState(this.selectedDate.getHours());
-      this.currentMinute = this.selectedDate.getMinutes();
-    } else if (this.mode === 'range' && this.startDate) {
-      this.update12HourState(this.startDate.getHours());
-      this.currentMinute = this.startDate.getMinutes();
+    const dateToSync = this.mode === 'single' ? this.selectedDate : this.startDate;
+    if (dateToSync) {
+      this.update12HourState(dateToSync.getHours());
+      this.currentMinute = dateToSync.getMinutes();
     }
   }
 
@@ -692,9 +753,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
   public isPreviewInRange(day: Date | null): boolean {
     if (this.mode !== 'range' || !this.startDate || this.endDate || !this.hoveredDate || !day) return false;
-    const start = this.startDate.getTime();
-    const end = this.hoveredDate.getTime();
-    const time = day.getTime();
+    const start = getStartOfDay(this.startDate).getTime();
+    const end = getStartOfDay(this.hoveredDate).getTime();
+    const time = getStartOfDay(day).getTime();
     return time > Math.min(start, end) && time < Math.max(start, end);
   }
 
@@ -728,6 +789,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 
   public changeMonth(delta: number): void {
+    if (this.disabled) return;
     this.currentDate.setMonth(this.currentDate.getMonth() + delta);
     this.generateCalendar();
   }
@@ -744,9 +806,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   public isInRange(d: Date | null): boolean {
     if (!d || !this.startDate || !this.endDate) return false;
 
-    const dTime = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-    const startDayTime = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate()).getTime();
-    const endDayTime = new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate()).getTime();
+    const dTime = getStartOfDay(d).getTime();
+    const startDayTime = getStartOfDay(this.startDate).getTime();
+    const endDayTime = getStartOfDay(this.endDate).getTime();
 
     const startTime = Math.min(startDayTime, endDayTime);
     const endTime = Math.max(startDayTime, endDayTime);
@@ -755,25 +817,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
   }
 }
 
-// --- 3. APP ROOT COMPONENT ---
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, NgxsmkDatepickerComponent, DatePipe],
+  imports: [CommonModule, NgxsmkDatepickerComponent, DatePipe, ReactiveFormsModule, JsonPipe],
   template: `
     <header class="app-header">
-      <h1>ngxsmk-datepicker Demo</h1>
+      <h1>ngxsmk-datepicker Demo (CVA/Reactive Forms)</h1>
       <button class="theme-toggle" (click)="toggleTheme()">
         Toggle Theme (Current: {{ currentTheme }})
       </button>
     </header>
 
-    <main class="content">
+    <main class="content" [formGroup]="datepickerForm">
       <section class="example-container">
-        <h2>Advanced Date Range Picker With Initial Value (Test Centering)</h2>
+        <h2>Date Range Picker (Reactive Forms) 🗓️</h2>
         <p>
-          This picker is initialized to <strong>{{ initialRangeValue.start | date: 'longDate' }}</strong>.
-          It must open centered on the month of this date.
+          Uses <code>formControlName="dateRange"</code> with preset ranges and <code>showTime</code>.
+          The calendar is centered on the initial value's start date.
         </p>
 
         <ngxsmk-datepicker
@@ -782,19 +843,41 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
           [showTime]="true"
           [minuteInterval]="15"
           [isInvalidDate]="isWeekend"
-          (valueChange)="handleRangeChange($event)"
           [theme]="currentTheme"
-          [value]="initialRangeValue" >
+          formControlName="dateRange">
         </ngxsmk-datepicker>
 
-        <div class="result-box"><strong>Output:</strong> {{ selectedRange }}</div>
+        <div class="result-box">
+          <strong>Form Value:</strong> <pre>{{ datepickerForm.controls.dateRange.value | json }}</pre>
+          <strong>Form Status:</strong> {{ datepickerForm.controls.dateRange.status }}
+        </div>
       </section>
 
       <section class="example-container">
-        <h2>Localization with Dark Mode</h2>
+        <h2>Single Date Selection with Time (Reactive Forms) ⏳</h2>
         <p>
-          Change the locale to see the month names, weekday names, and week start
-          day update automatically.
+          Uses <code>formControlName="singleDateWithTime"</code> with a 5-minute interval.
+          The control's value is a single <code>Date</code> object, including the time.
+        </p>
+
+        <ngxsmk-datepicker
+          mode="single"
+          [showTime]="true"
+          [minuteInterval]="5"
+          [theme]="currentTheme"
+          formControlName="singleDateWithTime">
+        </ngxsmk-datepicker>
+
+        <div class="result-box">
+          <strong>Form Value:</strong> <pre>{{ datepickerForm.controls.singleDateWithTime.value | json }}</pre>
+          <strong>Form Status:</strong> {{ datepickerForm.controls.singleDateWithTime.status }}
+        </div>
+      </section>
+
+      <section class="example-container">
+        <h2>Localization & Disabled State 🌐🚫</h2>
+        <p>
+          The picker is initially disabled via the form control (<code>disabledRange</code>). The locale changes dynamically.
         </p>
 
         <div class="locale-buttons">
@@ -806,42 +889,58 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
 
         <ngxsmk-datepicker
           [locale]="activeLocale"
-          [startAt]="startViewDate"
           [theme]="'dark'"
+          formControlName="disabledRange"
         ></ngxsmk-datepicker>
+        <br>
+        <button class="toggle-button" (click)="toggleDisabled()">Toggle Disabled State</button>
+
+        <div class="result-box">
+          <strong>Form Value:</strong> <pre>{{ datepickerForm.controls.disabledRange.value | json }}</pre>
+          <strong>Form Status:</strong> {{ datepickerForm.controls.disabledRange.status }}
+        </div>
       </section>
 
       <section class="example-container">
-        <h2>Single Date Selection</h2>
+        <h2>Single Date Selection with Min/Max Dates 📅</h2>
         <p>
-          This example disables past dates using <code>[minDate]</code> and future
-          dates using <code>[maxDate]</code> (Current range: {{minDate | date:'MM/dd/yyyy'}} to {{maxDate | date:'MM/dd/yyyy' }}).
+          Selection is limited between {{minDate | date:'MM/dd/yyyy'}} and {{maxDate | date:'MM/dd/yyyy' }}.
+          Uses <code>formControlName="singleDateMinMax"</code>.
         </p>
 
         <ngxsmk-datepicker
           mode="single"
           [minDate]="minDate"
           [maxDate]="maxDate"
-          (valueChange)="handleSingleDateChange($event)"
           [theme]="currentTheme"
+          formControlName="singleDateMinMax"
         >
         </ngxsmk-datepicker>
 
-        <div class="result-box"><strong>Output:</strong> {{ singleDateResult }}</div>
+        <div class="result-box">
+          <strong>Form Value:</strong> <pre>{{ datepickerForm.controls.singleDateMinMax.value | json }}</pre>
+          <strong>Form Status:</strong> {{ datepickerForm.controls.singleDateMinMax.status }}
+        </div>
       </section>
     </main>
   `,
   styles: [`
     :host {
+      --datepicker-primary-color: #6d28d9; --datepicker-primary-contrast: #ffffff;
+      --datepicker-range-background: #f5f3ff; --datepicker-background: #ffffff;
+      --datepicker-text-color: #222428; --datepicker-subtle-text-color: #9ca3af;
+      --datepicker-border-color: #e9e9e9; --datepicker-hover-background: #f0f0f0;
       display: block;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background-color: #f4f5f8;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
     :host(.dark-theme) {
+      --datepicker-range-background: rgba(139, 92, 246, 0.2); --datepicker-background: #1f2937;
+      --datepicker-text-color: #d1d5db; --datepicker-subtle-text-color: #6b7280;
+      --datepicker-border-color: #4b5563; --datepicker-hover-background: #374151;
       background-color: #111827;
     }
 
@@ -855,209 +954,92 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges {
       align-items: center;
     }
 
-    .app-header h1 {
-      margin: 0;
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
+    .app-header h1 { margin: 0; font-size: 1.5rem; font-weight: 600; }
 
-    .theme-toggle {
-      background-color: #3b82f6;
-      color: white;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background-color 0.2s;
+    .theme-toggle, .toggle-button {
+      background-color: #3b82f6; color: white; padding: 8px 12px; border: none; border-radius: 8px;
+      cursor: pointer; font-size: 0.9rem; transition: background-color 0.2s;
     }
-
-    .theme-toggle:hover {
-      background-color: #2563eb;
-    }
+    .toggle-button { background-color: #10b981; }
+    .theme-toggle:hover { background-color: #2563eb; }
+    .toggle-button:hover { background-color: #059669; }
 
     @media (max-width: 600px) {
-      .app-header {
-        padding: 1rem 1rem;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .app-header h1 {
-        font-size: 1.25rem;
-      }
+      .app-header { padding: 1rem 1rem; flex-direction: column; gap: 8px; }
+      .app-header h1 { font-size: 1.25rem; }
     }
 
-    .content {
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-    }
-
-    @media (max-width: 600px) {
-      .content {
-        padding: 1rem;
-        gap: 1.5rem;
-      }
-    }
+    .content { padding: 2rem; display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+    @media (max-width: 600px) { .content { padding: 1rem; gap: 1.5rem; } }
 
     .example-container {
-      width: 100%;
-      max-width: 620px;
-      padding: 1.5rem;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+      width: 100%; max-width: 620px; padding: 1.5rem; background: var(--datepicker-background, #ffffff);
+      border-radius: 12px; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+      display: flex; flex-direction: column; align-items: center;
     }
+    :host(.dark-theme) .example-container { background: #1f2937; color: #e5e7eb; }
 
-    :host(.dark-theme) .example-container {
-      background: #1f2937;
-      color: #e5e7eb;
-    }
-
-    .example-container h2 {
-      font-weight: 600;
-      margin-top: 0;
-      color: #333;
-    }
-    :host(.dark-theme) .example-container h2 {
-      color: #ffffff;
-    }
-
+    .example-container h2 { font-weight: 600; margin-top: 0; color: var(--datepicker-text-color, #333); }
     .example-container p {
-      color: #666;
-      font-size: 1rem;
-      margin-bottom: 24px;
-      border-left: 4px solid #e1e4e8;
-      padding-left: 12px;
-      line-height: 1.5;
-    }
-    :host(.dark-theme) .example-container p {
-      color: #9ca3af;
-      border-left-color: #4b5563;
-    }
-
-    @media (max-width: 600px) {
-      .example-container {
-        padding: 1rem;
-        border-radius: 8px;
-      }
-
-      .example-container h2 {
-        font-size: 1.25rem;
-      }
-
-      .example-container p {
-        font-size: 0.95rem;
-        margin-bottom: 16px;
-      }
+      color: var(--datepicker-subtle-text-color, #666); font-size: 1rem; margin-bottom: 24px;
+      border-left: 4px solid var(--datepicker-border-color, #e1e4e8); padding-left: 12px;
+      line-height: 1.5; width: 100%;
     }
 
     .result-box {
-      margin-top: 24px;
-      padding: 1rem;
-      background-color: #f6f8fa;
-      border: 1px solid #d1d5da;
-      border-radius: 8px;
+      margin-top: 24px; padding: 1rem; background-color: var(--datepicker-hover-background, #f6f8fa);
+      border: 1px solid var(--datepicker-border-color, #d1d5da); border-radius: 8px;
       font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-      font-size: 0.95rem;
-      word-wrap: break-word;
-      color: #24292e;
+      font-size: 0.95rem; word-wrap: break-word; color: var(--datepicker-text-color, #24292e); width: 100%;
     }
+    .result-box strong { font-weight: 600; }
 
-    :host(.dark-theme) .result-box {
-      background-color: #374151;
-      border-color: #4b5563;
-      color: #e5e7eb;
-    }
-
-    .result-box strong {
-      font-weight: 600;
-    }
-
-    @media (max-width: 600px) {
-      .result-box {
-        margin-top: 16px;
-        padding: 0.75rem;
-        font-size: 0.85rem;
-      }
-    }
-
-    .locale-buttons {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 1rem;
-    }
-
+    .locale-buttons { display: flex; flex-direction: row; align-items: center; gap: 1rem; }
     .locale-buttons button {
-      background-color: #04aa6d;
-      border: none;
-      color: white;
-      padding: 10px;
-      text-align: center;
-      text-decoration: none;
-      font-size: 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      min-height: 44px;
-      min-width: 44px;
-      transition: background-color 0.2s;
+      background-color: #04aa6d; border: none; color: white; padding: 10px; text-align: center;
+      text-decoration: none; font-size: 14px; border-radius: 12px; cursor: pointer;
+      min-height: 44px; min-width: 44px; transition: background-color 0.2s;
     }
-
-    .locale-buttons button.active {
-      background-color: #037f52;
-      box-shadow: 0 0 0 3px rgba(4, 170, 109, 0.4);
-    }
-
-    @media (max-width: 600px) {
-      .locale-buttons {
-        flex-direction: column;
-        width: 100%;
-        gap: 0.75rem;
-      }
-
-      .locale-buttons button {
-        width: 100%;
-        padding: 12px;
-        font-size: 1rem;
-      }
-    }
+    .locale-buttons button.active { background-color: #037f52; box-shadow: 0 0 0 3px rgba(4, 170, 109, 0.4); }
   `],
 })
 export class App {
   private today = new Date();
   private fourMonthsFromNow = addMonths(this.today, 4);
 
-  public singleDateResult: string = 'No date selected yet.';
-  public selectedRange: string = 'No date range selected yet.';
-  // Set minDate to today at midnight
   public minDate: Date = getStartOfDay(this.today);
-  // Set maxDate to end of next month
   public maxDate: Date = getEndOfDay(addMonths(this.today, 1));
   public activeLocale: string = 'en-US';
-
   public currentTheme: 'light' | 'dark' = 'light';
-  // Date to center the locale example's calendar view on
-  public startViewDate: Date = new Date('2025-10-12');
-
-  @HostBinding('class.dark-theme') get isDarkMode() {
-    return this.currentTheme === 'dark';
-  }
 
   public initialRangeValue: { start: Date; end: Date } = {
     start: getStartOfDay(this.fourMonthsFromNow),
     end: getEndOfDay(this.fourMonthsFromNow),
   };
+  public initialSingleDateTimeValue: Date = new Date();
+
+  constructor() {
+    this.initialSingleDateTimeValue.setFullYear(this.today.getFullYear(), this.today.getMonth(), this.today.getDate() + 2);
+    this.initialSingleDateTimeValue.setHours(14, 30, 0, 0);
+  }
+
+  public datepickerForm = new FormGroup({
+    dateRange: new FormControl(this.initialRangeValue),
+    singleDateWithTime: new FormControl(this.initialSingleDateTimeValue),
+    singleDateMinMax: new FormControl<Date | null>(null),
+    disabledRange: new FormControl({ value: this.initialRangeValue, disabled: true }),
+  });
 
   public myRanges: DateRange = {
-    Today: [getStartOfDay(this.today), getEndOfDay(this.today)],
-    Yesterday: [getStartOfDay(subtractDays(this.today, 1)), getEndOfDay(subtractDays(this.today, 1))],
+    'Today': [getStartOfDay(this.today), getEndOfDay(this.today)],
+    'Yesterday': [getStartOfDay(subtractDays(this.today, 1)), getEndOfDay(subtractDays(this.today, 1))],
     'Last 7 Days': [getStartOfDay(subtractDays(this.today, 6)), getEndOfDay(this.today)],
     'This Month': [getStartOfMonth(this.today), getEndOfMonth(this.today)],
   };
+
+  @HostBinding('class.dark-theme') get isDarkMode() {
+    return this.currentTheme === 'dark';
+  }
 
   isWeekend = (date: Date): boolean => {
     const day = date.getDay();
@@ -1072,19 +1054,12 @@ export class App {
     this.activeLocale = locale;
   }
 
-  handleSingleDateChange(selectedDate: Date | { start: Date; end: Date }): void {
-    if (selectedDate instanceof Date) {
-      this.singleDateResult = `Selected: ${selectedDate.toLocaleDateString()}`;
+  toggleDisabled(): void {
+    const control = this.datepickerForm.controls.disabledRange;
+    if (control.disabled) {
+      control.enable();
+    } else {
+      control.disable();
     }
-  }
-
-  handleRangeChange(range: Date | { start: Date; end: Date }): void {
-    const r = range as { start: Date; end: Date };
-    if (r?.start && r.end) {
-      this.selectedRange = `From: ${r.start.toLocaleDateString()} | To: ${r.end.toLocaleDateString()}`;
-    } else if (r?.start) {
-      this.selectedRange = `Start Date: ${r.start.toLocaleDateString()}`;
-    }
-    this.initialRangeValue = r as { start: Date; end: Date };
   }
 }
