@@ -4,8 +4,5 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  DISABLE_ANGULAR_PLUGIN = "true"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200

@@ -47,13 +47,12 @@
             "polyfills": [
               "zone.js"
             ],
-            "tsConfig": "projects/demo-app/tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "projects/demo-app/public"
-              }
+              },
+              "projects/demo-app/src/_redirects"
             ],
             "styles": [
               "projects/demo-app/src/styles.scss"
