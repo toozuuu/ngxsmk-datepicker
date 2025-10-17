@@ -69,7 +69,7 @@ export interface HolidayProvider {
 
 
 @Component({
-  selector: 'app-custom-select',
+  selector: 'ngxsmk-custom-select',
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -194,9 +194,9 @@ export class CustomSelectComponent {
             <div class="ngxsmk-calendar-container">
               <div class="ngxsmk-header">
                 <div class="ngxsmk-month-year-selects">
-                  <app-custom-select class="month-select" [options]="monthOptions"
-                                    [(value)]="currentMonth" [disabled]="disabled"></app-custom-select>
-                  <app-custom-select class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled"></app-custom-select>
+                  <ngxsmk-custom-select class="month-select" [options]="monthOptions"
+                                    [(value)]="currentMonth" [disabled]="disabled"></ngxsmk-custom-select>
+                  <ngxsmk-custom-select class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled"></ngxsmk-custom-select>
                 </div>
                 <div class="ngxsmk-nav-buttons">
                   <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled">
@@ -243,28 +243,28 @@ export class CustomSelectComponent {
               @if (showTime) {
                 <div class="ngxsmk-time-selection">
                   <span class="ngxsmk-time-label">Time:</span>
-                  <app-custom-select
+                  <ngxsmk-custom-select
                     class="hour-select"
                     [options]="hourOptions"
                     [(value)]="currentDisplayHour"
                     (valueChange)="onTimeChange()"
                     [disabled]="disabled"
-                  ></app-custom-select>
+                  ></ngxsmk-custom-select>
                   <span class="ngxsmk-time-separator">:</span>
-                  <app-custom-select
+                  <ngxsmk-custom-select
                     class="minute-select"
                     [options]="minuteOptions"
                     [(value)]="currentMinute"
                     (valueChange)="onTimeChange()"
                     [disabled]="disabled"
-                  ></app-custom-select>
-                  <app-custom-select
+                  ></ngxsmk-custom-select>
+                  <ngxsmk-custom-select
                     class="ampm-select"
                     [options]="ampmOptions"
                     [(value)]="isPm"
                     (valueChange)="onTimeChange()"
                     [disabled]="disabled"
-                  ></app-custom-select>
+                  ></ngxsmk-custom-select>
                 </div>
               }
               
