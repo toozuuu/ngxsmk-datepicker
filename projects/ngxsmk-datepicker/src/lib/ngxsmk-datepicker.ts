@@ -51,7 +51,7 @@ export interface DateRange {
   [key: string]: [DateInput, DateInput];
 }
 
-export type DatepickerValue = Date | { start: Date, end: Date } | null;
+export type DatepickerValue = Date | { start: Date, end: Date } | Date[] | null;
 
 
 @Component({
@@ -191,6 +191,7 @@ export class CustomSelectComponent {
               <div class="ngxsmk-day-cell"
                    [class.empty]="!day" [class.disabled]="isDateDisabled(day)" [class.today]="isSameDay(day, today)"
                    [class.selected]="mode === 'single' && isSameDay(day, selectedDate)"
+                   [class.multiple-selected]="mode === 'multiple' && isMultipleSelected(day)"
                    [class.start-date]="mode === 'range' && isSameDay(day, startDate)"
                    [class.end-date]="mode === 'range' && isSameDay(day, endDate)"
                    [class.in-range]="mode === 'range' && isInRange(day)"
@@ -342,8 +343,16 @@ export class CustomSelectComponent {
     }
     .ngxsmk-day-cell.start-date .ngxsmk-day-number,
     .ngxsmk-day-cell.end-date .ngxsmk-day-number,
-    .ngxsmk-day-cell.selected .ngxsmk-day-number {
+    .ngxsmk-day-cell.selected .ngxsmk-day-number,
+    .ngxsmk-day-cell.multiple-selected .ngxsmk-day-number {
       background-color: var(--datepicker-primary-color); color: var(--datepicker-primary-contrast);
+    }
+    .ngxsmk-day-cell.multiple-selected .ngxsmk-day-number {
+      border: 1px dashed var(--datepicker-primary-contrast);
+    }
+    .ngxsmk-day-cell.multiple-selected:hover .ngxsmk-day-number {
+      background-color: var(--datepicker-primary-color);
+      color: var(--datepicker-primary-contrast);
     }
     .ngxsmk-day-cell.in-range, .ngxsmk-day-cell.start-date,
     .ngxsmk-day-cell.end-date, .ngxsmk-day-cell.preview-range {
@@ -401,7 +410,7 @@ export class CustomSelectComponent {
   `],
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValueAccessor {
-  @Input() mode: 'single' | 'range' = 'single';
+  @Input() mode: 'single' | 'range' | 'multiple' = 'single';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   @Input() showRanges: boolean = true;
   @Input() showTime: boolean = false;
@@ -424,6 +433,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
   @Input() set disabledState(isDisabled: boolean) { this.disabled = isDisabled; }
 
   @Output() valueChange = new EventEmitter<DatepickerValue>();
+  @Output() action = new EventEmitter<{ type: string; payload?: any }>();
 
   private _minDate: Date | null = null;
   @Input() set minDate(value: DateInput | null) { this._minDate = this._normalizeDate(value); }
@@ -451,6 +461,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
   public weekDays: string[] = [];
   public readonly today: Date = getStartOfDay(new Date());
   public selectedDate: Date | null = null;
+  public selectedDates: Date[] = [];
   public startDate: Date | null = null;
   public endDate: Date | null = null;
   public hoveredDate: Date | null = null;
@@ -596,19 +607,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
   private initializeValue(value: DatepickerValue): void {
     let initialDate: Date | null = null;
 
+    this.selectedDate = null;
+    this.startDate = null;
+    this.endDate = null;
+    this.selectedDates = [];
+
     if (value) {
       if (this.mode === 'single' && value instanceof Date) {
         this.selectedDate = this._normalizeDate(value);
         initialDate = this.selectedDate;
       } else if (this.mode === 'range' && typeof value === 'object' && 'start' in value && 'end' in value) {
-        this.startDate = this._normalizeDate(value.start);
-        this.endDate = this._normalizeDate(value.end);
+        this.startDate = this._normalizeDate((value as {start: Date, end: Date}).start);
+        this.endDate = this._normalizeDate((value as {start: Date, end: Date}).end);
         initialDate = this.startDate;
+      } else if (this.mode === 'multiple' && Array.isArray(value)) {
+        this.selectedDates = (value as Date[]).map(d => this._normalizeDate(d)).filter((d): d is Date => d !== null);
+        initialDate = this.selectedDates.length > 0 ? this.selectedDates[this.selectedDates.length - 1] : null;
       }
-    } else {
-      this.selectedDate = null;
-      this.startDate = null;
-      this.endDate = null;
     }
 
     const viewCenterDate = initialDate || this._startAtDate || new Date();
@@ -683,6 +698,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
     this.currentDate = new Date(this.startDate);
     this.initializeValue({start: this.startDate, end: this.endDate});
     this.generateCalendar();
+    this.action.emit({type: 'rangeSelected', payload: {start: this.startDate, end: this.endDate, key: this.rangesArray.find(r => r.value === range)?.key}});
   }
 
   public isDateDisabled(date: Date | null): boolean {
@@ -701,6 +717,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
     return this.isInvalidDate(date);
   }
 
+  public isMultipleSelected(d: Date | null): boolean {
+    if (!d || this.mode !== 'multiple') return false;
+    const dTime = getStartOfDay(d).getTime();
+    return this.selectedDates.some(selected => getStartOfDay(selected).getTime() === dTime);
+  }
+
   public onTimeChange(): void {
     if (this.disabled) return;
     if (this.mode === 'single' && this.selectedDate) {
@@ -712,16 +734,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
       this.emitValue({start: this.startDate as Date, end: this.endDate as Date});
     } else if (this.mode === 'range' && this.startDate && !this.endDate) {
       this.startDate = this.applyCurrentTime(this.startDate);
+    } else if (this.mode === 'multiple') {
+      this.selectedDates = this.selectedDates.map(date => {
+        const newDate = getStartOfDay(date);
+        return this.applyCurrentTime(newDate);
+      });
+      this.emitValue([...this.selectedDates]);
     }
+
+    this.action.emit({type: 'timeChanged', payload: {hour: this.currentHour, minute: this.currentMinute}});
   }
 
   public onDateClick(day: Date | null): void {
     if (!day || this.isDateDisabled(day) || this.disabled) return;
 
+    const dateToToggle = getStartOfDay(day);
+
     if (this.mode === 'single') {
       this.selectedDate = this.applyCurrentTime(day);
       this.emitValue(this.selectedDate);
-    } else {
+    } else if (this.mode === 'range') {
       if (!this.startDate || (this.startDate && this.endDate)) {
         this.startDate = this.applyCurrentTime(day);
         this.endDate = null;
@@ -733,13 +765,36 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
         this.endDate = null;
       }
       this.hoveredDate = null;
+    } else if (this.mode === 'multiple') {
+      const existingIndex = this.selectedDates.findIndex(d => this.isSameDay(d, dateToToggle));
+
+      if (existingIndex > -1) {
+        this.selectedDates.splice(existingIndex, 1);
+      } else {
+        const dateWithTime = this.applyCurrentTime(dateToToggle);
+        this.selectedDates.push(dateWithTime);
+        this.selectedDates.sort((a, b) => a.getTime() - b.getTime());
+      }
+      this.emitValue([...this.selectedDates]);
     }
 
-    const dateToSync = this.mode === 'single' ? this.selectedDate : this.startDate;
+    const dateToSync = this.mode === 'single' ? this.selectedDate :
+      this.mode === 'range' ? this.startDate :
+        this.mode === 'multiple' && this.selectedDates.length > 0 ? this.selectedDates[this.selectedDates.length - 1] : null;
+
     if (dateToSync) {
       this.update12HourState(dateToSync.getHours());
       this.currentMinute = dateToSync.getMinutes();
     }
+
+    this.action.emit({
+      type: 'dateSelected',
+      payload: {
+        mode: this.mode,
+        value: this._internalValue,
+        date: day
+      }
+    });
   }
 
   public onDateHover(day: Date | null): void {
@@ -774,6 +829,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
     for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
       this.daysInMonth.push(this._normalizeDate(new Date(year, month, i)));
     }
+
+    this.action.emit({
+      type: 'calendarGenerated',
+      payload: {
+        month: month,
+        year: year,
+        days: this.daysInMonth.filter(d => d !== null)
+      }
+    });
   }
 
   private generateDropdownOptions(): void {
@@ -848,6 +912,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
           <strong>Form Value:</strong>
           <pre>{{ datepickerForm.controls.dateRange.value | json }}</pre>
           <strong>Form Status:</strong> {{ datepickerForm.controls.dateRange.status }}
+        </div>
+      </section>
+
+      <section class="example-container">
+        <h2>Multiple Date Selection (Booking) 🗓️🗓️🗓️</h2>
+        <p>
+          Uses <code>mode="multiple"</code> to select non-contiguous dates (e.g., for booking).
+          The value is an array of <code>Date</code> objects.
+        </p>
+
+        <ngxsmk-datepicker
+          mode="multiple"
+          [isInvalidDate]="isWeekend"
+          [theme]="currentTheme"
+          (action)="handleDatepickerAction($event)"
+          formControlName="multipleDates">
+        </ngxsmk-datepicker>
+
+        <div class="result-box">
+          <strong>Form Value:</strong>
+          <pre>{{ datepickerForm.controls.multipleDates.value | json }}</pre>
+          <strong>Last Action:</strong> <pre>{{ lastAction | json }}</pre>
         </div>
       </section>
 
@@ -1013,6 +1099,7 @@ export class App {
   public maxDate: Date = getEndOfDay(addMonths(this.today, 1));
   public activeLocale: string = 'en-US';
   public currentTheme: 'light' | 'dark' = 'light';
+  public lastAction: any = null;
 
   public initialRangeValue: { start: Date; end: Date } = {
     start: getStartOfDay(this.fourMonthsFromNow),
@@ -1028,6 +1115,7 @@ export class App {
   public datepickerForm = new FormGroup({
     dateRange: new FormControl(this.initialRangeValue),
     singleDateWithTime: new FormControl(this.initialSingleDateTimeValue),
+    multipleDates: new FormControl<Date[] | null>(null),
     singleDateMinMax: new FormControl<Date | null>(null),
     disabledRange: new FormControl({ value: this.initialRangeValue, disabled: true }),
   });
@@ -1063,5 +1151,10 @@ export class App {
     } else {
       control.disable();
     }
+  }
+
+  handleDatepickerAction(event: { type: string; payload?: any }): void {
+    console.log('Datepicker Action:', event);
+    this.lastAction = event;
   }
 }
