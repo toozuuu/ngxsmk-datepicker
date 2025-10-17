@@ -6,9 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:demo": "ng build ngxsmk-datepicker && ng serve demo-app",
     "build": "ng build",
-    "build:demo": "ng build ngxsmk-datepicker && ng build demo-app --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -16,6 +14,7 @@
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0"
   },
+  "dependencies": {},
   "main": "fesm2020/ngxsmk-datepicker.mjs",
   "module": "fesm2020/ngxsmk-datepicker.mjs",
   "es2020": "fesm2020/ngxsmk-datepicker.mjs",
@@ -54,12 +53,8 @@
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.5",
-    "@angular/cli": "^17.0.0",
     "@angular/forms": "^20.3.4",
     "@types/jasmine": "^5.1.9",
     "ng-packagr": "^20.3.0"
-  },
-  "overrides": {
-    "find-cache-directory": "3.3.2"
   }
 }
