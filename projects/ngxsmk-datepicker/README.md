@@ -23,6 +23,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Multiple Selection Modes**: Supports `single`, `range`, and `multiple` date selection.
 * **Inline and Popover Display**: Can be rendered inline or as a popover with automatic mode detection.
 * **Light and Dark Themes**: Includes built-in support for light and dark modes.
+* **Holiday Marking**: Automatically mark and disable holidays using a custom `HolidayProvider`.
 * **Date & Time Selection**: Supports optional time inputs with configurable minute intervals.
 * **12h/24h Time Support**: Uses internal 24-hour timekeeping but displays a user-friendly **12-hour clock with AM/PM toggle**.
 * **Predefined Date Ranges**: Offers quick selection of common ranges (e.g., "Last 7 Days").
@@ -45,7 +46,7 @@ ngxsmk-datepicker is a standalone component, so you can import it directly into 
 In your component file (e.g., app.component.ts), import NgxsmkDatepickerComponent.
 
     import { Component } from '@angular/core';    
-    import { NgxsmkDatepickerComponent, DateRange } from 'ngxsmk-datepicker';  
+    import { NgxsmkDatepickerComponent, DateRange, HolidayProvider } from 'ngxsmk-datepicker';  
       
     @Component({    
       selector: 'app-root',    
@@ -112,6 +113,8 @@ Use the `<ngxsmk-datepicker>` selector in your HTML template.
 | showTime       | boolean                                            | false                 | Enables the hour/minute/AM/PM selection section.                                                              |
 | value          | DatepickerValue                                    | null                  | The initial selected date, date range, or array of dates.                                                     |
 | startAt        | DateInput                                          | null                  | The date to initially center the calendar view on.                                                            |
+| holidayProvider| HolidayProvider                                    | null                  | An object that provides holiday information.                                                                  |
+| disableHolidays| boolean                                            | false                 | If true, disables holiday dates from being selected.                                                          |
 
 ### **Outputs**
 

@@ -19,3 +19,7 @@ To run the demo application, follow these steps:
     ```
 
 This will start a development server and open the demo application in your browser.
+
+## HolidayProvider
+
+The demo application includes a sample `HolidayProvider` that marks US holidays. You can find the implementation in the `app.ts` file.

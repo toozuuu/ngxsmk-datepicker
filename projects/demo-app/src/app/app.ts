@@ -2,9 +2,9 @@ import {Component, HostBinding} from '@angular/core';
 import {CommonModule, JsonPipe} from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {
-  DatepickerValue,
   DateRange,
-  NgxsmkDatepickerComponent
+  NgxsmkDatepickerComponent,
+  HolidayProvider,
 } from "../../../../projects/ngxsmk-datepicker/src/lib/ngxsmk-datepicker";
 
 function getStartOfDay(d: Date): Date {
@@ -35,6 +35,41 @@ function getEndOfMonth(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth() + 1, 0);
 }
 
+class SampleHolidayProvider implements HolidayProvider {
+  private readonly holidays: { [key: string]: string } = {
+    // 2025 US Holidays (Simplified list)
+    '2025-01-01': 'New Year\'s Day',
+    '2025-01-20': 'MLK Jr. Day',
+    '2025-02-17': 'Presidents\' Day',
+    '2025-05-26': 'Memorial Day',
+    '2025-07-04': 'Independence Day',
+    '2025-09-01': 'Labor Day',
+    '2025-10-13': 'Columbus Day',
+    '2025-11-11': 'Veterans Day',
+    '2025-11-27': 'Thanksgiving',
+    '2025-12-25': 'Christmas Day',
+  };
+
+  private formatDateKey(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  isHoliday(date: Date): boolean {
+    const key = this.formatDateKey(date);
+    return !!this.holidays[key];
+  }
+
+  getHolidayLabel(date: Date): string | null {
+    const key = this.formatDateKey(date);
+    return this.holidays[key] || null;
+  }
+}
+// ----------------------------------------------------
+
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -48,6 +83,35 @@ function getEndOfMonth(d: Date): Date {
     </header>
 
     <main class="content" [formGroup]="datepickerForm">
+
+      <section class="example-container">
+        <h2>Holiday Provider Integration 🎁</h2>
+        <p>
+          This example uses a custom <code>HolidayProvider</code> class to automatically mark 
+          (and optionally disable) US holidays. The dates are colored and the name is available via a tooltip.
+        </p>
+
+        <div class="holiday-controls">
+            <label>
+                <input type="checkbox" [checked]="disableHolidays" (change)="disableHolidays = !disableHolidays">
+                Disable Holidays
+            </label>
+        </div>
+
+        <ngxsmk-datepicker
+          mode="single"
+          placeholder="Select a date"
+          [holidayProvider]="holidayProvider"
+          [disableHolidays]="disableHolidays"
+          [theme]="currentTheme"
+          formControlName="singleDate">
+        </ngxsmk-datepicker>
+
+        <div class="result-box">
+          <strong>Form Value:</strong>
+          <pre>{{ datepickerForm.controls.singleDate.value | json }}</pre>
+        </div>
+      </section>
 
       <section class="example-container">
         <h2>Single Date Picker</h2>
@@ -73,7 +137,7 @@ function getEndOfMonth(d: Date): Date {
       <section class="example-container">
         <h2>Inline Range Picker</h2>
         <p>
-          The calendar is always visible and allows selecting a date range. The form control is initially disabled.
+          The calendar is always visible (<code>inline="true"</code>) and allows selecting a date range. The form control is initially disabled.
         </p>
 
         <ngxsmk-datepicker
@@ -241,7 +305,23 @@ function getEndOfMonth(d: Date): Date {
       flex-direction: column;
       align-items: center;
     }
-
+    
+    .holiday-controls {
+        width: 100%;
+        padding: 8px 12px;
+        margin-bottom: 12px;
+        border: 1px solid var(--datepicker-border-color);
+        border-radius: 8px;
+        background-color: var(--datepicker-hover-background);
+        font-size: 0.9rem;
+        color: var(--datepicker-text-color);
+    }
+    .holiday-controls label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
     :host(.dark-theme) .example-container {
       background: #1f2937;
       color: #e5e7eb;
@@ -309,12 +389,16 @@ function getEndOfMonth(d: Date): Date {
   `],
 })
 export class App {
-  private today = new Date();
+  private readonly today = new Date();
 
   public minDate: Date = getStartOfDay(this.today);
   public maxDate: Date = getEndOfDay(addMonths(this.today, 1));
   public currentTheme: 'light' | 'dark' = 'light';
   public lastAction: any = null;
+  
+  // NEW: Holiday Provider
+  public holidayProvider: HolidayProvider = new SampleHolidayProvider();
+  public disableHolidays: boolean = true; // State for the checkbox
 
   public datepickerForm = new FormGroup({
     singleDate: new FormControl(getStartOfDay(addMonths(this.today, 1))),
