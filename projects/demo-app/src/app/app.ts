@@ -5,7 +5,7 @@ import {
   DateRange,
   NgxsmkDatepickerComponent,
   HolidayProvider,
-} from "../../../../projects/ngxsmk-datepicker/src/lib/ngxsmk-datepicker";
+} from "ngxsmk-datepicker";
 
 function getStartOfDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
