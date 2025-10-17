@@ -61,6 +61,7 @@
           },
           "configurations": {
             "production": {
+              "outputPath": "dist/demo-app",
               "budgets": [
                 {
                   "type": "initial",
