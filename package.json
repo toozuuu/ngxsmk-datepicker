@@ -56,8 +56,10 @@
     "@angular-devkit/build-angular": "^20.3.5",
     "@angular/cli": "^17.0.0",
     "@angular/forms": "^20.3.4",
-    "@netlify/angular-runtime": "^3.0.0",
     "@types/jasmine": "^5.1.9",
     "ng-packagr": "^20.3.0"
+  },
+  "overrides": {
+    "find-cache-directory": "3.3.2"
   }
 }
