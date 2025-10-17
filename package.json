@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:demo": "ng build ngxsmk-datepicker && ng serve demo-app",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
