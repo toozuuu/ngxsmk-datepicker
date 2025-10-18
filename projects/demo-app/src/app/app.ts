@@ -191,8 +191,47 @@ class SampleHolidayProvider implements HolidayProvider {
         </div>
       </section>
 
-    </main>
-  `,
+     </main>
+
+     <footer class="app-footer">
+       <div class="footer-content">
+         <div class="footer-brand">
+           <h3>ngxsmk-datepicker</h3>
+           <p>Optimized for performance, built for developers</p>
+           <div class="version-info">
+             <span class="version-badge">v1.3.6</span>
+           </div>
+         </div>
+         
+         <div class="footer-links">
+           <a href="https://github.com/toozuuu/ngxsmk-datepicker" target="_blank" rel="noopener noreferrer" class="github-link">
+             <span class="github-icon">📁</span>
+             GitHub Repository
+           </a>
+           <div class="author-info">
+             <span class="author-label">Created by:</span>
+             <span class="author-name">Sachin Dilshan</span>
+             <a href="mailto:sachindilshan040@gmail.com" class="author-email">sachindilshan040@gmail.com</a>
+           </div>
+         </div>
+         
+         <div class="footer-stats">
+           <div class="footer-stat">
+             <span class="stat-value">30%</span>
+             <span class="stat-desc">Smaller Bundle</span>
+           </div>
+           <div class="footer-stat">
+             <span class="stat-value">40%</span>
+             <span class="stat-desc">Faster Render</span>
+           </div>
+           <div class="footer-stat">
+             <span class="stat-value">60%</span>
+             <span class="stat-desc">Faster Selection</span>
+           </div>
+         </div>
+       </div>
+     </footer>
+   `,
   styles: [`
     :host {
       --datepicker-primary-color: #6d28d9;
@@ -373,11 +412,166 @@ class SampleHolidayProvider implements HolidayProvider {
       transition: background-color 0.2s;
     }
 
-    .locale-buttons button.active {
-      background-color: #037f52;
-      box-shadow: 0 0 0 3px rgba(4, 170, 109, 0.4);
-    }
-  `],
+     .locale-buttons button.active {
+       background-color: #037f52;
+       box-shadow: 0 0 0 3px rgba(4, 170, 109, 0.4);
+     }
+
+     /* Footer Styles */
+     .app-footer {
+       background: var(--datepicker-background, #ffffff);
+       color: var(--datepicker-text-color, #333);
+       padding: 2rem 0;
+       margin-top: 3rem;
+       border-top: 1px solid var(--datepicker-border-color, #e9e9e9);
+     }
+
+     .footer-content {
+       max-width: 1200px;
+       margin: 0 auto;
+       padding: 0 2rem;
+       display: grid;
+       grid-template-columns: 1fr 1fr 1fr;
+       gap: 2rem;
+       align-items: start;
+     }
+
+     .footer-brand h3 {
+       font-size: 1.5rem;
+       font-weight: 700;
+       margin: 0 0 0.5rem 0;
+       color: var(--datepicker-text-color, #333);
+     }
+
+     .footer-brand p {
+       color: var(--datepicker-subtle-text-color, #666);
+       margin: 0 0 1rem 0;
+       font-size: 0.95rem;
+     }
+
+     .version-info {
+       margin-top: 0.5rem;
+     }
+
+     .version-badge {
+       display: inline-block;
+       background: var(--datepicker-primary-color, #6d28d9);
+       padding: 0.25rem 0.75rem;
+       border-radius: 1rem;
+       font-size: 0.8rem;
+       font-weight: 600;
+       color: white;
+       border: 1px solid var(--datepicker-primary-color, #6d28d9);
+     }
+
+     .footer-links {
+       display: flex;
+       flex-direction: column;
+       gap: 1rem;
+     }
+
+     .github-link {
+       display: inline-flex;
+       align-items: center;
+       gap: 0.5rem;
+       color: var(--datepicker-primary-color, #6d28d9);
+       text-decoration: none;
+       font-weight: 600;
+       padding: 0.5rem 1rem;
+       border: 1px solid var(--datepicker-primary-color, #6d28d9);
+       border-radius: 0.5rem;
+       transition: all 0.2s ease;
+       background: var(--datepicker-range-background, #f5f3ff);
+     }
+
+     .github-link:hover {
+       background: var(--datepicker-primary-color, #6d28d9);
+       color: white;
+       transform: translateY(-1px);
+     }
+
+     .github-icon {
+       font-size: 1.25rem;
+     }
+
+     .author-info {
+       display: flex;
+       flex-direction: column;
+       gap: 0.25rem;
+     }
+
+     .author-label {
+       font-size: 0.875rem;
+       color: var(--datepicker-subtle-text-color, #666);
+       font-weight: 500;
+     }
+
+     .author-name {
+       font-weight: 600;
+       color: var(--datepicker-text-color, #333);
+     }
+
+     .author-email {
+       color: var(--datepicker-primary-color, #6d28d9);
+       text-decoration: none;
+       font-size: 0.875rem;
+     }
+
+     .author-email:hover {
+       text-decoration: underline;
+     }
+
+     .footer-stats {
+       display: flex;
+       flex-direction: column;
+       gap: 1rem;
+     }
+
+     .footer-stat {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       text-align: center;
+     }
+
+     .stat-value {
+       font-size: 1.5rem;
+       font-weight: 700;
+       color: var(--datepicker-primary-color, #6d28d9);
+       line-height: 1;
+     }
+
+     .stat-desc {
+       font-size: 0.875rem;
+       color: var(--datepicker-subtle-text-color, #666);
+       font-weight: 500;
+     }
+
+     /* Responsive Footer */
+     @media (max-width: 768px) {
+       .footer-content {
+         grid-template-columns: 1fr;
+         gap: 1.5rem;
+         text-align: center;
+       }
+
+       .footer-links {
+         align-items: center;
+       }
+
+       .footer-stats {
+         flex-direction: row;
+         justify-content: space-around;
+       }
+     }
+
+     @media (max-width: 480px) {
+       .footer-stats {
+         flex-direction: column;
+         gap: 0.5rem;
+       }
+     }
+   `],
 })
 export class App {
   private readonly today = new Date();

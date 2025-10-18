@@ -11,148 +11,38 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  ChangeDetectionStrategy,
+  OnDestroy,
 } from '@angular/core';
-import {CommonModule, DatePipe, JsonPipe} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {
   ControlValueAccessor,
   FormsModule,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
-  FormControl,
-  FormGroup,
 } from '@angular/forms';
+import {
+  getStartOfDay,
+  addMonths,
+  normalizeDate,
+  DateInput,
+} from './utils/date.utils';
+import {
+  HolidayProvider,
+  DateRange,
+  DatepickerValue,
+  generateMonthOptions,
+  generateYearOptions,
+  generateTimeOptions,
+  generateWeekDays,
+  getFirstDayOfWeek,
+  get24Hour,
+  update12HourState,
+  processDateRanges,
+} from './utils/calendar.utils';
+import { CustomSelectComponent } from './components/custom-select.component';
+import { createDateComparator } from './utils/performance.utils';
 
-function getStartOfDay(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
-}
-function getEndOfDay(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
-}
-function addMonths(d: Date, months: number): Date {
-  const newDate = new Date(d);
-  newDate.setMonth(d.getMonth() + months);
-  return newDate;
-}
-function subtractDays(d: Date, days: number): Date {
-  const newDate = new Date(d);
-  newDate.setDate(d.getDate() - days);
-  return newDate;
-}
-function getStartOfMonth(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth(), 1);
-}
-function getEndOfMonth(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth() + 1, 0);
-}
-
-export type DateInput = Date | string | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };
-
-export interface DateRange {
-  [key: string]: [DateInput, DateInput];
-}
-
-export type DatepickerValue = Date | { start: Date, end: Date } | Date[] | null;
-
-// NEW INTERFACE for Holiday Provider
-export interface HolidayProvider {
-  /**
-   * Returns true if the given date is a holiday.
-   * The date passed will be at the start of the day (00:00:00).
-   */
-  isHoliday(date: Date): boolean;
-  
-  /**
-   * Optional: Returns a label or reason for the holiday.
-   */
-  getHolidayLabel?(date: Date): string | null;
-}
-
-
-@Component({
-  selector: 'ngxsmk-custom-select',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="ngxsmk-select-container" (click)="toggleDropdown()">
-      <button type="button" class="ngxsmk-select-display" [disabled]="disabled">
-        <span>{{ displayValue }}</span>
-        <svg class="ngxsmk-arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                d="M112 184l144 144 144-144"/>
-        </svg>
-      </button>
-      @if (isOpen) {
-        <div class="ngxsmk-options-panel">
-          <ul>
-            @for (option of options; track option.value) {
-              <li [class.selected]="option.value === value" (click)="selectOption(option); $event.stopPropagation()">
-                {{ option.label }}
-              </li>
-            }
-          </ul>
-        </div>
-      }
-    </div>
-  `,
-  styles: [`
-    :host { position: relative; display: inline-block; }
-    .ngxsmk-select-container { cursor: pointer; }
-    .ngxsmk-select-display {
-      display: flex; align-items: center; justify-content: space-between;
-      width: var(--custom-select-width, 115px); background: var(--datepicker-background, #fff);
-      border: 1px solid var(--datepicker-border-color, #ccc); color: var(--datepicker-text-color, #333);
-      border-radius: 4px; padding: 4px 8px; font-size: 14px; text-align: left; height: 30px;
-    }
-    .ngxsmk-select-display:disabled {
-      background-color: var(--datepicker-hover-background, #f0f0f0);
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
-    .ngxsmk-arrow-icon { width: 12px; height: 12px; margin-left: 8px; }
-    .ngxsmk-options-panel {
-      position: absolute; top: 110%; left: 0; width: 100%;
-      background: var(--datepicker-background, #fff); border: 1px solid var(--datepicker-border-color, #ccc);
-      color: var(--datepicker-text-color, #333); border-radius: 4px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-height: 200px; overflow-y: auto; z-index: 9999;
-    }
-    .ngxsmk-options-panel ul { list-style: none; padding: 4px; margin: 0; }
-    .ngxsmk-options-panel li { padding: 8px 12px; border-radius: 4px; cursor: pointer; }
-    .ngxsmk-options-panel li:hover { background-color: var(--datepicker-hover-background, #f0f0f0); }
-    .ngxsmk-options-panel li.selected {
-      background-color: var(--datepicker-primary-color, #3880ff); color: var(--datepicker-primary-contrast, #fff);
-    }
-  `],
-})
-export class CustomSelectComponent {
-  @Input() options: { label: string; value: any }[] = [];
-  @Input() value: any;
-  @Input() disabled: boolean = false;
-  @Output() valueChange = new EventEmitter<any>();
-  public isOpen = false;
-
-  private readonly elementRef: ElementRef = inject(ElementRef);
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    if (!this.elementRef.nativeElement.contains(event.target)) this.isOpen = false;
-  }
-
-  get displayValue(): string {
-    const selectedOption = this.options.find((opt) => opt.value === this.value);
-    return selectedOption ? selectedOption.label : '';
-  }
-
-  toggleDropdown(): void {
-    if (this.disabled) return;
-    this.isOpen = !this.isOpen;
-  }
-
-  selectOption(option: { label: string; value: any }): void {
-    this.value = option.value;
-    this.valueChange.emit(this.value);
-    this.isOpen = false;
-  }
-}
 
 @Component({
   selector: 'ngxsmk-datepicker',
@@ -163,6 +53,8 @@ export class CustomSelectComponent {
     useExisting: forwardRef(() => NgxsmkDatepickerComponent),
     multi: true
   }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./styles/datepicker.css'],
   template: `
     <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode">
       @if (!isInlineMode) {
@@ -282,269 +174,8 @@ export class CustomSelectComponent {
       }
     </div>
   `,
-  styles: [`
-    :host {
-      --datepicker-primary-color: #6d28d9; --datepicker-primary-contrast: #ffffff;
-      --datepicker-range-background: #f5f3ff; --datepicker-background: #ffffff;
-      --datepicker-text-color: #222428; --datepicker-subtle-text-color: #9ca3af;
-      --datepicker-border-color: #e9e9e9; --datepicker-hover-background: #f0f0f0;
-      display: inline-block;
-      position: relative; /* Host must be relative for popover */
-    }
-    :host(.dark-theme) {
-      --datepicker-range-background: rgba(139, 92, 246, 0.2); --datepicker-background: #1f2937;
-      --datepicker-text-color: #d1d5db; --datepicker-subtle-text-color: #6b7280;
-      --datepicker-border-color: #4b5563; --datepicker-hover-background: #374151;
-    }
-
-    /* Input/Popover Mode Styles */
-    .ngxsmk-datepicker-wrapper { position: relative; }
-    .ngxsmk-input-group {
-      display: flex; align-items: center; cursor: pointer;
-      width: 100%; min-width: 150px; border: 1px solid var(--datepicker-border-color, #ccc);
-      border-radius: 4px; background: var(--datepicker-background);
-      transition: border-color 0.15s ease;
-    }
-    .ngxsmk-input-group:hover:not(.disabled) { border-color: var(--datepicker-primary-color); }
-    .ngxsmk-input-group.disabled { cursor: not-allowed; opacity: 0.7; }
-    
-    .ngxsmk-display-input {
-      flex-grow: 1; padding: 6px 8px; font-size: 14px;
-      color: var(--datepicker-text-color, #333); background: transparent;
-      border: none; outline: none; cursor: pointer;
-    }
-    .ngxsmk-display-input:disabled { background: var(--datepicker-hover-background, #f0f0f0); cursor: not-allowed; }
-
-    .ngxsmk-clear-button {
-      background: none; border: none; padding: 0 8px; cursor: pointer;
-      color: var(--datepicker-subtle-text-color); line-height: 1;
-    }
-    .ngxsmk-clear-button svg { width: 14px; height: 14px; }
-    .ngxsmk-clear-button:hover { color: var(--datepicker-text-color); }
-
-    .ngxsmk-popover-container {
-      position: absolute; top: 100%; left: 0;
-      z-index: 10000; margin-top: 8px;
-    }
-    .ngxsmk-popover-container.ngxsmk-inline-container {
-      position: static; margin-top: 0;
-    }
-    .ngxsmk-datepicker-wrapper.ngxsmk-inline-mode { display: block; }
-    .ngxsmk-datepicker-wrapper.ngxsmk-inline-mode .ngxsmk-datepicker-container {
-      box-shadow: none; border: 1px solid var(--datepicker-border-color);
-    }
-    
-    .ngxsmk-footer {
-        display: flex; justify-content: flex-end; gap: 8px;
-        margin-top: 12px; padding-top: 8px;
-        border-top: 1px solid var(--datepicker-border-color);
-    }
-    .ngxsmk-clear-button-footer, .ngxsmk-close-button {
-        padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; cursor: pointer;
-        transition: background-color 0.2s;
-        border: 1px solid var(--datepicker-border-color);
-    }
-    .ngxsmk-clear-button-footer {
-        background: none;
-        color: var(--datepicker-subtle-text-color);
-    }
-    .ngxsmk-close-button {
-        background-color: var(--datepicker-primary-color);
-        color: var(--datepicker-primary-contrast);
-        border-color: var(--datepicker-primary-color);
-    }
-    .ngxsmk-close-button:hover:not(:disabled) {
-        opacity: 0.9;
-    }
-    .ngxsmk-clear-button-footer:hover:not(:disabled) {
-        background-color: var(--datepicker-hover-background);
-    }
-    /* End Input/Popover Mode Styles */
-
-    .ngxsmk-datepicker-container { display: flex; flex-direction: column; width: 100%; }
-    .ngxsmk-calendar-container {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      border-radius: 10px; padding: 12px; background: var(--datepicker-background);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      width: 100%;
-    }
-    .ngxsmk-ranges-container {
-      width: 100%;
-      padding: 12px;
-      border-right: none;
-      border-bottom: 1px solid var(--datepicker-border-color);
-      background: var(--datepicker-hover-background);
-      border-radius: 10px 10px 0 0;
-    }
-    .ngxsmk-ranges-container ul {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      list-style: none; padding: 0; margin: 0;
-    }
-    .ngxsmk-ranges-container li {
-      padding: 6px 10px;
-      margin-bottom: 0;
-      font-size: 0.85rem;
-      border: 1px solid var(--datepicker-border-color);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.15s ease;
-      flex-shrink: 0;
-    }
-    .ngxsmk-ranges-container li:hover { background-color: var(--datepicker-hover-background); }
-    .ngxsmk-ranges-container li.disabled { cursor: not-allowed; opacity: 0.5; background-color: transparent !important; color: var(--datepicker-subtle-text-color, #9ca3af); }
-
-
-    .ngxsmk-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 8px; position: relative; z-index: 2; gap: 4px;
-    }
-    .ngxsmk-month-year-selects { display: flex; gap: 4px; }
-    .ngxsmk-month-year-selects app-custom-select.month-select { --custom-select-width: 100px; }
-    .ngxsmk-month-year-selects app-custom-select.year-select { --custom-select-width: 75px; }
-    .ngxsmk-nav-buttons { display: flex; }
-    .ngxsmk-nav-button {
-      padding: 6px;
-      background: none; border: none; cursor: pointer; border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center; color: var(--datepicker-text-color);
-    }
-    .ngxsmk-nav-button:hover:not(:disabled) { background-color: var(--datepicker-hover-background); }
-    .ngxsmk-nav-button:disabled { cursor: not-allowed; opacity: 0.5; }
-    .ngxsmk-nav-button svg { width: 16px; height: 16px; }
-
-    /* Animation Styles */
-    .ngxsmk-days-grid-wrapper {
-      overflow-x: hidden;
-    }
-    .ngxsmk-days-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 0;
-      /* Smooth transition for the slide effect (transform) and fade (opacity) */
-      transition: transform 0.3s ease-out, opacity 0.15s ease-out 0.15s;
-    }
-
-    .ngxsmk-days-grid.animate-forward {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-
-    .ngxsmk-days-grid.animate-backward {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    /* End Animation Styles */
-
-    .ngxsmk-day-name {
-      font-size: 0.75rem;
-      padding: 6px 0;
-      color: var(--datepicker-subtle-text-color);
-      font-weight: 600;
-    }
-    .ngxsmk-day-cell {
-      height: 32px;
-      position: relative; display: flex; justify-content: center;
-      align-items: center; cursor: pointer; border-radius: 0;
-    }
-    .ngxsmk-day-cell.holiday .ngxsmk-day-number {
-      /* Example style for a holiday */
-      color: var(--datepicker-primary-color);
-      text-decoration: underline dotted;
-    }
-    
-    .ngxsmk-day-number {
-      width: 30px; height: 30px;
-      display: flex; justify-content: center;
-      align-items: center; border-radius: 50%; color: var(--datepicker-text-color);
-      font-size: 0.9rem;
-      position: relative; z-index: 1;
-    }
-
-    .ngxsmk-time-selection {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      flex-wrap: wrap;
-      margin-top: 12px; padding-top: 8px;
-      border-top: 1px solid var(--datepicker-border-color);
-    }
-    .ngxsmk-time-label { font-size: 0.9rem; color: var(--datepicker-subtle-text-color); margin-right: 4px; }
-    .ngxsmk-time-separator { font-weight: 600; color: var(--datepicker-text-color); }
-    .ngxsmk-time-selection app-custom-select { --custom-select-width: 55px; height: 28px; }
-    .ngxsmk-time-selection app-custom-select.ampm-select { --custom-select-width: 65px; }
-
-    .ngxsmk-day-cell:not(.disabled):hover .ngxsmk-day-number {
-      background-color: var(--datepicker-hover-background); color: var(--datepicker-primary-color);
-    }
-    .ngxsmk-day-cell.start-date .ngxsmk-day-number,
-    .ngxsmk-day-cell.end-date .ngxsmk-day-number,
-    .ngxsmk-day-cell.selected .ngxsmk-day-number,
-    .ngxsmk-day-cell.multiple-selected .ngxsmk-day-number {
-      background-color: var(--datepicker-primary-color); color: var(--datepicker-primary-contrast);
-    }
-    .ngxsmk-day-cell.multiple-selected .ngxsmk-day-number {
-      border: 1px dashed var(--datepicker-primary-contrast);
-    }
-    .ngxsmk-day-cell.multiple-selected:hover .ngxsmk-day-number {
-      background-color: var(--datepicker-primary-color);
-      color: var(--datepicker-primary-contrast);
-    }
-    .ngxsmk-day-cell.in-range, .ngxsmk-day-cell.start-date,
-    .ngxsmk-day-cell.end-date, .ngxsmk-day-cell.preview-range {
-      background-color: var(--datepicker-range-background);
-    }
-    .ngxsmk-day-cell.start-date { border-top-left-radius: 100%; border-bottom-left-radius: 100%; }
-    .ngxsmk-day-cell.end-date { border-top-right-radius: 100%; border-bottom-right-radius: 100%; }
-    .ngxsmk-day-cell.start-date.end-date { border-radius: 50px; }
-    .ngxsmk-day-cell.disabled {
-      background-color: transparent !important; color: #4b5563;
-      cursor: not-allowed; pointer-events: none; opacity: 0.5;
-    }
-    .ngxsmk-day-cell.today .ngxsmk-day-number { border: 1px solid var(--datepicker-primary-color); }
-
-    @media (min-width: 600px) {
-      .ngxsmk-datepicker-container { display: flex; flex-direction: row; }
-      .ngxsmk-calendar-container {
-        padding: 16px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        width: auto;
-        border-radius: 0 10px 10px 0;
-      }
-      .ngxsmk-ranges-container {
-        width: 180px;
-        padding: 16px;
-        border-right: 1px solid var(--datepicker-border-color);
-        border-bottom: none;
-        background: var(--datepicker-background);
-        border-radius: 10px 0 0 10px;
-      }
-      .ngxsmk-ranges-container ul {
-        flex-direction: column;
-        justify-content: flex-start;
-        gap: 0;
-      }
-      .ngxsmk-ranges-container li {
-        padding: 10px;
-        margin-bottom: 8px;
-        border: none;
-        font-size: 1rem;
-      }
-
-      .ngxsmk-header { margin-bottom: 12px; gap: 5px; }
-      .ngxsmk-month-year-selects app-custom-select.month-select { --custom-select-width: 120px; }
-      .ngxsmk-month-year-selects app-custom-select.year-select { --custom-select-width: 90px; }
-      .ngxsmk-nav-button { padding: 8px; }
-      .ngxsmk-nav-button svg { width: 18px; height: 18px; }
-      .ngxsmk-day-name { font-size: 0.8rem; padding: 8px 0; }
-      .ngxsmk-day-cell { height: 38px; }
-      .ngxsmk-day-number { width: 36px; height: 36px; font-size: 1rem; }
-      .ngxsmk-time-selection { margin-top: 16px; padding-top: 12px; }
-      .ngxsmk-time-selection app-custom-select { --custom-select-width: 60px; height: 30px; }
-      .ngxsmk-time-selection app-custom-select.ampm-select { --custom-select-width: 70px; }
-    }
-  `],
 })
-export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValueAccessor {
+export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
   @Input() mode: 'single' | 'range' | 'multiple' = 'single';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   @Input() showRanges: boolean = true;
@@ -588,16 +219,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
 
   private _ranges: { [key: string]: [Date, Date] } | null = null;
   @Input() set ranges(value: DateRange | null) {
-    if (!value) {
-      this._ranges = null;
-    } else {
-      this._ranges = Object.entries(value).reduce((acc, [key, dates]) => {
-        const start = this._normalizeDate(dates[0]);
-        const end = this._normalizeDate(dates[1]);
-        if (start && end) acc[key] = [start, end];
-        return acc;
-      }, {} as { [key: string]: [Date, Date] });
-    }
+    this._ranges = processDateRanges(value);
     this.updateRangesArray();
   }
 
@@ -636,6 +258,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
   public animateBackward: boolean = false;
   
   private readonly elementRef: ElementRef = inject(ElementRef);
+  private readonly dateComparator = createDateComparator();
   
   get isInlineMode(): boolean {
     return this.inline === true || this.inline === 'always' || 
@@ -812,13 +435,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
   }
 
   private get24Hour(displayHour: number, isPm: boolean): number {
-    if (isPm) { return displayHour === 12 ? 12 : displayHour + 12; }
-    return displayHour === 12 ? 0 : displayHour;
+    return get24Hour(displayHour, isPm);
   }
 
   private update12HourState(fullHour: number): void {
-    this.isPm = fullHour >= 12;
-    this.currentDisplayHour = fullHour % 12 || 12;
+    const state = update12HourState(fullHour);
+    this.isPm = state.isPm;
+    this.currentDisplayHour = state.displayHour;
   }
 
   private applyCurrentTime(date: Date): Date {
@@ -845,7 +468,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
         initialDate = this.startDate;
       } else if (this.mode === 'multiple' && Array.isArray(value)) {
         this.selectedDates = (value as Date[]).map(d => this._normalizeDate(d)).filter((d): d is Date => d !== null);
-        initialDate = this.selectedDates.length > 0 ? this.selectedDates[this.selectedDates.length - 1] : null;
+        initialDate = this.selectedDates.length > 0 ? this.selectedDates[this.selectedDates.length - 1]! : null;
       }
     }
 
@@ -863,46 +486,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
   }
 
   private _normalizeDate(date: DateInput | null): Date | null {
-    if (!date) return null;
-    const d = (date instanceof Date) ? new Date(date.getTime()) : new Date((date as any).toDate ? (date as any).toDate() : date as any);
-    if (isNaN(d.getTime())) return null;
-    return d;
+    return normalizeDate(date);
   }
 
   private generateTimeOptions(): void {
-    this.hourOptions = Array.from({length: 12}).map((_, i) => ({
-      label: (i + 1).toString().padStart(2, '0'),
-      value: i + 1,
-    }));
-
-    this.minuteOptions = [];
-    for (let i = 0; i < 60; i += this.minuteInterval) {
-      this.minuteOptions.push({
-        label: i.toString().padStart(2, '0'),
-        value: i,
-      });
-    }
+    const { hourOptions, minuteOptions } = generateTimeOptions(this.minuteInterval);
+    this.hourOptions = hourOptions;
+    this.minuteOptions = minuteOptions;
   }
 
   private generateLocaleData(): void {
     const year = new Date().getFullYear();
-    this.monthOptions = Array.from({length: 12}).map((_, i) => ({
-      label: new Date(year, i, 1).toLocaleDateString(this.locale, {month: 'long'}),
-      value: i,
-    }));
-
-    try {
-      this.firstDayOfWeek = ((new Intl.Locale(this.locale) as any).weekInfo?.firstDay || 0) % 7;
-    } catch (e) {
-      this.firstDayOfWeek = 0;
-    }
-
-    const day = new Date(year, 0, 7 + this.firstDayOfWeek);
-    this.weekDays = Array.from({length: 7}).map(() => {
-      const weekDay = new Date(day).toLocaleDateString(this.locale, {weekday: 'short'});
-      day.setDate(day.getDate() + 1);
-      return weekDay;
-    });
+    this.monthOptions = generateMonthOptions(this.locale, year);
+    this.firstDayOfWeek = getFirstDayOfWeek(this.locale);
+    this.weekDays = generateWeekDays(this.locale, this.firstDayOfWeek);
   }
 
   private updateRangesArray(): void {
@@ -1090,12 +687,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
   }
 
   private generateDropdownOptions(): void {
-    const startYear = this._currentYear - 10;
-    const endYear = this._currentYear + 10;
-    this.yearOptions = [];
-    for (let i = startYear; i <= endYear; i++) {
-      this.yearOptions.push({label: `${i}`, value: i});
-    }
+    this.yearOptions = generateYearOptions(this._currentYear);
   }
 
   public changeMonth(delta: number): void {
@@ -1132,12 +724,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
   }
 
   public isSameDay(d1: Date | null, d2: Date | null): boolean {
-    if (!d1 || !d2) return false;
-    return (
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()
-    );
+    return this.dateComparator(d1, d2);
   }
 
   public isInRange(d: Date | null): boolean {
@@ -1151,5 +738,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, ControlValu
     const endTime = Math.max(startDayTime, endDayTime);
 
     return dTime > startTime && dTime < endTime;
+  }
+
+  ngOnDestroy(): void {
+    // Clean up any subscriptions or timers if needed
+    // Currently no cleanup required, but method is here for future optimizations
   }
 }

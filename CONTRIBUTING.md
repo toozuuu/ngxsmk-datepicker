@@ -6,11 +6,11 @@ Please take a moment to review this document to make the contribution process as
 
 ## 🤝 Code of Conduct
 
-By participating in this project, you agree to abide by our [Code of Conduct](https://www.google.com/search?q=CODE_OF_CONDUCT.md "null"). Please ensure you treat all community members with respect and professionalism.
+By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). Please ensure you treat all community members with respect and professionalism.
 
 ## 🐛 Reporting Bugs and Issues
 
-If you find a bug, please first check the existing [Issues on GitHub](https://www.google.com/search?q=https://github.com/toozuuu/ngxsmk-datepicker/issues "null") to see if it has already been reported.
+If you find a bug, please first check the existing [Issues on GitHub](https://github.com/toozuuu/ngxsmk-datepicker/issues) to see if it has already been reported.
 
 If it's a new bug:
 
@@ -89,7 +89,7 @@ Please follow these steps to contribute code:
         ng test ngxsmk-datepicker
         
     
-4.  **Write Clear Commit Messages:** We adhere to the [**Conventional Commits specification**](https://www.conventionalcommits.org/en/v1.0.0/ "null"). This helps us automate versioning and changelog generation.
+4.  **Write Clear Commit Messages:** We adhere to the [**Conventional Commits specification**](https://www.conventionalcommits.org/en/v1.0.0/). This helps us automate versioning and changelog generation.
     
     -   **Format:** `type(scope): subject`
         

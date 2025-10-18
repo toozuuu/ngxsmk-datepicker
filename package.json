@@ -1,12 +1,15 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:optimized": "ng build ngxsmk-datepicker --configuration production",
+    "build:analyze": "node scripts/analyze-bundle.js",
+    "optimize": "node scripts/optimize-build.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

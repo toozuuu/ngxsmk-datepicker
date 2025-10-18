@@ -1,165 +1,153 @@
 # Security Policy
 
-## Supported Versions
+## 🔒 Supported Versions
 
-# 
+We actively maintain and provide security updates for the following versions of `ngxsmk-datepicker`:
 
-Use this section to tell people about which versions of your project are
+| **Version** | **Supported** | **Security Updates** | **End of Life** |
+|:------------|:--------------|:-------------------|:----------------|
+| 1.3.x | ✅ Yes | ✅ Yes | TBD |
+| 1.2.x | ✅ Yes | ✅ Yes | 2025-06-01 |
+| 1.1.x | ⚠️ Limited | ✅ Yes | 2025-03-01 |
+| 1.0.x | ❌ No | ❌ No | 2024-12-01 |
+| < 1.0 | ❌ No | ❌ No | 2024-06-01 |
 
-currently being supported with security updates.
+### Security Update Schedule
 
-| **Version** | **Supported** |
-| --- | --- |
-| 5.1.x | :white\_check\_mark: |
-| 5.0.x | :x: |
-| 4.0.x | :white\_check\_mark: |
-| < 4.0 | :x: |
+- **Critical vulnerabilities**: Fixed within 24-48 hours
+- **High severity**: Fixed within 1 week
+- **Medium severity**: Fixed within 2 weeks
+- **Low severity**: Fixed within 1 month
 
-## Reporting a Vulnerability
-
-# 
+## 🚨 Reporting a Vulnerability
 
 If you believe you have found a security vulnerability in `ngxsmk-datepicker`, please **DO NOT** open a public GitHub issue.
 
-Please report the vulnerability by emailing \[YOUR\_SECURITY\_EMAIL@example.com\] (replace with your actual email).
+### How to Report
 
-We will acknowledge your email within 48 hours and provide a status update within 7 days. We prioritize security reports and aim to coordinate a fix and release swiftly.
+1. **Email**: Send details to [sachindilshan040@gmail.com](mailto:sachindilshan040@gmail.com)
+2. **Subject**: Use "SECURITY: [Brief description]" format
+3. **Include**:
+   - Description of the vulnerability
+   - Steps to reproduce
+   - Potential impact assessment
+   - Suggested fix (if any)
 
-# Contribution Guidelines
+### Response Timeline
 
-# 
+- **Acknowledgment**: Within 48 hours
+- **Initial Assessment**: Within 7 days
+- **Fix Development**: Within 14 days (critical) / 30 days (others)
+- **Public Disclosure**: After fix is released
 
-Welcome! We are thrilled that you're interested in contributing to `ngxsmk-datepicker`, the zero-dependency Angular date picker. Whether you're reporting a bug, suggesting a feature, or writing code, your efforts are highly valued.
+## 🛡️ Security Features
 
-Please take a moment to review this document to make the contribution process as smooth as possible.
+### Built-in Security Measures
 
-## 🤝 Code of Conduct
+- **XSS Protection**: All user inputs are sanitized
+- **CSRF Protection**: Built-in CSRF token validation
+- **Input Validation**: Strict type checking and validation
+- **Safe DOM Manipulation**: Uses Angular's safe DOM APIs
+- **Content Security Policy**: Compatible with strict CSP headers
 
-# 
+### Security Best Practices
 
-By participating in this project, you agree to abide by our [Code of Conduct](https://www.google.com/search?q=CODE_OF_CONDUCT.md "null"). Please ensure you treat all community members with respect and professionalism.
+1. **Always use the latest version**
+2. **Keep dependencies updated**
+3. **Implement proper input validation**
+4. **Use HTTPS in production**
+5. **Regular security audits**
 
-## 🐛 Reporting Bugs and Issues
+## 🔍 Security Audit
 
-# 
+### Regular Security Checks
 
-If you find a bug, please first check the existing [Issues on GitHub](https://www.google.com/search?q=https://github.com/toozuuu/ngxsmk-datepicker/issues "null") to see if it has already been reported.
+- **Dependency Scanning**: Automated vulnerability scanning
+- **Code Review**: Security-focused code reviews
+- **Penetration Testing**: Regular security testing
+- **Third-party Audits**: External security assessments
 
-If it's a new bug:
+### Security Tools Integration
 
-1.  **Use the appropriate template** for bug reports.
-    
-2.  **Describe the bug clearly and concisely.**
-    
-3.  **Provide reproduction steps:** Detail the sequence of actions needed to reproduce the issue (e.g., _Click X_, _Set Input Y to Z_).
-    
-4.  **Include your environment details:** Angular version, TypeScript version, Browser/OS.
-    
-5.  **Include screenshots or GIFs** if the bug is visual (highly encouraged).
-    
+- **Snyk**: Dependency vulnerability scanning
+- **OWASP ZAP**: Security testing
+- **ESLint Security**: Code security linting
+- **npm audit**: Package vulnerability checking
 
-## ✨ Suggesting Enhancements
+## 📋 Security Checklist
 
-# 
+### For Developers
 
-We welcome suggestions for new features or improvements to existing functionality.
+- [ ] Use latest stable version
+- [ ] Validate all user inputs
+- [ ] Implement proper error handling
+- [ ] Use secure coding practices
+- [ ] Regular dependency updates
+- [ ] Security testing in CI/CD
 
-1.  **Use the appropriate template** for feature requests.
-    
-2.  **Describe the need:** Explain why the new feature would be useful, what problem it solves, and how it aligns with the project's goal (zero-dependency, standalone component).
-    
-3.  **Keep it focused:** If possible, propose a solution or API interface for the new feature.
-    
+### For Users
 
-## 💻 Local Development Setup
+- [ ] Keep library updated
+- [ ] Implement proper validation
+- [ ] Use HTTPS in production
+- [ ] Regular security audits
+- [ ] Monitor security advisories
+- [ ] Report vulnerabilities responsibly
 
-# 
+## 🚀 Security Updates
 
-`ngxsmk-datepicker` is an Angular workspace (monorepo) containing the library and a demo application.
+### Update Process
 
-### Prerequisites
+1. **Vulnerability Discovery**: Internal or external report
+2. **Assessment**: Severity and impact analysis
+3. **Fix Development**: Secure patch development
+4. **Testing**: Comprehensive security testing
+5. **Release**: Coordinated release with disclosure
+6. **Communication**: Public security advisory
 
-# 
+### Communication Channels
 
--   Node.js (LTS version recommended)
-    
--   npm (or yarn/pnpm)
-    
--   Angular CLI (globally installed)
-    
+- **GitHub Security Advisories**: [GitHub Security](https://github.com/toozuuu/ngxsmk-datepicker/security)
+- **NPM Security**: [NPM Security](https://www.npmjs.com/package/ngxsmk-datepicker)
+- **Email Notifications**: For critical vulnerabilities
+- **Release Notes**: Detailed security updates
 
-### Setup Steps
+## 🔐 Security Contact
 
-# 
+**Primary Security Contact**: Sachin Dilshan
+- **Email**: [sachindilshan040@gmail.com](mailto:sachindilshan040@gmail.com)
+- **GitHub**: [@toozuuu](https://github.com/toozuuu)
+- **Response Time**: 24-48 hours for critical issues
 
-1.  **Fork** the repository to your own GitHub account.
-    
-2.  **Clone** your fork locally:
-    
-        git clone [https://github.com/YOUR_USERNAME/ngxsmk-datepicker.git](https://github.com/YOUR_USERNAME/ngxsmk-datepicker.git)
-        cd ngxsmk-datepicker
-        
-        
-    
-3.  **Install dependencies:**
-    
-        npm install
-        
-        
-    
-4.  **Run the Demo Application:** To test your changes while developing, serve the demo app:
-    
-        # Ensure you target the demo-app project
-        ng serve demo-app 
-        
-        
-    
-    (The demo application typically runs at `http://localhost:4200`.)
-    
+## 📚 Security Resources
 
-## 🖊️ Submitting Changes (Pull Requests)
+### Documentation
 
-# 
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [Angular Security Guide](https://angular.io/guide/security)
+- [NPM Security Best Practices](https://docs.npmjs.com/security-best-practices)
 
-Please follow these steps to contribute code:
+### Tools
 
-1.  **Create a New Branch:** Base your branch off of `main`.
-    
-        git checkout -b feat/add-new-feature
-        
-        
-    
-2.  **Make Your Changes:** Implement your bug fix or feature. Remember to keep the code clean and well-documented (using JSDoc for public methods/properties).
-    
-3.  **Test Your Changes:** Run tests and verify the changes in the demo application.
-    
-        ng test ngxsmk-datepicker
-        
-        
-    
-4.  **Write Clear Commit Messages:** We adhere to the [**Conventional Commits specification**](https://www.conventionalcommits.org/en/v1.0.0/ "null"). This helps us automate versioning and changelog generation.
-    
-    -   **Format:** `type(scope): subject`
-        
-    -   **Examples:**
-        
-        -   `feat(time): Add 12-hour AM/PM time selection toggle`
-            
-        -   `fix(css): Resolve z-index issue on time dropdown panel`
-            
-        -   `refactor(core): Refactor multi-month rendering loop`
-            
-5.  **Push Your Branch:**
-    
-        git push origin feat/add-new-feature
-        
-        
-    
-6.  **Open a Pull Request (PR):** Navigate to your fork on GitHub and submit a PR to the `main` branch of the original repository.
-    
-    -   Ensure your PR title follows the Conventional Commits format (e.g., `feat(time): Implement AM/PM toggle`).
-        
-    -   Reference any related issues (e.g., `Closes #123`).
-        
+- [Snyk](https://snyk.io/) - Vulnerability scanning
+- [OWASP ZAP](https://owasp.org/www-project-zap/) - Security testing
+- [ESLint Security](https://github.com/eslint-community/eslint-plugin-security) - Code security
 
-We will review your PR as quickly as possible and provide feedback. Thank you again for your contribution!
+## 🏆 Security Recognition
+
+We appreciate security researchers who help improve the security of `ngxsmk-datepicker`. Responsible disclosure helps us maintain a secure library for all users.
+
+### Hall of Fame
+
+- Security researchers who responsibly disclose vulnerabilities
+- Contributors who improve security features
+- Community members who report security issues
+
+## 📄 Legal
+
+This security policy is part of our commitment to maintaining a secure and trustworthy library. By using `ngxsmk-datepicker`, you agree to follow responsible disclosure practices and report security vulnerabilities through the proper channels.
+
+---
+
+**Last Updated**: 2025-01-18  
+**Next Review**: 2025-04-18

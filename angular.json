@@ -45,6 +45,7 @@
           "options": {
             "outputPath": "dist/demo-app",
             "browser": "projects/demo-app/src/main.ts",
+            "tsConfig": "projects/demo-app/tsconfig.app.json",
             "polyfills": [
               "zone.js"
             ],
