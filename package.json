@@ -4,14 +4,14 @@
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "build:optimized": "ng build ngxsmk-datepicker --configuration production",
+    "ng": "npx ng",
+    "start": "npx ng serve demo-app",
+    "build": "npx ng build",
+    "build:optimized": "npx ng build ngxsmk-datepicker --configuration production",
     "build:analyze": "node scripts/analyze-bundle.js",
     "optimize": "node scripts/optimize-build.js",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "watch": "npx ng build --watch --configuration development",
+    "test": "npx ng test"
   },
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
@@ -56,8 +56,10 @@
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.5",
+    "@angular/cli": "^20.3.0",
     "@angular/forms": "^20.3.4",
     "@types/jasmine": "^5.1.9",
-    "ng-packagr": "^20.3.0"
+    "ng-packagr": "^20.3.0",
+    "zone.js": "^0.14.0"
   }
 }
