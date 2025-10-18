@@ -9,7 +9,7 @@ gxsmk-datepicker – A modern, powerful, and fully customizable date and date-ra
 
 Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
 
-## Screenshots
+## 📷 Screenshots
 
 <p align="left">
   <img src="https://github.com/toozuuu/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Advanced Date Range Picker" width="420" />

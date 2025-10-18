@@ -11,7 +11,7 @@ A modern, powerful, and fully customizable date and date-range picker component 
 - **License**: MIT
 - **Author**: Sachin Dilshan
 
-## Screenshots
+## 📷 Screenshots
 
 <p align="left">
   <img src="https://github.com/toozuuu/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Advanced Date Range Picker" width="420" />
