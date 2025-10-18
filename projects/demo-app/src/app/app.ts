@@ -1,6 +1,6 @@
 import {Component, HostBinding} from '@angular/core';
 import {CommonModule, JsonPipe} from '@angular/common';
-import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, FormGroup, ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {
   DateRange,
   NgxsmkDatepickerComponent,
@@ -73,7 +73,7 @@ class SampleHolidayProvider implements HolidayProvider {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, NgxsmkDatepickerComponent, ReactiveFormsModule, JsonPipe],
+  imports: [CommonModule, NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, JsonPipe],
   template: `
     <header class="app-header">
       <h1>ngxsmk-datepicker Demo</h1>
@@ -199,7 +199,7 @@ class SampleHolidayProvider implements HolidayProvider {
            <h3>ngxsmk-datepicker</h3>
            <p>Optimized for performance, built for developers</p>
            <div class="version-info">
-             <span class="version-badge">v1.3.8</span>
+             <span class="version-badge">v1.3.9</span>
            </div>
          </div>
          

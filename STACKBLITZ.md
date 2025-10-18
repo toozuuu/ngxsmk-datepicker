@@ -17,7 +17,7 @@ This guide helps you run the `ngxsmk-datepicker` project in Stackblitz.
 
 2. **Install Dependencies**
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
 
 3. **Start the Demo App**
@@ -35,7 +35,21 @@ This guide helps you run the `ngxsmk-datepicker` project in Stackblitz.
 
 **Solution**: Make sure all dependencies are installed:
 ```bash
-npm install
+npm install --legacy-peer-deps
+```
+
+#### Error: `ERESOLVE could not resolve` or dependency conflicts
+
+**Solution**: Use the legacy peer deps flag to resolve version conflicts:
+```bash
+npm install --legacy-peer-deps
+```
+
+#### Error: `Cannot find module 'typescript'` or `Cannot find package '@angular/compiler'`
+
+**Solution**: The required dependencies are now included in package.json. Make sure to install all dependencies:
+```bash
+npm install --legacy-peer-deps
 ```
 
 #### Error: `Port already in use`
@@ -104,4 +118,4 @@ Once everything is running, you should see the ngxsmk-datepicker demo with all i
 ---
 
 **Last Updated**: 2025-01-18  
-**Version**: 1.3.8
+**Version**: 1.3.9

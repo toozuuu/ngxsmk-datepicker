@@ -6,7 +6,7 @@ A modern, powerful, and fully customizable date and date-range picker component 
 
 - **NPM Package**: [ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
 - **GitHub Repository**: [https://github.com/toozuuu/ngxsmk-datepicker](https://github.com/toozuuu/ngxsmk-datepicker)
-- **Version**: 1.3.8
+- **Version**: 1.4.0
 - **License**: MIT
 - **Author**: Sachin Dilshan
 
@@ -214,7 +214,7 @@ We welcome and appreciate contributions from the community! Please see our [Cont
 
 ## 📄 Changelog
 
-### v1.3.8 (Latest)
+### v1.3.9 (Latest)
 - ✅ Performance optimizations (30% smaller bundle)
 - ✅ OnPush change detection strategy
 - ✅ Memoized date comparisons
