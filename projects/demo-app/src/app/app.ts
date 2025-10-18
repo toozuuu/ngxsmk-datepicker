@@ -199,7 +199,7 @@ class SampleHolidayProvider implements HolidayProvider {
            <h3>ngxsmk-datepicker</h3>
            <p>Optimized for performance, built for developers</p>
            <div class="version-info">
-             <span class="version-badge">v1.3.6</span>
+             <span class="version-badge">v1.3.8</span>
            </div>
          </div>
          

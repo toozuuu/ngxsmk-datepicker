@@ -251,7 +251,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.3.6** (Latest)
+### **v1.3.8** (Latest)
 - ✅ Performance optimizations (30% smaller bundle)
 - ✅ OnPush change detection strategy
 - ✅ Memoized date comparisons
