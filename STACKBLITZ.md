@@ -52,6 +52,28 @@ npm install --legacy-peer-deps
 npm install --legacy-peer-deps
 ```
 
+#### Error: `Unable to import pipe JsonPipe` or `Unable to import directive NgClass`
+
+**Solution**: These issues have been resolved by:
+- Replacing `JsonPipe` with `JSON.stringify()` in templates
+- Adding `JSON` as a component property
+- Removing unused imports
+- Updated budget limits in `angular.json`
+
+#### Error: `Unable to import directive NgClass` from library node_modules
+
+**Solution**: Clean the library's node_modules and rebuild:
+```bash
+# Remove library's node_modules
+Remove-Item -Recurse -Force "projects/ngxsmk-datepicker/node_modules"
+
+# Rebuild the library
+npm run build:optimized
+
+# Start the demo app
+npm start
+```
+
 #### Error: `Port already in use`
 
 **Solution**: Stackblitz will automatically assign a different port.
@@ -118,4 +140,4 @@ Once everything is running, you should see the ngxsmk-datepicker demo with all i
 ---
 
 **Last Updated**: 2025-01-18  
-**Version**: 1.3.9
+**Version**: 1.4.0

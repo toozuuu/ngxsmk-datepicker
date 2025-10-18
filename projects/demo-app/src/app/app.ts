@@ -1,5 +1,5 @@
 import {Component, HostBinding} from '@angular/core';
-import {CommonModule, JsonPipe} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {
   DateRange,
@@ -73,7 +73,7 @@ class SampleHolidayProvider implements HolidayProvider {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, JsonPipe],
+  imports: [CommonModule, NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule],
   template: `
     <header class="app-header">
       <h1>ngxsmk-datepicker Demo</h1>
@@ -109,7 +109,7 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ datepickerForm.controls.singleDate.value | json }}</pre>
+          <pre>{{ JSON.stringify(datepickerForm.controls.singleDate.value) }}</pre>
         </div>
       </section>
 
@@ -121,7 +121,7 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ datepickerForm.controls.singleDate2.value | json }}</pre>
+          <pre>{{ JSON.stringify(datepickerForm.controls.singleDate2.value) }}</pre>
         </div>
       </section>
 
@@ -142,7 +142,7 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ datepickerForm.controls.inlineRange.value | json }}</pre>
+          <pre>{{ JSON.stringify(datepickerForm.controls.inlineRange.value) }}</pre>
           <strong>Status:</strong> {{ datepickerForm.controls.inlineRange.status }}
         </div>
       </section>
@@ -165,7 +165,7 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ datepickerForm.controls.rangeWithTime.value | json }}</pre>
+          <pre>{{ JSON.stringify(datepickerForm.controls.rangeWithTime.value) }}</pre>
         </div>
       </section>
 
@@ -185,9 +185,9 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ datepickerForm.controls.multipleDates.value | json }}</pre>
+          <pre>{{ JSON.stringify(datepickerForm.controls.multipleDates.value) }}</pre>
           <strong>Last Action:</strong>
-          <pre>{{ lastAction | json }}</pre>
+          <pre>{{ JSON.stringify(lastAction) }}</pre>
         </div>
       </section>
 
@@ -199,7 +199,7 @@ class SampleHolidayProvider implements HolidayProvider {
            <h3>ngxsmk-datepicker</h3>
            <p>Optimized for performance, built for developers</p>
            <div class="version-info">
-             <span class="version-badge">v1.3.9</span>
+             <span class="version-badge">v1.4.0</span>
            </div>
          </div>
          
@@ -575,6 +575,7 @@ class SampleHolidayProvider implements HolidayProvider {
 })
 export class App {
   private readonly today = new Date();
+  public readonly JSON = JSON;
 
   public minDate: Date = getStartOfDay(this.today);
   public maxDate: Date = getEndOfDay(addMonths(this.today, 1));

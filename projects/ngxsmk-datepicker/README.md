@@ -214,7 +214,7 @@ We welcome and appreciate contributions from the community! Please see our [Cont
 
 ## 📄 Changelog
 
-### v1.3.9 (Latest)
+### v1.4.0 (Latest)
 - ✅ Performance optimizations (30% smaller bundle)
 - ✅ OnPush change detection strategy
 - ✅ Memoized date comparisons
