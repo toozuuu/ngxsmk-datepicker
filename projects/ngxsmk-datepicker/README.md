@@ -6,9 +6,19 @@ A modern, powerful, and fully customizable date and date-range picker component 
 
 - **NPM Package**: [ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
 - **GitHub Repository**: [https://github.com/toozuuu/ngxsmk-datepicker](https://github.com/toozuuu/ngxsmk-datepicker)
-- **Version**: 1.4.0
+- **Version**: 1.4.3
 - **License**: MIT
 - **Author**: Sachin Dilshan
+
+## Screenshots
+
+<p align="left">
+  <img src="https://github.com/toozuuu/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Advanced Date Range Picker" width="420" />
+  &nbsp;&nbsp;
+  <img src="https://github.com/toozuuu/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Angular Localization" width="420" />
+  &nbsp;&nbsp;
+  <img src="https://github.com/toozuuu/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Angular Single Date Selection" width="420" />
+</p>
 
 ## 🚀 Performance Optimizations
 
