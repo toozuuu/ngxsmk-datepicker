@@ -2,6 +2,12 @@
 
 A comprehensive demo application showcasing all features and capabilities of the `ngxsmk-datepicker` component. This demo serves as both a testing ground and documentation for developers.
 
+## 🌐 Live Demo
+
+**Try it online**: [https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker](https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker)
+
+The live demo runs directly in your browser without any installation required!
+
 ## 🚀 Quick Start
 
 ### Prerequisites

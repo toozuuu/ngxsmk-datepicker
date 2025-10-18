@@ -5,6 +5,7 @@ npm i ngxsmk-datepicker
 gxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
 * Github: [https://github.com/toozuuu/ngxsmk-datepicker](https://github.com/toozuuu/ngxsmk-datepicker)
+* **Live Demo**: [https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker](https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker)
 
 Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
 
