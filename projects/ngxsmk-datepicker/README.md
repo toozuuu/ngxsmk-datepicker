@@ -41,6 +41,7 @@ This library has been optimized for maximum performance:
 - **12h/24h Time Support**: Uses internal 24-hour timekeeping but displays a user-friendly 12-hour clock with AM/PM toggle
 - **Predefined Date Ranges**: Offers quick selection of common ranges (e.g., "Last 7 Days")
 - **Advanced Localization (i18n)**: Automatically handles month/weekday names and week start days based on the browser's locale
+- **Previous Month Context**: Shows last few days of previous month for better date selection context
 - **Custom Styling**: All component elements are prefixed with `ngxsmk-` and themeable via CSS custom properties
 - **Zero Dependencies**: The component is standalone and lightweight
 
@@ -225,12 +226,31 @@ We welcome and appreciate contributions from the community! Please see our [Cont
 
 ## 📄 Changelog
 
-### v1.4.7 (Latest)
+### v1.4.12 (Latest)
 - ⚡ **Instant Navigation**: Removed all animations for lightning-fast arrow navigation
 - 🚫 **Smart Back Arrow**: Automatically disables back arrow when minDate is set
 - 🎯 **Better UX**: Prevents navigation to invalid date ranges
+- 🗓️ **Previous Month Days**: Now shows last few days of previous month for better context
+- 🎨 **Enhanced Styling**: Improved visual hierarchy with better day cell sizing
+- 🖱️ **Interactive Previous Days**: Previous month days are now selectable and interactive
 - 🧹 **Code Optimization**: Cleaner, more maintainable codebase
 - 📦 **Smaller Bundle**: Reduced CSS and JavaScript footprint
+
+### v1.4.11
+- 🎨 **UI Improvements**: Enhanced day cell sizing and visual hierarchy
+- 🖱️ **Better Interactions**: Improved click and hover states for previous month days
+
+### v1.4.10
+- 🗓️ **Previous Month Display**: Added last few days of previous month for better context
+- 🎯 **Smart Selection**: Previous month days are now selectable and interactive
+
+### v1.4.9
+- 🚫 **Range Fix**: Fixed range highlighting on empty/previous month days
+- 🎨 **Styling Updates**: Improved visual consistency across all day types
+
+### v1.4.8
+- ⚡ **Performance**: Optimized calendar generation and rendering
+- 🧹 **Code Cleanup**: Removed unused animation code and improved maintainability
 
 ### v1.4.6
 - 🔧 **Fixed Import Paths**: Corrected package exports for proper module resolution
