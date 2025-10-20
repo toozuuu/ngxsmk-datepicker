@@ -184,6 +184,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() holidayProvider: HolidayProvider | null = null;
   @Input() disableHolidays: boolean = false;
   
+  // NEW: Disabled Dates Input
+  @Input() disabledDates: (string | Date)[] = [];
+  
   // Popover/Input Mode
   @Input() placeholder: string = 'Select Date';
   @Input() inline: boolean | 'always' | 'auto' = false;
@@ -426,7 +429,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
     
     // Rerun calendar generation if provider changes to refresh disabled states
-    if (changes['holidayProvider'] || changes['disableHolidays']) {
+    if (changes['holidayProvider'] || changes['disableHolidays'] || changes['disabledDates']) {
         this.generateCalendar();
     }
 
@@ -531,6 +534,19 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return normalizeDate(date);
   }
 
+  private parseDateString(dateString: string): Date | null {
+    try {
+      // Handle MM/DD/YYYY format
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return null;
+      }
+      return getStartOfDay(date);
+    } catch (error) {
+      return null;
+    }
+  }
+
   private generateTimeOptions(): void {
     const { hourOptions, minuteOptions } = generateTimeOptions(this.minuteInterval);
     this.hourOptions = hourOptions;
@@ -581,12 +597,29 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     const dateOnly = getStartOfDay(date);
 
-    // 1. Check holiday provider for disabling
+    // 1. Check disabled dates array
+    if (this.disabledDates.length > 0) {
+      for (const disabledDate of this.disabledDates) {
+        let parsedDate: Date | null;
+        
+        if (typeof disabledDate === 'string') {
+          parsedDate = this.parseDateString(disabledDate);
+        } else {
+          parsedDate = getStartOfDay(disabledDate);
+        }
+        
+        if (parsedDate && dateOnly.getTime() === parsedDate.getTime()) {
+          return true;
+        }
+      }
+    }
+
+    // 2. Check holiday provider for disabling
     if (this.holidayProvider && this.disableHolidays && this.holidayProvider.isHoliday(dateOnly)) {
       return true;
     }
 
-    // 2. Check min/max date
+    // 3. Check min/max date
     if (this._minDate) {
       const minDateOnly = getStartOfDay(this._minDate);
       if (dateOnly.getTime() < minDateOnly.getTime()) return true;
@@ -596,7 +629,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (dateOnly.getTime() > maxDateOnly.getTime()) return true;
     }
     
-    // 3. Check custom invalid date function
+    // 4. Check custom invalid date function
     return this.isInvalidDate(date);
   }
 

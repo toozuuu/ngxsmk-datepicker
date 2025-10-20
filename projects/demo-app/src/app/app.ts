@@ -110,6 +110,9 @@ class SampleHolidayProvider implements HolidayProvider {
         <div class="result-box">
           <strong>Form Value:</strong>
           <p>{{ JSON.stringify(datepickerForm.controls.singleDate.value) }}</p>
+          <strong>Holiday Tooltip Test:</strong>
+          <p>Hover over January 1, 2025 to see "New Year's Day" tooltip</p>
+          <p>Hover over July 4, 2025 to see "Independence Day" tooltip</p>
         </div>
       </section>
 
@@ -198,6 +201,40 @@ class SampleHolidayProvider implements HolidayProvider {
           <p>{{ JSON.stringify(datepickerForm.controls.multipleDates.value) }}</p>
           <strong>Last Action:</strong>
           <p>{{ JSON.stringify(lastAction) }}</p>
+        </div>
+      </section>
+
+      <section class="example-container">
+        <h2>Disabled Dates Array 🚫</h2>
+        <p>
+          This example demonstrates the new <code>disabledDates</code> input property. 
+          You can pass an array of date strings or Date objects to disable specific dates.
+          The dates in the array will be disabled and cannot be selected.
+        </p>
+
+        <div class="disabled-dates-controls">
+          <label>
+            <strong>Disabled Dates:</strong>
+            <p class="disabled-dates-list">{{ disabledDatesArray.join(', ') }}</p>
+          </label>
+          <button class="toggle-button" (click)="toggleDisabledDates()">
+            {{ hasDisabledDates ? 'Remove Disabled Dates' : 'Add Sample Disabled Dates' }}
+          </button>
+        </div>
+
+        <ngxsmk-datepicker
+          mode="single"
+          [disabledDates]="hasDisabledDates ? disabledDatesArray : []"
+          [theme]="currentTheme"
+          placeholder="Try selecting the disabled dates - they will be grayed out"
+          formControlName="disabledDatesDemo">
+        </ngxsmk-datepicker>
+
+        <div class="result-box">
+          <strong>Disabled Dates:</strong>
+          <p>{{ hasDisabledDates ? disabledDatesArray.join(', ') : 'None' }}</p>
+          <strong>Form Value:</strong>
+          <p>{{ JSON.stringify(datepickerForm.controls.disabledDatesDemo.value) }}</p>
         </div>
       </section>
 
@@ -383,7 +420,7 @@ class SampleHolidayProvider implements HolidayProvider {
       align-items: center;
     }
     
-    .holiday-controls, .min-date-controls {
+    .holiday-controls, .min-date-controls, .disabled-dates-controls {
         width: 100%;
         padding: 8px 12px;
         margin-bottom: 12px;
@@ -396,10 +433,17 @@ class SampleHolidayProvider implements HolidayProvider {
         flex-direction: column;
         gap: 12px;
     }
-    .holiday-controls label, .min-date-controls label {
+    .holiday-controls label, .min-date-controls label, .disabled-dates-controls label {
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+    .disabled-dates-list {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        font-size: 0.85rem;
+        color: var(--datepicker-subtle-text-color);
+        margin: 4px 0;
+        word-break: break-all;
     }
     .min-date-controls {
         flex-direction: row;
@@ -660,6 +704,10 @@ export class App {
   public hasMinDate: boolean = true;
   public minDateInput: string = this.today.toISOString().split('T')[0];
 
+  // Disabled Dates Demo Properties
+  public hasDisabledDates: boolean = false;
+  public disabledDatesArray: string[] = ['10/21/2025', '08/21/2025', '10/15/2025', '10/8/2025', '10/3/2025'];
+
   public datepickerForm = new FormGroup({
     singleDate: new FormControl(getStartOfDay(addMonths(this.today, 1))),
     singleDate2: new FormControl(getStartOfDay(addMonths(this.today, 1))),
@@ -670,6 +718,7 @@ export class App {
     rangeWithTime: new FormControl(),
     multipleDates: new FormControl<Date[] | null>(null),
     minDateDemo: new FormControl(),
+    disabledDatesDemo: new FormControl(),
   });
 
   public myRanges: DateRange = {
@@ -720,5 +769,9 @@ export class App {
       this.minDate = getStartOfDay(this.today);
       this.minDateInput = this.today.toISOString().split('T')[0];
     }
+  }
+
+  toggleDisabledDates(): void {
+    this.hasDisabledDates = !this.hasDisabledDates;
   }
 }

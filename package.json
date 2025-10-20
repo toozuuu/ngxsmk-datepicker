@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.4.13",
+  "version": "1.4.14",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "scripts": {
@@ -28,10 +28,12 @@
     "type": "git",
     "url": "git+https://github.com/toozuuu/ngxsmk-datepicker.git"
   },
+  "bugs": {
+    "url": "https://github.com/toozuuu/ngxsmk-datepicker/issues"
+  },
   "author": {
-    "email": "sachindilshan040@gmail.com",
     "name": "Sachin Dilshan",
-    "url": "https://github.com/toozuuu"
+    "url": "https://www.linkedin.com/in/sachindilshan/"
   },
   "sideEffects": false,
   "files": [
@@ -55,11 +57,11 @@
     "localization"
   ],
   "devDependencies": {
-    "@angular-devkit/build-angular": "^20.3.5",
-    "@angular/cli": "^20.3.0",
+    "@angular-devkit/build-angular": "^20.3.6",
+    "@angular/cli": "^20.3.6",
     "@angular/compiler": "^20.3.6",
     "@angular/compiler-cli": "^20.3.6",
-    "@angular/forms": "^20.3.4",
+    "@angular/forms": "^20.3.6",
     "@angular/core": "^20.3.6",
     "@angular/common": "^20.3.6",
     "@angular/platform-browser": "^20.3.6",

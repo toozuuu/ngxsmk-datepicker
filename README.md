@@ -25,6 +25,8 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Inline and Popover Display**: Can be rendered inline or as a popover with automatic mode detection.
 * **Light and Dark Themes**: Includes built-in support for light and dark modes.
 * **Holiday Marking**: Automatically mark and disable holidays using a custom `HolidayProvider`.
+* **Holiday Tooltips**: Hover over holiday dates to see holiday names as tooltips.
+* **Disabled Dates**: Disable specific dates by passing an array of date strings or Date objects.
 * **Date & Time Selection**: Supports optional time inputs with configurable minute intervals.
 * **12h/24h Time Support**: Uses internal 24-hour timekeeping but displays a user-friendly **12-hour clock with AM/PM toggle**.
 * **Predefined Date Ranges**: Offers quick selection of common ranges (e.g., "Last 7 Days").
@@ -96,6 +98,54 @@ Use the `<ngxsmk-datepicker>` selector in your HTML template.
       (valueChange)="onDateChange($event)"    
     ></ngxsmk-datepicker>  
 
+#### **3. Disabled Dates Example**
+
+Disable specific dates by passing an array of date strings or Date objects:
+
+```typescript
+// In your component
+disabledDates = ['10/21/2025', '08/21/2025', '10/15/2025', '10/8/2025', '10/3/2025'];
+
+// In your template
+<ngxsmk-datepicker
+  [mode]="'single'"
+  [disabledDates]="disabledDates"
+  placeholder="Select a date">
+</ngxsmk-datepicker>
+```
+
+#### **4. Holiday Tooltips Example**
+
+Holiday dates automatically show tooltips when you hover over them:
+
+```typescript
+// Holiday provider with tooltips
+class MyHolidayProvider implements HolidayProvider {
+  private holidays: { [key: string]: string } = {
+    '2025-01-01': 'New Year\'s Day',
+    '2025-07-04': 'Independence Day',
+    '2025-12-25': 'Christmas Day',
+  };
+
+  isHoliday(date: Date): boolean {
+    const key = this.formatDateKey(date);
+    return !!this.holidays[key];
+  }
+
+  getHolidayLabel(date: Date): string | null {
+    const key = this.formatDateKey(date);
+    return this.holidays[key] || null;
+  }
+}
+
+// In your template
+<ngxsmk-datepicker
+  [holidayProvider]="holidayProvider"
+  [disableHolidays]="false"
+  placeholder="Hover over holidays to see tooltips">
+</ngxsmk-datepicker>
+```
+
 ## **⚙️ API Reference**
 
 ### **Inputs**
@@ -117,6 +167,7 @@ Use the `<ngxsmk-datepicker>` selector in your HTML template.
 | startAt        | DateInput                                          | null                  | The date to initially center the calendar view on.                                                            |
 | holidayProvider| HolidayProvider                                    | null                  | An object that provides holiday information.                                                                  |
 | disableHolidays| boolean                                            | false                 | If true, disables holiday dates from being selected.                                                          |
+| disabledDates  | (string \| Date)[]                               | []                    | Array of dates to disable. Supports both string dates (MM/DD/YYYY) and Date objects.                         |
 
 ### **Outputs**
 
@@ -253,7 +304,14 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.4.12** (Latest)
+### **v1.4.13** (Latest)
+- 🚫 **Disabled Dates**: New `disabledDates` input property to disable specific dates
+- 🎯 **Date String Support**: Supports both string dates (MM/DD/YYYY) and Date objects
+- 💡 **Holiday Tooltips**: Hover over holiday dates to see holiday names as tooltips
+- 🎨 **Enhanced UX**: Better visual feedback for disabled dates
+- 📦 **Improved API**: More flexible date disabling options
+
+### **v1.4.12**
 - ⚡ **Instant Navigation**: Removed all animations for lightning-fast arrow navigation
 - 🚫 **Smart Back Arrow**: Automatically disables back arrow when minDate is set
 - 🎯 **Better UX**: Prevents navigation to invalid date ranges

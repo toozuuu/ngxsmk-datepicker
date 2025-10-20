@@ -1,6 +1,10 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.4.13",
+  "version": "1.4.14",
+  "author": {
+    "name": "Sachin Dilshan",
+    "url": "https://www.linkedin.com/in/sachindilshan/"
+  },
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0",
@@ -19,6 +23,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/toozuuu/ngxsmk-datepicker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/toozuuu/ngxsmk-datepicker/issues"
   },
   "sideEffects": false,
   "files": [
