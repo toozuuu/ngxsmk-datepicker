@@ -42,6 +42,7 @@ This library has been optimized for maximum performance:
 - **Predefined Date Ranges**: Offers quick selection of common ranges (e.g., "Last 7 Days")
 - **Advanced Localization (i18n)**: Automatically handles month/weekday names and week start days based on the browser's locale
 - **Previous Month Context**: Shows last few days of previous month for better date selection context
+- **Smart Initial View**: Automatically shows minDate's month when minDate is in the future
 - **Custom Styling**: All component elements are prefixed with `ngxsmk-` and themeable via CSS custom properties
 - **Zero Dependencies**: The component is standalone and lightweight
 
@@ -104,6 +105,23 @@ export class AppComponent {
 </ngxsmk-datepicker>
 ```
 
+### 3. Smart Initial View with Future minDate
+
+When you set a `minDate` that is in the future, the datepicker will automatically open to that month:
+
+```typescript
+// Example: Current date is 10/21/2025, but you want to restrict selection to December 2025
+const futureMinDate = new Date(2025, 11, 15); // December 15, 2025
+const futureMaxDate = new Date(2025, 11, 21); // December 21, 2025
+
+// The datepicker will automatically show December 2025 when opened
+<ngxsmk-datepicker
+  [minDate]="futureMinDate"
+  [maxDate]="futureMaxDate"
+  [mode]="'single'">
+</ngxsmk-datepicker>
+```
+
 ## ⚙️ API Reference
 
 ### Inputs
@@ -115,7 +133,7 @@ export class AppComponent {
 | `locale` | `string` | `navigator.language` | Sets the locale for language and regional formatting |
 | `theme` | `'light' \| 'dark'` | `'light'` | The color theme |
 | `showRanges` | `boolean` | `true` | If true, displays the predefined ranges panel when in 'range' mode |
-| `minDate` | `DateInput` | `null` | The earliest selectable date |
+| `minDate` | `DateInput` | `null` | The earliest selectable date. When set to a future date, the calendar will automatically open to that month |
 | `maxDate` | `DateInput` | `null` | The latest selectable date |
 | `isInvalidDate` | `(date: Date) => boolean` | `() => false` | A function to programmatically disable specific dates |
 | `ranges` | `DateRange` | `null` | An object of predefined date ranges |
@@ -226,7 +244,12 @@ We welcome and appreciate contributions from the community! Please see our [Cont
 
 ## 📄 Changelog
 
-### v1.4.12 (Latest)
+### v1.4.13 (Latest)
+- 🎯 **Smart Initial View**: Datepicker now automatically opens to minDate's month when minDate is set to a future date
+- 🚀 **Enhanced UX**: No more scrolling through months to reach future date ranges
+- 📅 **Intelligent Defaults**: Automatically centers the calendar view on the earliest available date
+
+### v1.4.12
 - ⚡ **Instant Navigation**: Removed all animations for lightning-fast arrow navigation
 - 🚫 **Smart Back Arrow**: Automatically disables back arrow when minDate is set
 - 🎯 **Better UX**: Prevents navigation to invalid date ranges

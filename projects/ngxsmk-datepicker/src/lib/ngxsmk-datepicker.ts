@@ -403,7 +403,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (this._internalValue) {
       this.initializeValue(this._internalValue);
-    } else if (this._startAtDate) {
+    } else {
       this.initializeValue(null);
     }
     this.generateCalendar();
@@ -436,6 +436,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this._currentMonth = this.currentDate.getMonth();
         this._currentYear = this.currentDate.getFullYear();
         this.generateCalendar();
+      }
+    }
+
+    // Handle minDate changes - if minDate is set and is in the future, 
+    // and we don't have a current value, update the view to show minDate's month
+    if (changes['minDate'] && !this._internalValue) {
+      if (this._minDate) {
+        const today = new Date();
+        const minDateOnly = getStartOfDay(this._minDate);
+        const todayOnly = getStartOfDay(today);
+        
+        // If minDate is in the future, update the view to show minDate's month
+        if (minDateOnly.getTime() > todayOnly.getTime()) {
+          this.currentDate = new Date(this._minDate);
+          this._currentMonth = this.currentDate.getMonth();
+          this._currentYear = this.currentDate.getFullYear();
+          this.generateCalendar();
+        }
       }
     }
   }
@@ -478,7 +496,25 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
 
-    const viewCenterDate = initialDate || this._startAtDate || new Date();
+    // Determine the initial view date
+    let viewCenterDate = initialDate || this._startAtDate;
+    
+    // If no specific date is set and minDate is in the future, use minDate's month
+    if (!viewCenterDate && this._minDate) {
+      const today = new Date();
+      const minDateOnly = getStartOfDay(this._minDate);
+      const todayOnly = getStartOfDay(today);
+      
+      // If minDate is in the future, use minDate as the initial view
+      if (minDateOnly.getTime() > todayOnly.getTime()) {
+        viewCenterDate = this._minDate;
+      }
+    }
+    
+    // Fallback to current date if no other date is determined
+    if (!viewCenterDate) {
+      viewCenterDate = new Date();
+    }
 
     if (viewCenterDate) {
       this.currentDate = new Date(viewCenterDate);

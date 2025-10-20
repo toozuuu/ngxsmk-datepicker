@@ -47,6 +47,7 @@ The live demo runs directly in your browser without any installation required!
 ### 📅 Single Date Selection
 - **Popover Calendar**: Clean, intuitive date selection
 - **Weekend Restrictions**: Disable weekends with `isInvalidDate`
+- **Smart Initial View**: Automatically opens to minDate's month when minDate is in the future
 - **Theme Support**: Light and dark mode compatibility
 - **Form Integration**: Reactive forms with validation
 
@@ -67,6 +68,11 @@ The live demo runs directly in your browser without any installation required!
 - **Action Tracking**: Real-time event logging
 - **Weekend Restrictions**: Consistent with other demos
 - **Event Handling**: Comprehensive action event system
+
+### 🎯 Smart Initial View Feature
+- **Future Date Handling**: When minDate is set to a future date, the calendar automatically opens to that month
+- **Enhanced UX**: No need to navigate through months to reach future date ranges
+- **Intelligent Defaults**: Perfect for booking systems, event scheduling, and future date selection
 
 ## 🎨 Theme Support
 
