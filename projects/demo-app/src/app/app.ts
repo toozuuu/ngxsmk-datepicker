@@ -109,7 +109,7 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ JSON.stringify(datepickerForm.controls.singleDate.value) }}</pre>
+          <p>{{ JSON.stringify(datepickerForm.controls.singleDate.value) }}</p>
         </div>
       </section>
 
@@ -121,7 +121,7 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ JSON.stringify(datepickerForm.controls.singleDate2.value) }}</pre>
+          <p>{{ JSON.stringify(datepickerForm.controls.singleDate2.value) }}</p>
         </div>
       </section>
 
@@ -142,7 +142,7 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ JSON.stringify(datepickerForm.controls.inlineRange.value) }}</pre>
+          <p>{{ JSON.stringify(datepickerForm.controls.inlineRange.value) }}</p>
           <strong>Status:</strong> {{ datepickerForm.controls.inlineRange.status }}
         </div>
       </section>
@@ -165,7 +165,7 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ JSON.stringify(datepickerForm.controls.rangeWithTime.value) }}</pre>
+          <p>{{ JSON.stringify(datepickerForm.controls.rangeWithTime.value) }}</p>
         </div>
       </section>
 
@@ -185,9 +185,9 @@ class SampleHolidayProvider implements HolidayProvider {
 
         <div class="result-box">
           <strong>Form Value:</strong>
-          <pre>{{ JSON.stringify(datepickerForm.controls.multipleDates.value) }}</pre>
+          <p>{{ JSON.stringify(datepickerForm.controls.multipleDates.value) }}</p>
           <strong>Last Action:</strong>
-          <pre>{{ JSON.stringify(lastAction) }}</pre>
+          <p>{{ JSON.stringify(lastAction) }}</p>
         </div>
       </section>
 
