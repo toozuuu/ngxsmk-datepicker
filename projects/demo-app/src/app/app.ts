@@ -119,6 +119,15 @@ class SampleHolidayProvider implements HolidayProvider {
           This is the default mode, with a popover calendar. It includes a clear button and min/max date validation.
         </p>
 
+        <ngxsmk-datepicker
+          mode="single"
+          [minDate]="minDate"
+          [maxDate]="maxDate"
+          [theme]="currentTheme"
+          placeholder="Select a date"
+          formControlName="singleDate2">
+        </ngxsmk-datepicker>
+
         <div class="result-box">
           <strong>Form Value:</strong>
           <p>{{ JSON.stringify(datepickerForm.controls.singleDate2.value) }}</p>
@@ -135,6 +144,7 @@ class SampleHolidayProvider implements HolidayProvider {
           mode="range"
           [inline]="true"
           [theme]="currentTheme"
+          [minDate]="minDate"
           formControlName="inlineRange">
         </ngxsmk-datepicker>
         <br>
@@ -236,7 +246,7 @@ class SampleHolidayProvider implements HolidayProvider {
            <h3>ngxsmk-datepicker</h3>
            <p>Optimized for performance, built for developers</p>
            <div class="version-info">
-             <span class="version-badge">v1.4.6</span>
+             <span class="version-badge">v1.4.8</span>
            </div>
          </div>
          

@@ -112,7 +112,7 @@ import { createDateComparator } from './utils/performance.utils';
                   }
                   @for (day of daysInMonth; track $index) {
                     <div class="ngxsmk-day-cell"
-                        [class.empty]="!day" [class.disabled]="isDateDisabled(day)" 
+                        [class.empty]="!isCurrentMonth(day)" [class.disabled]="isDateDisabled(day)" 
                         [class.today]="isSameDay(day, today)"
                         [class.holiday]="isHoliday(day)"
                         [class.selected]="mode === 'single' && isSameDay(day, selectedDate)"
@@ -670,8 +670,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const startDayOfWeek = firstDayOfMonth.getDay();
     const emptyCellCount = (startDayOfWeek - this.firstDayOfWeek + 7) % 7;
 
+    // Add previous month's days instead of null values
+    const previousMonth = month === 0 ? 11 : month - 1;
+    const previousYear = month === 0 ? year - 1 : year;
+    const lastDayOfPreviousMonth = new Date(previousYear, previousMonth + 1, 0);
+    
     for (let i = 0; i < emptyCellCount; i++) {
-      this.daysInMonth.push(null);
+      const dayNumber = lastDayOfPreviousMonth.getDate() - emptyCellCount + i + 1;
+      this.daysInMonth.push(this._normalizeDate(new Date(previousYear, previousMonth, dayNumber)));
     }
     for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
       this.daysInMonth.push(this._normalizeDate(new Date(year, month, i)));
@@ -713,6 +719,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public isSameDay(d1: Date | null, d2: Date | null): boolean {
     return this.dateComparator(d1, d2);
+  }
+
+  public isCurrentMonth(day: Date | null): boolean {
+    if (!day) return false;
+    return day.getMonth() === this._currentMonth && day.getFullYear() === this._currentYear;
   }
 
   public isInRange(d: Date | null): boolean {

@@ -7,7 +7,7 @@ A modern, powerful, and fully customizable date and date-range picker component 
 - **NPM Package**: [ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
 - **GitHub Repository**: [https://github.com/toozuuu/ngxsmk-datepicker](https://github.com/toozuuu/ngxsmk-datepicker)
 - **Live Demo**: [https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker](https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker)
-- **Version**: 1.4.7
+- **Version**: 1.4.8
 - **License**: MIT
 - **Author**: Sachin Dilshan
 
@@ -225,12 +225,23 @@ We welcome and appreciate contributions from the community! Please see our [Cont
 
 ## 📄 Changelog
 
-### v1.4.6 (Latest)
+### v1.4.8 (Latest)
+- 📅 **Previous Month Days**: Now shows last few days of previous month for better context
+- 🎯 **Smart Selection**: Previous month days are selectable when not disabled by minDate/maxDate
+- 🎨 **Visual Improvements**: Better distinction between current and previous month days
+- 🔧 **Range Selection**: Previous month days can be part of date ranges when valid
+- 🚀 **Enhanced UX**: More intuitive calendar navigation and selection
+
+### v1.4.7
 - ⚡ **Instant Navigation**: Removed all animations for lightning-fast arrow navigation
 - 🚫 **Smart Back Arrow**: Automatically disables back arrow when minDate is set
 - 🎯 **Better UX**: Prevents navigation to invalid date ranges
 - 🧹 **Code Optimization**: Cleaner, more maintainable codebase
 - 📦 **Smaller Bundle**: Reduced CSS and JavaScript footprint
+
+### v1.4.6
+- 🔧 **Fixed Import Paths**: Corrected package exports for proper module resolution
+- 📦 **Better Package Structure**: Improved npm package configuration
 
 ### v1.4.5
 - 🐛 Bug fixes and stability improvements

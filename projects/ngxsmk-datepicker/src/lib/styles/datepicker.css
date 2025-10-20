@@ -579,6 +579,26 @@
   opacity: 0.5;
 }
 
+.ngxsmk-day-cell.empty {
+  opacity: 0.6;
+}
+
+.ngxsmk-day-cell.empty.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ngxsmk-day-cell.empty .ngxsmk-day-number {
+  color: var(--datepicker-subtle-text-color);
+  font-weight: 400;
+}
+
+/* Dark theme support for empty days */
+
+:host(.dark-theme) .ngxsmk-day-cell.empty .ngxsmk-day-number {
+  color: #6b7280;
+}
+
 .ngxsmk-day-cell.today .ngxsmk-day-number {
   border: 1px solid var(--datepicker-primary-color);
 }
