@@ -252,7 +252,20 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.4.0** (Latest)
+### **v1.4.6** (Latest)
+- ⚡ **Instant Navigation**: Removed all animations for lightning-fast arrow navigation
+- 🚫 **Smart Back Arrow**: Automatically disables back arrow when minDate is set
+- 🎯 **Better UX**: Prevents navigation to invalid date ranges
+- 🧹 **Code Optimization**: Cleaner, more maintainable codebase
+- 📦 **Smaller Bundle**: Reduced CSS and JavaScript footprint
+
+### **v1.4.5**
+- 🐛 Bug fixes and stability improvements
+- 🔧 Enhanced error handling
+- 📱 Improved mobile responsiveness
+- 🎨 Minor UI/UX improvements
+
+### **v1.4.0**
 - ✅ Performance optimizations (30% smaller bundle)
 - ✅ OnPush change detection strategy
 - ✅ Memoized date comparisons

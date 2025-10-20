@@ -91,7 +91,7 @@ import { createDateComparator } from './utils/performance.utils';
                   <ngxsmk-custom-select class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled"></ngxsmk-custom-select>
                 </div>
                 <div class="ngxsmk-nav-buttons">
-                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled">
+                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled || isBackArrowDisabled">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                       <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
                             d="M328 112L184 256l144 144"/>
@@ -106,9 +106,7 @@ import { createDateComparator } from './utils/performance.utils';
                 </div>
               </div>
               <div class="ngxsmk-days-grid-wrapper">
-                <div class="ngxsmk-days-grid"
-                    [class.animate-forward]="animateForward" 
-                    [class.animate-backward]="animateBackward">
+                <div class="ngxsmk-days-grid">
                   @for (day of weekDays; track day) {
                     <div class="ngxsmk-day-name">{{ day }}</div>
                   }
@@ -254,8 +252,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   ];
 
   // Animation state properties
-  public animateForward: boolean = false;
-  public animateBackward: boolean = false;
   
   private readonly elementRef: ElementRef = inject(ElementRef);
   private readonly dateComparator = createDateComparator();
@@ -284,6 +280,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return `${this.selectedDates.length} dates selected`;
     }
     return '';
+  }
+
+  get isBackArrowDisabled(): boolean {
+    if (!this._minDate) return false;
+    
+    // Get the first day of the current month
+    const firstDayOfCurrentMonth = new Date(this.currentYear, this.currentMonth, 1);
+    
+    // Check if the first day of current month is before or equal to minDate
+    return firstDayOfCurrentMonth <= this._minDate;
   }
   
   @HostListener('document:click', ['$event'])
@@ -359,7 +365,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this._currentMonth !== month) {
       this._currentMonth = month;
       this.currentDate.setMonth(month);
-      this.generateCalendar(true);
+      this.generateCalendar();
     }
   }
 
@@ -370,7 +376,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this._currentYear !== year) {
       this._currentYear = year;
       this.currentDate.setFullYear(year);
-      this.generateCalendar(true);
+      this.generateCalendar();
     }
   }
 
@@ -652,7 +658,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return time > Math.min(start, end) && time < Math.max(start, end);
   }
 
-  public generateCalendar(resetAnimation: boolean = true): void {
+  public generateCalendar(): void {
     this.daysInMonth = [];
     const year = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
@@ -671,10 +677,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.daysInMonth.push(this._normalizeDate(new Date(year, month, i)));
     }
 
-    if (resetAnimation) {
-      this.animateForward = false;
-      this.animateBackward = false;
-    }
 
     this.action.emit({
       type: 'calendarGenerated',
@@ -693,32 +695,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public changeMonth(delta: number): void {
     if (this.disabled) return;
 
-    // 1. Set the animation class (triggers slide-out)
-    if (delta > 0) {
-      this.animateForward = true;
-      this.animateBackward = false;
-    } else {
-      this.animateBackward = true;
-      this.animateForward = false;
-    }
+    // Check if going back is disabled due to minDate constraint
+    if (delta < 0 && this.isBackArrowDisabled) return;
 
     const newDate = addMonths(this.currentDate, delta);
 
-    // 2. Wait for the slide-out transition to complete (300ms)
-    setTimeout(() => {
-      // 3. Update the data
-      this.currentDate = newDate;
-      this._currentMonth = newDate.getMonth();
-      this._currentYear = newDate.getFullYear();
+    // Update the data immediately (no animation)
+    this.currentDate = newDate;
+    this._currentMonth = newDate.getMonth();
+    this._currentYear = newDate.getFullYear();
 
-      // Generate new calendar view but tell it *not* to reset animation flags yet.
-      this.generateCalendar(false);
-
-      // 4. Reset the animation flags to false (triggers slide-in of the new content)
-      this.animateForward = false;
-      this.animateBackward = false;
-
-    }, 300); // Wait time should match the CSS transition duration (0.3s)
+    // Generate new calendar view
+    this.generateCalendar();
 
     this.action.emit({type: 'monthChanged', payload: { delta: delta }});
   }

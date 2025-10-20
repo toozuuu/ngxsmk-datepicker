@@ -396,27 +396,13 @@
   height: 16px;
 }
 
-/* Animation Styles */
-.ngxsmk-days-grid-wrapper {
-  overflow-x: hidden;
-}
+/* Days Grid Styles */
 
 .ngxsmk-days-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
   gap: 0;
-  transition: transform 0.3s ease-out, opacity 0.15s ease-out 0.15s;
-}
-
-.ngxsmk-days-grid.animate-forward {
-  transform: translateX(-100%);
-  opacity: 0;
-}
-
-.ngxsmk-days-grid.animate-backward {
-  transform: translateX(100%);
-  opacity: 0;
 }
 
 .ngxsmk-day-name {
@@ -539,7 +525,7 @@
 }
 
 .ngxsmk-time-selection app-custom-select.ngxsmk-time-select-animated {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ngxsmk-day-cell:not(.disabled):hover .ngxsmk-day-number {

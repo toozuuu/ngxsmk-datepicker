@@ -191,6 +191,43 @@ class SampleHolidayProvider implements HolidayProvider {
         </div>
       </section>
 
+      <section class="example-container">
+        <h2>Back Arrow Disable with minDate 🚫</h2>
+        <p>
+          When <code>minDate</code> is set, the back arrow automatically disables to prevent navigation 
+          to months before the minimum date. This provides better UX by preventing users from navigating 
+          to invalid date ranges.
+        </p>
+
+        <div class="min-date-controls">
+          <label>
+            <strong>Min Date:</strong>
+            <input type="date" 
+                   [value]="minDateInput" 
+                   (change)="updateMinDate($event)"
+                   class="date-input">
+          </label>
+          <button class="toggle-button" (click)="toggleMinDate()">
+            {{ hasMinDate ? 'Remove minDate' : 'Set minDate to Today' }}
+          </button>
+        </div>
+
+        <ngxsmk-datepicker
+          mode="single"
+          [minDate]="hasMinDate ? minDate : null"
+          [theme]="currentTheme"
+          placeholder="Try navigating back - arrow will be disabled"
+          formControlName="minDateDemo">
+        </ngxsmk-datepicker>
+
+        <div class="result-box">
+          <strong>Current minDate:</strong>
+          <p>{{ hasMinDate ? (minDate | date:'medium') : 'None' }}</p>
+          <strong>Form Value:</strong>
+          <p>{{ JSON.stringify(datepickerForm.controls.minDateDemo.value) }}</p>
+        </div>
+      </section>
+
      </main>
 
      <footer class="app-footer">
@@ -199,7 +236,7 @@ class SampleHolidayProvider implements HolidayProvider {
            <h3>ngxsmk-datepicker</h3>
            <p>Optimized for performance, built for developers</p>
            <div class="version-info">
-             <span class="version-badge">v1.4.0</span>
+             <span class="version-badge">v1.4.6</span>
            </div>
          </div>
          
@@ -336,7 +373,7 @@ class SampleHolidayProvider implements HolidayProvider {
       align-items: center;
     }
     
-    .holiday-controls {
+    .holiday-controls, .min-date-controls {
         width: 100%;
         padding: 8px 12px;
         margin-bottom: 12px;
@@ -345,11 +382,34 @@ class SampleHolidayProvider implements HolidayProvider {
         background-color: var(--datepicker-hover-background);
         font-size: 0.9rem;
         color: var(--datepicker-text-color);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
     }
-    .holiday-controls label {
+    .holiday-controls label, .min-date-controls label {
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+    .min-date-controls {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .date-input {
+        padding: 6px 8px;
+        border: 1px solid var(--datepicker-border-color);
+        border-radius: 4px;
+        background-color: var(--datepicker-background);
+        color: var(--datepicker-text-color);
+        font-size: 0.9rem;
+    }
+    @media (max-width: 600px) {
+      .min-date-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
     
     :host(.dark-theme) .example-container {
@@ -586,6 +646,10 @@ export class App {
   public holidayProvider: HolidayProvider = new SampleHolidayProvider();
   public disableHolidays: boolean = true; // State for the checkbox
 
+  // MinDate Demo Properties
+  public hasMinDate: boolean = true;
+  public minDateInput: string = this.today.toISOString().split('T')[0];
+
   public datepickerForm = new FormGroup({
     singleDate: new FormControl(getStartOfDay(addMonths(this.today, 1))),
     singleDate2: new FormControl(getStartOfDay(addMonths(this.today, 1))),
@@ -595,6 +659,7 @@ export class App {
     }),
     rangeWithTime: new FormControl(),
     multipleDates: new FormControl<Date[] | null>(null),
+    minDateDemo: new FormControl(),
   });
 
   public myRanges: DateRange = {
@@ -629,5 +694,21 @@ export class App {
   handleDatepickerAction(event: { type: string; payload?: any }): void {
     console.log('Datepicker Action:', event);
     this.lastAction = event;
+  }
+
+  updateMinDate(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (target.value) {
+      this.minDate = getStartOfDay(new Date(target.value));
+      this.minDateInput = target.value;
+    }
+  }
+
+  toggleMinDate(): void {
+    this.hasMinDate = !this.hasMinDate;
+    if (this.hasMinDate) {
+      this.minDate = getStartOfDay(this.today);
+      this.minDateInput = this.today.toISOString().split('T')[0];
+    }
   }
 }

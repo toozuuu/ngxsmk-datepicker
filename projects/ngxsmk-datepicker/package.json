@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.4.4",
+  "version": "1.4.7",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0",
@@ -45,7 +45,7 @@
   "exports": {
     ".": {
       "import": "./fesm2022/ngxsmk-datepicker.mjs",
-      "require": "./fesm2020/ngxsmk-datepicker.mjs"
+      "require": "./fesm2022/ngxsmk-datepicker.mjs"
     }
   },
   "optimization": {
