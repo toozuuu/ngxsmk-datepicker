@@ -7,7 +7,7 @@ A modern, powerful, and fully customizable date and date-range picker component 
 - **NPM Package**: [ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
 - **GitHub Repository**: [https://github.com/toozuuu/ngxsmk-datepicker](https://github.com/toozuuu/ngxsmk-datepicker)
 - **Live Demo**: [https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker](https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker)
-- **Version**: 1.4.8
+- **Version**: 1.4.10
 - **License**: MIT
 - **Author**: Sachin Dilshan
 
@@ -225,7 +225,17 @@ We welcome and appreciate contributions from the community! Please see our [Cont
 
 ## 📄 Changelog
 
-### v1.4.8 (Latest)
+### v1.4.10 (Latest)
+- 🔧 **Fixed Import Paths**: Added support for both `'ngxsmk-datepicker'` and `'ngxsmk-datepicker/dist/ngxsmk-datepicker'` import paths
+- 📦 **Better Compatibility**: Ensures backward compatibility with existing import patterns
+- 🚀 **Enhanced Developer Experience**: Works with both import styles
+
+### v1.4.9
+- 🔧 **Fixed Package Exports**: Corrected package.json exports field for proper TypeScript support
+- 📦 **Better Module Resolution**: Improved import paths and type definitions
+- 🚀 **Enhanced Developer Experience**: Cleaner imports without dist paths
+
+### v1.4.8
 - 📅 **Previous Month Days**: Now shows last few days of previous month for better context
 - 🎯 **Smart Selection**: Previous month days are selectable when not disabled by minDate/maxDate
 - 🎨 **Visual Improvements**: Better distinction between current and previous month days
