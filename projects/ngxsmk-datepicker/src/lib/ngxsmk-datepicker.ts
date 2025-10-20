@@ -593,7 +593,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public onDateClick(day: Date | null): void {
-    if (!day || this.isDateDisabled(day) || this.disabled) return;
+    if (!day || this.disabled) return;
+    
+    // Only check isDateDisabled for current month days
+    if (this.isCurrentMonth(day) && this.isDateDisabled(day)) return;
 
     const dateToToggle = getStartOfDay(day);
 

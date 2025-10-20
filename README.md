@@ -252,24 +252,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.4.10** (Latest)
-- 🔧 **Fixed Import Paths**: Added support for both `'ngxsmk-datepicker'` and `'ngxsmk-datepicker/dist/ngxsmk-datepicker'` import paths
-- 📦 **Better Compatibility**: Ensures backward compatibility with existing import patterns
-- 🚀 **Enhanced Developer Experience**: Works with both import styles
-
-### **v1.4.9**
-- 🔧 **Fixed Package Exports**: Corrected package.json exports field for proper TypeScript support
-- 📦 **Better Module Resolution**: Improved import paths and type definitions
-- 🚀 **Enhanced Developer Experience**: Cleaner imports without dist paths
-
-### **v1.4.8**
-- 📅 **Previous Month Days**: Now shows last few days of previous month for better context
-- 🎯 **Smart Selection**: Previous month days are selectable when not disabled by minDate/maxDate
-- 🎨 **Visual Improvements**: Better distinction between current and previous month days
-- 🔧 **Range Selection**: Previous month days can be part of date ranges when valid
-- 🚀 **Enhanced UX**: More intuitive calendar navigation and selection
-
-### **v1.4.7**
+### **v1.4.7** (Latest)
 - ⚡ **Instant Navigation**: Removed all animations for lightning-fast arrow navigation
 - 🚫 **Smart Back Arrow**: Automatically disables back arrow when minDate is set
 - 🎯 **Better UX**: Prevents navigation to invalid date ranges

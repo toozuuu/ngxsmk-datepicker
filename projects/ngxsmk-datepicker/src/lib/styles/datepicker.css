@@ -299,7 +299,7 @@
   padding: var(--datepicker-spacing-md);
   background: var(--datepicker-background);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  /* width: 100%; */
 }
 
 .ngxsmk-ranges-container {
@@ -528,7 +528,7 @@
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ngxsmk-day-cell:not(.disabled):hover .ngxsmk-day-number {
+.ngxsmk-day-cell:not(.disabled):not(.empty):hover .ngxsmk-day-number {
   background-color: var(--datepicker-hover-background);
   color: var(--datepicker-primary-color);
 }
@@ -580,18 +580,13 @@
 }
 
 .ngxsmk-day-cell.empty {
-  opacity: 0.6;
-}
-
-.ngxsmk-day-cell.empty.disabled {
-  cursor: not-allowed;
-  pointer-events: none;
+  opacity: 1;
 }
 
 .ngxsmk-day-cell.empty .ngxsmk-day-number {
   color: var(--datepicker-subtle-text-color);
-  font-weight: 400;
 }
+
 
 /* Dark theme support for empty days */
 
@@ -667,12 +662,12 @@
   }
 
   .ngxsmk-day-cell {
-    height: 38px;
+    height: 42px;
   }
 
   .ngxsmk-day-number {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     font-size: var(--datepicker-font-size-lg);
   }
 
