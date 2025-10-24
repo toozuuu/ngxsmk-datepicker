@@ -17,7 +17,15 @@
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@angular/core": "^20.3.6",
+    "@angular/common": "^20.3.6",
+    "@angular/forms": "^20.3.6",
+    "@angular/platform-browser": "^20.3.6",
+    "@angular/platform-browser-dynamic": "^20.3.6",
+    "@angular/router": "^20.3.6",
+    "zone.js": "^0.15.0"
+  },
   "main": "fesm2020/ngxsmk-datepicker.mjs",
   "module": "fesm2020/ngxsmk-datepicker.mjs",
   "es2020": "fesm2020/ngxsmk-datepicker.mjs",
@@ -61,15 +69,8 @@
     "@angular/cli": "^20.3.6",
     "@angular/compiler": "^20.3.6",
     "@angular/compiler-cli": "^20.3.6",
-    "@angular/forms": "^20.3.6",
-    "@angular/core": "^20.3.6",
-    "@angular/common": "^20.3.6",
-    "@angular/platform-browser": "^20.3.6",
-    "@angular/platform-browser-dynamic": "^20.3.6",
-    "@angular/router": "^20.3.6",
     "@types/jasmine": "^5.1.9",
     "ng-packagr": "^20.3.0",
-    "typescript": "^5.7.0",
-    "zone.js": "^0.15.0"
+    "typescript": "^5.7.0"
   }
 }
