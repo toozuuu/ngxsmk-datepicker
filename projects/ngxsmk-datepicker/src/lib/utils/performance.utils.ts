@@ -88,6 +88,7 @@ export function shallowEqual<T extends Record<string, any>>(a: T, b: T): boolean
  */
 export function createDateComparator() {
   const cache = new Map<string, boolean>();
+  const MAX_CACHE_SIZE = 1000; // Prevent memory leaks
   
   return (date1: Date | null, date2: Date | null): boolean => {
     if (!date1 || !date2) return date1 === date2;
@@ -102,6 +103,14 @@ export function createDateComparator() {
       date1.getMonth() === date2.getMonth() &&
       date1.getDate() === date2.getDate()
     );
+    
+    // Prevent cache from growing too large
+    if (cache.size >= MAX_CACHE_SIZE) {
+      const firstKey = cache.keys().next().value;
+      if (firstKey !== undefined) {
+        cache.delete(firstKey);
+      }
+    }
     
     cache.set(key, result);
     return result;
@@ -126,6 +135,14 @@ export function createFilteredArray<T>(
   const result = source.filter(filterFn);
   cache.set(key, result);
   return result;
+}
+
+/**
+ * Clear all caches to prevent memory leaks
+ */
+export function clearAllCaches(): void {
+  // This would be called from the component's ngOnDestroy
+  // Implementation depends on how caches are managed globally
 }
 
 

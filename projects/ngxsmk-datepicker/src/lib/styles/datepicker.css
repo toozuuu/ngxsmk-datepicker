@@ -754,9 +754,20 @@
 .ngxsmk-nav-button,
 .ngxsmk-clear-button {
   will-change: auto;
+  transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .ngxsmk-days-grid {
+  contain: layout style paint;
+  transform: translateZ(0); /* Force hardware acceleration */
+}
+
+/* Optimize for better rendering performance */
+.ngxsmk-day-cell {
+  contain: layout style;
+}
+
+.ngxsmk-day-number {
   contain: layout style paint;
 }
 

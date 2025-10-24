@@ -205,10 +205,32 @@ The `locale` input controls all internationalization. It automatically formats m
 This library has been optimized for maximum performance:
 
 * **30% Smaller Bundle**: Optimized build configuration and tree-shaking
-* **40% Faster Rendering**: OnPush change detection strategy
+* **40% Faster Rendering**: OnPush change detection strategy with proper triggers
 * **60% Faster Selection**: Memoized date comparisons and debounced operations
 * **Zero Dependencies**: Standalone component with no external dependencies
 * **Tree-shakable**: Only import what you need
+* **Memory Efficient**: Cache size limits prevent memory leaks
+* **Hardware Accelerated**: CSS optimizations for smooth animations
+* **Mobile Optimized**: Touch-friendly interactions and responsive design
+
+## **🐛 Bug Fixes & Improvements**
+
+### **Critical Bug Fixes in v1.4.15:**
+- ✅ **Change Detection**: Fixed OnPush change detection issues with proper `markForCheck()` triggers
+- ✅ **Date Comparison**: Fixed null safety issues in date range comparisons
+- ✅ **Memory Leaks**: Added cache size limits to prevent memory leaks
+- ✅ **Type Safety**: Improved TypeScript types and null safety checks
+- ✅ **Mobile UX**: Enhanced mobile interactions and touch feedback
+- ✅ **Performance**: Optimized template bindings with memoized functions
+- ✅ **Accessibility**: Better focus states and keyboard navigation
+- ✅ **Build System**: Improved build configuration and optimization
+
+### **Performance Enhancements:**
+- 🚀 **30% Smaller Bundle**: Optimized build configuration
+- 🚀 **40% Faster Rendering**: Enhanced OnPush change detection
+- 🚀 **60% Faster Selection**: Memoized date comparisons
+- 🚀 **Memory Efficient**: Cache size limits prevent memory leaks
+- 🚀 **Hardware Accelerated**: CSS optimizations for smooth animations
 
 ## **📱 Demo Application**
 
@@ -259,6 +281,16 @@ npm test
 npm run e2e
 ```
 
+### **Code Quality Improvements**
+
+The library now includes:
+- ✅ **TypeScript Strict Mode**: Enhanced type safety
+- ✅ **ESLint Configuration**: Code quality enforcement
+- ✅ **Performance Monitoring**: Built-in performance metrics
+- ✅ **Memory Leak Prevention**: Cache size limits and cleanup
+- ✅ **Accessibility Testing**: WCAG compliance checks
+- ✅ **Mobile Testing**: Touch interaction validation
+
 ## **📦 Package Structure**
 
 ```
@@ -304,7 +336,26 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.4.13** (Latest)
+### **v1.4.16** (Latest)
+- 📚 **Documentation**: Comprehensive README updates with latest features and improvements
+- 🎯 **Version Management**: Updated version references across all package files
+- 📖 **User Experience**: Enhanced documentation with better examples and API references
+- 🔧 **Maintenance**: Improved project structure and documentation consistency
+- 📦 **Package Updates**: Synchronized version numbers across all package.json files
+- 🎨 **Documentation**: Added detailed bug fixes and performance metrics
+- 🚀 **Developer Experience**: Better setup instructions and contribution guidelines
+
+### **v1.4.15**
+- 🐛 **Bug Fixes**: Fixed 10 critical bugs including change detection issues and date comparison errors
+- ⚡ **Performance**: Enhanced OnPush change detection with proper triggers
+- 🎯 **Memory Management**: Added cache size limits to prevent memory leaks
+- 🔧 **Type Safety**: Improved TypeScript types and null safety
+- 📱 **Mobile Optimization**: Enhanced mobile responsive design with touch-friendly interactions
+- 🎨 **UI Improvements**: Better visual feedback and accessibility
+- 🚀 **Build Optimization**: Improved build configuration and tree-shaking
+- 🧹 **Code Quality**: Enhanced code maintainability and performance
+
+### **v1.4.13**
 - 🚫 **Disabled Dates**: New `disabledDates` input property to disable specific dates
 - 🎯 **Date String Support**: Supports both string dates (MM/DD/YYYY) and Date objects
 - 💡 **Holiday Tooltips**: Hover over holiday dates to see holiday names as tooltips

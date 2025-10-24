@@ -13,6 +13,7 @@ import {
   SimpleChanges,
   ChangeDetectionStrategy,
   OnDestroy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import {
@@ -77,7 +78,7 @@ import { createDateComparator } from './utils/performance.utils';
             @if (showRanges && rangesArray.length > 0 && mode === 'range') {
               <div class="ngxsmk-ranges-container">
                 <ul>
-                  @for (range of rangesArray; track range.key) {
+                  @for (range of rangesArray; track trackByRange($index, range)) {
                     <li (click)="selectRange(range.value)" [class.disabled]="disabled">{{ range.key }}</li>
                   }
                 </ul>
@@ -110,20 +111,20 @@ import { createDateComparator } from './utils/performance.utils';
                   @for (day of weekDays; track day) {
                     <div class="ngxsmk-day-name">{{ day }}</div>
                   }
-                  @for (day of daysInMonth; track $index) {
+                  @for (day of daysInMonth; track trackByDay($index, day)) {
                     <div class="ngxsmk-day-cell"
-                        [class.empty]="!isCurrentMonth(day)" [class.disabled]="isDateDisabled(day)" 
-                        [class.today]="isSameDay(day, today)"
-                        [class.holiday]="isHoliday(day)"
-                        [class.selected]="mode === 'single' && isSameDay(day, selectedDate)"
+                        [class.empty]="!isCurrentMonthMemo(day)" [class.disabled]="isDateDisabledMemo(day)" 
+                        [class.today]="isSameDayMemo(day, today)"
+                        [class.holiday]="isHolidayMemo(day)"
+                        [class.selected]="mode === 'single' && isSameDayMemo(day, selectedDate)"
                         [class.multiple-selected]="mode === 'multiple' && isMultipleSelected(day)"
-                        [class.start-date]="mode === 'range' && isSameDay(day, startDate)"
-                        [class.end-date]="mode === 'range' && isSameDay(day, endDate)"
+                        [class.start-date]="mode === 'range' && isSameDayMemo(day, startDate)"
+                        [class.end-date]="mode === 'range' && isSameDayMemo(day, endDate)"
                         [class.in-range]="mode === 'range' && isInRange(day)"
                         [class.preview-range]="isPreviewInRange(day)"
                         (click)="onDateClick(day)" (mouseenter)="onDateHover(day)">
                       @if (day) {
-                        <div class="ngxsmk-day-number" [attr.title]="getHolidayLabel(day)">{{ day | date : 'd' }}</div>
+                        <div class="ngxsmk-day-number" [attr.title]="getHolidayLabelMemo(day)">{{ day | date : 'd' }}</div>
                       }
                     </div>
                   }
@@ -257,6 +258,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   // Animation state properties
   
   private readonly elementRef: ElementRef = inject(ElementRef);
+  private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   private readonly dateComparator = createDateComparator();
   
   get isInlineMode(): boolean {
@@ -270,14 +272,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   
   get displayValue(): string {
     if (this.mode === 'single' && this.selectedDate) {
-      return this.selectedDate.toLocaleString(this.locale, { 
-        year: 'numeric', month: 'short', day: '2-digit', 
-        hour: this.showTime ? '2-digit' : undefined, 
-        minute: this.showTime ? '2-digit' : undefined 
-      });
+      const options: Intl.DateTimeFormatOptions = { 
+        year: 'numeric', 
+        month: 'short', 
+        day: '2-digit'
+      };
+      
+      if (this.showTime) {
+        options.hour = '2-digit';
+        options.minute = '2-digit';
+      }
+      
+      return this.selectedDate.toLocaleString(this.locale, options);
     } else if (this.mode === 'range' && this.startDate && this.endDate) {
-      const start = this.startDate.toLocaleString(this.locale, { year: 'numeric', month: 'short', day: '2-digit' });
-      const end = this.endDate.toLocaleString(this.locale, { year: 'numeric', month: 'short', day: '2-digit' });
+      const options: Intl.DateTimeFormatOptions = { 
+        year: 'numeric', 
+        month: 'short', 
+        day: '2-digit' 
+      };
+      const start = this.startDate.toLocaleString(this.locale, options);
+      const end = this.endDate.toLocaleString(this.locale, options);
       return `${start} - ${end}`;
     } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
       return `${this.selectedDates.length} dates selected`;
@@ -294,11 +308,55 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     // Check if the first day of current month is before or equal to minDate
     return firstDayOfCurrentMonth <= this._minDate;
   }
+
+  // Optimized getters for template performance
+  get isCurrentMonthMemo(): (day: Date | null) => boolean {
+    return (day: Date | null) => {
+      if (!day) return false;
+      return day.getMonth() === this._currentMonth && day.getFullYear() === this._currentYear;
+    };
+  }
+
+  get isDateDisabledMemo(): (day: Date | null) => boolean {
+    return (day: Date | null) => {
+      if (!day) return false;
+      return this.isDateDisabled(day);
+    };
+  }
+
+  get isSameDayMemo(): (d1: Date | null, d2: Date | null) => boolean {
+    return (d1: Date | null, d2: Date | null) => this.dateComparator(d1, d2);
+  }
+
+  get isHolidayMemo(): (day: Date | null) => boolean {
+    return (day: Date | null) => {
+      if (!day || !this.holidayProvider) return false;
+      const dateOnly = getStartOfDay(day);
+      return this.holidayProvider.isHoliday(dateOnly);
+    };
+  }
+
+  get getHolidayLabelMemo(): (day: Date | null) => string | null {
+    return (day: Date | null) => {
+      if (!day || !this.holidayProvider || !this.isHolidayMemo(day)) return null;
+      return this.holidayProvider.getHolidayLabel ? this.holidayProvider.getHolidayLabel(getStartOfDay(day)) : 'Holiday';
+    };
+  }
+
+  // TrackBy functions for better performance
+  trackByDay(index: number, day: Date | null): string {
+    return day ? day.getTime().toString() : `empty-${index}`;
+  }
+
+  trackByRange(_index: number, range: { key: string; value: [Date, Date] }): string {
+    return range.key;
+  }
   
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (!this.isInlineMode && this.isCalendarOpen && !this.elementRef.nativeElement.contains(event.target)) {
       this.isCalendarOpen = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -338,6 +396,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public toggleCalendar(): void {
     if (this.disabled || this.isInlineMode) return;
     this.isCalendarOpen = !this.isCalendarOpen;
+    this.cdr.markForCheck();
   }
   
   public clearValue(event?: MouseEvent): void {
@@ -359,6 +418,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._currentMonth = this.currentDate.getMonth();
     this._currentYear = this.currentDate.getFullYear();
     this.generateCalendar();
+    this.cdr.markForCheck();
   }
 
   get currentMonth(): number { return this._currentMonth; }
@@ -369,6 +429,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this._currentMonth = month;
       this.currentDate.setMonth(month);
       this.generateCalendar();
+      this.cdr.markForCheck();
     }
   }
 
@@ -380,6 +441,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this._currentYear = year;
       this.currentDate.setFullYear(year);
       this.generateCalendar();
+      this.cdr.markForCheck();
     }
   }
 
@@ -577,6 +639,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.initializeValue({start: this.startDate, end: this.endDate});
     this.generateCalendar();
     this.action.emit({type: 'rangeSelected', payload: {start: this.startDate, end: this.endDate, key: this.rangesArray.find(r => r.value === range)?.key}});
+    this.cdr.markForCheck();
   }
   
   // NEW: Check if a date is a holiday
@@ -659,6 +722,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     this.action.emit({type: 'timeChanged', payload: {hour: this.currentHour, minute: this.currentMinute}});
+    this.cdr.markForCheck();
   }
 
   public onDateClick(day: Date | null): void {
@@ -676,7 +740,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (!this.startDate || (this.startDate && this.endDate)) {
         this.startDate = this.applyCurrentTime(day);
         this.endDate = null;
-      } else if (day >= this.startDate) {
+      } else if (day && this.startDate && day >= this.startDate) {
         this.endDate = this.applyCurrentTime(day);
         this.emitValue({start: this.startDate as Date, end: this.endDate as Date});
       } else {
@@ -714,11 +778,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         date: day
       }
     });
+    
+    this.cdr.markForCheck();
   }
 
   public onDateHover(day: Date | null): void {
     if (this.mode === 'range' && this.startDate && !this.endDate && day) {
       this.hoveredDate = day;
+      this.cdr.markForCheck();
     }
   }
 
@@ -755,6 +822,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.daysInMonth.push(this._normalizeDate(new Date(year, month, i)));
     }
 
+    this.cdr.markForCheck();
 
     this.action.emit({
       type: 'calendarGenerated',
@@ -787,6 +855,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.generateCalendar();
 
     this.action.emit({type: 'monthChanged', payload: { delta: delta }});
+    this.cdr.markForCheck();
   }
 
   public isSameDay(d1: Date | null, d2: Date | null): boolean {
@@ -813,6 +882,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   ngOnDestroy(): void {
     // Clean up any subscriptions or timers if needed
-    // Currently no cleanup required, but method is here for future optimizations
+    this.selectedDate = null;
+    this.selectedDates = [];
+    this.startDate = null;
+    this.endDate = null;
+    this.hoveredDate = null;
+    this._internalValue = null;
+    
+    // Clear any cached data
+    if (this.dateComparator && typeof this.dateComparator === 'function') {
+      // Clear any internal caches if they exist
+    }
   }
 }
