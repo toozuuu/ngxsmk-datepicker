@@ -6,9 +6,9 @@
     "url": "https://www.linkedin.com/in/sachindilshan/"
   },
   "peerDependencies": {
-    "@angular/common": ">=17.0.0",
-    "@angular/core": ">=17.0.0",
-    "@angular/forms": ">=17.0.0"
+    "@angular/common": ">=17.0.0 <22.0.0",
+    "@angular/core": ">=17.0.0 <22.0.0",
+    "@angular/forms": ">=17.0.0 <22.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
@@ -43,7 +43,11 @@
     "date-range-picker",
     "calendar",
     "standalone-component",
+    "angular-17",
+    "angular-18",
+    "angular-19",
     "angular-20",
+    "angular-21",
     "typescript",
     "date-selection",
     "i18n",

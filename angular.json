@@ -46,9 +46,7 @@
             "outputPath": "dist/demo-app",
             "browser": "projects/demo-app/src/main.ts",
             "tsConfig": "projects/demo-app/tsconfig.app.json",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": [],
             "assets": [
               {
                 "glob": "**/*",
@@ -104,7 +102,6 @@
           "builder": "@angular/build:karma",
           "options": {
             "polyfills": [
-              "zone.js",
               "zone.js/testing"
             ],
             "tsConfig": "projects/demo-app/tsconfig.spec.json",
