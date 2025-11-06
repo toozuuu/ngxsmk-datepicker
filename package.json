@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.4.16",
+  "version": "1.5.0",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "scripts": {
@@ -14,17 +14,16 @@
     "test": "npx ng test"
   },
   "peerDependencies": {
-    "@angular/common": ">=17.0.0",
-    "@angular/core": ">=17.0.0"
+    "@angular/common": ">=17.0.0 <22.0.0",
+    "@angular/core": ">=17.0.0 <22.0.0"
   },
   "dependencies": {
-    "@angular/core": "^20.3.6",
-    "@angular/common": "^20.3.6",
-    "@angular/forms": "^20.3.6",
-    "@angular/platform-browser": "^20.3.6",
-    "@angular/platform-browser-dynamic": "^20.3.6",
-    "@angular/router": "^20.3.6",
-    "zone.js": "^0.15.0"
+    "@angular/common": ">=17.0.0 <22.0.0",
+    "@angular/core": ">=17.0.0 <22.0.0",
+    "@angular/forms": "^21.0.0-rc.1",
+    "@angular/platform-browser": "^21.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "^21.0.0-rc.1",
+    "@angular/router": "^21.0.0-rc.1"
   },
   "main": "fesm2020/ngxsmk-datepicker.mjs",
   "module": "fesm2020/ngxsmk-datepicker.mjs",
@@ -58,19 +57,30 @@
     "date-range-picker",
     "calendar",
     "standalone-component",
+    "angular-17",
+    "angular-18",
+    "angular-19",
     "angular-20",
+    "angular-21",
     "typescript",
     "date-selection",
     "i18n",
     "localization"
   ],
   "devDependencies": {
-    "@angular-devkit/build-angular": "^20.3.6",
-    "@angular/cli": "^20.3.6",
-    "@angular/compiler": "^20.3.6",
-    "@angular/compiler-cli": "^20.3.6",
-    "@types/jasmine": "^5.1.9",
-    "ng-packagr": "^20.3.0",
-    "typescript": "^5.7.0"
+    "@angular-devkit/build-angular": "^21.0.0-rc.1",
+    "@angular/cli": "^21.0.0-rc.1",
+    "@angular/compiler": "^21.0.0-rc.1",
+    "@angular/compiler-cli": "^21.0.0-rc.1",
+    "@types/jasmine": "^5.1.12",
+    "jasmine-core": "^5.12.1",
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-coverage": "^2.2.1",
+    "karma-jasmine": "^5.1.0",
+    "karma-jasmine-html-reporter": "^2.1.0",
+    "ng-packagr": "^21.0.0-rc.0",
+    "typescript": "^5.7.0",
+    "zone.js": "^0.15.0"
   }
 }

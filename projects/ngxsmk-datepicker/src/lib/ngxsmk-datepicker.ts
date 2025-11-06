@@ -180,15 +180,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() showRanges: boolean = true;
   @Input() showTime: boolean = false;
   @Input() minuteInterval: number = 1;
-  
-  // NEW: Holiday Provider Inputs
   @Input() holidayProvider: HolidayProvider | null = null;
   @Input() disableHolidays: boolean = false;
-  
-  // NEW: Disabled Dates Input
   @Input() disabledDates: (string | Date)[] = [];
-  
-  // Popover/Input Mode
   @Input() placeholder: string = 'Select Date';
   @Input() inline: boolean | 'always' | 'auto' = false;
   public isCalendarOpen: boolean = false;
@@ -255,8 +249,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     {label: 'PM', value: true}
   ];
 
-  // Animation state properties
-  
   private readonly elementRef: ElementRef = inject(ElementRef);
   private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   private readonly dateComparator = createDateComparator();
@@ -301,15 +293,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   get isBackArrowDisabled(): boolean {
     if (!this._minDate) return false;
-    
-    // Get the first day of the current month
     const firstDayOfCurrentMonth = new Date(this.currentYear, this.currentMonth, 1);
-    
-    // Check if the first day of current month is before or equal to minDate
     return firstDayOfCurrentMonth <= this._minDate;
   }
-
-  // Optimized getters for template performance
   get isCurrentMonthMemo(): (day: Date | null) => boolean {
     return (day: Date | null) => {
       if (!day) return false;
@@ -343,7 +329,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     };
   }
 
-  // TrackBy functions for better performance
   trackByDay(index: number, day: Date | null): string {
     return day ? day.getTime().toString() : `empty-${index}`;
   }
@@ -385,7 +370,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.onChange(val);
     this.onTouched();
     
-    // Auto-close popover when a selection is complete
     if (!this.isInlineMode && val !== null) {
       if (this.mode === 'single' || (this.mode === 'range' && this.startDate && this.endDate)) {
         this.isCalendarOpen = false;
@@ -412,8 +396,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     
     this.emitValue(null);
     this.action.emit({type: 'clear', payload: null});
-    
-    // Reset view to today after clearing
     this.currentDate = new Date();
     this._currentMonth = this.currentDate.getMonth();
     this._currentYear = this.currentDate.getFullYear();

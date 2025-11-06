@@ -336,7 +336,17 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.4.16** (Latest)
+### **v1.5.0** (Latest)
+- 🚀 **Angular 21 Support**: Full compatibility with Angular 21 RC versions
+- ⚡ **Zone-less Support**: Works without zone.js for improved performance
+- 🧪 **Comprehensive Tests**: Added extensive test suite covering all features
+- 🔧 **Angular 17-21 Compatibility**: Supports Angular versions 17, 18, 19, 20, and 21
+- 📦 **Dependency Updates**: Updated to Angular 21 RC and latest build tools
+- 🧹 **Code Cleanup**: Removed unnecessary documentation files and comments
+- 📝 **Improved Keywords**: Added version-specific keywords for better discoverability
+- 🎯 **Peer Dependencies**: Updated to support Angular 17-21 range
+
+### **v1.4.16**
 - 📚 **Documentation**: Comprehensive README updates with latest features and improvements
 - 🎯 **Version Management**: Updated version references across all package files
 - 📖 **User Experience**: Enhanced documentation with better examples and API references
