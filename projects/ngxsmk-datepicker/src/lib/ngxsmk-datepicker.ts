@@ -189,6 +189,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public _internalValue: DatepickerValue = null;
 
+  private _value: DatepickerValue = null;
+  @Input() set value(val: DatepickerValue) {
+    this._value = val;
+  }
+  get value(): DatepickerValue {
+    return this._internalValue;
+  }
+
   private _startAtDate: Date | null = null;
   @Input() set startAt(value: DateInput | null) { this._startAtDate = this._normalizeDate(value); }
 
@@ -448,8 +456,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.update12HourState(this.currentHour);
     }
 
-    if (this._internalValue) {
-      this.initializeValue(this._internalValue);
+    const initialValue = this._value !== null ? this._value : this._internalValue;
+    if (initialValue) {
+      this.initializeValue(initialValue);
+      this._internalValue = initialValue;
     } else {
       this.initializeValue(null);
     }
@@ -468,8 +478,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.onTimeChange();
     }
 
-    if (changes['value'] && changes['value'].currentValue !== changes['value'].previousValue) {
-      this.writeValue(changes['value'].currentValue);
+    if (changes['value']) {
+      const newValue = changes['value'].currentValue;
+      if (!this.isValueEqual(newValue, this._internalValue)) {
+        this.writeValue(newValue);
+      }
     }
     
     // Rerun calendar generation if provider changes to refresh disabled states
@@ -578,6 +591,33 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return normalizeDate(date);
   }
 
+  private isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {
+    if (val1 === val2) return true;
+    if (val1 === null || val2 === null) return val1 === val2;
+    
+    if (val1 instanceof Date && val2 instanceof Date) {
+      return val1.getTime() === val2.getTime();
+    }
+    
+    if (typeof val1 === 'object' && typeof val2 === 'object' && 
+        'start' in val1 && 'end' in val1 && 'start' in val2 && 'end' in val2) {
+      const r1 = val1 as { start: Date, end: Date };
+      const r2 = val2 as { start: Date, end: Date };
+      return r1.start.getTime() === r2.start.getTime() && 
+             r1.end.getTime() === r2.end.getTime();
+    }
+    
+    if (Array.isArray(val1) && Array.isArray(val2)) {
+      if (val1.length !== val2.length) return false;
+      return val1.every((d1, i) => {
+        const d2 = val2[i];
+        return d1 && d2 && d1.getTime() === d2.getTime();
+      });
+    }
+    
+    return false;
+  }
+
   private parseDateString(dateString: string): Date | null {
     try {
       // Handle MM/DD/YYYY format
@@ -624,14 +664,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.cdr.markForCheck();
   }
   
-  // NEW: Check if a date is a holiday
   public isHoliday(date: Date | null): boolean {
     if (!date || !this.holidayProvider) return false;
     const dateOnly = getStartOfDay(date);
     return this.holidayProvider.isHoliday(dateOnly);
   }
   
-  // NEW: Get holiday label
   public getHolidayLabel(date: Date | null): string | null {
     if (!date || !this.holidayProvider || !this.isHoliday(date)) return null;
     return this.holidayProvider.getHolidayLabel ? this.holidayProvider.getHolidayLabel(getStartOfDay(date)) : 'Holiday';

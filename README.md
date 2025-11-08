@@ -163,7 +163,7 @@ class MyHolidayProvider implements HolidayProvider {
 | ranges         | DateRange                                          | null                  | An object of predefined date ranges.                                                                          |
 | minuteInterval | number                                             | 1                     | Interval for minute dropdown options.                                                                         |
 | showTime       | boolean                                            | false                 | Enables the hour/minute/AM/PM selection section.                                                              |
-| value          | DatepickerValue                                    | null                  | The initial selected date, date range, or array of dates.                                                     |
+| value          | DatepickerValue                                    | null                  | Programmatic value setting. Set the datepicker value from code (useful for server-side API data).            |
 | startAt        | DateInput                                          | null                  | The date to initially center the calendar view on.                                                            |
 | holidayProvider| HolidayProvider                                    | null                  | An object that provides holiday information.                                                                  |
 | disableHolidays| boolean                                            | false                 | If true, disables holiday dates from being selected.                                                          |
@@ -336,7 +336,17 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.5.0** (Latest)
+### **v1.6.0** (Latest)
+- 🎯 **Programmatic Value Setting**: Added `value` input property to set datepicker value programmatically, perfect for server-side API data integration
+- 🎨 **Enhanced Demo App**: Completely redesigned demo application with TokiForge-inspired modern UI and API documentation style
+- 🚀 **GitHub Pages Deployment**: Added automated GitHub Pages deployment with GitHub Actions workflow
+- 📚 **Improved Documentation**: Enhanced demo app with comprehensive examples, code snippets, and interactive documentation
+- 🔧 **Build Optimizations**: Updated CSS budget limits and improved build configuration
+- 🎨 **Modern UI Design**: Beautiful gradient themes, glass-morphism effects, and improved visual hierarchy
+- 📱 **Better UX**: Enhanced navigation, code copying functionality, and responsive design
+- 🛠️ **Developer Experience**: Improved build scripts and deployment automation
+
+### **v1.5.0**
 - 🚀 **Angular 21 Support**: Full compatibility with Angular 21 RC versions
 - ⚡ **Zone-less Support**: Works without zone.js for improved performance
 - 🧪 **Comprehensive Tests**: Added extensive test suite covering all features

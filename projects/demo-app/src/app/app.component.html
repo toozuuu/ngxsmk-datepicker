@@ -1,0 +1,380 @@
+<div class="docs-container" [class.dark-theme]="currentTheme === 'dark'">
+  <aside class="docs-sidebar">
+    <div class="sidebar-header">
+      <h1 class="sidebar-title">ngxsmk-datepicker</h1>
+      <span class="sidebar-version">v1.6.0</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#getting-started" (click)="scrollToSection($event, 'getting-started')" class="nav-link">Getting Started</a>
+      <a href="#installation" (click)="scrollToSection($event, 'installation')" class="nav-link">Installation</a>
+      <a href="#basic-usage" (click)="scrollToSection($event, 'basic-usage')" class="nav-link">Basic Usage</a>
+      <a href="#api-reference" (click)="scrollToSection($event, 'api-reference')" class="nav-link">API Reference</a>
+      <a href="#inputs" (click)="scrollToSection($event, 'inputs')" class="nav-link nav-link-sub">Inputs</a>
+      <a href="#outputs" (click)="scrollToSection($event, 'outputs')" class="nav-link nav-link-sub">Outputs</a>
+      <a href="#examples" (click)="scrollToSection($event, 'examples')" class="nav-link">Examples</a>
+      <a href="#single-date" (click)="scrollToSection($event, 'single-date')" class="nav-link nav-link-sub">Single Date</a>
+      <a href="#date-range" (click)="scrollToSection($event, 'date-range')" class="nav-link nav-link-sub">Date Range</a>
+      <a href="#multiple-dates" (click)="scrollToSection($event, 'multiple-dates')" class="nav-link nav-link-sub">Multiple Dates</a>
+      <a href="#programmatic-value" (click)="scrollToSection($event, 'programmatic-value')" class="nav-link nav-link-sub">Programmatic Value</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="theme-toggle" (click)="toggleTheme()">
+        {{ currentTheme === 'dark' ? '☀️' : '🌙' }} {{ currentTheme === 'dark' ? 'Light' : 'Dark' }} Mode
+      </button>
+    </div>
+  </aside>
+
+  <main class="docs-content">
+    <section id="getting-started" class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">ngxsmk-datepicker</h1>
+        <p class="hero-tagline">Forge your dates. Shape your UI.</p>
+        <p class="hero-version">(v1.6.0)</p>
+        <p class="hero-description">A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.</p>
+        <div class="hero-buttons">
+          <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">Get Started</a>
+          <a href="https://github.com/toozuuu/ngxsmk-datepicker" target="_blank" class="hero-button secondary">View on GitHub</a>
+        </div>
+      </div>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Zero Dependencies</h3>
+          <p>No external dependencies, just Angular</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>High Performance</h3>
+          <p>Optimized for fast rendering and selection</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Customizable</h3>
+          <p>Fully customizable themes and styles</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Responsive</h3>
+          <p>Works great on all device sizes</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h3>Type Safe</h3>
+          <p>Full TypeScript support with type definitions</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">♿</div>
+          <h3>Accessible</h3>
+          <p>Built with accessibility in mind</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+          <h3>Lightweight</h3>
+          <p>Small bundle size, minimal overhead</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Form Integration</h3>
+          <p>Seamless integration with Angular forms</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="installation" class="docs-section">
+      <h2 class="section-title">Installation</h2>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <button class="code-copy" (click)="copyCode('npm install ngxsmk-datepicker')">Copy</button>
+        </div>
+        <pre><code>npm install ngxsmk-datepicker</code></pre>
+      </div>
+    </section>
+
+    <section id="basic-usage" class="docs-section">
+      <h2 class="section-title">Basic Usage</h2>
+      <p>Import the component in your Angular module or standalone component:</p>
+      
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">typescript</span>
+          <button class="code-copy" (click)="copyCode(basicUsageCode)">Copy</button>
+        </div>
+        <pre><code [innerHTML]="basicUsageCode | code"></code></pre>
+      </div>
+
+      <p>Use in your template:</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">html</span>
+          <button class="code-copy" (click)="copyCode(basicTemplateCode)">Copy</button>
+        </div>
+        <pre><code [innerHTML]="basicTemplateCode | code"></code></pre>
+      </div>
+    </section>
+
+    <section id="api-reference" class="docs-section">
+      <h2 class="section-title">API Reference</h2>
+      
+      <div id="inputs" class="api-subsection">
+        <h3 class="subsection-title">Inputs</h3>
+        <div class="api-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>mode</code></td>
+                <td><code>'single' | 'range' | 'multiple'</code></td>
+                <td><code>'single'</code></td>
+                <td>Selection mode</td>
+              </tr>
+              <tr>
+                <td><code>value</code></td>
+                <td><code>DatepickerValue</code></td>
+                <td><code>null</code></td>
+                <td>Programmatic value setting</td>
+              </tr>
+              <tr>
+                <td><code>placeholder</code></td>
+                <td><code>string</code></td>
+                <td><code>'Select Date'</code></td>
+                <td>Input placeholder text</td>
+              </tr>
+              <tr>
+                <td><code>minDate</code></td>
+                <td><code>DateInput | null</code></td>
+                <td><code>null</code></td>
+                <td>Minimum selectable date</td>
+              </tr>
+              <tr>
+                <td><code>maxDate</code></td>
+                <td><code>DateInput | null</code></td>
+                <td><code>null</code></td>
+                <td>Maximum selectable date</td>
+              </tr>
+              <tr>
+                <td><code>showTime</code></td>
+                <td><code>boolean</code></td>
+                <td><code>false</code></td>
+                <td>Show time selection</td>
+              </tr>
+              <tr>
+                <td><code>inline</code></td>
+                <td><code>boolean | 'always' | 'auto'</code></td>
+                <td><code>false</code></td>
+                <td>Inline calendar display</td>
+              </tr>
+              <tr>
+                <td><code>theme</code></td>
+                <td><code>'light' | 'dark'</code></td>
+                <td><code>'light'</code></td>
+                <td>Theme variant</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="outputs" class="api-subsection">
+        <h3 class="subsection-title">Outputs</h3>
+        <div class="api-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>valueChange</code></td>
+                <td><code>EventEmitter&lt;DatepickerValue&gt;</code></td>
+                <td>Emitted when value changes</td>
+              </tr>
+              <tr>
+                <td><code>action</code></td>
+                <td><code>EventEmitter&lt;&#123; type: string; payload?: any &#125;&gt;</code></td>
+                <td>Emitted on user actions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="examples" class="docs-section">
+      <h2 class="section-title">Examples</h2>
+
+      <div id="single-date" class="example-section">
+        <h3 class="example-title">Single Date Selection</h3>
+        <p>Basic single date picker with form control integration.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [theme]="currentTheme"
+            placeholder="Select a date"
+            formControlName="singleDate">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(singleDateCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="singleDateCode | code"></code></pre>
+        </div>
+
+        <div class="result-box">
+          <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.singleDate.value) }}</code>
+        </div>
+      </div>
+
+      <div id="date-range" class="example-section">
+        <h3 class="example-title">Date Range Selection</h3>
+        <p>Select a date range with optional time selection.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="range"
+            [showTime]="true"
+            [minuteInterval]="15"
+            [ranges]="myRanges"
+            [theme]="currentTheme"
+            formControlName="rangeWithTime">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(rangeDateCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="rangeDateCode | code"></code></pre>
+        </div>
+
+        <div class="result-box">
+          <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTime.value) }}</code>
+        </div>
+      </div>
+
+      <div id="multiple-dates" class="example-section">
+        <h3 class="example-title">Multiple Date Selection</h3>
+        <p>Select multiple non-contiguous dates.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="multiple"
+            [theme]="currentTheme"
+            (action)="handleDatepickerAction($event)"
+            formControlName="multipleDates">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(multipleDatesCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="multipleDatesCode | code"></code></pre>
+        </div>
+
+        <div class="result-box">
+          <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.multipleDates.value) }}</code>
+        </div>
+      </div>
+
+      <div id="programmatic-value" class="example-section">
+        <h3 class="example-title">Programmatic Value Setting</h3>
+        <p>Set the datepicker value programmatically, useful when data comes from a server-side API.</p>
+        
+        <div class="example-controls">
+          <button class="demo-button" (click)="setSingleDateFromApi()">Set Single Date</button>
+          <button class="demo-button" (click)="setRangeFromApi()">Set Date Range</button>
+          <button class="demo-button" (click)="setMultipleDatesFromApi()">Set Multiple Dates</button>
+          <button class="demo-button" (click)="clearProgrammaticValue()">Clear</button>
+        </div>
+
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [value]="programmaticSingleDate"
+            [theme]="currentTheme"
+            placeholder="Single date picker"
+            (valueChange)="onProgrammaticValueChange($event)">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(programmaticCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="programmaticCode | code"></code></pre>
+        </div>
+
+        <div class="result-box">
+          <strong>Current Value:</strong> 
+          <code>{{ programmaticSingleDate ? (programmaticSingleDate | date:'medium') : 'Not set' }}</code>
+        </div>
+      </div>
+
+      <div class="example-section">
+        <h3 class="example-title">Inline Calendar</h3>
+        <p>Calendar always visible with inline mode.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="range"
+            [inline]="true"
+            [theme]="currentTheme"
+            formControlName="inlineRange">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(inlineCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="inlineCode | code"></code></pre>
+        </div>
+      </div>
+
+      <div class="example-section">
+        <h3 class="example-title">With Min/Max Date</h3>
+        <p>Restrict date selection with min and max date constraints.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [minDate]="minDate"
+            [maxDate]="maxDate"
+            [theme]="currentTheme"
+            placeholder="Select a date"
+            formControlName="singleDate2">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(minMaxCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="minMaxCode | code"></code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+

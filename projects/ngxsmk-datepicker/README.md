@@ -7,7 +7,7 @@ A modern, powerful, and fully customizable date and date-range picker component 
 - **NPM Package**: [ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
 - **GitHub Repository**: [https://github.com/toozuuu/ngxsmk-datepicker](https://github.com/toozuuu/ngxsmk-datepicker)
 - **Live Demo**: [https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker](https://stackblitz.com/~/github.com/toozuuu/ngxsmk-datepicker)
-- **Version**: 1.5.0
+- **Version**: 1.6.0
 - **License**: MIT
 - **Author**: Sachin Dilshan
 
@@ -320,7 +320,27 @@ We welcome and appreciate contributions from the community! Please see our [Cont
 
 ## 📄 Changelog
 
-### v1.4.16 (Latest)
+### v1.6.0 (Latest)
+- 🎯 **Programmatic Value Setting**: Added `value` input property to set datepicker value programmatically, perfect for server-side API data integration
+- 🎨 **Enhanced Demo App**: Completely redesigned demo application with TokiForge-inspired modern UI and API documentation style
+- 🚀 **GitHub Pages Deployment**: Added automated GitHub Pages deployment with GitHub Actions workflow
+- 📚 **Improved Documentation**: Enhanced demo app with comprehensive examples, code snippets, and interactive documentation
+- 🔧 **Build Optimizations**: Updated CSS budget limits and improved build configuration
+- 🎨 **Modern UI Design**: Beautiful gradient themes, glass-morphism effects, and improved visual hierarchy
+- 📱 **Better UX**: Enhanced navigation, code copying functionality, and responsive design
+- 🛠️ **Developer Experience**: Improved build scripts and deployment automation
+
+### v1.5.0
+- 🚀 **Angular 21 Support**: Full compatibility with Angular 21 RC versions
+- ⚡ **Zone-less Support**: Works without zone.js for improved performance
+- 🧪 **Comprehensive Tests**: Added extensive test suite covering all features
+- 🔧 **Angular 17-21 Compatibility**: Supports Angular versions 17, 18, 19, 20, and 21
+- 📦 **Dependency Updates**: Updated to Angular 21 RC and latest build tools
+- 🧹 **Code Cleanup**: Removed unnecessary documentation files and comments
+- 📝 **Improved Keywords**: Added version-specific keywords for better discoverability
+- 🎯 **Peer Dependencies**: Updated to support Angular 17-21 range
+
+### v1.4.16
 - 📚 **Documentation**: Comprehensive README updates with latest features and improvements
 - 🎯 **Version Management**: Updated version references across all package files
 - 📖 **User Experience**: Enhanced documentation with better examples and API references
