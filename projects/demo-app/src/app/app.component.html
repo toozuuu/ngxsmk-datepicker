@@ -1,21 +1,26 @@
 <div class="docs-container" [class.dark-theme]="currentTheme === 'dark'">
-  <aside class="docs-sidebar">
+  @if (mobileMenuOpen) {
+    <div class="mobile-menu-overlay" (click)="closeMobileMenu()"></div>
+  }
+  <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="mobileMenuOpen ? 'Close menu' : 'Open menu'">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+  <aside class="docs-sidebar" [class.mobile-open]="mobileMenuOpen">
     <div class="sidebar-header">
       <h1 class="sidebar-title">ngxsmk-datepicker</h1>
       <span class="sidebar-version">v1.7.0</span>
     </div>
     <nav class="sidebar-nav">
-      <a href="#getting-started" (click)="scrollToSection($event, 'getting-started')" class="nav-link">Getting Started</a>
-      <a href="#installation" (click)="scrollToSection($event, 'installation')" class="nav-link">Installation</a>
-      <a href="#basic-usage" (click)="scrollToSection($event, 'basic-usage')" class="nav-link">Basic Usage</a>
-      <a href="#api-reference" (click)="scrollToSection($event, 'api-reference')" class="nav-link">API Reference</a>
-      <a href="#inputs" (click)="scrollToSection($event, 'inputs')" class="nav-link nav-link-sub">Inputs</a>
-      <a href="#outputs" (click)="scrollToSection($event, 'outputs')" class="nav-link nav-link-sub">Outputs</a>
-      <a href="#examples" (click)="scrollToSection($event, 'examples')" class="nav-link">Examples</a>
-      <a href="#single-date" (click)="scrollToSection($event, 'single-date')" class="nav-link nav-link-sub">Single Date</a>
-      <a href="#date-range" (click)="scrollToSection($event, 'date-range')" class="nav-link nav-link-sub">Date Range</a>
-      <a href="#multiple-dates" (click)="scrollToSection($event, 'multiple-dates')" class="nav-link nav-link-sub">Multiple Dates</a>
-      <a href="#programmatic-value" (click)="scrollToSection($event, 'programmatic-value')" class="nav-link nav-link-sub">Programmatic Value</a>
+      @for (navItem of navigationItems; track navItem.id) {
+        <a 
+          [href]="'#' + navItem.id" 
+          (click)="scrollToSection($event, navItem.id); closeMobileMenu()" 
+          [class]="'nav-link' + (navItem.sub ? ' nav-link-sub' : '')">
+          {{ navItem.label }}
+        </a>
+      }
     </nav>
     <div class="sidebar-footer">
       <button class="theme-toggle" (click)="toggleTheme()">
@@ -38,46 +43,13 @@
       </div>
       
       <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🚀</div>
-          <h3>Zero Dependencies</h3>
-          <p>No external dependencies, just Angular</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>High Performance</h3>
-          <p>Optimized for fast rendering and selection</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎨</div>
-          <h3>Customizable</h3>
-          <p>Fully customizable themes and styles</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📱</div>
-          <h3>Responsive</h3>
-          <p>Works great on all device sizes</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔧</div>
-          <h3>Type Safe</h3>
-          <p>Full TypeScript support with type definitions</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">♿</div>
-          <h3>Accessible</h3>
-          <p>Built with accessibility in mind</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📦</div>
-          <h3>Lightweight</h3>
-          <p>Small bundle size, minimal overhead</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔄</div>
-          <h3>Form Integration</h3>
-          <p>Seamless integration with Angular forms</p>
-        </div>
+        @for (feature of features; track feature.title) {
+          <div class="feature-card">
+            <div class="feature-icon">{{ feature.icon }}</div>
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+          </div>
+        }
       </div>
     </section>
 
@@ -130,54 +102,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><code>mode</code></td>
-                <td><code>'single' | 'range' | 'multiple'</code></td>
-                <td><code>'single'</code></td>
-                <td>Selection mode</td>
-              </tr>
-              <tr>
-                <td><code>value</code></td>
-                <td><code>DatepickerValue</code></td>
-                <td><code>null</code></td>
-                <td>Programmatic value setting</td>
-              </tr>
-              <tr>
-                <td><code>placeholder</code></td>
-                <td><code>string</code></td>
-                <td><code>'Select Date'</code></td>
-                <td>Input placeholder text</td>
-              </tr>
-              <tr>
-                <td><code>minDate</code></td>
-                <td><code>DateInput | null</code></td>
-                <td><code>null</code></td>
-                <td>Minimum selectable date</td>
-              </tr>
-              <tr>
-                <td><code>maxDate</code></td>
-                <td><code>DateInput | null</code></td>
-                <td><code>null</code></td>
-                <td>Maximum selectable date</td>
-              </tr>
-              <tr>
-                <td><code>showTime</code></td>
-                <td><code>boolean</code></td>
-                <td><code>false</code></td>
-                <td>Show time selection</td>
-              </tr>
-              <tr>
-                <td><code>inline</code></td>
-                <td><code>boolean | 'always' | 'auto'</code></td>
-                <td><code>false</code></td>
-                <td>Inline calendar display</td>
-              </tr>
-              <tr>
-                <td><code>theme</code></td>
-                <td><code>'light' | 'dark'</code></td>
-                <td><code>'light'</code></td>
-                <td>Theme variant</td>
-              </tr>
+              @for (input of inputProperties; track input.property) {
+                <tr>
+                  <td><code>{{ input.property }}</code></td>
+                  <td><code>{{ input.type }}</code></td>
+                  <td><code>{{ input.default }}</code></td>
+                  <td>{{ input.description }}</td>
+                </tr>
+              }
             </tbody>
           </table>
         </div>
@@ -195,16 +127,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><code>valueChange</code></td>
-                <td><code>EventEmitter&lt;DatepickerValue&gt;</code></td>
-                <td>Emitted when value changes</td>
-              </tr>
-              <tr>
-                <td><code>action</code></td>
-                <td><code>EventEmitter&lt;&#123; type: string; payload?: any &#125;&gt;</code></td>
-                <td>Emitted on user actions</td>
-              </tr>
+              @for (output of outputProperties; track output.event) {
+                <tr>
+                  <td><code>{{ output.event }}</code></td>
+                  <td><code>{{ output.type }}</code></td>
+                  <td>{{ output.description }}</td>
+                </tr>
+              }
             </tbody>
           </table>
         </div>
@@ -213,6 +142,7 @@
 
     <section id="examples" class="docs-section">
       <h2 class="section-title">Examples</h2>
+      <form [formGroup]="datepickerForm">
 
       <div id="single-date" class="example-section">
         <h3 class="example-title">Single Date Selection</h3>
@@ -235,9 +165,11 @@
           <pre><code [innerHTML]="singleDateCode | code"></code></pre>
         </div>
 
-        <div class="result-box">
-          <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.singleDate.value) }}</code>
-        </div>
+        @if (datepickerForm.controls.singleDate.value) {
+          <div class="result-box">
+            <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.singleDate.value) }}</code>
+          </div>
+        }
       </div>
 
       <div id="date-range" class="example-section">
@@ -263,9 +195,11 @@
           <pre><code [innerHTML]="rangeDateCode | code"></code></pre>
         </div>
 
-        <div class="result-box">
-          <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTime.value) }}</code>
-        </div>
+        @if (datepickerForm.controls.rangeWithTime.value) {
+          <div class="result-box">
+            <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTime.value) }}</code>
+          </div>
+        }
       </div>
 
       <div id="multiple-dates" class="example-section">
@@ -289,9 +223,11 @@
           <pre><code [innerHTML]="multipleDatesCode | code"></code></pre>
         </div>
 
-        <div class="result-box">
-          <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.multipleDates.value) }}</code>
-        </div>
+        @if (datepickerForm.controls.multipleDates.value) {
+          <div class="result-box">
+            <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.multipleDates.value) }}</code>
+          </div>
+        }
       </div>
 
       <div id="programmatic-value" class="example-section">
@@ -299,10 +235,9 @@
         <p>Set the datepicker value programmatically, useful when data comes from a server-side API.</p>
         
         <div class="example-controls">
-          <button class="demo-button" (click)="setSingleDateFromApi()">Set Single Date</button>
-          <button class="demo-button" (click)="setRangeFromApi()">Set Date Range</button>
-          <button class="demo-button" (click)="setMultipleDatesFromApi()">Set Multiple Dates</button>
-          <button class="demo-button" (click)="clearProgrammaticValue()">Clear</button>
+          @for (action of programmaticActions; track action.label) {
+            <button class="demo-button" (click)="action.action()">{{ action.label }}</button>
+          }
         </div>
 
         <div class="example-demo">
@@ -325,7 +260,11 @@
 
         <div class="result-box">
           <strong>Current Value:</strong> 
-          <code>{{ programmaticSingleDate ? (programmaticSingleDate | date:'medium') : 'Not set' }}</code>
+          @if (programmaticSingleDate) {
+            <code>{{ programmaticSingleDate | date:'medium' }}</code>
+          } @else {
+            <code>Not set</code>
+          }
         </div>
       </div>
 
@@ -374,6 +313,7 @@
           <pre><code [innerHTML]="minMaxCode | code"></code></pre>
         </div>
       </div>
+      </form>
     </section>
   </main>
 </div>

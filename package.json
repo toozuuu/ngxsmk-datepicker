@@ -7,7 +7,7 @@
     "ng": "npx ng",
     "start": "npx ng serve demo-app",
     "build": "npx ng build",
-    "build:demo": "npx ng build demo-app --configuration production --base-href /ngxsmk-datepicker/",
+    "build:demo": "npx ng build demo-app --configuration production",
     "build:optimized": "npx ng build ngxsmk-datepicker --configuration production",
     "build:analyze": "node scripts/analyze-bundle.js",
     "optimize": "node scripts/optimize-build.js",

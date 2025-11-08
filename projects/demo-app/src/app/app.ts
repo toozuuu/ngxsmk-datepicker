@@ -80,6 +80,55 @@ export class App {
   private readonly today = new Date();
   public readonly JSON = JSON;
   public currentTheme: 'light' | 'dark' = 'light';
+  public mobileMenuOpen: boolean = false;
+
+  public features = [
+    { icon: '🚀', title: 'Zero Dependencies', description: 'No external dependencies, just Angular' },
+    { icon: '⚡', title: 'High Performance', description: 'Optimized for fast rendering and selection' },
+    { icon: '🎨', title: 'Customizable', description: 'Fully customizable themes and styles' },
+    { icon: '📱', title: 'Responsive', description: 'Works great on all device sizes' },
+    { icon: '🔧', title: 'Type Safe', description: 'Full TypeScript support with type definitions' },
+    { icon: '♿', title: 'Accessible', description: 'Built with accessibility in mind' },
+    { icon: '📦', title: 'Lightweight', description: 'Small bundle size, minimal overhead' },
+    { icon: '🔄', title: 'Form Integration', description: 'Seamless integration with Angular forms' },
+  ];
+
+  public navigationItems = [
+    { id: 'getting-started', label: 'Getting Started', sub: false },
+    { id: 'installation', label: 'Installation', sub: false },
+    { id: 'basic-usage', label: 'Basic Usage', sub: false },
+    { id: 'api-reference', label: 'API Reference', sub: false },
+    { id: 'inputs', label: 'Inputs', sub: true },
+    { id: 'outputs', label: 'Outputs', sub: true },
+    { id: 'examples', label: 'Examples', sub: false },
+    { id: 'single-date', label: 'Single Date', sub: true },
+    { id: 'date-range', label: 'Date Range', sub: true },
+    { id: 'multiple-dates', label: 'Multiple Dates', sub: true },
+    { id: 'programmatic-value', label: 'Programmatic Value', sub: true },
+  ];
+
+  public inputProperties = [
+    { property: 'mode', type: "'single' | 'range' | 'multiple'", default: "'single'", description: 'Selection mode' },
+    { property: 'value', type: 'DatepickerValue', default: 'null', description: 'Programmatic value setting' },
+    { property: 'placeholder', type: 'string', default: "'Select Date'", description: 'Input placeholder text' },
+    { property: 'minDate', type: 'DateInput | null', default: 'null', description: 'Minimum selectable date' },
+    { property: 'maxDate', type: 'DateInput | null', default: 'null', description: 'Maximum selectable date' },
+    { property: 'showTime', type: 'boolean', default: 'false', description: 'Show time selection' },
+    { property: 'inline', type: "boolean | 'always' | 'auto'", default: 'false', description: 'Inline calendar display' },
+    { property: 'theme', type: "'light' | 'dark'", default: "'light'", description: 'Theme variant' },
+  ];
+
+  public outputProperties = [
+    { event: 'valueChange', type: 'EventEmitter<DatepickerValue>', description: 'Emitted when value changes' },
+    { event: 'action', type: 'EventEmitter<{ type: string; payload?: any }>', description: 'Emitted on user actions' },
+  ];
+
+  public programmaticActions = [
+    { label: 'Set Single Date', action: () => this.setSingleDateFromApi() },
+    { label: 'Set Date Range', action: () => this.setRangeFromApi() },
+    { label: 'Set Multiple Dates', action: () => this.setMultipleDatesFromApi() },
+    { label: 'Clear', action: () => this.clearProgrammaticValue() },
+  ];
 
   public minDate: Date = getStartOfDay(this.today);
   public maxDate: Date = getEndOfDay(addMonths(this.today, 1));
@@ -100,8 +149,8 @@ export class App {
   public lastProgrammaticChange: Date | null = null;
 
   public datepickerForm = new FormGroup({
-    singleDate: new FormControl(getStartOfDay(addMonths(this.today, 1))),
-    singleDate2: new FormControl(getStartOfDay(addMonths(this.today, 1))),
+    singleDate: new FormControl<DatepickerValue>(getStartOfDay(addMonths(this.today, 1))),
+    singleDate2: new FormControl<DatepickerValue>(getStartOfDay(addMonths(this.today, 1))),
     inlineRange: new FormControl({
       value: {start: getStartOfDay(this.today), end: getEndOfDay(this.today)},
       disabled: true
@@ -126,31 +175,47 @@ export class App {
   imports: [NgxsmkDatepickerComponent]
 })`;
 
-  public basicTemplateCode = `<ngxsmk-datepicker
-  mode="single"
-  placeholder="Select a date"
-  formControlName="myDate">
-</ngxsmk-datepicker>`;
+  public basicTemplateCode = `import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-  public singleDateCode = `<ngxsmk-datepicker
-  mode="single"
-  placeholder="Select a date"
-  formControlName="singleDate">
-</ngxsmk-datepicker>`;
+export class MyComponent {
+  myForm = new FormGroup({
+    myDate: new FormControl<DatepickerValue>(null)
+  });
+}
 
-  public rangeDateCode = `<ngxsmk-datepicker
-  mode="range"
-  [showTime]="true"
-  [minuteInterval]="15"
-  [ranges]="myRanges"
-  formControlName="rangeWithTime">
-</ngxsmk-datepicker>`;
+<form [formGroup]="myForm">
+  <ngxsmk-datepicker
+    mode="single"
+    placeholder="Select a date"
+    formControlName="myDate">
+  </ngxsmk-datepicker>
+</form>`;
 
-  public multipleDatesCode = `<ngxsmk-datepicker
-  mode="multiple"
-  (action)="handleDatepickerAction($event)"
-  formControlName="multipleDates">
-</ngxsmk-datepicker>`;
+  public singleDateCode = `<form [formGroup]="datepickerForm">
+  <ngxsmk-datepicker
+    mode="single"
+    placeholder="Select a date"
+    formControlName="singleDate">
+  </ngxsmk-datepicker>
+</form>`;
+
+  public rangeDateCode = `<form [formGroup]="datepickerForm">
+  <ngxsmk-datepicker
+    mode="range"
+    [showTime]="true"
+    [minuteInterval]="15"
+    [ranges]="myRanges"
+    formControlName="rangeWithTime">
+  </ngxsmk-datepicker>
+</form>`;
+
+  public multipleDatesCode = `<form [formGroup]="datepickerForm">
+  <ngxsmk-datepicker
+    mode="multiple"
+    (action)="handleDatepickerAction($event)"
+    formControlName="multipleDates">
+  </ngxsmk-datepicker>
+</form>`;
 
   public programmaticCode = `setDateFromApi() {
   const apiDate = new Date();
@@ -163,19 +228,23 @@ export class App {
   (valueChange)="onValueChange($event)">
 </ngxsmk-datepicker>`;
 
-  public inlineCode = `<ngxsmk-datepicker
-  mode="range"
-  [inline]="true"
-  formControlName="inlineRange">
-</ngxsmk-datepicker>`;
+  public inlineCode = `<form [formGroup]="datepickerForm">
+  <ngxsmk-datepicker
+    mode="range"
+    [inline]="true"
+    formControlName="inlineRange">
+  </ngxsmk-datepicker>
+</form>`;
 
-  public minMaxCode = `<ngxsmk-datepicker
-  mode="single"
-  [minDate]="minDate"
-  [maxDate]="maxDate"
-  placeholder="Select a date"
-  formControlName="singleDate">
-</ngxsmk-datepicker>`;
+  public minMaxCode = `<form [formGroup]="datepickerForm">
+  <ngxsmk-datepicker
+    mode="single"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    placeholder="Select a date"
+    formControlName="singleDate2">
+  </ngxsmk-datepicker>
+</form>`;
 
   @HostBinding('class.dark-theme') get isDarkMode() {
     return this.currentTheme === 'dark';
@@ -188,6 +257,14 @@ export class App {
 
   toggleTheme(): void {
     this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
   }
 
   scrollToSection(event: Event, sectionId: string): void {
