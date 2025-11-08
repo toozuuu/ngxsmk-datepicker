@@ -6,7 +6,7 @@ gxsmk-datepicker – A modern, powerful, and fully customizable date and date-ra
 
 * Github: [https://github.com/NGXSMK/ngxsmk-datepicker](https://github.com/NGXSMK/ngxsmk-datepicker)
 * **Live Demo**: [https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker](https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker)
-* **GitHub Pages Demo**: [https://ngxsmk.github.io/ngxsmk-datepicker/](https://ngxsmk.github.io/ngxsmk-datepicker/) (See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for setup instructions)
+* **GitHub Pages Demo**: [https://ngxsmk.github.io/ngxsmk-datepicker/](https://ngxsmk.github.io/ngxsmk-datepicker/)
 
 Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
 

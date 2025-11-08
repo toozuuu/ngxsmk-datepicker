@@ -7,13 +7,11 @@ on:
       - master
   workflow_dispatch:
 
-# Note: GitHub Pages must be enabled in repository settings first!
-# Go to: Settings > Pages > Build and deployment > Source: GitHub Actions
-
 permissions:
   contents: read
   pages: write
   id-token: write
+  administration: write
 
 concurrency:
   group: "pages"
@@ -40,8 +38,8 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        # This step requires GitHub Pages to be enabled in repository settings
-        # If you see an error here, enable Pages at: Settings > Pages > Source: GitHub Actions
+        with:
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

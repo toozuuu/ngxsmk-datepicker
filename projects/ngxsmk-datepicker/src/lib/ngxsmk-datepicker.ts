@@ -485,7 +485,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
     
-    // Rerun calendar generation if provider changes to refresh disabled states
     if (changes['holidayProvider'] || changes['disableHolidays'] || changes['disabledDates']) {
         this.generateCalendar();
     }
@@ -499,15 +498,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
 
-    // Handle minDate changes - if minDate is set and is in the future, 
-    // and we don't have a current value, update the view to show minDate's month
     if (changes['minDate'] && !this._internalValue) {
       if (this._minDate) {
         const today = new Date();
         const minDateOnly = getStartOfDay(this._minDate);
         const todayOnly = getStartOfDay(today);
         
-        // If minDate is in the future, update the view to show minDate's month
         if (minDateOnly.getTime() > todayOnly.getTime()) {
           this.currentDate = new Date(this._minDate);
           this._currentMonth = this.currentDate.getMonth();
@@ -556,22 +552,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
 
-    // Determine the initial view date
     let viewCenterDate = initialDate || this._startAtDate;
     
-    // If no specific date is set and minDate is in the future, use minDate's month
     if (!viewCenterDate && this._minDate) {
       const today = new Date();
       const minDateOnly = getStartOfDay(this._minDate);
       const todayOnly = getStartOfDay(today);
       
-      // If minDate is in the future, use minDate as the initial view
       if (minDateOnly.getTime() > todayOnly.getTime()) {
         viewCenterDate = this._minDate;
       }
     }
     
-    // Fallback to current date if no other date is determined
     if (!viewCenterDate) {
       viewCenterDate = new Date();
     }
@@ -620,7 +612,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private parseDateString(dateString: string): Date | null {
     try {
-      // Handle MM/DD/YYYY format
       const date = new Date(dateString);
       if (isNaN(date.getTime())) {
         return null;
@@ -680,7 +671,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     const dateOnly = getStartOfDay(date);
 
-    // 1. Check disabled dates array
     if (this.disabledDates.length > 0) {
       for (const disabledDate of this.disabledDates) {
         let parsedDate: Date | null;
@@ -697,12 +687,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
 
-    // 2. Check holiday provider for disabling
     if (this.holidayProvider && this.disableHolidays && this.holidayProvider.isHoliday(dateOnly)) {
       return true;
     }
 
-    // 3. Check min/max date
     if (this._minDate) {
       const minDateOnly = getStartOfDay(this._minDate);
       if (dateOnly.getTime() < minDateOnly.getTime()) return true;
@@ -712,7 +700,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (dateOnly.getTime() > maxDateOnly.getTime()) return true;
     }
     
-    // 4. Check custom invalid date function
     return this.isInvalidDate(date);
   }
 
@@ -748,7 +735,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public onDateClick(day: Date | null): void {
     if (!day || this.disabled) return;
     
-    // Only check isDateDisabled for current month days
     if (this.isCurrentMonth(day) && this.isDateDisabled(day)) return;
 
     const dateToToggle = getStartOfDay(day);
@@ -829,7 +815,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const startDayOfWeek = firstDayOfMonth.getDay();
     const emptyCellCount = (startDayOfWeek - this.firstDayOfWeek + 7) % 7;
 
-    // Add previous month's days instead of null values
     const previousMonth = month === 0 ? 11 : month - 1;
     const previousYear = month === 0 ? year - 1 : year;
     const lastDayOfPreviousMonth = new Date(previousYear, previousMonth + 1, 0);
@@ -861,17 +846,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public changeMonth(delta: number): void {
     if (this.disabled) return;
 
-    // Check if going back is disabled due to minDate constraint
     if (delta < 0 && this.isBackArrowDisabled) return;
 
     const newDate = addMonths(this.currentDate, delta);
-
-    // Update the data immediately (no animation)
     this.currentDate = newDate;
     this._currentMonth = newDate.getMonth();
     this._currentYear = newDate.getFullYear();
-
-    // Generate new calendar view
     this.generateCalendar();
 
     this.action.emit({type: 'monthChanged', payload: { delta: delta }});
@@ -901,17 +881,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   ngOnDestroy(): void {
-    // Clean up any subscriptions or timers if needed
     this.selectedDate = null;
     this.selectedDates = [];
     this.startDate = null;
     this.endDate = null;
     this.hoveredDate = null;
     this._internalValue = null;
-    
-    // Clear any cached data
-    if (this.dateComparator && typeof this.dateComparator === 'function') {
-      // Clear any internal caches if they exist
-    }
   }
 }

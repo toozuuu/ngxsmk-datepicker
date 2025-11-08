@@ -123,8 +123,7 @@ export class App {
 
 @Component({
   standalone: true,
-  imports: [NgxsmkDatepickerComponent],
-  // ...
+  imports: [NgxsmkDatepickerComponent]
 })`;
 
   public basicTemplateCode = `<ngxsmk-datepicker
@@ -153,14 +152,12 @@ export class App {
   formControlName="multipleDates">
 </ngxsmk-datepicker>`;
 
-  public programmaticCode = `// Set value programmatically
-setDateFromApi() {
+  public programmaticCode = `setDateFromApi() {
   const apiDate = new Date();
   apiDate.setDate(apiDate.getDate() + 7);
   this.selectedDate = apiDate;
 }
 
-// In template
 <ngxsmk-datepicker
   [value]="selectedDate"
   (valueChange)="onValueChange($event)">
