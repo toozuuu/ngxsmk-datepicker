@@ -19,13 +19,13 @@
   "esm2022": "fesm2022/ngxsmk-datepicker.mjs",
   "types": "index.d.ts",
   "typings": "index.d.ts",
-  "homepage": "https://github.com/toozuuu/ngxsmk-datepicker#readme",
+  "homepage": "https://github.com/NGXSMK/ngxsmk-datepicker#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/toozuuu/ngxsmk-datepicker.git"
+    "url": "git+https://github.com/NGXSMK/ngxsmk-datepicker.git"
   },
   "bugs": {
-    "url": "https://github.com/toozuuu/ngxsmk-datepicker/issues"
+    "url": "https://github.com/NGXSMK/ngxsmk-datepicker/issues"
   },
   "sideEffects": false,
   "files": [
