@@ -1,0 +1,45 @@
+# Development files
+.angular/
+node_modules/
+projects/
+dist/demo-app/
+dist/test-out/
+
+# Build artifacts
+*.log
+*.tsbuildinfo
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test files
+*.spec.ts
+*.test.ts
+karma.conf.js
+src/
+
+# Configuration files
+tsconfig.json
+angular.json
+.angular.json
+.gitignore
+.editorconfig
+
+# Documentation (keep only README.md and LICENSE)
+DEPLOYMENT.md
+README-DEPLOYMENT.md
+CONTRIBUTING.md
+
+# Scripts
+scripts/
+
+# GitHub
+.github/
+
+# Only include the built library from dist/ngxsmk-datepicker
+# This will be handled by the files field in package.json
+

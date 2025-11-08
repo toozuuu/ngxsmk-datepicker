@@ -13,7 +13,10 @@
     "optimize": "node scripts/optimize-build.js",
     "watch": "npx ng build --watch --configuration development",
     "test": "npx ng test",
-    "deploy": "npm run build:demo && npx gh-pages -d dist/demo-app/browser"
+    "deploy": "npm run build:demo && npx gh-pages -d dist/demo-app/browser",
+    "prepublishOnly": "npm run build:optimized",
+    "prepublish:copy-license": "node -e \"require('fs').copyFileSync('LICENSE', 'dist/ngxsmk-datepicker/LICENSE')\"",
+    "publish:lib": "npm run build:optimized && npm run prepublish:copy-license"
   },
   "peerDependencies": {
     "@angular/common": ">=17.0.0 <22.0.0",
@@ -46,12 +49,7 @@
   },
   "sideEffects": false,
   "files": [
-    "**/*.d.ts",
-    "**/*.metadata.json",
-    "**/*.js",
-    "README.md",
-    "LICENSE",
-    "docs"
+    "dist/ngxsmk-datepicker"
   ],
   "keywords": [
     "angular",
