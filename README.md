@@ -337,7 +337,15 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.6.0** (Latest)
+### **v1.7.0** (Latest)
+- 🧪 **Issue Test Suite**: Added comprehensive test suites for issues #8 and #13
+- 🐛 **Bug Fixes**: Fixed programmatic value setting and Angular 21 compatibility tests
+- 🧹 **Code Cleanup**: Removed unnecessary files, folders, and comments from codebase
+- 📝 **Test Improvements**: Enhanced test coverage with issue-specific test files
+- 🔧 **Test Fixes**: Fixed disabled date tests and integration test issues
+- 🎯 **Code Quality**: Improved code maintainability by removing redundant comments
+
+### **v1.6.0**
 - 🎯 **Programmatic Value Setting**: Added `value` input property to set datepicker value programmatically, perfect for server-side API data integration
 - 🎨 **Enhanced Demo App**: Completely redesigned demo application with TokiForge-inspired modern UI and API documentation style
 - 🚀 **GitHub Pages Deployment**: Added automated GitHub Pages deployment with GitHub Actions workflow

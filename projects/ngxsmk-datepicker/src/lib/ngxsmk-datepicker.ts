@@ -44,7 +44,6 @@ import {
 import { CustomSelectComponent } from './components/custom-select.component';
 import { createDateComparator } from './utils/performance.utils';
 
-
 @Component({
   selector: 'ngxsmk-datepicker',
   standalone: true,
@@ -358,6 +357,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._internalValue = val;
     this.initializeValue(val);
     this.generateCalendar();
+    this.cdr.markForCheck();
   }
 
   registerOnChange(fn: any): void {
@@ -470,6 +470,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (changes['locale']) {
       this.generateLocaleData();
       this.generateCalendar();
+      this.cdr.markForCheck();
     }
 
     if (changes['minuteInterval']) {
@@ -481,12 +482,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (changes['value']) {
       const newValue = changes['value'].currentValue;
       if (!this.isValueEqual(newValue, this._internalValue)) {
-        this.writeValue(newValue);
+        this._internalValue = newValue;
+        this.initializeValue(newValue);
+        this.generateCalendar();
+        this.cdr.markForCheck();
       }
     }
     
     if (changes['holidayProvider'] || changes['disableHolidays'] || changes['disabledDates']) {
         this.generateCalendar();
+        this.cdr.markForCheck();
     }
 
     if (changes['startAt']) {
@@ -495,11 +500,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this._currentMonth = this.currentDate.getMonth();
         this._currentYear = this.currentDate.getFullYear();
         this.generateCalendar();
+        this.cdr.markForCheck();
       }
     }
 
-    if (changes['minDate'] && !this._internalValue) {
-      if (this._minDate) {
+    if (changes['minDate']) {
+      this.generateCalendar();
+      this.cdr.markForCheck();
+      
+      if (!this._internalValue && this._minDate) {
         const today = new Date();
         const minDateOnly = getStartOfDay(this._minDate);
         const todayOnly = getStartOfDay(today);
@@ -509,8 +518,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this._currentMonth = this.currentDate.getMonth();
           this._currentYear = this.currentDate.getFullYear();
           this.generateCalendar();
+          this.cdr.markForCheck();
         }
       }
+    }
+    
+    if (changes['maxDate']) {
+      this.generateCalendar();
+      this.cdr.markForCheck();
     }
   }
 

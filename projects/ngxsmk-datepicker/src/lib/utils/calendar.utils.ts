@@ -1,8 +1,3 @@
-/**
- * Calendar utility functions for ngxsmk-datepicker
- * Optimized for performance and tree-shaking
- */
-
 import { DateInput, normalizeDate } from './date.utils';
 
 export interface HolidayProvider {

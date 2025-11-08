@@ -1,8 +1,3 @@
-/**
- * Date utility functions for ngxsmk-datepicker
- * Extracted to improve tree-shaking and reduce bundle size
- */
-
 export function getStartOfDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
 }

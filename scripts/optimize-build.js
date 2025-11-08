@@ -1,10 +1,5 @@
 #!/usr/bin/env node
 
-/**
- * Build optimization script for ngxsmk-datepicker
- * This script optimizes the build process for better performance and smaller bundles
- */
-
 const fs = require('fs');
 const path = require('path');
 
