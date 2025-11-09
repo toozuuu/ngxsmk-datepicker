@@ -153,8 +153,7 @@ export class App {
 
   public signalDate = signal<DatepickerValue>(null);
 
-  // Customization & A11y demo state
-  public weekStartDemo: number = 1; // Monday
+  public weekStartDemo: number = 1;
   public yearRangeDemo: number = 20;
   public clearLabelDemo: string = 'Clear';
   public closeLabelDemo: string = 'Close';
