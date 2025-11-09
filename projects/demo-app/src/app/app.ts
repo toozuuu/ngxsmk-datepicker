@@ -151,10 +151,8 @@ export class App {
   public programmaticMultipleDates: Date[] | null = null;
   public lastProgrammaticChange: Date | null = null;
 
-  // Signal Forms demo state
   public signalDate = signal<DatepickerValue>(null);
 
-  // Customization & A11y demo state
   public weekStartDemo: number = 1; // Monday
   public yearRangeDemo: number = 20;
   public clearLabelDemo: string = 'Clear';
@@ -308,8 +306,7 @@ export class MyComponent {
   }">
 </ngxsmk-datepicker>`;
 
-  public themingCssVarsCode = `<!-- Set CSS variables on a parent scope -->
-<div style="
+  public themingCssVarsCode = `<div style="
   --datepicker-primary-color: #ec4899;
   --datepicker-primary-contrast: #ffffff;
   --datepicker-range-background: #fce7f3;
