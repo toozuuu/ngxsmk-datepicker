@@ -208,6 +208,33 @@
         }
       </div>
 
+      <div id="customization-a11y" class="example-section">
+        <h3 class="example-title">Customization & A11y</h3>
+        <p>Demonstrates week start, year range, custom labels, aria labels, and styling via classes.</p>
+
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [theme]="currentTheme"
+            [weekStart]="weekStartDemo"
+            [yearRange]="yearRangeDemo"
+            [clearLabel]="clearLabelDemo"
+            [closeLabel]="closeLabelDemo"
+            [prevMonthAriaLabel]="prevLabelDemo"
+            [nextMonthAriaLabel]="nextLabelDemo"
+            [classes]="datepickerClasses">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(customizationCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="customizationCode | code"></code></pre>
+        </div>
+      </div>
+
       <div id="date-range" class="example-section">
         <h3 class="example-title">Date Range Selection</h3>
         <p>Select a date range with optional time selection.</p>
