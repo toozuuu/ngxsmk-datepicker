@@ -99,6 +99,7 @@ export class App {
     { id: 'basic-usage', label: 'Basic Usage', sub: false },
     { id: 'api-reference', label: 'API Reference', sub: false },
     { id: 'signal-forms', label: 'Signal Forms (Angular 21)', sub: true },
+    { id: 'theming', label: 'Theming', sub: true },
     { id: 'customization-a11y', label: 'Customization & A11y', sub: true },
     { id: 'inputs', label: 'Inputs', sub: true },
     { id: 'outputs', label: 'Outputs', sub: true },
@@ -150,7 +151,6 @@ export class App {
   public programmaticMultipleDates: Date[] | null = null;
   public lastProgrammaticChange: Date | null = null;
 
-  // Signal Forms demo state
   public signalDate = signal<DatepickerValue>(null);
 
   // Customization & A11y demo state
@@ -296,6 +296,27 @@ export class MyComponent {
   [closeLabel]="'Close'"
   [prevMonthAriaLabel]="'Previous month'"
   [nextMonthAriaLabel]="'Next month'"
+  [classes]="{
+    inputGroup: 'rounded-lg border',
+    input: 'px-3 py-2 text-sm',
+    popover: 'shadow-2xl',
+    dayCell: 'hover:bg-indigo-50',
+    footer: 'flex justify-end gap-2',
+    clearBtn: 'btn btn-ghost',
+    closeBtn: 'btn btn-primary'
+  }">
+</ngxsmk-datepicker>`;
+
+  public themingCssVarsCode = `<div style="
+  --datepicker-primary-color: #ec4899;
+  --datepicker-primary-contrast: #ffffff;
+  --datepicker-range-background: #fce7f3;
+">
+  <ngxsmk-datepicker mode="single"></ngxsmk-datepicker>
+</div>`;
+
+  public themingClassesCode = `<ngxsmk-datepicker
+  mode="single"
   [classes]="{
     inputGroup: 'rounded-lg border',
     input: 'px-3 py-2 text-sm',
