@@ -194,6 +194,15 @@ class MyHolidayProvider implements HolidayProvider {
 | holidayProvider| HolidayProvider                                    | null                  | An object that provides holiday information.                                                                  |
 | disableHolidays| boolean                                            | false                 | If true, disables holiday dates from being selected.                                                          |
 | disabledDates  | (string \| Date)[]                               | []                    | Array of dates to disable. Supports both string dates (MM/DD/YYYY) and Date objects.                         |
+| weekStart      | number \| null                                   | null                  | Override week start day (0=Sunday, 1=Monday, etc.). If null, uses locale-based week start.                  |
+| yearRange      | number                                            | 10                    | Number of years before/after current year to show in year dropdown.                                            |
+| clearLabel     | string                                            | 'Clear'               | Custom label for the clear button.                                                                            |
+| closeLabel     | string                                            | 'Close'               | Custom label for the close button.                                                                            |
+| prevMonthAriaLabel | string                                        | 'Previous month'      | Aria label for previous month navigation button.                                                              |
+| nextMonthAriaLabel | string                                        | 'Next month'          | Aria label for next month navigation button.                                                                  |
+| clearAriaLabel | string                                            | 'Clear selection'     | Aria label for clear button.                                                                                 |
+| closeAriaLabel | string                                            | 'Close calendar'      | Aria label for close button.                                                                                 |
+| classes        | { wrapper?, inputGroup?, input?, popover?, container?, calendar?, header?, navPrev?, navNext?, dayCell?, footer?, clearBtn?, closeBtn? } | undefined | Tailwind-friendly class overrides for theming. |
 
 ### **Outputs**
 
@@ -204,17 +213,44 @@ class MyHolidayProvider implements HolidayProvider {
 
 ## **🎨 Theming**
 
+### CSS Variables
+
 You can easily customize the colors of the datepicker by overriding the CSS custom properties in your own stylesheet.
 
-    ngxsmk-datepicker {    
-      --datepicker-primary-color: #d9267d;      /* Main color for selected dates */    
-      --datepicker-primary-contrast: #ffffff;  /* Text color on selected dates */    
-      --datepicker-range-background: #fce7f3;  /* Background for the date range bar */    
-    }  
+```css
+ngxsmk-datepicker {
+  --datepicker-primary-color: #d9267d;
+  --datepicker-primary-contrast: #ffffff;
+  --datepicker-range-background: #fce7f3;
+}
+```
+
+### Tailwind/ngClass Support
+
+For Tailwind CSS or custom class-based theming, use the `classes` input:
+
+```html
+<ngxsmk-datepicker
+  mode="single"
+  [classes]="{
+    inputGroup: 'rounded-lg border',
+    input: 'px-3 py-2 text-sm',
+    popover: 'shadow-2xl',
+    dayCell: 'hover:bg-indigo-50',
+    footer: 'flex justify-end gap-2',
+    clearBtn: 'btn btn-ghost',
+    closeBtn: 'btn btn-primary'
+  }">
+</ngxsmk-datepicker>
+```
+
+### Dark Theme
 
 To enable the dark theme, simply bind the theme input:
 
+```html
 <ngxsmk-datepicker [theme]="'dark'"></ngxsmk-datepicker>
+```
 
 ## **🌍 Localization**
 
@@ -275,11 +311,15 @@ npm start
 ```
 
 The demo includes:
+- **Signal Forms (Angular 21)** with writable signal binding examples
+- **Theming** with CSS variables and Tailwind classes examples
+- **Customization & A11y** with weekStart, yearRange, labels, and aria examples
 - **Holiday Provider Integration** with US holidays
 - **Single Date Selection** with weekend restrictions
 - **Inline Range Picker** with toggle controls
 - **Date Range with Time** selection
 - **Multiple Date Selection** with action tracking
+- **Programmatic Value Setting** for all selection modes
 - **Theme Toggle** (Light/Dark mode)
 
 ## **🔧 Development**
@@ -362,11 +402,24 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.7.0** (Latest)
-- 🧪 **Issue Test Suite**: Added comprehensive test suites for issues #8 and #13
+### **v1.8.0** (Latest)
+- 📚 **Documentation Updates**: Comprehensive README updates with all new features
+- 🧹 **Code Cleanup**: Removed unnecessary comments and files from demo project
+- 📝 **API Documentation**: Enhanced API reference with new inputs and examples
+- 🎨 **Theming Documentation**: Added Tailwind CSS and ngClass theming examples
+- ✅ **Project Cleanup**: Improved code maintainability and documentation consistency
+
+### **v1.7.0**
+- 🎯 **Signal Forms Support**: Full Angular 21 signal forms integration with writable signals
+- 🎨 **Tailwind Theming**: Added `classes` input for Tailwind CSS and custom class-based theming
+- 🌍 **Localization Improvements**: Added `weekStart` input to override locale-based week start day
+- 📅 **Year Range Configuration**: Added `yearRange` input to customize year dropdown range
+- ♿ **Accessibility Enhancements**: Added customizable aria labels for all interactive elements
+- 🏷️ **Custom Labels**: Added `clearLabel` and `closeLabel` inputs for button customization
+- 🧪 **Comprehensive Test Suite**: Added 56 tests covering all features and edge cases
 - 🐛 **Bug Fixes**: Fixed programmatic value setting and Angular 21 compatibility tests
 - 🧹 **Code Cleanup**: Removed unnecessary files, folders, and comments from codebase
-- 📝 **Test Improvements**: Enhanced test coverage with issue-specific test files
+- 📝 **Test Improvements**: Enhanced test coverage with comprehensive feature tests
 - 🔧 **Test Fixes**: Fixed disabled date tests and integration test issues
 - 🎯 **Code Quality**: Improved code maintainability by removing redundant comments
 
