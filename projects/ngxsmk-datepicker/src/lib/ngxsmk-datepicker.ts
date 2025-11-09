@@ -58,14 +58,14 @@ import { createDateComparator } from './utils/performance.utils';
   template: `
     <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode">
       @if (!isInlineMode) {
-        <div class="ngxsmk-input-group" (click)="toggleCalendar()" [class.disabled]="disabled">
+        <div class="ngxsmk-input-group" (click)="toggleCalendar()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog">
           <input type="text" 
                  [value]="displayValue" 
                  [placeholder]="placeholder" 
                  readonly 
                  [disabled]="disabled"
                  class="ngxsmk-display-input">
-          <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event)" [disabled]="disabled" *ngIf="displayValue">
+          <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event)" [disabled]="disabled" *ngIf="displayValue" [attr.aria-label]="clearAriaLabel" [title]="clearLabel">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
           </button>
         </div>
@@ -91,13 +91,13 @@ import { createDateComparator } from './utils/performance.utils';
                   <ngxsmk-custom-select class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled"></ngxsmk-custom-select>
                 </div>
                 <div class="ngxsmk-nav-buttons">
-                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled || isBackArrowDisabled">
+                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled || isBackArrowDisabled" [attr.aria-label]="prevMonthAriaLabel" [title]="prevMonthAriaLabel">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                       <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
                             d="M328 112L184 256l144 144"/>
                     </svg>
                   </button>
-                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(1)" [disabled]="disabled">
+                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(1)" [disabled]="disabled" [attr.aria-label]="nextMonthAriaLabel" [title]="nextMonthAriaLabel">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                       <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
                             d="M184 112l144 144-144 144"/>
@@ -159,11 +159,11 @@ import { createDateComparator } from './utils/performance.utils';
               }
               
               <div class="ngxsmk-footer" *ngIf="!isInlineMode">
-                <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled">
-                  Clear
+                <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled" [attr.aria-label]="clearAriaLabel">
+                  {{ clearLabel }}
                 </button>
-                <button type="button" class="ngxsmk-close-button" (click)="isCalendarOpen = false" [disabled]="disabled">
-                  Close
+                <button type="button" class="ngxsmk-close-button" (click)="isCalendarOpen = false" [disabled]="disabled" [attr.aria-label]="closeAriaLabel">
+                  {{ closeLabel }}
                 </button>
               </div>
             </div>
@@ -184,6 +184,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() disabledDates: (string | Date)[] = [];
   @Input() placeholder: string = 'Select Date';
   @Input() inline: boolean | 'always' | 'auto' = false;
+  // Accessibility and customization
+  @Input() clearLabel: string = 'Clear';
+  @Input() closeLabel: string = 'Close';
+  @Input() prevMonthAriaLabel: string = 'Previous month';
+  @Input() nextMonthAriaLabel: string = 'Next month';
+  @Input() clearAriaLabel: string = 'Clear selection';
+  @Input() closeAriaLabel: string = 'Close calendar';
+  // Localization configurability
+  @Input() weekStart: number | null = null;
+  // Year dropdown configurability (range before/after current year)
+  @Input() yearRange: number = 10;
   public isCalendarOpen: boolean = false;
 
   public _internalValue: DatepickerValue = null;
@@ -472,11 +483,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.generateCalendar();
       this.cdr.markForCheck();
     }
+    if (changes['weekStart']) {
+      this.generateLocaleData();
+      this.generateCalendar();
+      this.cdr.markForCheck();
+    }
 
     if (changes['minuteInterval']) {
       this.generateTimeOptions();
       this.currentMinute = Math.floor(this.currentMinute / this.minuteInterval) * this.minuteInterval;
       this.onTimeChange();
+    }
+    if (changes['yearRange']) {
+      this.generateDropdownOptions();
+      this.cdr.markForCheck();
     }
 
     if (changes['value']) {
@@ -646,7 +666,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private generateLocaleData(): void {
     const year = new Date().getFullYear();
     this.monthOptions = generateMonthOptions(this.locale, year);
-    this.firstDayOfWeek = getFirstDayOfWeek(this.locale);
+    // If weekStart is provided, use it; otherwise derive from locale
+    this.firstDayOfWeek = this.weekStart !== null && this.weekStart !== undefined
+      ? this.weekStart
+      : getFirstDayOfWeek(this.locale);
     this.weekDays = generateWeekDays(this.locale, this.firstDayOfWeek);
   }
 
@@ -855,7 +878,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private generateDropdownOptions(): void {
-    this.yearOptions = generateYearOptions(this._currentYear);
+    this.yearOptions = generateYearOptions(this._currentYear, this.yearRange);
   }
 
   public changeMonth(delta: number): void {
