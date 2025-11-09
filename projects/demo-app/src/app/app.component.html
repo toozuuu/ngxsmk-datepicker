@@ -311,6 +311,26 @@
             placeholder="Single date picker"
             (valueChange)="onProgrammaticValueChange($event)">
           </ngxsmk-datepicker>
+
+          <div style="height: 1rem;"></div>
+
+          <ngxsmk-datepicker
+            mode="range"
+            [value]="programmaticRange"
+            [theme]="currentTheme"
+            placeholder="Range picker"
+            (valueChange)="onProgrammaticRangeChange($event)">
+          </ngxsmk-datepicker>
+
+          <div style="height: 1rem;"></div>
+
+          <ngxsmk-datepicker
+            mode="multiple"
+            [value]="programmaticMultipleDates"
+            [theme]="currentTheme"
+            placeholder="Multiple dates picker"
+            (valueChange)="onProgrammaticMultipleChange($event)">
+          </ngxsmk-datepicker>
         </div>
 
         <div class="code-block">
@@ -325,6 +345,24 @@
           <strong>Current Value:</strong> 
           @if (programmaticSingleDate) {
             <code>{{ programmaticSingleDate | date:'medium' }}</code>
+          } @else {
+            <code>Not set</code>
+          }
+        </div>
+
+        <div class="result-box">
+          <strong>Current Range:</strong> 
+          @if (programmaticRange) {
+            <code>{{ programmaticRange.start | date:'medium' }} - {{ programmaticRange.end | date:'medium' }}</code>
+          } @else {
+            <code>Not set</code>
+          }
+        </div>
+
+        <div class="result-box">
+          <strong>Current Multiple:</strong> 
+          @if (programmaticMultipleDates?.length) {
+            <code>{{ programmaticMultipleDates | json }}</code>
           } @else {
             <code>Not set</code>
           }
