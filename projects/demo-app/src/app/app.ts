@@ -364,14 +364,11 @@ export class MyComponent {
   }
 
   copyCode(code: string): void {
-    navigator.clipboard.writeText(code).then(() => {
-      console.log('Code copied to clipboard');
-    });
+    navigator.clipboard.writeText(code);
   }
 
 
   handleDatepickerAction(event: { type: string; payload?: any }): void {
-    console.log('Datepicker Action:', event);
     this.lastAction = event;
   }
 
@@ -412,7 +409,6 @@ export class MyComponent {
     const dateValue = value instanceof Date ? value : null;
     this.lastProgrammaticChange = dateValue;
     this.programmaticSingleDate = dateValue;
-    console.log('Programmatic single date changed:', value);
   }
 
   onProgrammaticRangeChange(value: DatepickerValue): void {
@@ -421,11 +417,9 @@ export class MyComponent {
     } else {
       this.programmaticRange = null;
     }
-    console.log('Programmatic range changed:', value);
   }
 
   onProgrammaticMultipleChange(value: DatepickerValue): void {
     this.programmaticMultipleDates = Array.isArray(value) ? value : null;
-    console.log('Programmatic multiple dates changed:', value);
   }
 }
