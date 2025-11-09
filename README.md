@@ -46,6 +46,31 @@ Install the package using npm:
 
 ngxsmk-datepicker is a standalone component, so you can import it directly into your component or module.
 
+### Signal Forms (Angular 21)
+
+You can bind directly to a writable Signal using standard two-way binding. This works seamlessly alongside traditional Reactive Forms.
+
+```ts
+import { signal } from '@angular/core';
+import { DatepickerValue } from 'ngxsmk-datepicker';
+
+export class MyComponent {
+  dateSig = signal<DatepickerValue>(null);
+}
+```
+
+```html
+<ngxsmk-datepicker
+  mode="single"
+  [value]="dateSig()"
+  (valueChange)="dateSig.set($event)">
+</ngxsmk-datepicker>
+
+<p>Signal value: {{ dateSig() | json }}</p>
+```
+
+This pattern is also compatible with computed/linked signals produced by `httpResource`, enabling powerful data flows with Angular 21.
+
 #### **1. Import the Component**
 
 In your component file (e.g., app.component.ts), import NgxsmkDatepickerComponent.

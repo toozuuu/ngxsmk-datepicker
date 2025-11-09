@@ -144,6 +144,42 @@
       <h2 class="section-title">Examples</h2>
       <form [formGroup]="datepickerForm">
 
+      <div id="signal-forms" class="example-section">
+        <h3 class="example-title">Signal Forms (Angular 21)</h3>
+        <p>Bind directly to a writable signal using two-way binding.</p>
+
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [theme]="currentTheme"
+            placeholder="Select a date (signals)"
+            [value]="signalDate()"
+            (valueChange)="signalDate.set($event)">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="result-box">
+          <strong>Signal Value:</strong>
+          <code>{{ signalDate() | json }}</code>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(signalFormsTsCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="signalFormsTsCode | code"></code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(signalFormsHtmlCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="signalFormsHtmlCode | code"></code></pre>
+        </div>
+      </div>
+
       <div id="single-date" class="example-section">
         <h3 class="example-title">Single Date Selection</h3>
         <p>Basic single date picker with form control integration.</p>
