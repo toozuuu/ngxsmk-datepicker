@@ -314,12 +314,12 @@ export class MyComponent {
   --datepicker-primary-contrast: #ffffff;
   --datepicker-range-background: #fce7f3;
 ">
-  <ngxsmk-datepicker mode=\\"single\\"></ngxsmk-datepicker>
+  <ngxsmk-datepicker mode="single"></ngxsmk-datepicker>
 </div>`;
 
   public themingClassesCode = `<ngxsmk-datepicker
-  mode=\\"single\\"
-  [classes]=\\"{
+  mode="single"
+  [classes]="{
     inputGroup: 'rounded-lg border',
     input: 'px-3 py-2 text-sm',
     popover: 'shadow-2xl',
@@ -327,7 +327,7 @@ export class MyComponent {
     footer: 'flex justify-end gap-2',
     clearBtn: 'btn btn-ghost',
     closeBtn: 'btn btn-primary'
-  }\\">
+  }">
 </ngxsmk-datepicker>`;
 
   @HostBinding('class.dark-theme') get isDarkMode() {
