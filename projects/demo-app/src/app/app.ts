@@ -240,9 +240,9 @@ export class MyComponent {
 }`;
 
   public signalFormsHtmlCode = `<ngxsmk-datepicker
-  mode=\\"single\\"
-  [value]=\\"dateSig()\\"
-  (valueChange)=\\"dateSig.set($event)\\">
+  mode="single"
+  [value]="dateSig()"
+  (valueChange)="dateSig.set($event)">
 </ngxsmk-datepicker>
 
 <p>Signal value: {{ dateSig() | json }}</p>`;
