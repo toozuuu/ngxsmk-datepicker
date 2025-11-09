@@ -584,13 +584,17 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
     it('should have role and aria attributes on input group', () => {
       component.inline = false;
+      component.ngOnInit();
       fixture.detectChanges();
 
       const inputGroup = fixture.debugElement.query(By.css('.ngxsmk-input-group'));
-      expect(inputGroup).toBeTruthy();
+      expect(inputGroup).withContext('Input group should be rendered when not in inline mode').toBeTruthy();
       if (inputGroup) {
         expect(inputGroup.nativeElement.getAttribute('role')).toBe('button');
         expect(inputGroup.nativeElement.getAttribute('aria-haspopup')).toBe('dialog');
+      } else {
+        // If input group is not found, verify inline mode is correctly set
+        expect(component.isInlineMode).toBe(false);
       }
     });
   });
