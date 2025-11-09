@@ -601,6 +601,10 @@
 }
 
 .result-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
   margin-top: 0.75rem;
   padding: 1rem 1.5rem;
   background: rgba(102, 126, 234, 0.1);

@@ -56,24 +56,25 @@ import { createDateComparator } from './utils/performance.utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./styles/datepicker.css'],
   template: `
-    <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode">
+    <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [ngClass]="classes?.wrapper">
       @if (!isInlineMode) {
-        <div class="ngxsmk-input-group" (click)="toggleCalendar()" [class.disabled]="disabled">
+        <div class="ngxsmk-input-group" (click)="toggleCalendar()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [ngClass]="classes?.inputGroup">
           <input type="text" 
                  [value]="displayValue" 
                  [placeholder]="placeholder" 
                  readonly 
                  [disabled]="disabled"
-                 class="ngxsmk-display-input">
-          <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event)" [disabled]="disabled" *ngIf="displayValue">
+                 class="ngxsmk-display-input"
+                 [ngClass]="classes?.input">
+          <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event)" [disabled]="disabled" *ngIf="displayValue" [attr.aria-label]="clearAriaLabel" [title]="clearLabel" [ngClass]="classes?.clearBtn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
           </button>
         </div>
       }
 
       @if (isCalendarVisible) {
-        <div class="ngxsmk-popover-container" [class.ngxsmk-inline-container]="isInlineMode">
-          <div class="ngxsmk-datepicker-container">
+        <div class="ngxsmk-popover-container" [class.ngxsmk-inline-container]="isInlineMode" [ngClass]="classes?.popover">
+          <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
             @if (showRanges && rangesArray.length > 0 && mode === 'range') {
               <div class="ngxsmk-ranges-container">
                 <ul>
@@ -83,21 +84,21 @@ import { createDateComparator } from './utils/performance.utils';
                 </ul>
               </div>
             }
-            <div class="ngxsmk-calendar-container">
-              <div class="ngxsmk-header">
+            <div class="ngxsmk-calendar-container" [ngClass]="classes?.calendar">
+              <div class="ngxsmk-header" [ngClass]="classes?.header">
                 <div class="ngxsmk-month-year-selects">
                   <ngxsmk-custom-select class="month-select" [options]="monthOptions"
                                     [(value)]="currentMonth" [disabled]="disabled"></ngxsmk-custom-select>
                   <ngxsmk-custom-select class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled"></ngxsmk-custom-select>
                 </div>
                 <div class="ngxsmk-nav-buttons">
-                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled || isBackArrowDisabled">
+                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled || isBackArrowDisabled" [attr.aria-label]="prevMonthAriaLabel" [title]="prevMonthAriaLabel" [ngClass]="classes?.navPrev">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                       <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
                             d="M328 112L184 256l144 144"/>
                     </svg>
                   </button>
-                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(1)" [disabled]="disabled">
+                  <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(1)" [disabled]="disabled" [attr.aria-label]="nextMonthAriaLabel" [title]="nextMonthAriaLabel" [ngClass]="classes?.navNext">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                       <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
                             d="M184 112l144 144-144 144"/>
@@ -111,7 +112,7 @@ import { createDateComparator } from './utils/performance.utils';
                     <div class="ngxsmk-day-name">{{ day }}</div>
                   }
                   @for (day of daysInMonth; track trackByDay($index, day)) {
-                    <div class="ngxsmk-day-cell"
+                    <div class="ngxsmk-day-cell" [ngClass]="classes?.dayCell"
                         [class.empty]="!isCurrentMonthMemo(day)" [class.disabled]="isDateDisabledMemo(day)" 
                         [class.today]="isSameDayMemo(day, today)"
                         [class.holiday]="isHolidayMemo(day)"
@@ -158,12 +159,12 @@ import { createDateComparator } from './utils/performance.utils';
                 </div>
               }
               
-              <div class="ngxsmk-footer" *ngIf="!isInlineMode">
-                <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled">
-                  Clear
+              <div class="ngxsmk-footer" *ngIf="!isInlineMode" [ngClass]="classes?.footer">
+                <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled" [attr.aria-label]="clearAriaLabel" [ngClass]="classes?.clearBtn">
+                  {{ clearLabel }}
                 </button>
-                <button type="button" class="ngxsmk-close-button" (click)="isCalendarOpen = false" [disabled]="disabled">
-                  Close
+                <button type="button" class="ngxsmk-close-button" (click)="isCalendarOpen = false" [disabled]="disabled" [attr.aria-label]="closeAriaLabel" [ngClass]="classes?.closeBtn">
+                  {{ closeLabel }}
                 </button>
               </div>
             </div>
@@ -184,6 +185,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() disabledDates: (string | Date)[] = [];
   @Input() placeholder: string = 'Select Date';
   @Input() inline: boolean | 'always' | 'auto' = false;
+  // Accessibility and customization
+  @Input() clearLabel: string = 'Clear';
+  @Input() closeLabel: string = 'Close';
+  @Input() prevMonthAriaLabel: string = 'Previous month';
+  @Input() nextMonthAriaLabel: string = 'Next month';
+  @Input() clearAriaLabel: string = 'Clear selection';
+  @Input() closeAriaLabel: string = 'Close calendar';
+  // Localization configurability
+  @Input() weekStart: number | null = null;
+  // Year dropdown configurability (range before/after current year)
+  @Input() yearRange: number = 10;
   public isCalendarOpen: boolean = false;
 
   public _internalValue: DatepickerValue = null;
@@ -205,6 +217,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   @Input() theme: 'light' | 'dark' = 'light';
   @HostBinding('class.dark-theme') get isDarkMode() { return this.theme === 'dark'; }
+
+  // Tailwind/ngClass theming hooks
+  @Input() classes?: {
+    wrapper?: string;
+    inputGroup?: string;
+    input?: string;
+    clearBtn?: string;
+    popover?: string;
+    container?: string;
+    calendar?: string;
+    header?: string;
+    navPrev?: string;
+    navNext?: string;
+    dayCell?: string;
+    footer?: string;
+    closeBtn?: string;
+  };
 
   private onChange = (_: any) => {};
   private onTouched = () => {};
@@ -472,11 +501,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.generateCalendar();
       this.cdr.markForCheck();
     }
+    if (changes['weekStart']) {
+      this.generateLocaleData();
+      this.generateCalendar();
+      this.cdr.markForCheck();
+    }
 
     if (changes['minuteInterval']) {
       this.generateTimeOptions();
       this.currentMinute = Math.floor(this.currentMinute / this.minuteInterval) * this.minuteInterval;
       this.onTimeChange();
+    }
+    if (changes['yearRange']) {
+      this.generateDropdownOptions();
+      this.cdr.markForCheck();
     }
 
     if (changes['value']) {
@@ -646,7 +684,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private generateLocaleData(): void {
     const year = new Date().getFullYear();
     this.monthOptions = generateMonthOptions(this.locale, year);
-    this.firstDayOfWeek = getFirstDayOfWeek(this.locale);
+    // If weekStart is provided, use it; otherwise derive from locale
+    this.firstDayOfWeek = this.weekStart !== null && this.weekStart !== undefined
+      ? this.weekStart
+      : getFirstDayOfWeek(this.locale);
     this.weekDays = generateWeekDays(this.locale, this.firstDayOfWeek);
   }
 
@@ -855,7 +896,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private generateDropdownOptions(): void {
-    this.yearOptions = generateYearOptions(this._currentYear);
+    this.yearOptions = generateYearOptions(this._currentYear, this.yearRange);
   }
 
   public changeMonth(delta: number): void {
