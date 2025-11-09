@@ -402,7 +402,14 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.7.0** (Latest)
+### **v1.8.0** (Latest)
+- 📚 **Documentation Updates**: Comprehensive README updates with all new features
+- 🧹 **Code Cleanup**: Removed unnecessary comments and files from demo project
+- 📝 **API Documentation**: Enhanced API reference with new inputs and examples
+- 🎨 **Theming Documentation**: Added Tailwind CSS and ngClass theming examples
+- ✅ **Project Cleanup**: Improved code maintainability and documentation consistency
+
+### **v1.7.0**
 - 🎯 **Signal Forms Support**: Full Angular 21 signal forms integration with writable signals
 - 🎨 **Tailwind Theming**: Added `classes` input for Tailwind CSS and custom class-based theming
 - 🌍 **Localization Improvements**: Added `weekStart` input to override locale-based week start day

@@ -8,7 +8,7 @@ A modern, powerful, and fully customizable date and date-range picker component 
 - **GitHub Repository**: [https://github.com/NGXSMK/ngxsmk-datepicker](https://github.com/NGXSMK/ngxsmk-datepicker)
 - **Live Demo**: [https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker](https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker)
 - **GitHub Pages Demo**: [https://ngxsmk.github.io/ngxsmk-datepicker/](https://ngxsmk.github.io/ngxsmk-datepicker/)
-- **Version**: 1.7.0
+- **Version**: 1.8.0
 - **License**: MIT
 - **Author**: Sachin Dilshan
 
@@ -321,7 +321,14 @@ We welcome and appreciate contributions from the community! Please see our [Cont
 
 ## 📄 Changelog
 
-### v1.7.0 (Latest)
+### v1.8.0 (Latest)
+- 📚 **Documentation Updates**: Comprehensive README updates with all new features
+- 🧹 **Code Cleanup**: Removed unnecessary comments and files from demo project
+- 📝 **API Documentation**: Enhanced API reference with new inputs and examples
+- 🎨 **Theming Documentation**: Added Tailwind CSS and ngClass theming examples
+- ✅ **Project Cleanup**: Improved code maintainability and documentation consistency
+
+### v1.7.0
 - 🧪 **Issue Test Suite**: Added comprehensive test suites for issues #8 and #13
 - 🐛 **Bug Fixes**: Fixed programmatic value setting and Angular 21 compatibility tests
 - 🧹 **Code Cleanup**: Removed unnecessary files, folders, and comments from codebase
