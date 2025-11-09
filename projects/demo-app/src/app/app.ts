@@ -99,6 +99,8 @@ export class App {
     { id: 'basic-usage', label: 'Basic Usage', sub: false },
     { id: 'api-reference', label: 'API Reference', sub: false },
     { id: 'signal-forms', label: 'Signal Forms (Angular 21)', sub: true },
+    { id: 'theming', label: 'Theming', sub: true },
+    { id: 'customization-a11y', label: 'Customization & A11y', sub: true },
     { id: 'inputs', label: 'Inputs', sub: true },
     { id: 'outputs', label: 'Outputs', sub: true },
     { id: 'examples', label: 'Examples', sub: false },
@@ -149,8 +151,28 @@ export class App {
   public programmaticMultipleDates: Date[] | null = null;
   public lastProgrammaticChange: Date | null = null;
 
-  // Signal Forms demo state
   public signalDate = signal<DatepickerValue>(null);
+
+  public weekStartDemo: number = 1; // Monday
+  public yearRangeDemo: number = 20;
+  public clearLabelDemo: string = 'Clear';
+  public closeLabelDemo: string = 'Close';
+  public prevLabelDemo: string = 'Previous month';
+  public nextLabelDemo: string = 'Next month';
+  public datepickerClasses: any = {
+    inputGroup: 'rounded-lg border border-purple-300 dark:border-purple-700',
+    input: 'px-3 py-2 text-sm',
+    popover: 'shadow-2xl',
+    container: 'bg-white dark:bg-neutral-900',
+    calendar: 'p-2',
+    header: 'mb-2',
+    navPrev: 'hover:bg-purple-50 dark:hover:bg-neutral-800 rounded-md',
+    navNext: 'hover:bg-purple-50 dark:hover:bg-neutral-800 rounded-md',
+    dayCell: 'hover:bg-purple-50 dark:hover:bg-neutral-800 rounded-md',
+    footer: 'flex justify-end gap-2',
+    clearBtn: 'btn btn-ghost',
+    closeBtn: 'btn btn-primary'
+  };
 
   public datepickerForm = new FormGroup({
     singleDate: new FormControl<DatepickerValue>(getStartOfDay(addMonths(this.today, 1))),
@@ -264,6 +286,46 @@ export class MyComponent {
     formControlName="singleDate2">
   </ngxsmk-datepicker>
 </form>`;
+
+  public customizationCode = `<ngxsmk-datepicker
+  mode="single"
+  [weekStart]="1"
+  [yearRange]="20"
+  [clearLabel]="'Clear'"
+  [closeLabel]="'Close'"
+  [prevMonthAriaLabel]="'Previous month'"
+  [nextMonthAriaLabel]="'Next month'"
+  [classes]="{
+    inputGroup: 'rounded-lg border',
+    input: 'px-3 py-2 text-sm',
+    popover: 'shadow-2xl',
+    dayCell: 'hover:bg-indigo-50',
+    footer: 'flex justify-end gap-2',
+    clearBtn: 'btn btn-ghost',
+    closeBtn: 'btn btn-primary'
+  }">
+</ngxsmk-datepicker>`;
+
+  public themingCssVarsCode = `<div style="
+  --datepicker-primary-color: #ec4899;
+  --datepicker-primary-contrast: #ffffff;
+  --datepicker-range-background: #fce7f3;
+">
+  <ngxsmk-datepicker mode="single"></ngxsmk-datepicker>
+</div>`;
+
+  public themingClassesCode = `<ngxsmk-datepicker
+  mode="single"
+  [classes]="{
+    inputGroup: 'rounded-lg border',
+    input: 'px-3 py-2 text-sm',
+    popover: 'shadow-2xl',
+    dayCell: 'hover:bg-indigo-50',
+    footer: 'flex justify-end gap-2',
+    clearBtn: 'btn btn-ghost',
+    closeBtn: 'btn btn-primary'
+  }">
+</ngxsmk-datepicker>`;
 
   @HostBinding('class.dark-theme') get isDarkMode() {
     return this.currentTheme === 'dark';

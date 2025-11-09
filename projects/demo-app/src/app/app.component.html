@@ -53,6 +53,50 @@
       </div>
     </section>
 
+    <section id="theming" class="docs-section">
+      <h2 class="section-title">Theming</h2>
+      <p>There are two recommended ways to theme the datepicker: CSS variables and the new <code>[classes]</code> input for Tailwind/custom classes.</p>
+
+      <h3 class="subsection-title">CSS Variables</h3>
+      <p>Set CSS variables on a parent scope to control colors and background accents.</p>
+
+      <div class="example-demo">
+        <div style="--datepicker-primary-color:#ec4899; --datepicker-primary-contrast:#ffffff; --datepicker-range-background:#fce7f3;">
+          <ngxsmk-datepicker
+            mode="single"
+            [theme]="currentTheme">
+          </ngxsmk-datepicker>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">html</span>
+          <button class="code-copy" (click)="copyCode(themingCssVarsCode)">Copy</button>
+        </div>
+        <pre><code [innerHTML]="themingCssVarsCode | code"></code></pre>
+      </div>
+
+      <h3 class="subsection-title">Classes / Tailwind</h3>
+      <p>Use the <code>[classes]</code> input to attach utility classes to inner elements.</p>
+
+      <div class="example-demo">
+        <ngxsmk-datepicker
+          mode="single"
+          [theme]="currentTheme"
+          [classes]="datepickerClasses">
+        </ngxsmk-datepicker>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">html</span>
+          <button class="code-copy" (click)="copyCode(themingClassesCode)">Copy</button>
+        </div>
+        <pre><code [innerHTML]="themingClassesCode | code"></code></pre>
+      </div>
+    </section>
+
     <section id="installation" class="docs-section">
       <h2 class="section-title">Installation</h2>
       <div class="code-block">
@@ -208,6 +252,33 @@
         }
       </div>
 
+      <div id="customization-a11y" class="example-section">
+        <h3 class="example-title">Customization & A11y</h3>
+        <p>Demonstrates week start, year range, custom labels, aria labels, and styling via classes.</p>
+
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [theme]="currentTheme"
+            [weekStart]="weekStartDemo"
+            [yearRange]="yearRangeDemo"
+            [clearLabel]="clearLabelDemo"
+            [closeLabel]="closeLabelDemo"
+            [prevMonthAriaLabel]="prevLabelDemo"
+            [nextMonthAriaLabel]="nextLabelDemo"
+            [classes]="datepickerClasses">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(customizationCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="customizationCode | code"></code></pre>
+        </div>
+      </div>
+
       <div id="date-range" class="example-section">
         <h3 class="example-title">Date Range Selection</h3>
         <p>Select a date range with optional time selection.</p>
@@ -284,6 +355,26 @@
             placeholder="Single date picker"
             (valueChange)="onProgrammaticValueChange($event)">
           </ngxsmk-datepicker>
+
+          <div style="height: 1rem;"></div>
+
+          <ngxsmk-datepicker
+            mode="range"
+            [value]="programmaticRange"
+            [theme]="currentTheme"
+            placeholder="Range picker"
+            (valueChange)="onProgrammaticRangeChange($event)">
+          </ngxsmk-datepicker>
+
+          <div style="height: 1rem;"></div>
+
+          <ngxsmk-datepicker
+            mode="multiple"
+            [value]="programmaticMultipleDates"
+            [theme]="currentTheme"
+            placeholder="Multiple dates picker"
+            (valueChange)="onProgrammaticMultipleChange($event)">
+          </ngxsmk-datepicker>
         </div>
 
         <div class="code-block">
@@ -298,6 +389,24 @@
           <strong>Current Value:</strong> 
           @if (programmaticSingleDate) {
             <code>{{ programmaticSingleDate | date:'medium' }}</code>
+          } @else {
+            <code>Not set</code>
+          }
+        </div>
+
+        <div class="result-box">
+          <strong>Current Range:</strong> 
+          @if (programmaticRange) {
+            <code>{{ programmaticRange.start | date:'medium' }} - {{ programmaticRange.end | date:'medium' }}</code>
+          } @else {
+            <code>Not set</code>
+          }
+        </div>
+
+        <div class="result-box">
+          <strong>Current Multiple:</strong> 
+          @if (programmaticMultipleDates?.length) {
+            <code>{{ programmaticMultipleDates | json }}</code>
           } @else {
             <code>Not set</code>
           }
