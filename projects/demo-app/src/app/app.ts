@@ -1,4 +1,4 @@
-import {Component, HostBinding} from '@angular/core';
+import {Component, HostBinding, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {
@@ -98,6 +98,7 @@ export class App {
     { id: 'installation', label: 'Installation', sub: false },
     { id: 'basic-usage', label: 'Basic Usage', sub: false },
     { id: 'api-reference', label: 'API Reference', sub: false },
+    { id: 'signal-forms', label: 'Signal Forms (Angular 21)', sub: true },
     { id: 'inputs', label: 'Inputs', sub: true },
     { id: 'outputs', label: 'Outputs', sub: true },
     { id: 'examples', label: 'Examples', sub: false },
@@ -147,6 +148,9 @@ export class App {
   public programmaticRange: { start: Date; end: Date } | null = null;
   public programmaticMultipleDates: Date[] | null = null;
   public lastProgrammaticChange: Date | null = null;
+
+  // Signal Forms demo state
+  public signalDate = signal<DatepickerValue>(null);
 
   public datepickerForm = new FormGroup({
     singleDate: new FormControl<DatepickerValue>(getStartOfDay(addMonths(this.today, 1))),
@@ -227,6 +231,20 @@ export class MyComponent {
   [value]="selectedDate"
   (valueChange)="onValueChange($event)">
 </ngxsmk-datepicker>`;
+
+  public signalFormsTsCode = `import { signal } from '@angular/core';
+import { DatepickerValue } from 'ngxsmk-datepicker';
+
+export class MyComponent {
+  dateSig = signal<DatepickerValue>(null);
+}`;
+
+  public signalFormsHtmlCode = `<ngxsmk-datepicker
+  mode=\\"single\\"
+  [(value)]=\\"dateSig\\">
+</ngxsmk-datepicker>
+
+<p>Signal value: {{ dateSig() | json }}</p>`;
 
   public inlineCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
