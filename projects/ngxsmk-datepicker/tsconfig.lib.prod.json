@@ -12,7 +12,9 @@
     "exactOptionalPropertyTypes": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "importsNotUsedAsValues": "remove",
+    "preserveConstEnums": false
   },
   "angularCompilerOptions": {
     "compilationMode": "partial",

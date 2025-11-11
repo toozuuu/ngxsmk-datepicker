@@ -44,4 +44,3 @@ export function normalizeDate(date: DateInput | null): Date | null {
 
 export type DateInput = Date | string | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };
 
-

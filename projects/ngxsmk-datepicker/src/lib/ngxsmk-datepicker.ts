@@ -14,8 +14,10 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
   ChangeDetectorRef,
+  PLATFORM_ID,
+  effect,
 } from '@angular/core';
-import {CommonModule, DatePipe} from '@angular/common';
+import { isPlatformBrowser, CommonModule, DatePipe } from '@angular/common';
 import {
   ControlValueAccessor,
   FormsModule,
@@ -43,6 +45,10 @@ import {
 } from './utils/calendar.utils';
 import { CustomSelectComponent } from './components/custom-select.component';
 import { createDateComparator } from './utils/performance.utils';
+import { 
+  DatepickerHooks, 
+  KeyboardShortcutContext
+} from './interfaces/datepicker-hooks.interface';
 
 @Component({
   selector: 'ngxsmk-datepicker',
@@ -58,14 +64,18 @@ import { createDateComparator } from './utils/performance.utils';
   template: `
     <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [ngClass]="classes?.wrapper">
       @if (!isInlineMode) {
-        <div class="ngxsmk-input-group" (click)="toggleCalendar()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [ngClass]="classes?.inputGroup">
+        <div class="ngxsmk-input-group" (click)="toggleCalendar()" (keydown.enter)="toggleCalendar()" (keydown.space)="toggleCalendar(); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
           <input type="text" 
                  [value]="displayValue" 
                  [placeholder]="placeholder" 
                  readonly 
                  [disabled]="disabled"
+                 [attr.aria-label]="placeholder || 'Select date'"
+                 [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
                  class="ngxsmk-display-input"
-                 [ngClass]="classes?.input">
+                 [ngClass]="classes?.input"
+                 (keydown.enter)="toggleCalendar()"
+                 (keydown.space)="toggleCalendar(); $event.preventDefault()">
           <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event)" [disabled]="disabled" *ngIf="displayValue" [attr.aria-label]="clearAriaLabel" [title]="clearLabel" [ngClass]="classes?.clearBtn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
           </button>
@@ -79,7 +89,7 @@ import { createDateComparator } from './utils/performance.utils';
               <div class="ngxsmk-ranges-container">
                 <ul>
                   @for (range of rangesArray; track trackByRange($index, range)) {
-                    <li (click)="selectRange(range.value)" [class.disabled]="disabled">{{ range.key }}</li>
+                    <li (click)="selectRange(range.value)" (keydown.enter)="selectRange(range.value)" (keydown.space)="selectRange(range.value); $event.preventDefault()" [class.disabled]="disabled" [attr.tabindex]="disabled ? -1 : 0" role="button" [attr.aria-disabled]="disabled">{{ range.key }}</li>
                   }
                 </ul>
               </div>
@@ -107,7 +117,7 @@ import { createDateComparator } from './utils/performance.utils';
                 </div>
               </div>
               <div class="ngxsmk-days-grid-wrapper">
-                <div class="ngxsmk-days-grid">
+                <div class="ngxsmk-days-grid" role="grid" [attr.aria-label]="'Calendar for ' + (currentDate | date : 'MMMM yyyy')">
                   @for (day of weekDays; track day) {
                     <div class="ngxsmk-day-name">{{ day }}</div>
                   }
@@ -122,9 +132,20 @@ import { createDateComparator } from './utils/performance.utils';
                         [class.end-date]="mode === 'range' && isSameDayMemo(day, endDate)"
                         [class.in-range]="mode === 'range' && isInRange(day)"
                         [class.preview-range]="isPreviewInRange(day)"
-                        (click)="onDateClick(day)" (mouseenter)="onDateHover(day)">
+                        [class.focused]="day && focusedDate && isSameDayMemo(day, focusedDate)"
+                        [attr.tabindex]="day && !isDateDisabledMemo(day) ? 0 : -1"
+                        [attr.role]="day ? 'gridcell' : null"
+                        [attr.aria-selected]="day && (mode === 'single' && isSameDayMemo(day, selectedDate)) ? 'true' : null"
+                        [attr.aria-label]="day ? getAriaLabel(day) : null"
+                        [ngClass]="getDayCellCustomClasses(day)"
+                        [attr.title]="day ? getDayCellTooltip(day) : null"
+                        (click)="onDateClick(day)" 
+                        (keydown.enter)="onDateClick(day)"
+                        (keydown.space)="onDateClick(day); $event.preventDefault()"
+                        (mouseenter)="onDateHover(day)"
+                        (focus)="onDateFocus(day)">
                       @if (day) {
-                        <div class="ngxsmk-day-number" [attr.title]="getHolidayLabelMemo(day)">{{ day | date : 'd' }}</div>
+                        <div class="ngxsmk-day-number">{{ formatDayNumber(day) }}</div>
                       }
                     </div>
                   }
@@ -175,6 +196,9 @@ import { createDateComparator } from './utils/performance.utils';
   `,
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+  private static _idCounter = 0;
+  public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
+  
   @Input() mode: 'single' | 'range' | 'multiple' = 'single';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   @Input() showRanges: boolean = true;
@@ -185,17 +209,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() disabledDates: (string | Date)[] = [];
   @Input() placeholder: string = 'Select Date';
   @Input() inline: boolean | 'always' | 'auto' = false;
-  // Accessibility and customization
   @Input() clearLabel: string = 'Clear';
   @Input() closeLabel: string = 'Close';
   @Input() prevMonthAriaLabel: string = 'Previous month';
   @Input() nextMonthAriaLabel: string = 'Next month';
   @Input() clearAriaLabel: string = 'Clear selection';
   @Input() closeAriaLabel: string = 'Close calendar';
-  // Localization configurability
   @Input() weekStart: number | null = null;
-  // Year dropdown configurability (range before/after current year)
   @Input() yearRange: number = 10;
+  @Input() hooks: DatepickerHooks | null = null;
+  @Input() enableKeyboardShortcuts: boolean = true;
+  @Input() customShortcuts: { [key: string]: (context: KeyboardShortcutContext) => boolean } | null = null;
+  @Input() autoApplyClose: boolean = false;
   public isCalendarOpen: boolean = false;
 
   public _internalValue: DatepickerValue = null;
@@ -203,9 +228,95 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private _value: DatepickerValue = null;
   @Input() set value(val: DatepickerValue) {
     this._value = val;
+    if (!this._field && val !== undefined) {
+      let normalizedValue: DatepickerValue = null;
+      if (val !== null) {
+        if (val instanceof Date) {
+          normalizedValue = this._normalizeDate(val) as DatepickerValue;
+        } else if (typeof val === 'object' && 'start' in val && 'end' in val) {
+          normalizedValue = {
+            start: this._normalizeDate(val.start),
+            end: this._normalizeDate(val.end)
+          } as DatepickerValue;
+        } else if (Array.isArray(val)) {
+          normalizedValue = val.map(d => this._normalizeDate(d)).filter((d): d is Date => d !== null) as DatepickerValue;
+        }
+      }
+      if (!this.isValueEqual(normalizedValue, this._internalValue)) {
+        this._internalValue = normalizedValue;
+        this.initializeValue(normalizedValue);
+        this.generateCalendar();
+        this.cdr.markForCheck();
+      }
+    }
   }
   get value(): DatepickerValue {
     return this._internalValue;
+  }
+
+  private _field: any = null;
+  
+  @Input() set field(field: any) {
+    this._field = field;
+    if (field) {
+      try {
+        effect(() => {
+            let fieldValue: any = null;
+            
+            if (typeof field.value === 'function') {
+              fieldValue = field.value();
+            } else if (field.value !== undefined) {
+              fieldValue = field.value;
+            }
+            
+            const normalizedValue = fieldValue !== null && fieldValue !== undefined
+              ? (this._normalizeDate(fieldValue) as DatepickerValue)
+              : null;
+            
+            if (!this.isValueEqual(normalizedValue, this._internalValue)) {
+              this._internalValue = normalizedValue;
+              this.initializeValue(normalizedValue);
+              this.generateCalendar();
+              this.cdr.markForCheck();
+            }
+            
+            if (typeof field.disabled === 'function') {
+              const newDisabled = field.disabled();
+              if (this.disabled !== newDisabled) {
+                this.disabled = newDisabled;
+                this.cdr.markForCheck();
+              }
+            } else if (field.disabled !== undefined && this.disabled !== field.disabled) {
+              this.disabled = field.disabled;
+              this.cdr.markForCheck();
+            }
+        });
+      } catch {
+        this.syncFieldValue(field);
+      }
+    }
+  }
+  get field(): any {
+    return this._field;
+  }
+  
+  private syncFieldValue(field: any): void {
+    const fieldValue = typeof field.value === 'function' ? field.value() : field.value;
+    const normalizedValue = fieldValue !== null && fieldValue !== undefined
+      ? (this._normalizeDate(fieldValue) as DatepickerValue)
+      : null;
+    if (!this.isValueEqual(normalizedValue, this._internalValue)) {
+      this._internalValue = normalizedValue;
+      this.initializeValue(normalizedValue);
+      this.generateCalendar();
+      this.cdr.markForCheck();
+    }
+    
+    if (typeof field.disabled === 'function') {
+      this.disabled = field.disabled();
+    } else if (field.disabled !== undefined) {
+      this.disabled = field.disabled;
+    }
   }
 
   private _startAtDate: Date | null = null;
@@ -218,7 +329,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() theme: 'light' | 'dark' = 'light';
   @HostBinding('class.dark-theme') get isDarkMode() { return this.theme === 'dark'; }
 
-  // Tailwind/ngClass theming hooks
   @Input() classes?: {
     wrapper?: string;
     inputGroup?: string;
@@ -287,11 +397,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private readonly elementRef: ElementRef = inject(ElementRef);
   private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly dateComparator = createDateComparator();
   
   get isInlineMode(): boolean {
-    return this.inline === true || this.inline === 'always' || 
-           (this.inline === 'auto' && typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches);
+    if (this.inline === true || this.inline === 'always') {
+      return true;
+    }
+    if (this.inline === 'auto' && this.isBrowser) {
+      try {
+        return window.matchMedia('(min-width: 768px)').matches;
+      } catch {
+        return false;
+      }
+    }
+    return false;
   }
 
   get isCalendarVisible(): boolean {
@@ -299,6 +420,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
   
   get displayValue(): string {
+    if (this.hooks?.formatDisplayValue) {
+      return this.hooks.formatDisplayValue(this._internalValue, this.mode);
+    }
+    
     if (this.mode === 'single' && this.selectedDate) {
       const options: Intl.DateTimeFormatOptions = { 
         year: 'numeric', 
@@ -375,10 +500,300 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (!this.isInlineMode && this.isCalendarOpen && !this.elementRef.nativeElement.contains(event.target)) {
-      this.isCalendarOpen = false;
+    if (this.isBrowser && !this.isInlineMode && this.isCalendarOpen) {
+      const target = event.target as Node;
+      if (target && !this.elementRef.nativeElement.contains(target)) {
+        this.isCalendarOpen = false;
+        this.cdr.markForCheck();
+      }
+    }
+  }
+
+  @HostListener('keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    if (!this.isCalendarVisible || this.disabled) return;
+    
+    const target = event.target as HTMLElement;
+    const isCalendarFocused = target?.closest('.ngxsmk-days-grid') !== null;
+    
+    if (isCalendarFocused || event.key === 'Escape') {
+      const handled = this.handleKeyboardNavigation(event);
+      if (handled) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+  }
+
+  private handleKeyboardNavigation(event: KeyboardEvent): boolean {
+    if (!this.enableKeyboardShortcuts) {
+      return false;
+    }
+
+    const context: KeyboardShortcutContext = {
+      currentDate: this.currentDate,
+      selectedDate: this.selectedDate,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      selectedDates: this.selectedDates,
+      mode: this.mode,
+      focusedDate: this.focusedDate,
+      isCalendarOpen: this.isCalendarOpen
+    };
+
+    if (this.customShortcuts) {
+      const key = this.getShortcutKey(event);
+      if (key && this.customShortcuts[key]) {
+        const handled = this.customShortcuts[key](context);
+        if (handled) {
+          event.preventDefault();
+          event.stopPropagation();
+          return true;
+        }
+      }
+    }
+
+    if (this.hooks?.handleShortcut) {
+      const handled = this.hooks.handleShortcut(event, context);
+      if (handled) {
+        event.preventDefault();
+        event.stopPropagation();
+        return true;
+      }
+    }
+    switch (event.key) {
+      case 'ArrowLeft':
+        this.navigateDate(-1, 0);
+        return true;
+      case 'ArrowRight':
+        this.navigateDate(1, 0);
+        return true;
+      case 'ArrowUp':
+        this.navigateDate(0, -1);
+        return true;
+      case 'ArrowDown':
+        this.navigateDate(0, 1);
+        return true;
+      case 'PageUp':
+        if (event.shiftKey) {
+          this.currentYear = this.currentYear - 1;
+        } else {
+          this.changeMonth(-1);
+        }
+        return true;
+      case 'PageDown':
+        if (event.shiftKey) {
+          this.currentYear = this.currentYear + 1;
+        } else {
+          this.changeMonth(1);
+        }
+        return true;
+      case 'Home':
+        this.navigateToFirstDay();
+        return true;
+      case 'End':
+        this.navigateToLastDay();
+        return true;
+      case 'Enter':
+      case ' ':
+        if (this.focusedDate) {
+          this.onDateClick(this.focusedDate);
+        }
+        return true;
+      case 'Escape':
+        if (!this.isInlineMode) {
+          this.isCalendarOpen = false;
+          this.cdr.markForCheck();
+        }
+        return true;
+      case 't':
+      case 'T':
+        if (!event.ctrlKey && !event.metaKey) {
+          this.selectToday();
+          return true;
+        }
+        return false;
+      case 'y':
+      case 'Y':
+        if (!event.ctrlKey && !event.metaKey) {
+          this.selectYesterday();
+          return true;
+        }
+        return false;
+      case 'n':
+      case 'N':
+        if (!event.ctrlKey && !event.metaKey) {
+          this.selectTomorrow();
+          return true;
+        }
+        return false;
+      case 'w':
+      case 'W':
+        if (!event.ctrlKey && !event.metaKey) {
+          this.selectNextWeek();
+          return true;
+        }
+        return false;
+      default:
+        return false;
+    }
+  }
+
+  private getShortcutKey(event: KeyboardEvent): string | null {
+    const parts: string[] = [];
+    if (event.ctrlKey) parts.push('Ctrl');
+    if (event.metaKey) parts.push('Meta');
+    if (event.shiftKey) parts.push('Shift');
+    if (event.altKey) parts.push('Alt');
+    parts.push(event.key);
+    return parts.length > 1 ? parts.join('+') : event.key;
+  }
+
+  public focusedDate: Date | null = null;
+
+  private navigateDate(days: number, weeks: number): void {
+    const baseDate = this.focusedDate || this.currentDate || new Date();
+    const newDate = new Date(baseDate);
+    newDate.setDate(newDate.getDate() + days + (weeks * 7));
+    
+    if (this.isDateValid(newDate)) {
+      this.focusedDate = newDate;
+      this.currentDate = new Date(newDate);
+      this.currentDate.setDate(1);
+      this.generateCalendar();
       this.cdr.markForCheck();
     }
+  }
+
+  private navigateToFirstDay(): void {
+    const year = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    if (this.isDateValid(firstDay)) {
+      this.focusedDate = firstDay;
+      this.generateCalendar();
+      this.cdr.markForCheck();
+    }
+  }
+
+  private navigateToLastDay(): void {
+    const year = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth();
+    const lastDay = new Date(year, month + 1, 0);
+    if (this.isDateValid(lastDay)) {
+      this.focusedDate = lastDay;
+      this.generateCalendar();
+      this.cdr.markForCheck();
+    }
+  }
+
+  private selectToday(): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (this.isDateValid(today)) {
+      this.focusedDate = today;
+      this.onDateClick(today);
+    }
+  }
+
+  private selectYesterday(): void {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(0, 0, 0, 0);
+    if (this.isDateValid(yesterday)) {
+      this.focusedDate = yesterday;
+      this.onDateClick(yesterday);
+    }
+  }
+
+  private selectTomorrow(): void {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    if (this.isDateValid(tomorrow)) {
+      this.focusedDate = tomorrow;
+      this.onDateClick(tomorrow);
+    }
+  }
+
+  private selectNextWeek(): void {
+    const nextWeek = new Date();
+    nextWeek.setDate(nextWeek.getDate() + 7);
+    nextWeek.setHours(0, 0, 0, 0);
+    if (this.isDateValid(nextWeek)) {
+      this.focusedDate = nextWeek;
+      this.currentDate = new Date(nextWeek);
+      this.currentDate.setDate(1);
+      this.generateCalendar();
+      this.onDateClick(nextWeek);
+    }
+  }
+
+  onDateFocus(day: Date | null): void {
+    if (day) {
+      this.focusedDate = day;
+    }
+  }
+
+  private isDateValid(date: Date): boolean {
+    if (this.minDate && date < this.minDate) return false;
+    if (this.maxDate && date > this.maxDate) return false;
+    if (this.isInvalidDate && this.isInvalidDate(date)) return false;
+    if (this.isDateDisabledMemo(date)) return false;
+    
+    if (this.hooks?.validateDate) {
+      if (!this.hooks.validateDate(date, this._internalValue, this.mode)) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+
+  getDayCellCustomClasses(day: Date | null): string[] {
+    if (!day || !this.hooks?.getDayCellClasses) return [];
+    
+    const isSelected = this.mode === 'single' && this.isSameDayMemo(day, this.selectedDate) ||
+                      this.mode === 'multiple' && this.isMultipleSelected(day) ||
+                      this.mode === 'range' && (this.isSameDayMemo(day, this.startDate) || this.isSameDayMemo(day, this.endDate));
+    const isDisabled = this.isDateDisabledMemo(day);
+    const isToday = this.isSameDayMemo(day, this.today);
+    const isHoliday = this.isHolidayMemo(day);
+    
+    return this.hooks.getDayCellClasses(day, isSelected, isDisabled, isToday, isHoliday) || [];
+  }
+
+  getDayCellTooltip(day: Date | null): string | null {
+    if (!day) return null;
+    
+    const holidayLabel = this.getHolidayLabelMemo(day);
+    
+    if (this.hooks?.getDayCellTooltip) {
+      const customTooltip = this.hooks.getDayCellTooltip(day, holidayLabel);
+      if (customTooltip !== null) return customTooltip;
+    }
+    
+    return holidayLabel;
+  }
+
+  formatDayNumber(day: Date | null): string {
+    if (!day) return '';
+    
+    if (this.hooks?.formatDayNumber) {
+      return this.hooks.formatDayNumber(day);
+    }
+    
+    return day.getDate().toString();
+  }
+
+  getAriaLabel(day: Date | null): string {
+    if (!day) return '';
+    
+    if (this.hooks?.formatAriaLabel) {
+      return this.hooks.formatAriaLabel(day);
+    }
+    
+    return day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   }
 
 
@@ -403,6 +818,32 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private emitValue(val: DatepickerValue) {
     this._internalValue = val;
+    
+    if (this._field) {
+      try {
+        if (typeof this._field.setValue === 'function') {
+          this._field.setValue(val);
+        } else if (typeof this._field.updateValue === 'function') {
+          this._field.updateValue(() => val);
+        } else if (typeof this._field.value === 'function') {
+          if (typeof this._field.value.set === 'function') {
+            this._field.value.set(val);
+          } else {
+            try {
+              const valueSignal = this._field.value();
+              if (valueSignal && typeof valueSignal.set === 'function') {
+                valueSignal.set(val);
+              }
+            } catch {
+            }
+          }
+        } else if (this._field.value && typeof this._field.value.set === 'function') {
+          this._field.value.set(val);
+        }
+      } catch {
+      }
+    }
+    
     this.valueChange.emit(val);
     this.onChange(val);
     this.onTouched();
@@ -418,6 +859,27 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this.disabled || this.isInlineMode) return;
     this.isCalendarOpen = !this.isCalendarOpen;
     this.cdr.markForCheck();
+  }
+
+  private closeCalendar(): void {
+    if (!this.isInlineMode) {
+      this.isCalendarOpen = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  private shouldAutoClose(): boolean {
+    if (!this.autoApplyClose || this.showTime || this.isInlineMode) {
+      return false;
+    }
+
+    if (this.mode === 'single') {
+      return this.selectedDate !== null;
+    } else if (this.mode === 'range') {
+      return this.startDate !== null && this.endDate !== null;
+    }
+
+    return false;
   }
   
   public clearValue(event?: MouseEvent): void {
@@ -465,7 +927,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   ngOnInit(): void {
-    if (this._locale === 'en-US' && typeof navigator !== 'undefined') {
+    if (this._locale === 'en-US' && this.isBrowser && typeof navigator !== 'undefined' && navigator.language) {
       this._locale = navigator.language;
     }
 
@@ -485,7 +947,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.update12HourState(this.currentHour);
     }
 
-    const initialValue = this._value !== null ? this._value : this._internalValue;
+    let initialValue: DatepickerValue = null;
+    if (this._field) {
+      const fieldValue = typeof this._field.value === 'function' ? this._field.value() : this._field.value;
+      if (fieldValue !== undefined && fieldValue !== null) {
+        initialValue = this._normalizeDate(fieldValue) as DatepickerValue;
+      }
+    } else if (this._value !== null) {
+      initialValue = this._value;
+    } else if (this._internalValue !== null) {
+      initialValue = this._internalValue;
+    }
+    
     if (initialValue) {
       this.initializeValue(initialValue);
       this._internalValue = initialValue;
@@ -517,13 +990,31 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.cdr.markForCheck();
     }
 
+    if (changes['field']) {
+      const newField = changes['field'].currentValue;
+      if (newField) {
+        const fieldValue = typeof newField.value === 'function' ? newField.value() : newField.value;
+        if (fieldValue !== undefined && fieldValue !== null) {
+          const normalizedValue = this._normalizeDate(fieldValue) as DatepickerValue;
+          if (!this.isValueEqual(normalizedValue, this._internalValue)) {
+            this._internalValue = normalizedValue;
+            this.initializeValue(normalizedValue);
+            this.generateCalendar();
+            this.cdr.markForCheck();
+          }
+        }
+      }
+    }
+    
     if (changes['value']) {
-      const newValue = changes['value'].currentValue;
-      if (!this.isValueEqual(newValue, this._internalValue)) {
-        this._internalValue = newValue;
-        this.initializeValue(newValue);
-        this.generateCalendar();
-        this.cdr.markForCheck();
+      if (!this._field) {
+        const newValue = changes['value'].currentValue;
+        if (!this.isValueEqual(newValue, this._internalValue)) {
+          this._internalValue = newValue;
+          this.initializeValue(newValue);
+          this.generateCalendar();
+          this.cdr.markForCheck();
+        }
       }
     }
     
@@ -670,7 +1161,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         return null;
       }
       return getStartOfDay(date);
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -684,7 +1175,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private generateLocaleData(): void {
     const year = new Date().getFullYear();
     this.monthOptions = generateMonthOptions(this.locale, year);
-    // If weekStart is provided, use it; otherwise derive from locale
     this.firstDayOfWeek = this.weekStart !== null && this.weekStart !== undefined
       ? this.weekStart
       : getFirstDayOfWeek(this.locale);
@@ -708,6 +1198,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.initializeValue({start: this.startDate, end: this.endDate});
     this.generateCalendar();
     this.action.emit({type: 'rangeSelected', payload: {start: this.startDate, end: this.endDate, key: this.rangesArray.find(r => r.value === range)?.key}});
+    
+    if (this.shouldAutoClose()) {
+      this.closeCalendar();
+    }
+    
     this.cdr.markForCheck();
   }
   
@@ -794,6 +1289,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this.isCurrentMonth(day) && this.isDateDisabled(day)) return;
 
     const dateToToggle = getStartOfDay(day);
+    
+    if (this.hooks?.beforeDateSelect) {
+      if (!this.hooks.beforeDateSelect(day, this._internalValue)) {
+        return;
+      }
+    }
 
     if (this.mode === 'single') {
       this.selectedDate = this.applyCurrentTime(day);
@@ -803,7 +1304,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.startDate = this.applyCurrentTime(day);
         this.endDate = null;
       } else if (day && this.startDate && day >= this.startDate) {
-        this.endDate = this.applyCurrentTime(day);
+        const potentialEndDate = this.applyCurrentTime(day);
+        
+        if (this.hooks?.validateRange) {
+          if (!this.hooks.validateRange(this.startDate, potentialEndDate)) {
+            this.startDate = potentialEndDate;
+            this.endDate = null;
+            this.hoveredDate = null;
+            return;
+          }
+        }
+        
+        this.endDate = potentialEndDate;
         this.emitValue({start: this.startDate as Date, end: this.endDate as Date});
       } else {
         this.startDate = this.applyCurrentTime(day);
@@ -832,6 +1344,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.currentMinute = dateToSync.getMinutes();
     }
 
+    if (this.hooks?.afterDateSelect) {
+      this.hooks.afterDateSelect(day, this._internalValue);
+    }
+    
     this.action.emit({
       type: 'dateSelected',
       payload: {
@@ -840,6 +1356,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         date: day
       }
     });
+
+    if (this.shouldAutoClose()) {
+      this.closeCalendar();
+    }
     
     this.cdr.markForCheck();
   }

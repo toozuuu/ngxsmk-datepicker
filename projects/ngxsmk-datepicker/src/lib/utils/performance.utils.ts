@@ -21,16 +21,18 @@ export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: number | null = null;
+  let timeout: ReturnType<typeof setTimeout> | null = null;
   
   return (...args: Parameters<T>) => {
-    if (timeout) {
+    if (timeout !== null) {
       clearTimeout(timeout);
     }
     
-    timeout = window.setTimeout(() => {
-      func(...args);
-    }, wait);
+    if (typeof setTimeout !== 'undefined') {
+      timeout = setTimeout(() => {
+        func(...args);
+      }, wait);
+    }
   };
 }
 
@@ -44,7 +46,11 @@ export function throttle<T extends (...args: any[]) => any>(
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      window.setTimeout(() => (inThrottle = false), limit);
+      if (typeof setTimeout !== 'undefined') {
+        setTimeout(() => (inThrottle = false), limit);
+      } else {
+        inThrottle = false;
+      }
     }
   };
 }
@@ -113,5 +119,4 @@ export function createFilteredArray<T>(
   return result;
 }
 
-export function clearAllCaches(): void {
-}
+export function clearAllCaches(): void {}

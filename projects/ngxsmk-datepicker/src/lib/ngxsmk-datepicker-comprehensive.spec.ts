@@ -593,7 +593,6 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
         expect(inputGroup.nativeElement.getAttribute('role')).toBe('button');
         expect(inputGroup.nativeElement.getAttribute('aria-haspopup')).toBe('dialog');
       } else {
-        // If input group is not found, verify inline mode is correctly set
         expect(component.isInlineMode).toBe(false);
       }
     });

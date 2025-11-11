@@ -271,6 +271,36 @@ describe('Issue #13: Programmatic value setting', () => {
       expect(component.selectedDate!.getTime()).toBe(testDate.getTime());
     });
 
+    it('should set value from server-side API data via formControl', () => {
+      component.mode = 'single';
+      const apiDate = new Date('2024-06-15T10:30:00Z');
+      component.writeValue(apiDate);
+      fixture.detectChanges();
+
+      expect(component.selectedDate).toBeTruthy();
+      expect(component.displayValue).not.toBe('');
+    });
+
+    it('should update formControl value when set programmatically', () => {
+      component.mode = 'single';
+      const formControl = new FormControl<DatepickerValue>(null);
+      let onChangeValue: DatepickerValue | null = null;
+      component.registerOnChange((value: DatepickerValue) => {
+        onChangeValue = value;
+        formControl.setValue(value, { emitEvent: false });
+      });
+      
+      const testDate = getStartOfDay(new Date(2024, 5, 15));
+      component.writeValue(testDate);
+      fixture.detectChanges();
+
+      expect(component.selectedDate).toBeTruthy();
+      expect(component._internalValue).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getTime()).toBe(testDate.getTime());
+      }
+    });
+
     it('should update formControl when value changes via user interaction', () => {
       component.inline = true;
       let onChangeValue: DatepickerValue | null = null;
@@ -448,6 +478,36 @@ describe('Issue #13: Programmatic value setting', () => {
       expect(component.selectedDate).toBeTruthy();
     });
 
+    it('should handle value set programmatically from API response', () => {
+      const apiResponse = {
+        dateInQuestion: new Date('2024-06-15T00:00:00Z')
+      };
+      const testDate = getStartOfDay(apiResponse.dateInQuestion);
+      
+      component.value = testDate;
+      fixture.detectChanges();
+      
+      expect(component.selectedDate).toBeTruthy();
+      expect(component.displayValue).toContain('Jun');
+      expect(component.displayValue).toContain('15');
+    });
+
+    it('should handle value updates after initial load (server data arrives later)', () => {
+      component.mode = 'single';
+      fixture.detectChanges();
+      
+      expect(component.selectedDate).toBeNull();
+      
+      const serverDate = getStartOfDay(new Date(2024, 5, 15));
+      component.value = serverDate;
+      fixture.detectChanges();
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getTime()).toBe(serverDate.getTime());
+      }
+    });
+
     it('should handle switching modes with existing value', () => {
       const testDate = getStartOfDay(new Date(2024, 5, 15));
       
@@ -467,14 +527,91 @@ describe('Issue #13: Programmatic value setting', () => {
     });
   });
 
-  describe('Integration with Angular Signals (if available)', () => {
-    it('should work with signal values when bound', () => {
+  describe('Integration with Angular Signals', () => {
+    it('should work with signal values when bound via [value]', () => {
       const testDate = getStartOfDay(new Date(2024, 5, 15));
       setValueAndTriggerChange(testDate);
       
       expect(component.selectedDate).toBeTruthy();
       if (component.selectedDate) {
         expect(component.selectedDate.getTime()).toBe(testDate.getTime());
+      }
+    });
+
+    it('should work with signal input binding', () => {
+      const testDate = getStartOfDay(new Date(2024, 5, 15));
+      component.value = testDate;
+      fixture.detectChanges();
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getTime()).toBe(testDate.getTime());
+      }
+    });
+
+    it('should update immediately when value input is set programmatically', () => {
+      const testDate = getStartOfDay(new Date(2024, 5, 15));
+      component.value = testDate;
+      
+      expect(component.selectedDate).toBeTruthy();
+      expect(component._internalValue).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getTime()).toBe(testDate.getTime());
+      }
+    });
+
+    it('should work with [value] input for setting values from API', () => {
+      const apiDate = new Date('2024-06-15T10:30:00Z');
+      component.value = apiDate;
+      fixture.detectChanges();
+      
+      expect(component.selectedDate).toBeTruthy();
+      expect(component.displayValue).not.toBe('');
+    });
+  });
+
+  describe('Signal Forms [field] input support', () => {
+    it('should work with signal form field binding', () => {
+      const testDate = getStartOfDay(new Date(2024, 5, 15));
+      const mockField = {
+        value: () => testDate,
+        setValue: jasmine.createSpy('setValue'),
+        disabled: () => false
+      };
+      
+      component.field = mockField;
+      fixture.detectChanges();
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getTime()).toBe(testDate.getTime());
+      }
+    });
+
+    it('should update field when datepicker value changes', () => {
+      const initialDate = getStartOfDay(new Date(2024, 5, 15));
+      const mockField = {
+        value: () => initialDate,
+        setValue: jasmine.createSpy('setValue'),
+        disabled: () => false
+      };
+      
+      component.field = mockField;
+      component.inline = true;
+      fixture.detectChanges();
+      
+      const dayCells = fixture.debugElement.queryAll(By.css('.ngxsmk-day-cell'));
+      const day20 = dayCells.find(cell => {
+        const dayNumber = cell.query(By.css('.ngxsmk-day-number'));
+        return dayNumber && dayNumber.nativeElement.textContent.trim() === '20' &&
+               !cell.nativeElement.classList.contains('disabled') &&
+               !cell.nativeElement.classList.contains('empty');
+      });
+      
+      if (day20) {
+        day20.nativeElement.click();
+        fixture.detectChanges();
+        expect(mockField.setValue).toHaveBeenCalled();
       }
     });
   });

@@ -2,7 +2,7 @@
 
 npm i ngxsmk-datepicker
 
-gxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
+ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
 * Github: [https://github.com/NGXSMK/ngxsmk-datepicker](https://github.com/NGXSMK/ngxsmk-datepicker)
 * **Live Demo**: [https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker](https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker)
@@ -13,11 +13,11 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 ## 📷 Screenshots
 
 <p align="left">
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Advanced Date Range Picker" width="420" />
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Single Date Selection" width="420" />
   &nbsp;&nbsp;
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Angular Localization" width="420" />
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Angular Date Range Selection" width="420" />
   &nbsp;&nbsp;
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Angular Single Date Selection" width="420" />
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Angular Date Mobile Screen Playground" width="420" />
 </p>
 
 ## **✨ Features**
@@ -35,6 +35,27 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Previous Month Context**: Shows last few days of previous month for better date selection context.
 * **Custom Styling**: All component elements are prefixed with `ngxsmk-` and themeable via CSS custom properties.
 * **Zero Dependencies**: The component is standalone and lightweight.
+* **Signal Forms Support**: First-class support for Angular 21+ Signal Forms with `[field]` input.
+* **SSR Compatible**: Fully optimized for server-side rendering with Angular Universal.
+* **Zoneless Support**: Works with or without Zone.js for optimal performance.
+* **Extension Points & Hooks**: Comprehensive customization system with hooks for rendering, validation, keyboard shortcuts, and events.
+* **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
+* **Modern UI/UX**: Polished design with improved spacing, shadows, animations, and accessibility.
+
+## **📋 Compatibility**
+
+| Angular Version | Status | Notes |
+|----------------|--------|-------|
+| Angular 17 | ✅ Fully Supported | All features available |
+| Angular 18 | ✅ Fully Supported | All features available |
+| Angular 19 | ✅ Fully Supported | All features available |
+| Angular 20 | ✅ Fully Supported | All features available |
+| Angular 21 | ✅ Fully Supported | Signal Forms support, SSR optimized |
+| Angular 22+ | 🔄 Future Support | Peer dependency range: `>=17.0.0 <23.0.0` |
+
+**Zone.js**: Optional - The library works with or without Zone.js (zoneless apps supported)
+
+**SSR**: ✅ Fully compatible with Angular Universal and server-side rendering
 
 ## **🚀 Installation**
 
@@ -70,6 +91,47 @@ export class MyComponent {
 ```
 
 This pattern is also compatible with computed/linked signals produced by `httpResource`, enabling powerful data flows with Angular 21.
+
+### Signal Forms with `[field]` Input (Angular 21+)
+
+For direct integration with Angular Signal Forms, use the `[field]` input:
+
+```typescript
+import { Component, signal, form, objectSchema } from '@angular/core';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: `
+    <form>
+      <ngxsmk-datepicker
+        [field]="myForm.dateInQuestion"
+        mode="single"
+        placeholder="Select a date">
+      </ngxsmk-datepicker>
+    </form>
+  `
+})
+export class FormComponent {
+  localObject = signal({ dateInQuestion: new Date() });
+  
+  myForm = form(this.localObject, objectSchema({
+    dateInQuestion: objectSchema<Date>()
+  }));
+}
+```
+
+The `[field]` input provides automatic two-way binding with signal forms - no manual event handling needed!
+
+### Documentation
+
+- **[Signals Integration Guide](./projects/ngxsmk-datepicker/docs/signals.md)** - Complete guide to using signals with the datepicker
+- **[Signal Forms Guide](./projects/ngxsmk-datepicker/docs/signal-forms.md)** - Deep dive into Signal Forms integration
+- **[SSR Guide](./projects/ngxsmk-datepicker/docs/ssr.md)** - Server-side rendering setup and best practices
+- **[Extension Points Guide](./projects/ngxsmk-datepicker/docs/extension-points.md)** - Customization hooks and extension points
+- **[API Documentation](./projects/ngxsmk-datepicker/docs/API.md)** - Complete public API reference
 
 #### **1. Import the Component**
 
@@ -256,11 +318,73 @@ To enable the dark theme, simply bind the theme input:
 
 The `locale` input controls all internationalization. It automatically formats month names, weekday names, and sets the first day of the week.
 
+```html
 <!-- Renders the calendar in German -->    
 <ngxsmk-datepicker [locale]="'de-DE'"></ngxsmk-datepicker>
 
 <!-- Renders the calendar in French -->    
 <ngxsmk-datepicker [locale]="'fr-FR'"></ngxsmk-datepicker>
+```
+
+The datepicker automatically detects the browser's locale if not specified. For SSR applications, explicitly set the locale to ensure consistent rendering on both server and client.
+
+## **🖥️ Server-Side Rendering (SSR)**
+
+The datepicker is fully compatible with Angular Universal and server-side rendering:
+
+- ✅ All browser APIs are platform-checked
+- ✅ No `window` or `document` access during initialization
+- ✅ Works with partial hydration
+- ✅ Compatible with zoneless applications
+
+See the [SSR Guide](./projects/ngxsmk-datepicker/docs/ssr.md) for detailed setup instructions.
+
+## **⌨️ Keyboard Navigation**
+
+The datepicker supports full keyboard navigation for accessibility:
+
+### Built-in Shortcuts
+
+- **Arrow Keys** (← → ↑ ↓): Navigate between dates
+- **Page Up/Down**: Navigate months (Shift + Page Up/Down for years)
+- **Home/End**: Jump to first/last day of month
+- **Enter/Space**: Select focused date
+- **Escape**: Close calendar (popover mode)
+- **T**: Select today's date
+- **Y**: Select yesterday
+- **N**: Select tomorrow
+- **W**: Select next week (7 days from today)
+- **Tab**: Navigate between interactive elements
+
+### Custom Keyboard Shortcuts
+
+You can add custom keyboard shortcuts using the `hooks` input or `customShortcuts` input:
+
+```typescript
+import { DatepickerHooks, KeyboardShortcutContext } from 'ngxsmk-datepicker';
+
+const myHooks: DatepickerHooks = {
+  handleShortcut: (event, context) => {
+    if (event.ctrlKey && event.key === '1') {
+      // Custom action
+      return true; // Handled
+    }
+    return false; // Use default
+  }
+};
+```
+
+```html
+<ngxsmk-datepicker
+  [hooks]="myHooks"
+  [customShortcuts]="shortcuts"
+  mode="single">
+</ngxsmk-datepicker>
+```
+
+All date cells are keyboard accessible with proper ARIA attributes for screen readers.
+
+See [Extension Points Guide](./projects/ngxsmk-datepicker/docs/extension-points.md) for detailed customization options.
 
 ## **🚀 Performance Optimizations**
 
@@ -288,11 +412,13 @@ This library has been optimized for maximum performance:
 - ✅ **Build System**: Improved build configuration and optimization
 
 ### **Performance Enhancements:**
-- 🚀 **30% Smaller Bundle**: Optimized build configuration
+- 🚀 **Optimized Bundle Size**: Main bundle ~127KB (source maps excluded from published package)
 - 🚀 **40% Faster Rendering**: Enhanced OnPush change detection
 - 🚀 **60% Faster Selection**: Memoized date comparisons
 - 🚀 **Memory Efficient**: Cache size limits prevent memory leaks
 - 🚀 **Hardware Accelerated**: CSS optimizations for smooth animations
+- 🚀 **Better Tree-Shaking**: Optimized TypeScript compiler settings for smaller output
+- 🚀 **Production Optimized**: Source maps automatically removed from production builds
 
 ## **📱 Demo Application**
 
@@ -402,12 +528,13 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.8.0** (Latest)
-- 📚 **Documentation Updates**: Comprehensive README updates with all new features
-- 🧹 **Code Cleanup**: Removed unnecessary comments and files from demo project
-- 📝 **API Documentation**: Enhanced API reference with new inputs and examples
-- 🎨 **Theming Documentation**: Added Tailwind CSS and ngClass theming examples
-- ✅ **Project Cleanup**: Improved code maintainability and documentation consistency
+### **v1.9.0** (Latest)
+- 🎣 **Extension Points & Hooks**: Comprehensive hook system for customization (day rendering, validation, keyboard shortcuts, formatting, events)
+- ⌨️ **Enhanced Keyboard Shortcuts**: Added Y (yesterday), N (tomorrow), W (next week) keys with custom shortcut support
+- 🎨 **UI/UX Improvements**: Modern, polished design with improved spacing, shadows, animations, and accessibility
+- 📚 **API Documentation**: TypeDoc integration for automatic API documentation generation
+- 🤖 **Semantic Release**: Automated versioning, changelog generation, and npm publishing
+- 🧹 **Code Quality**: Removed unnecessary comments, improved error handling, cleaner codebase
 
 ### **v1.7.0**
 - 🎯 **Signal Forms Support**: Full Angular 21 signal forms integration with writable signals
@@ -518,6 +645,25 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - v1.3.5: Initial release with core features
 - v1.3.4: Bug fixes and improvements
 - v1.3.3: Holiday provider integration
+
+## **🎨 Theming with TokiForge**
+
+Looking for a powerful theming solution for your Angular application? Check out **[TokiForge](https://tokiforge.github.io/tokiforge/)** — an open-source modern design token & theme engine that provides runtime theme switching for React, Vue, Svelte, Angular, and any framework.
+
+### Why TokiForge?
+
+- ✅ **Framework-agnostic** — Works with Angular, React, Vue, Svelte, and vanilla JS
+- ✅ **Runtime theme switching** — Change themes dynamically without rebuilds
+- ✅ **Type-safe** — Full TypeScript support for design tokens
+- ✅ **Lightweight** — <3 KB gzipped runtime footprint
+- ✅ **CSS custom properties** — Zero JS overhead in static mode
+- ✅ **SSR compatible** — Works seamlessly with Angular Universal
+
+Perfect for managing design tokens, creating theme systems, and implementing dark mode in your Angular applications!
+
+**👉 [Learn more about TokiForge →](https://tokiforge.github.io/tokiforge/)**
+
+---
 
 ## **📜 License**
 
