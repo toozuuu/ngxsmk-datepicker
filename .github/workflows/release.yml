@@ -31,7 +31,7 @@ jobs:
         run: npm run build:optimized
 
       - name: Run Tests
-        run: npm test -- --no-watch --browsers=ChromeHeadless
+        run: npx ng test ngxsmk-datepicker --no-watch --browsers=ChromeHeadless
 
       - name: Release
         env:

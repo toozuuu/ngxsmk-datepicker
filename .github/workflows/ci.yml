@@ -42,7 +42,7 @@ jobs:
         run: npm run build:optimized
 
       - name: Run tests
-        run: npm test -- --no-watch --browsers=ChromeHeadless
+        run: npx ng test ngxsmk-datepicker --no-watch --browsers=ChromeHeadless
 
   build:
     name: Build (Angular 21)
