@@ -44,15 +44,41 @@ jobs:
             @angular/compiler-cli@^${{ matrix.angular }} \
             @angular-devkit/build-angular@^${{ matrix.angular }} \
             @angular/cli@^${{ matrix.angular }}
+          # Ensure zone.js is installed for testing
+          npm install --save-dev zone.js@^0.15.0 || npm install --save-dev zone.js@latest
 
       - name: Run linter
         run: npm run lint 2>/dev/null || echo "Linter not configured, skipping"
 
       - name: Build library
-        run: npm run build:optimized
+        run: |
+          echo "Building library with Angular ${{ matrix.angular }}..."
+          # Build the library (source map removal is handled by the script)
+          npx ng build ngxsmk-datepicker --configuration production || {
+            echo "❌ Build failed"
+            echo "Angular version: ${{ matrix.angular }}"
+            echo "Node version: $(node -v)"
+            exit 1
+          }
+          # Remove source maps if they exist (script handles errors gracefully)
+          node scripts/remove-sourcemaps.js || echo "⚠️ Source map removal skipped (may not exist)"
+        continue-on-error: false
+
+      - name: Verify build artifacts
+        run: |
+          # Check for either fesm2022 or fesm2020 bundle (different Angular versions use different formats)
+          if [ -f dist/ngxsmk-datepicker/fesm2022/ngxsmk-datepicker.mjs ] || [ -f dist/ngxsmk-datepicker/fesm2020/ngxsmk-datepicker.mjs ]; then
+            echo "✅ Build artifacts verified"
+          else
+            echo "❌ Build failed - main bundle not found"
+            echo "Checking dist folder contents:"
+            ls -la dist/ngxsmk-datepicker/ || echo "dist/ngxsmk-datepicker folder not found"
+            exit 1
+          fi
 
       - name: Run tests
-        run: npx ng test ngxsmk-datepicker --no-watch --browsers=ChromeHeadless
+        run: npx ng test ngxsmk-datepicker --no-watch --browsers=ChromeHeadless --code-coverage=false
+        continue-on-error: false
 
   build:
     name: Build (Angular 20)
