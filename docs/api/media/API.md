@@ -245,7 +245,53 @@ export class ServerFormComponent {
 }
 ```
 
-### 5. Date Range Selection with Time
+### 5. Signal Forms with Manual Binding (Stabilized Pattern)
+
+**Scenario**: Using manual `[value]` and `(valueChange)` binding with Signal Forms to prevent stability issues. This pattern directly mutates the form value, avoiding change detection loops.
+
+```typescript
+import { Component, signal, computed, form, objectSchema } from '@angular/core';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-stable-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: `
+    <ngxsmk-datepicker
+      class="w-full border:none"
+      [value]="myDate()"
+      (valueChange)="onMyDateChange($any($event))"
+      mode="single"
+      placeholder="Select a date">
+    </ngxsmk-datepicker>
+  `
+})
+export class StableFormComponent {
+  localObject = signal({ myDate: new Date() });
+  
+  myForm = form(this.localObject, objectSchema({
+    myDate: objectSchema<Date>()
+  }));
+  
+  // Get a computed signal reference to the date field value
+  myDate = computed(() => this.myForm.value().myDate);
+  
+  onMyDateChange(newDate: Date): void {
+    // Directly mutate the form value object to avoid change detection loops
+    this.myForm.value().myDate = newDate;
+  }
+}
+```
+
+**When to use this pattern:**
+- When `[field]` binding causes stability issues or change detection loops
+- When you need more explicit control over form updates
+- When direct mutation is preferred over creating new object references
+
+**Note:** The `$any($event)` cast may be needed if there's a type mismatch between `DatepickerValue` and your expected `Date` type.
+
+### 6. Date Range Selection with Time
 
 **Scenario**: Booking system with check-in/check-out dates and times.
 

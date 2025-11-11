@@ -143,6 +143,53 @@ export class ManualUpdateComponent {
 }
 ```
 
+## Alternative: Manual Binding with valueChange (Stabilized Pattern)
+
+If you experience stability issues with the `[field]` binding, you can use manual binding with `[value]` and `(valueChange)`. This pattern directly mutates the form value, which can help prevent change detection loops:
+
+```typescript
+import { Component, signal, computed, form, objectSchema } from '@angular/core';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-stable-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: `
+    <ngxsmk-datepicker
+      class="w-full border:none"
+      [value]="myDate()"
+      (valueChange)="onMyDateChange($any($event))"
+      mode="single"
+      placeholder="Select a date">
+    </ngxsmk-datepicker>
+  `
+})
+export class StableFormComponent {
+  localObject = signal({ myDate: new Date() });
+  
+  myForm = form(this.localObject, objectSchema({
+    myDate: objectSchema<Date>()
+  }));
+  
+  // Get a signal reference to the date field value
+  myDate = computed(() => this.myForm.value().myDate);
+  
+  onMyDateChange(newDate: Date): void {
+    // Directly mutate the form value object
+    this.myForm.value().myDate = newDate;
+  }
+}
+```
+
+**Why this pattern works:**
+- Direct mutation of the form value avoids creating new object references
+- Prevents potential change detection loops
+- More explicit control over when updates occur
+- Useful when `[field]` binding causes stability issues
+
+**Note:** The `$any($event)` cast may be needed if there's a type mismatch between `DatepickerValue` and your expected `Date` type.
+
 ## Validation
 
 Signal Forms support validation. The datepicker respects the field's disabled state:
