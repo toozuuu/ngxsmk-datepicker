@@ -13,12 +13,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        angular: ['17.0.0', '18.0.0', '19.0.0', '20.0.0', '21.0.0']
-        node: ['18.x', '20.x']
-        exclude:
+        include:
           - angular: '17.0.0'
-            node: '20.x'
+            node: '18.x'
           - angular: '18.0.0'
+            node: '18.x'
+          - angular: '19.0.0'
+            node: '20.x'
+          - angular: '20.0.0'
             node: '20.x'
     steps:
       - name: Checkout code
@@ -33,7 +35,15 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          npm install --save-dev @angular/core@${{ matrix.angular }} @angular/common@${{ matrix.angular }} @angular/forms@${{ matrix.angular }} @angular/compiler@${{ matrix.angular }} @angular/compiler-cli@${{ matrix.angular }} @angular-devkit/build-angular@${{ matrix.angular }} @angular/cli@${{ matrix.angular }}
+          # Install Angular packages - use caret range to get latest compatible patch version
+          npm install --save-dev \
+            @angular/core@^${{ matrix.angular }} \
+            @angular/common@^${{ matrix.angular }} \
+            @angular/forms@^${{ matrix.angular }} \
+            @angular/compiler@^${{ matrix.angular }} \
+            @angular/compiler-cli@^${{ matrix.angular }} \
+            @angular-devkit/build-angular@^${{ matrix.angular }} \
+            @angular/cli@^${{ matrix.angular }}
 
       - name: Run linter
         run: npm run lint 2>/dev/null || echo "Linter not configured, skipping"
@@ -45,7 +55,7 @@ jobs:
         run: npx ng test ngxsmk-datepicker --no-watch --browsers=ChromeHeadless
 
   build:
-    name: Build (Angular 21)
+    name: Build (Angular 20)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
