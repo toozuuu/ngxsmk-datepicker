@@ -64,7 +64,7 @@ import {
   template: `
     <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [ngClass]="classes?.wrapper">
       @if (!isInlineMode) {
-        <div class="ngxsmk-input-group" (click)="toggleCalendar()" (keydown.enter)="toggleCalendar()" (keydown.space)="toggleCalendar(); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
+        <div class="ngxsmk-input-group" (click)="toggleCalendar($event)" (touchend)="toggleCalendar($event)" (keydown.enter)="toggleCalendar($event)" (keydown.space)="toggleCalendar($event); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
           <input type="text" 
                  [value]="displayValue" 
                  [placeholder]="placeholder" 
@@ -74,8 +74,8 @@ import {
                  [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
                  class="ngxsmk-display-input"
                  [ngClass]="classes?.input"
-                 (keydown.enter)="toggleCalendar()"
-                 (keydown.space)="toggleCalendar(); $event.preventDefault()">
+                 (keydown.enter)="toggleCalendar($event)"
+                 (keydown.space)="toggleCalendar($event); $event.preventDefault()">
           <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event)" [disabled]="disabled" *ngIf="displayValue" [attr.aria-label]="clearAriaLabel" [title]="clearLabel" [ngClass]="classes?.clearBtn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
           </button>
@@ -222,6 +222,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() customShortcuts: { [key: string]: (context: KeyboardShortcutContext) => boolean } | null = null;
   @Input() autoApplyClose: boolean = false;
   public isCalendarOpen: boolean = false;
+  private isOpeningCalendar: boolean = false;
+  private openCalendarTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private lastToggleTime: number = 0;
 
   public _internalValue: DatepickerValue = null;
 
@@ -499,12 +502,35 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
   
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
+  onDocumentClick(event: MouseEvent | TouchEvent): void {
+    if (this.isOpeningCalendar) {
+      return;
+    }
+    
     if (this.isBrowser && !this.isInlineMode && this.isCalendarOpen) {
       const target = event.target as Node;
       if (target && !this.elementRef.nativeElement.contains(target)) {
         this.isCalendarOpen = false;
         this.cdr.markForCheck();
+      }
+    }
+  }
+
+  @HostListener('document:touchend', ['$event'])
+  onDocumentTouchEnd(event: TouchEvent): void {
+    if (this.isOpeningCalendar) {
+      return;
+    }
+    
+    if (this.isBrowser && !this.isInlineMode && this.isCalendarOpen) {
+      const target = event.target as Node;
+      if (target && !this.elementRef.nativeElement.contains(target)) {
+        setTimeout(() => {
+          if (!this.isOpeningCalendar) {
+            this.isCalendarOpen = false;
+            this.cdr.markForCheck();
+          }
+        }, 100);
       }
     }
   }
@@ -855,9 +881,46 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
   
-  public toggleCalendar(): void {
+  public toggleCalendar(event?: Event): void {
     if (this.disabled || this.isInlineMode) return;
+    
+    if (event && (event.type === 'click' || event.type === 'touchend')) {
+      const now = Date.now();
+      if (now - this.lastToggleTime < 300) {
+        return;
+      }
+      this.lastToggleTime = now;
+    }
+    
+    if (event) {
+      event.stopPropagation();
+      if (event.type === 'touchend') {
+        event.preventDefault();
+      }
+    }
+    
+    const wasOpen = this.isCalendarOpen;
     this.isCalendarOpen = !this.isCalendarOpen;
+    
+    if (!wasOpen && this.isCalendarOpen) {
+      this.isOpeningCalendar = true;
+      
+      if (this.openCalendarTimeoutId) {
+        clearTimeout(this.openCalendarTimeoutId);
+      }
+      
+      this.openCalendarTimeoutId = setTimeout(() => {
+        this.isOpeningCalendar = false;
+        this.openCalendarTimeoutId = null;
+      }, 300);
+    } else {
+      this.isOpeningCalendar = false;
+      if (this.openCalendarTimeoutId) {
+        clearTimeout(this.openCalendarTimeoutId);
+        this.openCalendarTimeoutId = null;
+      }
+    }
+    
     this.cdr.markForCheck();
   }
 
@@ -1463,5 +1526,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.endDate = null;
     this.hoveredDate = null;
     this._internalValue = null;
+    
+    if (this.openCalendarTimeoutId) {
+      clearTimeout(this.openCalendarTimeoutId);
+      this.openCalendarTimeoutId = null;
+    }
   }
 }
