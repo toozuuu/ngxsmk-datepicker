@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "scripts": {
@@ -8,27 +8,37 @@
     "start": "npx ng serve demo-app",
     "build": "npx ng build",
     "build:demo": "npx ng build demo-app --configuration production",
-    "build:optimized": "npx ng build ngxsmk-datepicker --configuration production",
+    "build:optimized": "npx ng build ngxsmk-datepicker --configuration production && node scripts/remove-sourcemaps.js",
     "build:analyze": "node scripts/analyze-bundle.js",
     "optimize": "node scripts/optimize-build.js",
     "watch": "npx ng build --watch --configuration development",
     "test": "npx ng test",
+    "lint": "npx ng lint",
     "deploy": "npm run build:demo && npx gh-pages -d dist/demo-app/browser",
     "prepublishOnly": "npm run build:optimized",
     "prepublish:copy-license": "node -e \"require('fs').copyFileSync('LICENSE', 'dist/ngxsmk-datepicker/LICENSE')\"",
-    "publish:lib": "npm run build:optimized && npm run prepublish:copy-license"
+    "publish:lib": "npm run build:optimized && npm run prepublish:copy-license",
+    "semantic-release": "semantic-release",
+    "docs": "typedoc --options typedoc.json && node scripts/enhance-api-docs.js",
+    "docs:serve": "npm run docs && npx http-server docs/api -p 8080 -o"
   },
   "peerDependencies": {
-    "@angular/common": ">=17.0.0 <22.0.0",
-    "@angular/core": ">=17.0.0 <22.0.0"
+    "@angular/common": ">=17.0.0 <23.0.0",
+    "@angular/core": ">=17.0.0 <23.0.0",
+    "@angular/forms": ">=17.0.0 <23.0.0"
+  },
+  "peerDependenciesMeta": {
+    "zone.js": {
+      "optional": true
+    }
   },
   "dependencies": {
-    "@angular/common": "^21.0.0-rc.1",
-    "@angular/core": "^21.0.0-rc.1",
-    "@angular/forms": "^21.0.0-rc.1",
-    "@angular/platform-browser": "^21.0.0-rc.1",
-    "@angular/platform-browser-dynamic": "^21.0.0-rc.1",
-    "@angular/router": "^21.0.0-rc.1"
+    "@angular/common": ">=17.0.0 <23.0.0",
+    "@angular/core": ">=17.0.0 <23.0.0",
+    "@angular/forms": ">=17.0.0 <23.0.0",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/platform-browser-dynamic": "^20.3.0",
+    "@angular/router": "^20.3.0"
   },
   "main": "fesm2020/ngxsmk-datepicker.mjs",
   "module": "fesm2020/ngxsmk-datepicker.mjs",
@@ -68,19 +78,30 @@
     "localization"
   ],
   "devDependencies": {
-    "@angular-devkit/build-angular": "^21.0.0-rc.1",
-    "@angular/cli": "^21.0.0-rc.1",
-    "@angular/compiler": "^21.0.0-rc.1",
-    "@angular/compiler-cli": "^21.0.0-rc.1",
+    "@angular-devkit/build-angular": "^20.3.0",
+    "@angular/cli": "^20.3.0",
+    "@angular/compiler": "^20.3.0",
+    "@angular/compiler-cli": "^20.3.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^11.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "@semantic-release/npm": "^11.0.2",
+    "@semantic-release/release-notes-generator": "^12.1.0",
     "@types/jasmine": "^5.1.12",
+    "angular-eslint": "20.6.0",
+    "eslint": "^9.39.0",
     "jasmine-core": "^5.12.1",
     "karma": "^6.4.4",
     "karma-chrome-launcher": "^3.2.0",
     "karma-coverage": "^2.2.1",
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.1.0",
-    "ng-packagr": "^21.0.0-rc.0",
+    "ng-packagr": "^20.3.0",
+    "semantic-release": "^23.0.0",
+    "typedoc": "^0.26.11",
     "typescript": "^5.7.0",
+    "typescript-eslint": "8.46.3",
     "zone.js": "^0.15.0"
   }
 }

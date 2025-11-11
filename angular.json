@@ -24,7 +24,20 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "tsConfig": "projects/ngxsmk-datepicker/tsconfig.spec.json"
+            "tsConfig": "projects/ngxsmk-datepicker/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/ngxsmk-datepicker/**/*.ts",
+              "projects/ngxsmk-datepicker/**/*.html"
+            ]
           }
         }
       }
@@ -46,7 +59,9 @@
             "outputPath": "dist/demo-app",
             "browser": "projects/demo-app/src/main.ts",
             "tsConfig": "projects/demo-app/tsconfig.app.json",
-            "polyfills": [],
+            "polyfills": [
+              "zone.js"
+            ],
             "assets": [
               {
                 "glob": "**/*",
@@ -70,8 +85,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "20kB",
-                  "maximumError": "25kB"
+                  "maximumWarning": "31kB",
+                  "maximumError": "35kB"
                 }
               ],
               "outputHashing": "all"
@@ -116,6 +131,15 @@
             ],
             "styles": [
               "projects/demo-app/src/styles.scss"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/demo-app/**/*.ts",
+              "projects/demo-app/**/*.html"
             ]
           }
         }

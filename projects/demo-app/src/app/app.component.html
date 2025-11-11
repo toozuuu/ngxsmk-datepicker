@@ -1,32 +1,74 @@
 <div class="docs-container" [class.dark-theme]="currentTheme === 'dark'">
   @if (mobileMenuOpen) {
-    <div class="mobile-menu-overlay" (click)="closeMobileMenu()"></div>
+    <div class="mobile-menu-overlay" (click)="closeMobileMenu()" (keydown.enter)="closeMobileMenu()" (keydown.escape)="closeMobileMenu()" tabindex="0" role="button" [attr.aria-label]="'Close menu'"></div>
   }
-  <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="mobileMenuOpen ? 'Close menu' : 'Open menu'">
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-  </button>
+
+  <!-- API Documentation Header -->
+  <header class="api-docs-header">
+    <div class="header-container">
+      <div class="header-left">
+        <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="mobileMenuOpen ? 'Close menu' : 'Open menu'">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+        <a href="#getting-started" (click)="scrollToSection($event, 'getting-started')" class="header-logo">
+          <span class="logo-text">ngxsmk-datepicker</span>
+          <span class="logo-version">v1.9.0</span>
+        </a>
+      </div>
+      <div class="header-center">
+        <div class="global-search">
+          <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="Search documentation..." 
+            [(ngModel)]="searchQuery"
+            (input)="onSearchChange($any($event.target).value || '')"
+            (keydown.escape)="clearSearch()"
+            aria-label="Search documentation">
+          @if (searchQuery) {
+            <button class="search-clear" (click)="clearSearch()" aria-label="Clear search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          }
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="header-theme-toggle" (click)="toggleTheme()" [attr.aria-label]="currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+          {{ currentTheme === 'dark' ? '☀️' : '🌙' }}
+        </button>
+      </div>
+    </div>
+  </header>
+
   <aside class="docs-sidebar" [class.mobile-open]="mobileMenuOpen">
     <div class="sidebar-header">
-      <h1 class="sidebar-title">ngxsmk-datepicker</h1>
-      <span class="sidebar-version">v1.8.0</span>
+      <h1 class="sidebar-title">Documentation</h1>
     </div>
     <nav class="sidebar-nav">
-      @for (navItem of navigationItems; track navItem.id) {
-        <a 
-          [href]="'#' + navItem.id" 
-          (click)="scrollToSection($event, navItem.id); closeMobileMenu()" 
-          [class]="'nav-link' + (navItem.sub ? ' nav-link-sub' : '')">
-          {{ navItem.label }}
-        </a>
+      @if (searchQuery && filteredNavigationItems.length === 0) {
+        <div class="search-no-results">
+          <p>No results found for "{{ searchQuery }}"</p>
+        </div>
+      } @else {
+        @for (navItem of filteredNavigationItems; track navItem.id) {
+          <a 
+            [href]="'#' + navItem.id" 
+            (click)="scrollToSection($event, navItem.id); closeMobileMenu()" 
+            [class]="'nav-link' + (navItem.sub ? ' nav-link-sub' : '')">
+            {{ navItem.label }}
+          </a>
+        }
       }
     </nav>
-    <div class="sidebar-footer">
-      <button class="theme-toggle" (click)="toggleTheme()">
-        {{ currentTheme === 'dark' ? '☀️' : '🌙' }} {{ currentTheme === 'dark' ? 'Light' : 'Dark' }} Mode
-      </button>
-    </div>
   </aside>
 
   <main class="docs-content">
@@ -34,8 +76,8 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">Forge your dates. Shape your UI.</p>
-        <p class="hero-version">(v1.8.0)</p>
-        <p class="hero-description">A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.</p>
+        <p class="hero-version">(v1.9.0)</p>
+        <p class="hero-description">A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular 17+ applications. Features GPU-accelerated animations, comprehensive theming with CSS variables, extension points & hooks, Signal Forms support, full SSR compatibility, and enhanced keyboard navigation.</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">Get Started</a>
           <a href="https://github.com/NGXSMK/ngxsmk-datepicker" target="_blank" class="hero-button secondary">View on GitHub</a>
@@ -55,18 +97,43 @@
 
     <section id="theming" class="docs-section">
       <h2 class="section-title">Theming</h2>
-      <p>There are two recommended ways to theme the datepicker: CSS variables and the new <code>[classes]</code> input for Tailwind/custom classes.</p>
+      <p>The datepicker supports comprehensive theming through CSS custom properties (CSS variables) and the <code>[theme]</code> input. All styling can be customized to match your application's design system.</p>
 
-      <h3 class="subsection-title">CSS Variables</h3>
-      <p>Set CSS variables on a parent scope to control colors and background accents.</p>
+      <h3 class="subsection-title">Built-in Light/Dark Themes</h3>
+      <p>Use the <code>[theme]</code> input to switch between light and dark modes. The datepicker automatically applies the appropriate theme styles.</p>
 
       <div class="example-demo">
-        <div style="--datepicker-primary-color:#ec4899; --datepicker-primary-contrast:#ffffff; --datepicker-range-background:#fce7f3;">
+        <div class="theme-demo">
           <ngxsmk-datepicker
             mode="single"
-            [theme]="currentTheme">
+            [theme]="currentTheme"
+            placeholder="Select a date">
+          </ngxsmk-datepicker>
+          <button class="theme-toggle-btn" (click)="toggleTheme()">
+            Switch to {{ currentTheme === 'dark' ? 'Light' : 'Dark' }} Mode
+          </button>
+        </div>
+      </div>
+
+      <h3 class="subsection-title">CSS Variables Customization</h3>
+      <p>Set CSS variables on a parent scope to control colors, spacing, shadows, typography, border radius, and transitions. The datepicker provides 28+ CSS custom properties for complete customization. See the <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md#133-complete-css-variables-reference" target="_blank">complete CSS variables reference</a> in the API documentation.</p>
+
+      <div class="example-demo">
+        <div style="--datepicker-primary-color:#3b82f6; --datepicker-primary-contrast:#ffffff; --datepicker-range-background:#dbeafe; --datepicker-radius-md:10px;">
+          <ngxsmk-datepicker
+            mode="single"
+            [theme]="currentTheme"
+            placeholder="Custom blue theme">
           </ngxsmk-datepicker>
         </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">css</span>
+          <button class="code-copy" (click)="copyCode(themingCssCode)">Copy</button>
+        </div>
+        <pre><code [innerHTML]="themingCssCode | code"></code></pre>
       </div>
 
       <div class="code-block">
@@ -95,6 +162,19 @@
         </div>
         <pre><code [innerHTML]="themingClassesCode | code"></code></pre>
       </div>
+
+      <h3 class="subsection-title">Design System Integration</h3>
+      <p>Integrate with design token systems like TokiForge, Tailwind CSS, or Material Design by mapping CSS variables to your design tokens.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">css</span>
+          <button class="code-copy" (click)="copyCode(designSystemCode)">Copy</button>
+        </div>
+        <pre><code [innerHTML]="designSystemCode | code"></code></pre>
+      </div>
+
+      <p>For complete theming documentation, see the <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md#13-theming-and-customization" target="_blank">Theming section</a> in the API documentation.</p>
     </section>
 
     <section id="installation" class="docs-section">
@@ -413,7 +493,7 @@
         </div>
       </div>
 
-      <div class="example-section">
+      <div id="inline-calendar" class="example-section">
         <h3 class="example-title">Inline Calendar</h3>
         <p>Calendar always visible with inline mode.</p>
         
@@ -435,7 +515,7 @@
         </div>
       </div>
 
-      <div class="example-section">
+      <div id="min-max-date" class="example-section">
         <h3 class="example-title">With Min/Max Date</h3>
         <p>Restrict date selection with min and max date constraints.</p>
         
@@ -459,7 +539,73 @@
         </div>
       </div>
       </form>
+
+      <div id="mobile-playground" class="example-section">
+        <h3 class="example-title">Mobile Screen Playground</h3>
+        <p>Test the datepicker across different mobile screen sizes. Use the buttons below to simulate various device widths and see how the datepicker adapts responsively.</p>
+        
+        <div class="mobile-size-selector">
+          @for (size of mobileSizes; track size.label) {
+          <button 
+            class="size-button"
+            [class.active]="selectedMobileSize === size.width"
+            (click)="selectMobileSize(size.width)">
+            {{ size.label }}
+            <span class="size-dimension">({{ size.width }}px)</span>
+          </button>
+          }
+        </div>
+
+        <div class="mobile-preview-container" [style.width.px]="getPreviewWidth()">
+          <div class="mobile-preview-frame">
+            <div class="mobile-preview-header">
+              <div class="mobile-preview-status-bar">
+                <span class="mobile-time">{{ currentTime }}</span>
+                <div class="mobile-signal-icons">
+                  <span>📶</span>
+                  <span>📶</span>
+                  <span>🔋</span>
+                </div>
+              </div>
+            </div>
+            <div class="mobile-preview-content">
+              <ngxsmk-datepicker
+                mode="range"
+                [inline]="true"
+                [theme]="currentTheme">
+              </ngxsmk-datepicker>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(mobilePlaygroundCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="mobilePlaygroundCode | code"></code></pre>
+        </div>
+      </div>
     </section>
   </main>
+
+  <!-- TokiForge Promotion Sidebar - Right Side -->
+  <aside class="tokiforge-promotion">
+    <div class="promotion-content">
+      <div class="promotion-icon">🎨</div>
+      <div class="promotion-text">
+        <h4>Powered by TokiForge</h4>
+        <p>Modern design token & theme engine for Angular, React, Vue, Svelte, and more</p>
+      </div>
+      <a href="https://tokiforge.github.io/tokiforge/" target="_blank" class="promotion-button" aria-label="Visit TokiForge website">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        <span>Visit</span>
+      </a>
+    </div>
+  </aside>
 </div>
 

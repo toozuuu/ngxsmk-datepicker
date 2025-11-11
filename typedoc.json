@@ -1,0 +1,47 @@
+{
+  "entryPoints": [
+    "projects/ngxsmk-datepicker/src/public-api.ts"
+  ],
+  "out": "docs/api",
+  "theme": "default",
+  "name": "ngxsmk-datepicker API Documentation",
+  "readme": "README.md",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "excludeExternals": true,
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "Components",
+    "Interfaces",
+    "Types",
+    "Functions",
+    "*"
+  ],
+  "sort": [
+    "source-order"
+  ],
+  "kindSortOrder": [
+    "Project",
+    "Module",
+    "Namespace",
+    "Enum",
+    "Class",
+    "Interface",
+    "TypeAlias",
+    "Constructor",
+    "Property",
+    "Method",
+    "Accessor",
+    "Function",
+    "Variable"
+  ],
+  "gitRevision": "main",
+  "gitRemote": "origin",
+  "validation": {
+    "invalidLink": true,
+    "notDocumented": false
+  }
+}
+

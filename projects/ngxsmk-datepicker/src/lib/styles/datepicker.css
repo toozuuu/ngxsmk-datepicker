@@ -1,40 +1,56 @@
-/* Optimized CSS for ngxsmk-datepicker - extracted for better tree-shaking */
-
 :host {
   --datepicker-primary-color: #6d28d9;
   --datepicker-primary-contrast: #ffffff;
   --datepicker-range-background: #f5f3ff;
   --datepicker-background: #ffffff;
-  --datepicker-text-color: #222428;
-  --datepicker-subtle-text-color: #9ca3af;
-  --datepicker-border-color: #e9e9e9;
-  --datepicker-hover-background: #f0f0f0;
+  --datepicker-text-color: #1f2937;
+  --datepicker-subtle-text-color: #6b7280;
+  --datepicker-border-color: #e5e7eb;
+  --datepicker-hover-background: #f3f4f6;
+  --datepicker-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --datepicker-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --datepicker-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   --datepicker-font-size-base: 14px;
   --datepicker-font-size-sm: 12px;
   --datepicker-font-size-lg: 16px;
   --datepicker-font-size-xl: 18px;
-  --datepicker-line-height: 1.4;
+  --datepicker-line-height: 1.5;
   --datepicker-spacing-xs: 4px;
   --datepicker-spacing-sm: 8px;
   --datepicker-spacing-md: 12px;
   --datepicker-spacing-lg: 16px;
   --datepicker-spacing-xl: 20px;
+  --datepicker-spacing-2xl: 24px;
+  --datepicker-radius-sm: 6px;
+  --datepicker-radius-md: 8px;
+  --datepicker-radius-lg: 12px;
+  --datepicker-radius-xl: 16px;
+  --datepicker-transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-block;
   position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 :host(.dark-theme) {
-  --datepicker-range-background: rgba(139, 92, 246, 0.2);
+  --datepicker-range-background: rgba(139, 92, 246, 0.15);
   --datepicker-background: #1f2937;
-  --datepicker-text-color: #d1d5db;
-  --datepicker-subtle-text-color: #6b7280;
-  --datepicker-border-color: #4b5563;
+  --datepicker-text-color: #f3f4f6;
+  --datepicker-subtle-text-color: #9ca3af;
+  --datepicker-border-color: #374151;
   --datepicker-hover-background: #374151;
+  --datepicker-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --datepicker-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
-/* Input/Popover Mode Styles */
 .ngxsmk-datepicker-wrapper {
   position: relative;
+  width: 100%;
 }
 
 .ngxsmk-input-group {
@@ -42,199 +58,145 @@
   align-items: center;
   cursor: pointer;
   width: 100%;
-  min-width: 150px;
-  border: 1px solid var(--datepicker-border-color, #ccc);
-  border-radius: 4px;
+  min-width: 200px;
+  border: 1.5px solid var(--datepicker-border-color);
+  border-radius: var(--datepicker-radius-md);
   background: var(--datepicker-background);
-  transition: all 0.2s ease;
+  transition: var(--datepicker-transition);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--datepicker-shadow-sm);
 }
 
-/* Result box container states */
 .ngxsmk-input-group:focus-within {
   border-color: var(--datepicker-primary-color);
-  box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.1);
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1), var(--datepicker-shadow-md);
+  outline: none;
 }
 
 .ngxsmk-input-group:hover:not(.disabled) {
   border-color: var(--datepicker-primary-color);
+  box-shadow: var(--datepicker-shadow-md);
 }
 
 .ngxsmk-input-group.has-value {
   border-color: var(--datepicker-primary-color);
 }
 
-.ngxsmk-input-group.error {
-  border-color: #dc2626;
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
-}
-
-.ngxsmk-input-group.success {
-  border-color: #16a34a;
-  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.1);
-}
-
 .ngxsmk-input-group.disabled {
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.6;
+  background: var(--datepicker-hover-background);
 }
 
-/* Result Box (Display Input) Styles */
 .ngxsmk-display-input {
   flex-grow: 1;
-  padding: var(--datepicker-spacing-sm) var(--datepicker-spacing-sm);
+  padding: var(--datepicker-spacing-md) var(--datepicker-spacing-lg);
   font-size: var(--datepicker-font-size-base);
   line-height: var(--datepicker-line-height);
-  color: var(--datepicker-text-color, #333);
+  color: var(--datepicker-text-color);
   background: transparent;
   border: none;
   outline: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  transition: var(--datepicker-transition);
   min-height: 20px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  font-weight: 400;
 }
 
 .ngxsmk-display-input:disabled {
-  background: var(--datepicker-hover-background, #f0f0f0);
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-.ngxsmk-display-input:focus {
-  outline: 2px solid var(--datepicker-primary-color);
-  outline-offset: 2px;
-}
-
 .ngxsmk-display-input::placeholder {
   color: var(--datepicker-subtle-text-color);
-  font-style: italic;
-}
-
-/* Result box states */
-.ngxsmk-input-group:focus-within .ngxsmk-display-input {
-  color: var(--datepicker-primary-color);
-}
-
-.ngxsmk-input-group:hover:not(.disabled) .ngxsmk-display-input {
-  color: var(--datepicker-text-color);
-}
-
-/* Result box with value */
-.ngxsmk-input-group.has-value .ngxsmk-display-input {
-  font-weight: 500;
-  color: var(--datepicker-text-color);
-}
-
-/* Result box empty state */
-.ngxsmk-input-group:not(.has-value) .ngxsmk-display-input {
-  color: var(--datepicker-subtle-text-color);
-}
-
-/* Result box error state */
-.ngxsmk-input-group.error .ngxsmk-display-input {
-  color: #dc2626;
-  border-color: #dc2626;
-}
-
-/* Result box success state */
-.ngxsmk-input-group.success .ngxsmk-display-input {
-  color: #16a34a;
-  border-color: #16a34a;
-}
-
-/* Result box utility classes */
-.ngxsmk-input-group.compact {
-  min-width: 120px;
-  padding: var(--datepicker-spacing-xs);
-}
-
-.ngxsmk-input-group.compact .ngxsmk-display-input {
-  font-size: var(--datepicker-font-size-sm);
-  padding: var(--datepicker-spacing-xs);
-}
-
-.ngxsmk-input-group.large {
-  min-width: 200px;
-  padding: var(--datepicker-spacing-md);
-}
-
-.ngxsmk-input-group.large .ngxsmk-display-input {
-  font-size: var(--datepicker-font-size-lg);
-  padding: var(--datepicker-spacing-md);
-}
-
-/* Result box with icon */
-.ngxsmk-input-group.with-icon .ngxsmk-display-input {
-  padding-left: 32px;
-}
-
-.ngxsmk-input-group .ngxsmk-input-icon {
-  position: absolute;
-  left: var(--datepicker-spacing-sm);
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--datepicker-subtle-text-color);
-  pointer-events: none;
-}
-
-/* Result box loading state */
-.ngxsmk-input-group.loading .ngxsmk-display-input {
-  color: var(--datepicker-subtle-text-color);
-  cursor: wait;
-}
-
-.ngxsmk-input-group.loading::after {
-  content: '';
-  position: absolute;
-  right: var(--datepicker-spacing-sm);
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--datepicker-border-color);
-  border-top: 2px solid var(--datepicker-primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: translateY(-50%) rotate(0deg); }
-  100% { transform: translateY(-50%) rotate(360deg); }
+  font-weight: 400;
 }
 
 .ngxsmk-clear-button {
   background: none;
   border: none;
-  padding: 0 8px;
+  padding: var(--datepicker-spacing-sm);
+  margin-right: var(--datepicker-spacing-sm);
   cursor: pointer;
   color: var(--datepicker-subtle-text-color);
   line-height: 1;
+  border-radius: var(--datepicker-radius-sm);
+  transition: var(--datepicker-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ngxsmk-clear-button svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
-.ngxsmk-clear-button:hover {
+.ngxsmk-clear-button:hover:not(:disabled) {
   color: var(--datepicker-text-color);
+  background: var(--datepicker-hover-background);
+}
+
+.ngxsmk-clear-button:focus-visible {
+  outline: 2px solid var(--datepicker-primary-color);
+  outline-offset: 2px;
 }
 
 .ngxsmk-popover-container {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 8px);
   left: 0;
-  z-index: 10000;
-  margin-top: 8px;
+  z-index: 999999;
+  animation: fadeInDown 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInDownMobile {
+  from {
+    opacity: 0;
+    transform: translate3d(-50%, -8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 .ngxsmk-popover-container.ngxsmk-inline-container {
   position: static;
   margin-top: 0;
+  animation: none;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  left: 0;
+  transform: none;
 }
 
 .ngxsmk-datepicker-wrapper.ngxsmk-inline-mode {
@@ -245,29 +207,498 @@
   box-shadow: none;
 }
 
+.ngxsmk-datepicker-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+}
+
+.ngxsmk-calendar-container {
+  font-size: var(--datepicker-font-size-base);
+  line-height: var(--datepicker-line-height);
+  border-radius: var(--datepicker-radius-lg);
+  padding: var(--datepicker-spacing-xl);
+  background: var(--datepicker-background);
+  box-shadow: var(--datepicker-shadow-lg);
+  border: 1px solid var(--datepicker-border-color);
+  width: fit-content;
+  height: fit-content;
+  min-width: fit-content;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  overflow: visible;
+}
+
+.ngxsmk-ranges-container {
+  width: 100%;
+  padding: var(--datepicker-spacing-lg);
+  background: var(--datepicker-hover-background);
+  border-radius: var(--datepicker-radius-lg);
+  border: 1px solid var(--datepicker-border-color);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.ngxsmk-ranges-container ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--datepicker-spacing-sm);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ngxsmk-ranges-container li {
+  padding: var(--datepicker-spacing-sm) var(--datepicker-spacing-md);
+  font-size: var(--datepicker-font-size-sm);
+  line-height: var(--datepicker-line-height);
+  border: 1px solid var(--datepicker-border-color);
+  border-radius: var(--datepicker-radius-md);
+  cursor: pointer;
+  transition: var(--datepicker-transition);
+  flex-shrink: 0;
+  background: var(--datepicker-background);
+  font-weight: 500;
+}
+
+.ngxsmk-ranges-container li:hover:not(.disabled) {
+  background-color: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  border-color: var(--datepicker-primary-color);
+  transform: translate3d(0, -1px, 0);
+  box-shadow: var(--datepicker-shadow-sm);
+  will-change: transform;
+}
+
+.ngxsmk-ranges-container li.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: transparent !important;
+  color: var(--datepicker-subtle-text-color);
+}
+
+.ngxsmk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--datepicker-spacing-lg);
+  position: relative;
+  z-index: 2;
+  gap: var(--datepicker-spacing-md);
+  padding-bottom: var(--datepicker-spacing-md);
+  border-bottom: 1px solid var(--datepicker-border-color);
+}
+
+.ngxsmk-month-year-selects {
+  display: flex;
+  gap: var(--datepicker-spacing-sm);
+  flex: 1;
+}
+
+.ngxsmk-nav-buttons {
+  display: flex;
+  gap: var(--datepicker-spacing-xs);
+}
+
+.ngxsmk-nav-button {
+  padding: var(--datepicker-spacing-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--datepicker-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--datepicker-text-color);
+  transition: var(--datepicker-transition);
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.ngxsmk-nav-button:hover:not(:disabled) {
+  background-color: var(--datepicker-hover-background);
+  transform: scale3d(1.05, 1.05, 1);
+  will-change: transform;
+}
+
+.ngxsmk-nav-button:active:not(:disabled) {
+  transform: scale3d(0.95, 0.95, 1);
+}
+
+.ngxsmk-nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.ngxsmk-nav-button:focus-visible {
+  outline: 2px solid var(--datepicker-primary-color);
+  outline-offset: 2px;
+}
+
+.ngxsmk-nav-button svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
+}
+
+.ngxsmk-days-grid-wrapper {
+  margin-top: var(--datepicker-spacing-md);
+  overflow: visible;
+  position: relative;
+}
+
+.ngxsmk-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, auto);
+  justify-content: center;
+  text-align: center;
+  gap: var(--datepicker-spacing-xs);
+  width: 100%;
+  position: relative;
+  isolation: isolate;
+}
+
+.ngxsmk-day-name {
+  font-size: var(--datepicker-font-size-sm);
+  padding: var(--datepicker-spacing-md) 0;
+  color: var(--datepicker-subtle-text-color);
+  font-weight: 600;
+  line-height: var(--datepicker-line-height);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ngxsmk-day-cell {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: var(--datepicker-radius-sm);
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: transparent;
+  box-sizing: border-box;
+  overflow: visible;
+  z-index: 1;
+  margin: 0 auto;
+  contain: layout style;
+  backface-visibility: hidden;
+}
+
+.ngxsmk-day-number {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  max-width: 36px;
+  min-height: 36px;
+  max-height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: var(--datepicker-text-color);
+  font-size: var(--datepicker-font-size-base);
+  line-height: var(--datepicker-line-height);
+  position: relative;
+  z-index: 2;
+  font-weight: 500;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  box-sizing: border-box;
+  contain: layout style;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.ngxsmk-day-cell:not(.disabled):not(.empty):hover .ngxsmk-day-number {
+  background-color: var(--datepicker-hover-background);
+  color: var(--datepicker-primary-color);
+  transform: scale3d(1.1, 1.1, 1);
+  will-change: transform;
+}
+
+.ngxsmk-day-cell.focused {
+  z-index: 10;
+}
+
+.ngxsmk-day-cell.focused .ngxsmk-day-number {
+  outline: 2px solid var(--datepicker-primary-color);
+  outline-offset: 2px;
+  background-color: var(--datepicker-hover-background);
+  z-index: 11;
+}
+
+.ngxsmk-day-cell.selected:not(.start-date):not(.end-date):not(.in-range):not(.preview-range) {
+  z-index: 3;
+}
+
+.ngxsmk-day-cell.selected:not(.start-date):not(.end-date):not(.in-range):not(.preview-range) .ngxsmk-day-number {
+  background-color: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  font-weight: 600;
+  box-shadow: var(--datepicker-shadow-sm);
+  position: relative;
+  z-index: 4;
+}
+
+.ngxsmk-day-cell.start-date:not(.in-range):not(.preview-range):not(.end-date),
+.ngxsmk-day-cell.end-date:not(.in-range):not(.preview-range):not(.start-date) {
+  z-index: 3;
+}
+
+.ngxsmk-day-cell.start-date:not(.in-range):not(.preview-range):not(.end-date) .ngxsmk-day-number,
+.ngxsmk-day-cell.end-date:not(.in-range):not(.preview-range):not(.start-date) .ngxsmk-day-number {
+  background-color: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  font-weight: 600;
+  box-shadow: var(--datepicker-shadow-sm);
+  position: relative;
+  z-index: 4;
+  border: none;
+}
+
+.ngxsmk-day-cell.multiple-selected .ngxsmk-day-number {
+  background-color: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  font-weight: 600;
+  border: 2px solid var(--datepicker-primary-contrast);
+  box-shadow: var(--datepicker-shadow-sm);
+  position: relative;
+  z-index: 2;
+}
+
+.ngxsmk-day-cell.in-range,
+.ngxsmk-day-cell.preview-range {
+  background-color: var(--datepicker-range-background);
+  z-index: 1;
+}
+
+.ngxsmk-day-cell.start-date.in-range,
+.ngxsmk-day-cell.end-date.in-range,
+.ngxsmk-day-cell.start-date.preview-range,
+.ngxsmk-day-cell.end-date.preview-range {
+  background-color: var(--datepicker-range-background);
+  z-index: 2;
+}
+
+.ngxsmk-day-cell.start-date.in-range .ngxsmk-day-number,
+.ngxsmk-day-cell.end-date.in-range .ngxsmk-day-number,
+.ngxsmk-day-cell.start-date.preview-range .ngxsmk-day-number,
+.ngxsmk-day-cell.end-date.preview-range .ngxsmk-day-number {
+  background-color: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  font-weight: 600;
+  box-shadow: var(--datepicker-shadow-sm);
+  position: relative;
+  z-index: 7;
+}
+
+.ngxsmk-day-cell.start-date.end-date:not(.in-range) .ngxsmk-day-number {
+  background-color: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  font-weight: 600;
+  box-shadow: var(--datepicker-shadow-sm);
+  position: relative;
+  z-index: 2;
+}
+
+.ngxsmk-day-cell.start-date.end-date.in-range {
+  background-color: var(--datepicker-range-background);
+}
+
+.ngxsmk-day-cell.start-date.end-date.in-range .ngxsmk-day-number {
+  background-color: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  font-weight: 600;
+  box-shadow: var(--datepicker-shadow-sm);
+  position: relative;
+  z-index: 2;
+}
+
+.ngxsmk-day-cell.disabled {
+  background-color: transparent !important;
+  color: var(--datepicker-subtle-text-color);
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.ngxsmk-day-cell.disabled.in-range,
+.ngxsmk-day-cell.disabled.preview-range {
+  background-color: transparent !important;
+}
+
+.ngxsmk-day-cell.empty {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.ngxsmk-day-cell.empty .ngxsmk-day-number {
+  color: var(--datepicker-subtle-text-color);
+}
+
+.ngxsmk-day-cell.today:not(.selected):not(.start-date):not(.end-date):not(.in-range):not(.preview-range):not(.multiple-selected) {
+  z-index: 5;
+}
+
+.ngxsmk-day-cell.today:not(.selected):not(.start-date):not(.end-date):not(.in-range):not(.preview-range):not(.multiple-selected) .ngxsmk-day-number {
+  border: 2px solid var(--datepicker-primary-color);
+  font-weight: 600;
+  background-color: transparent;
+  color: var(--datepicker-primary-color);
+  z-index: 6;
+  box-sizing: border-box;
+}
+
+.ngxsmk-day-cell.today.selected:not(.start-date):not(.end-date):not(.in-range):not(.preview-range):not(.multiple-selected) .ngxsmk-day-number {
+  border: none;
+  background-color: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  font-weight: 600;
+  box-shadow: var(--datepicker-shadow-sm);
+  z-index: 4;
+}
+
+.ngxsmk-day-cell.today.start-date:not(.in-range):not(.preview-range):not(.end-date) .ngxsmk-day-number,
+.ngxsmk-day-cell.today.end-date:not(.in-range):not(.preview-range):not(.start-date) .ngxsmk-day-number {
+  border: none;
+  background-color: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  font-weight: 600;
+  box-shadow: var(--datepicker-shadow-sm);
+  z-index: 4;
+}
+
+.ngxsmk-day-cell.today.in-range:not(.start-date):not(.end-date) .ngxsmk-day-number,
+.ngxsmk-day-cell.today.preview-range:not(.start-date):not(.end-date) .ngxsmk-day-number {
+  background-color: transparent;
+  border: 2px solid var(--datepicker-primary-color);
+  color: var(--datepicker-primary-color);
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+
+.ngxsmk-day-cell.holiday .ngxsmk-day-number {
+  color: var(--datepicker-primary-color);
+  position: relative;
+}
+
+.ngxsmk-day-cell.holiday .ngxsmk-day-number::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+  width: 4px;
+  height: 4px;
+  background: var(--datepicker-primary-color);
+  border-radius: 50%;
+}
+
+.ngxsmk-time-selection {
+  display: flex;
+  align-items: center;
+  gap: var(--datepicker-spacing-sm);
+  flex-wrap: nowrap;
+  margin-top: var(--datepicker-spacing-lg);
+  padding-top: var(--datepicker-spacing-lg);
+  border-top: 1px solid var(--datepicker-border-color);
+  width: 100%;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.ngxsmk-time-selection > * {
+  flex-shrink: 0;
+}
+
+.ngxsmk-time-selection ngxsmk-custom-select,
+.ngxsmk-time-selection app-custom-select {
+  --custom-select-width: 75px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.ngxsmk-time-selection ngxsmk-custom-select[data-open="true"],
+.ngxsmk-time-selection app-custom-select[data-open="true"] {
+  z-index: 10000000;
+  position: relative;
+}
+
+.ngxsmk-time-label {
+  font-size: var(--datepicker-font-size-base);
+  line-height: var(--datepicker-line-height);
+  color: var(--datepicker-text-color);
+  font-weight: 500;
+  margin-right: var(--datepicker-spacing-xs);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ngxsmk-time-separator {
+  font-weight: 600;
+  color: var(--datepicker-text-color);
+  font-size: var(--datepicker-font-size-lg);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .ngxsmk-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
-  margin-top: 12px;
-  padding-top: 8px;
+  gap: var(--datepicker-spacing-sm);
+  margin-top: var(--datepicker-spacing-lg);
+  padding-top: var(--datepicker-spacing-lg);
   border-top: 1px solid var(--datepicker-border-color);
 }
 
 .ngxsmk-clear-button-footer,
 .ngxsmk-close-button {
-  padding: var(--datepicker-spacing-sm) var(--datepicker-spacing-md);
-  border-radius: 6px;
-  font-size: var(--datepicker-font-size-sm);
+  padding: var(--datepicker-spacing-sm) var(--datepicker-spacing-lg);
+  border-radius: var(--datepicker-radius-md);
+  font-size: var(--datepicker-font-size-base);
   line-height: var(--datepicker-line-height);
   cursor: pointer;
-  transition: background-color 0.2s;
-  border: 1px solid var(--datepicker-border-color);
+  transition: var(--datepicker-transition);
+  border: 1.5px solid var(--datepicker-border-color);
+  font-weight: 500;
+  min-height: 40px;
 }
 
 .ngxsmk-clear-button-footer {
-  background: none;
-  color: var(--datepicker-subtle-text-color);
+  background: var(--datepicker-background);
+  color: var(--datepicker-text-color);
+}
+
+.ngxsmk-clear-button-footer:hover:not(:disabled) {
+  background-color: var(--datepicker-hover-background);
+  border-color: var(--datepicker-border-color);
 }
 
 .ngxsmk-close-button {
@@ -277,543 +708,291 @@
 }
 
 .ngxsmk-close-button:hover:not(:disabled) {
+  background-color: var(--datepicker-primary-color);
   opacity: 0.9;
+  transform: translate3d(0, -1px, 0);
+  box-shadow: var(--datepicker-shadow-sm);
+  will-change: transform;
 }
 
-.ngxsmk-clear-button-footer:hover:not(:disabled) {
-  background-color: var(--datepicker-hover-background);
+.ngxsmk-close-button:active:not(:disabled) {
+  transform: translate3d(0, 0, 0);
 }
 
-/* Calendar Styles */
-.ngxsmk-datepicker-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.ngxsmk-calendar-container {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: var(--datepicker-font-size-base);
-  line-height: var(--datepicker-line-height);
-  border-radius: 10px;
-  padding: var(--datepicker-spacing-md);
-  background: var(--datepicker-background);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  /* width: 100%; */
-}
-
-.ngxsmk-ranges-container {
-  width: 100%;
-  padding: var(--datepicker-spacing-md);
-  border-right: none;
-  background: var(--datepicker-hover-background);
-  border-radius: 10px;
-}
-
-.ngxsmk-ranges-container ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.ngxsmk-ranges-container li {
-  padding: var(--datepicker-spacing-sm) var(--datepicker-spacing-sm);
-  margin-bottom: 0;
-  font-size: var(--datepicker-font-size-sm);
-  line-height: var(--datepicker-line-height);
-  border: 1px solid var(--datepicker-border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-  flex-shrink: 0;
-}
-
-.ngxsmk-ranges-container li:hover {
-  background-color: var(--datepicker-hover-background);
-}
-
-.ngxsmk-ranges-container li.disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-  background-color: transparent !important;
-  color: var(--datepicker-subtle-text-color, #9ca3af);
-}
-
-.ngxsmk-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 2;
-  gap: 4px;
-}
-
-.ngxsmk-month-year-selects {
-  display: flex;
-  gap: 4px;
-}
-
-.ngxsmk-month-year-selects app-custom-select.month-select {
-  --custom-select-width: 100px;
-}
-
-.ngxsmk-month-year-selects app-custom-select.year-select {
-  --custom-select-width: 75px;
-}
-
-.ngxsmk-nav-buttons {
-  display: flex;
-}
-
-.ngxsmk-nav-button {
-  padding: 6px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--datepicker-text-color);
-}
-
-.ngxsmk-nav-button:hover:not(:disabled) {
-  background-color: var(--datepicker-hover-background);
-}
-
-.ngxsmk-nav-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.ngxsmk-nav-button svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Days Grid Styles */
-
-.ngxsmk-days-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  gap: 0;
-}
-
-.ngxsmk-day-name {
-  font-size: var(--datepicker-font-size-sm);
-  padding: var(--datepicker-spacing-sm) 0;
-  color: var(--datepicker-subtle-text-color);
-  font-weight: 600;
-  line-height: var(--datepicker-line-height);
-}
-
-.ngxsmk-day-cell {
-  height: 32px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 0;
-}
-
-.ngxsmk-day-cell.holiday .ngxsmk-day-number {
-  color: var(--datepicker-primary-color);
-  text-decoration: underline dotted;
-}
-
-.ngxsmk-day-number {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  color: var(--datepicker-text-color);
-  font-size: var(--datepicker-font-size-base);
-  line-height: var(--datepicker-line-height);
-  position: relative;
-  z-index: 1;
-}
-
-.ngxsmk-time-selection {
-  display: flex;
-  align-items: center;
-  gap: var(--datepicker-spacing-xs);
-  flex-wrap: wrap;
-  margin-top: var(--datepicker-spacing-md);
-  padding-top: var(--datepicker-spacing-sm);
-  border-top: 1px solid var(--datepicker-border-color);
-}
-
-.ngxsmk-time-label {
-  font-size: var(--datepicker-font-size-base);
-  line-height: var(--datepicker-line-height);
-  color: var(--datepicker-subtle-text-color);
-  margin-right: var(--datepicker-spacing-xs);
-}
-
-.ngxsmk-time-separator {
-  font-weight: 600;
-  color: var(--datepicker-text-color);
-}
-
-/* Time Selection Selectbox Styles */
-.ngxsmk-time-selection app-custom-select {
-  --custom-select-width: 75px;
-  height: 28px;
-}
-
-.ngxsmk-time-selection app-custom-select.ampm-select {
-  --custom-select-width: 75px;
-}
-
-/* Specific time selectbox classes */
-.ngxsmk-time-selection .hour-select {
-  --custom-select-width: 75px;
-  --custom-select-height: 28px;
-}
-
-.ngxsmk-time-selection .minute-select {
-  --custom-select-width: 75px;
-  --custom-select-height: 28px;
-}
-
-.ngxsmk-time-selection .ampm-select {
-  --custom-select-width: 75px;
-  --custom-select-height: 28px;
-}
-
-/* Time selectbox hover and focus states */
-.ngxsmk-time-selection app-custom-select:hover {
-  border-color: var(--datepicker-primary-color);
-}
-
-.ngxsmk-time-selection app-custom-select:focus-within {
-  border-color: var(--datepicker-primary-color);
-  box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.2);
-}
-
-/* Time selectbox utility classes */
-.ngxsmk-time-selection .time-select-compact {
-  --custom-select-width: 60px;
-  --custom-select-height: 24px;
-  font-size: var(--datepicker-font-size-sm);
-}
-
-.ngxsmk-time-selection .time-select-large {
-  --custom-select-width: 90px;
-  --custom-select-height: 36px;
-  font-size: var(--datepicker-font-size-lg);
-}
-
-.ngxsmk-time-selection .time-select-disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* Time selectbox animation classes */
-.ngxsmk-time-selection app-custom-select {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.ngxsmk-time-selection app-custom-select.ngxsmk-time-select-animated {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.ngxsmk-day-cell:not(.disabled):not(.empty):hover .ngxsmk-day-number {
-  background-color: var(--datepicker-hover-background);
-  color: var(--datepicker-primary-color);
-}
-
-.ngxsmk-day-cell.start-date .ngxsmk-day-number,
-.ngxsmk-day-cell.end-date .ngxsmk-day-number,
-.ngxsmk-day-cell.selected .ngxsmk-day-number,
-.ngxsmk-day-cell.multiple-selected .ngxsmk-day-number {
-  background-color: var(--datepicker-primary-color);
-  color: var(--datepicker-primary-contrast);
-}
-
-.ngxsmk-day-cell.multiple-selected .ngxsmk-day-number {
-  border: 1px dashed var(--datepicker-primary-contrast);
-}
-
-.ngxsmk-day-cell.multiple-selected:hover .ngxsmk-day-number {
-  background-color: var(--datepicker-primary-color);
-  color: var(--datepicker-primary-contrast);
-}
-
-.ngxsmk-day-cell.in-range,
-.ngxsmk-day-cell.start-date,
-.ngxsmk-day-cell.end-date,
-.ngxsmk-day-cell.preview-range {
-  background-color: var(--datepicker-range-background);
-}
-
-.ngxsmk-day-cell.start-date {
-  border-top-left-radius: 100%;
-  border-bottom-left-radius: 100%;
-}
-
-.ngxsmk-day-cell.end-date {
-  border-top-right-radius: 100%;
-  border-bottom-right-radius: 100%;
-}
-
-.ngxsmk-day-cell.start-date.end-date {
-  border-radius: 50px;
-}
-
-.ngxsmk-day-cell.disabled {
-  background-color: transparent !important;
-  color: #4b5563;
-  cursor: not-allowed;
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-.ngxsmk-day-cell.empty {
-  opacity: 1;
-}
-
-.ngxsmk-day-cell.empty .ngxsmk-day-number {
-  color: var(--datepicker-subtle-text-color);
-}
-
-
-/* Dark theme support for empty days */
-
-:host(.dark-theme) .ngxsmk-day-cell.empty .ngxsmk-day-number {
-  color: #6b7280;
-}
-
-.ngxsmk-day-cell.today .ngxsmk-day-number {
-  border: 1px solid var(--datepicker-primary-color);
-}
-
-/* Responsive Design */
-@media (min-width: 600px) {
-  .ngxsmk-datepicker-container {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .ngxsmk-calendar-container {
-    padding: var(--datepicker-spacing-lg);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: auto;
-    border-radius: 10px;
-    min-height: 280px;
-  }
-
-  .ngxsmk-ranges-container {
-    width: 180px;
-    padding: var(--datepicker-spacing-lg);
-    border-bottom: none;
-    background: var(--datepicker-background);
-    border-radius: 10px 0 0 10px;
-  }
-
-  .ngxsmk-ranges-container ul {
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 0;
-  }
-
-  .ngxsmk-ranges-container li {
-    padding: var(--datepicker-spacing-sm);
-    margin-bottom: var(--datepicker-spacing-sm);
-    border: none;
-    font-size: var(--datepicker-font-size-lg);
-  }
-
-  .ngxsmk-header {
-    margin-bottom: var(--datepicker-spacing-md);
-    gap: var(--datepicker-spacing-xs);
-  }
-
-  .ngxsmk-month-year-selects app-custom-select.month-select {
-    --custom-select-width: 120px;
-  }
-
-  .ngxsmk-month-year-selects app-custom-select.year-select {
-    --custom-select-width: 90px;
-  }
-
-  .ngxsmk-nav-button {
-    padding: var(--datepicker-spacing-sm);
-  }
-
-  .ngxsmk-nav-button svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .ngxsmk-day-name {
-    font-size: var(--datepicker-font-size-base);
-    padding: var(--datepicker-spacing-sm) 0;
-  }
-
-  .ngxsmk-day-cell {
-    height: 42px;
-  }
-
-  .ngxsmk-day-number {
-    width: 38px;
-    height: 38px;
-    font-size: var(--datepicker-font-size-lg);
-  }
-
-  .ngxsmk-time-selection {
-    margin-top: var(--datepicker-spacing-lg);
-    padding-top: var(--datepicker-spacing-md);
-  }
-
-  .ngxsmk-time-selection app-custom-select {
-    --custom-select-width: 60px;
-    height: 30px;
-  }
-
-  .ngxsmk-time-selection app-custom-select.ampm-select {
-    --custom-select-width: 70px;
-  }
-
-  /* Responsive time selectbox classes */
-  .ngxsmk-time-selection .hour-select {
-    --custom-select-width: 60px;
-    --custom-select-height: 30px;
-  }
-
-  .ngxsmk-time-selection .minute-select {
-    --custom-select-width: 60px;
-    --custom-select-height: 30px;
-  }
-
-  .ngxsmk-time-selection .ampm-select {
-    --custom-select-width: 70px;
-    --custom-select-height: 30px;
-  }
-}
-
-/* Additional Optimizations */
-@media (prefers-reduced-motion: reduce) {
-  .ngxsmk-days-grid {
-    transition: none;
-  }
-  
-  .ngxsmk-days-grid.animate-forward,
-  .ngxsmk-days-grid.animate-backward {
-    transform: none;
-    opacity: 1;
-  }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  :host {
-    --datepicker-border-color: #000000;
-    --datepicker-text-color: #000000;
-    --datepicker-subtle-text-color: #666666;
-  }
-  
-  .ngxsmk-day-cell.disabled {
-    opacity: 0.3;
-  }
-}
-
-/* Print styles */
-@media print {
-  .ngxsmk-datepicker-wrapper {
-    display: none;
-  }
-}
-
-/* Focus improvements for accessibility */
-.ngxsmk-day-cell:focus-visible .ngxsmk-day-number {
-  outline: 2px solid var(--datepicker-primary-color);
-  outline-offset: 2px;
-}
-
-.ngxsmk-nav-button:focus-visible,
-.ngxsmk-clear-button:focus-visible,
 .ngxsmk-clear-button-footer:focus-visible,
 .ngxsmk-close-button:focus-visible {
   outline: 2px solid var(--datepicker-primary-color);
   outline-offset: 2px;
 }
 
-/* Performance optimizations */
-.ngxsmk-day-cell,
-.ngxsmk-nav-button,
+@media (min-width: 640px) {
+  .ngxsmk-popover-container {
+    width: auto;
+    min-width: 600px;
+    max-width: 800px;
+  }
+
+  .ngxsmk-datepicker-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ngxsmk-calendar-container {
+    padding: var(--datepicker-spacing-2xl);
+    width: fit-content;
+    height: fit-content;
+    min-width: fit-content;
+  }
+
+  .ngxsmk-ranges-container {
+    width: 200px;
+    padding: var(--datepicker-spacing-xl);
+    border-right: 1px solid var(--datepicker-border-color);
+    border-radius: var(--datepicker-radius-lg) 0 0 var(--datepicker-radius-lg);
+    background: var(--datepicker-hover-background);
+  }
+
+  .ngxsmk-ranges-container ul {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--datepicker-spacing-xs);
+  }
+
+  .ngxsmk-ranges-container li {
+    padding: var(--datepicker-spacing-md) var(--datepicker-spacing-lg);
+    margin-bottom: 0;
+    border: none;
+    font-size: var(--datepicker-font-size-base);
+    width: 100%;
+    text-align: left;
+  }
+
+  .ngxsmk-day-cell {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    min-height: 44px;
+    max-height: 44px;
+  }
+
+  .ngxsmk-day-number {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    font-size: var(--datepicker-font-size-base);
+  }
+}
+
+@media (max-width: 639px) {
+  .ngxsmk-popover-container {
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    position: fixed;
+  }
+
+  .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
+    animation: fadeInDownMobile 0.2s ease-out;
+  }
+
+  .ngxsmk-input-group {
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .ngxsmk-display-input {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .ngxsmk-days-grid-wrapper {
+    padding: 0 4px;
+  }
+
+  .ngxsmk-days-grid {
+    gap: 4px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .ngxsmk-day-cell {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    max-width: 36px;
+    min-height: 36px;
+    max-height: 36px;
+  }
+
+  .ngxsmk-day-number {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    font-size: var(--datepicker-font-size-sm);
+  }
+
+  .ngxsmk-day-name {
+    font-size: 10px;
+    padding: 8px 0;
+  }
+
+  .ngxsmk-datepicker-container {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .ngxsmk-calendar-container {
+    padding: var(--datepicker-spacing-md);
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ngxsmk-header {
+    margin-bottom: var(--datepicker-spacing-sm);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ngxsmk-month-year-selects {
+    width: 100%;
+    margin-bottom: var(--datepicker-spacing-xs);
+    gap: 8px;
+  }
+
+  .ngxsmk-nav-button {
+    padding: 6px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .ngxsmk-nav-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ngxsmk-time-selection {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: var(--datepicker-spacing-sm) 0;
+  }
+
+  .ngxsmk-time-selection > * {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .ngxsmk-time-label {
+    font-size: 12px;
+  }
+
+  .ngxsmk-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: var(--datepicker-spacing-md);
+    padding-top: var(--datepicker-spacing-md);
+  }
+
+  .ngxsmk-clear-button-footer,
+  .ngxsmk-close-button {
+    flex: 1 1 auto;
+    min-width: 100px;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .ngxsmk-ranges-container {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :host {
+    --datepicker-border-color: #000000;
+    --datepicker-text-color: #000000;
+    --datepicker-subtle-text-color: #666666;
+  }
+
+  .ngxsmk-day-cell.disabled {
+    opacity: 0.3;
+  }
+
+  .ngxsmk-day-cell:focus-visible .ngxsmk-day-number {
+    outline: 3px solid;
+    outline-offset: 2px;
+  }
+}
+
+@media print {
+  .ngxsmk-datepicker-wrapper {
+    display: none;
+  }
+}
+
+.ngxsmk-day-cell:focus-visible {
+  outline: none;
+}
+
+.ngxsmk-day-cell:focus-visible .ngxsmk-day-number {
+  outline: 2px solid var(--datepicker-primary-color);
+  outline-offset: 2px;
+  background-color: var(--datepicker-hover-background);
+}
+
+.ngxsmk-nav-button {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
 .ngxsmk-clear-button {
-  will-change: auto;
-  transform: translateZ(0); /* Force hardware acceleration */
+  will-change: background-color;
 }
 
 .ngxsmk-days-grid {
-  contain: layout style paint;
-  transform: translateZ(0); /* Force hardware acceleration */
-}
-
-/* Optimize for better rendering performance */
-.ngxsmk-day-cell {
   contain: layout style;
+  will-change: contents;
+  transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ngxsmk-day-number {
-  contain: layout style paint;
+.ngxsmk-ranges-container::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* Mobile optimizations */
-@media (max-width: 480px) {
-  .ngxsmk-day-cell {
-    height: 28px;
-  }
-  
-  .ngxsmk-day-number {
-    width: 26px;
-    height: 26px;
-    font-size: var(--datepicker-font-size-sm);
-  }
-  
-  .ngxsmk-day-name {
-    font-size: var(--datepicker-font-size-sm);
-    padding: var(--datepicker-spacing-xs) 0;
-  }
-  
-  .ngxsmk-calendar-container {
-    padding: var(--datepicker-spacing-sm);
-  }
-  
-  .ngxsmk-header {
-    margin-bottom: var(--datepicker-spacing-sm);
-  }
-  
-  /* Mobile result box optimizations */
-  .ngxsmk-input-group {
-    min-width: 120px;
-  }
-  
-  .ngxsmk-display-input {
-    font-size: var(--datepicker-font-size-sm);
-    padding: var(--datepicker-spacing-xs);
-  }
-  
-  .ngxsmk-clear-button {
-    padding: 0 var(--datepicker-spacing-xs);
-  }
-  
-  .ngxsmk-clear-button svg {
-    width: 12px;
-    height: 12px;
-  }
+.ngxsmk-ranges-container::-webkit-scrollbar-track {
+  background: var(--datepicker-hover-background);
+  border-radius: var(--datepicker-radius-sm);
 }
 
+.ngxsmk-ranges-container::-webkit-scrollbar-thumb {
+  background: var(--datepicker-subtle-text-color);
+  border-radius: var(--datepicker-radius-sm);
+}
+
+.ngxsmk-ranges-container::-webkit-scrollbar-thumb:hover {
+  background: var(--datepicker-text-color);
+}
 

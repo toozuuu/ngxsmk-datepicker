@@ -20,9 +20,12 @@ try {
   files.forEach(file => {
     const filePath = path.join(distPath, file);
     if (fs.statSync(filePath).isFile()) {
-      const size = fs.statSync(filePath).size;
-      totalSize += size;
-      fileSizes.push({ file, size: (size / 1024).toFixed(2) + ' KB' });
+      // Exclude source maps from analysis (they're not shipped to consumers)
+      if (!filePath.endsWith('.map')) {
+        const size = fs.statSync(filePath).size;
+        totalSize += size;
+        fileSizes.push({ file, size: (size / 1024).toFixed(2) + ' KB' });
+      }
     }
   });
   

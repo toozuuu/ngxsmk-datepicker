@@ -1,15 +1,7 @@
 import { DateInput, normalizeDate } from './date.utils';
 
 export interface HolidayProvider {
-  /**
-   * Returns true if the given date is a holiday.
-   * The date passed will be at the start of the day (00:00:00).
-   */
   isHoliday(date: Date): boolean;
-  
-  /**
-   * Optional: Returns a label or reason for the holiday.
-   */
   getHolidayLabel?(date: Date): string | null;
 }
 
@@ -19,9 +11,6 @@ export interface DateRange {
 
 export type DatepickerValue = Date | { start: Date, end: Date } | Date[] | null;
 
-/**
- * Generate month options for dropdown
- */
 export function generateMonthOptions(locale: string, year: number): { label: string; value: number }[] {
   return Array.from({length: 12}).map((_, i) => ({
     label: new Date(year, i, 1).toLocaleDateString(locale, {month: 'long'}),
@@ -29,9 +18,6 @@ export function generateMonthOptions(locale: string, year: number): { label: str
   }));
 }
 
-/**
- * Generate year options for dropdown
- */
 export function generateYearOptions(currentYear: number, range: number = 10): { label: string; value: number }[] {
   const startYear = currentYear - range;
   const endYear = currentYear + range;
@@ -44,9 +30,6 @@ export function generateYearOptions(currentYear: number, range: number = 10): { 
   return options;
 }
 
-/**
- * Generate time options for hour/minute dropdowns
- */
 export function generateTimeOptions(minuteInterval: number = 1): {
   hourOptions: { label: string; value: number }[];
   minuteOptions: { label: string; value: number }[];
@@ -67,9 +50,6 @@ export function generateTimeOptions(minuteInterval: number = 1): {
   return { hourOptions, minuteOptions };
 }
 
-/**
- * Generate week days for calendar header
- */
 export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): string[] {
   const day = new Date(2024, 0, 7 + firstDayOfWeek);
   return Array.from({length: 7}).map(() => {
@@ -79,28 +59,19 @@ export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): st
   });
 }
 
-/**
- * Get first day of week for locale
- */
 export function getFirstDayOfWeek(locale: string): number {
   try {
-    return ((new Intl.Locale(locale) as any).weekInfo?.firstDay || 0) % 7;
-  } catch (e) {
+    return ((new Intl.Locale(locale) as { weekInfo?: { firstDay?: number } }).weekInfo?.firstDay || 0) % 7;
+  } catch {
     return 0;
   }
 }
 
-/**
- * Convert 12-hour to 24-hour format
- */
 export function get24Hour(displayHour: number, isPm: boolean): number {
   if (isPm) { return displayHour === 12 ? 12 : displayHour + 12; }
   return displayHour === 12 ? 0 : displayHour;
 }
 
-/**
- * Convert 24-hour to 12-hour format
- */
 export function update12HourState(fullHour: number): { isPm: boolean; displayHour: number } {
   return {
     isPm: fullHour >= 12,
@@ -108,9 +79,6 @@ export function update12HourState(fullHour: number): { isPm: boolean; displayHou
   };
 }
 
-/**
- * Process date ranges input
- */
 export function processDateRanges(ranges: DateRange | null): { [key: string]: [Date, Date] } | null {
   if (!ranges) return null;
   
@@ -121,5 +89,3 @@ export function processDateRanges(ranges: DateRange | null): { [key: string]: [D
     return acc;
   }, {} as { [key: string]: [Date, Date] });
 }
-
-

@@ -1,4 +1,4 @@
-import {Component, HostBinding, signal} from '@angular/core';
+import {Component, HostBinding, OnInit, OnDestroy, HostListener, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {
@@ -76,38 +76,49 @@ class SampleHolidayProvider implements HolidayProvider {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class App {
+export class App implements OnInit, OnDestroy {
   private readonly today = new Date();
   public readonly JSON = JSON;
   public currentTheme: 'light' | 'dark' = 'light';
   public mobileMenuOpen: boolean = false;
+  public selectedMobileSize: number = 375;
+  public currentTime: string = '9:41';
+  public searchQuery: string = '';
+  public filteredNavigationItems: Array<{ id: string; label: string; sub: boolean; keywords: string }> = [];
 
   public features = [
     { icon: '🚀', title: 'Zero Dependencies', description: 'No external dependencies, just Angular' },
-    { icon: '⚡', title: 'High Performance', description: 'Optimized for fast rendering and selection' },
-    { icon: '🎨', title: 'Customizable', description: 'Fully customizable themes and styles' },
-    { icon: '📱', title: 'Responsive', description: 'Works great on all device sizes' },
-    { icon: '🔧', title: 'Type Safe', description: 'Full TypeScript support with type definitions' },
-    { icon: '♿', title: 'Accessible', description: 'Built with accessibility in mind' },
-    { icon: '📦', title: 'Lightweight', description: 'Small bundle size, minimal overhead' },
-    { icon: '🔄', title: 'Form Integration', description: 'Seamless integration with Angular forms' },
+    { icon: '⚡', title: 'High Performance', description: 'GPU-accelerated animations with transform3d, optimized rendering' },
+    { icon: '🎨', title: 'Fully Customizable', description: '28+ CSS variables, built-in themes, and extension points' },
+    { icon: '📱', title: 'Responsive', description: 'Mobile-first design, works great on all device sizes' },
+    { icon: '🔧', title: 'Type Safe', description: 'Full TypeScript support with comprehensive type definitions' },
+    { icon: '♿', title: 'Accessible', description: 'ARIA attributes, keyboard navigation, screen reader support' },
+    { icon: '📦', title: 'Lightweight', description: 'Small bundle size, minimal overhead, tree-shakeable' },
+    { icon: '🔄', title: 'Form Integration', description: 'Reactive Forms, Signal Forms (Angular 21+), ControlValueAccessor' },
+    { icon: '🎯', title: 'Extension Points', description: 'Comprehensive hooks for customization, validation, and events' },
+    { icon: '⌨️', title: 'Keyboard Shortcuts', description: 'Enhanced navigation with custom shortcuts (Y, N, W, T keys)' },
+    { icon: '🌐', title: 'SSR Ready', description: 'Fully compatible with Angular Universal, platform-safe' },
+    { icon: '⚙️', title: 'Zoneless Support', description: 'Works with or without Zone.js, OnPush change detection' },
   ];
 
   public navigationItems = [
-    { id: 'getting-started', label: 'Getting Started', sub: false },
-    { id: 'installation', label: 'Installation', sub: false },
-    { id: 'basic-usage', label: 'Basic Usage', sub: false },
-    { id: 'api-reference', label: 'API Reference', sub: false },
-    { id: 'signal-forms', label: 'Signal Forms (Angular 21)', sub: true },
-    { id: 'theming', label: 'Theming', sub: true },
-    { id: 'customization-a11y', label: 'Customization & A11y', sub: true },
-    { id: 'inputs', label: 'Inputs', sub: true },
-    { id: 'outputs', label: 'Outputs', sub: true },
-    { id: 'examples', label: 'Examples', sub: false },
-    { id: 'single-date', label: 'Single Date', sub: true },
-    { id: 'date-range', label: 'Date Range', sub: true },
-    { id: 'multiple-dates', label: 'Multiple Dates', sub: true },
-    { id: 'programmatic-value', label: 'Programmatic Value', sub: true },
+    { id: 'getting-started', label: 'Getting Started', sub: false, keywords: 'getting started introduction overview' },
+    { id: 'installation', label: 'Installation', sub: false, keywords: 'install setup npm package' },
+    { id: 'basic-usage', label: 'Basic Usage', sub: false, keywords: 'basic usage example simple' },
+    { id: 'api-reference', label: 'API Reference', sub: false, keywords: 'api reference documentation' },
+    { id: 'theming', label: 'Theming', sub: false, keywords: 'theme dark light styling css' },
+    { id: 'examples', label: 'Examples', sub: false, keywords: 'examples demo showcase' },
+    { id: 'signal-forms', label: 'Signal Forms (Angular 21)', sub: true, keywords: 'signal forms angular 21 reactive' },
+    { id: 'single-date', label: 'Single Date', sub: true, keywords: 'single date picker selection' },
+    { id: 'customization-a11y', label: 'Customization & A11y', sub: true, keywords: 'customization accessibility a11y aria' },
+    { id: 'date-range', label: 'Date Range', sub: true, keywords: 'date range selection start end' },
+    { id: 'multiple-dates', label: 'Multiple Dates', sub: true, keywords: 'multiple dates selection array' },
+    { id: 'programmatic-value', label: 'Programmatic Value', sub: true, keywords: 'programmatic set value api' },
+    { id: 'inline-calendar', label: 'Inline Calendar', sub: true, keywords: 'inline calendar always visible' },
+    { id: 'min-max-date', label: 'Min/Max Date', sub: true, keywords: 'min max date limit restriction' },
+    { id: 'mobile-playground', label: 'Mobile Playground', sub: true, keywords: 'mobile responsive playground test' },
+    { id: 'inputs', label: 'Inputs', sub: false, keywords: 'inputs properties @input parameters' },
+    { id: 'outputs', label: 'Outputs', sub: false, keywords: 'outputs events @output emitters' },
   ];
 
   public inputProperties = [
@@ -135,7 +146,7 @@ export class App {
 
   public minDate: Date = getStartOfDay(this.today);
   public maxDate: Date = getEndOfDay(addMonths(this.today, 1));
-  public lastAction: any = null;
+  public lastAction: { type: string; payload?: unknown } | null = null;
   
   public holidayProvider: HolidayProvider = new SampleHolidayProvider();
   public disableHolidays: boolean = true;
@@ -159,7 +170,7 @@ export class App {
   public closeLabelDemo: string = 'Close';
   public prevLabelDemo: string = 'Previous month';
   public nextLabelDemo: string = 'Next month';
-  public datepickerClasses: any = {
+  public datepickerClasses: { [key: string]: string } = {
     inputGroup: 'rounded-lg border border-purple-300 dark:border-purple-700',
     input: 'px-3 py-2 text-sm',
     popover: 'shadow-2xl',
@@ -306,6 +317,23 @@ export class MyComponent {
   }">
 </ngxsmk-datepicker>`;
 
+  public themingCssCode = `.custom-datepicker-wrapper {
+  --datepicker-primary-color: #3b82f6;
+  --datepicker-primary-contrast: #ffffff;
+  --datepicker-range-background: #dbeafe;
+  --datepicker-background: #ffffff;
+  --datepicker-text-color: #111827;
+  --datepicker-subtle-text-color: #6b7280;
+  --datepicker-border-color: #d1d5db;
+  --datepicker-hover-background: #f3f4f6;
+  --datepicker-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --datepicker-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --datepicker-font-size-base: 15px;
+  --datepicker-spacing-md: 14px;
+  --datepicker-radius-md: 10px;
+}`;
+
   public themingCssVarsCode = `<div style="
   --datepicker-primary-color: #ec4899;
   --datepicker-primary-contrast: #ffffff;
@@ -313,6 +341,24 @@ export class MyComponent {
 ">
   <ngxsmk-datepicker mode="single"></ngxsmk-datepicker>
 </div>`;
+
+  public designSystemCode = `:host {
+  /* TokiForge integration example */
+  --datepicker-primary-color: var(--toki-color-primary, #6d28d9);
+  --datepicker-primary-contrast: var(--toki-color-on-primary, #ffffff);
+  --datepicker-background: var(--toki-color-surface, #ffffff);
+  --datepicker-text-color: var(--toki-color-on-surface, #1f2937);
+  --datepicker-border-color: var(--toki-color-outline, #e5e7eb);
+  
+  /* Spacing from design system */
+  --datepicker-spacing-sm: var(--toki-spacing-sm, 8px);
+  --datepicker-spacing-md: var(--toki-spacing-md, 12px);
+  --datepicker-spacing-lg: var(--toki-spacing-lg, 16px);
+  
+  /* Border radius from design system */
+  --datepicker-radius-md: var(--toki-radius-md, 8px);
+  --datepicker-radius-lg: var(--toki-radius-lg, 12px);
+}`;
 
   public themingClassesCode = `<ngxsmk-datepicker
   mode="single"
@@ -367,7 +413,7 @@ export class MyComponent {
   }
 
 
-  handleDatepickerAction(event: { type: string; payload?: any }): void {
+  handleDatepickerAction(event: { type: string; payload?: unknown }): void {
     this.lastAction = event;
   }
 
@@ -420,5 +466,91 @@ export class MyComponent {
 
   onProgrammaticMultipleChange(value: DatepickerValue): void {
     this.programmaticMultipleDates = Array.isArray(value) ? value : null;
+  }
+
+  public mobileSizes = [
+    { label: 'iPhone SE', width: 375 },
+    { label: 'iPhone 12/13', width: 390 },
+    { label: 'iPhone 14 Pro', width: 393 },
+    { label: 'iPhone 14 Pro Max', width: 430 },
+    { label: 'Samsung Galaxy', width: 360 },
+    { label: 'Pixel 5', width: 393 },
+    { label: 'iPad Mini', width: 768 },
+    { label: 'iPad', width: 820 },
+  ];
+
+  selectMobileSize(width: number): void {
+    this.selectedMobileSize = width;
+  }
+
+  getPreviewWidth(): number {
+    if (typeof window === 'undefined') {
+      return this.selectedMobileSize;
+    }
+    
+    const viewportWidth = window.innerWidth;
+    const maxWidth = viewportWidth <= 480 
+      ? viewportWidth - 24 // 1.5rem padding
+      : viewportWidth <= 768
+      ? viewportWidth - 32 // 2rem padding
+      : this.selectedMobileSize;
+    
+    return Math.min(this.selectedMobileSize, maxWidth);
+  }
+
+  public mobilePlaygroundCode = `<div class="mobile-preview-container" style="width: 375px;">
+  <div class="mobile-preview-frame">
+    <div class="mobile-preview-content">
+      <ngxsmk-datepicker
+        mode="range"
+        [inline]="true">
+      </ngxsmk-datepicker>
+    </div>
+  </div>
+</div>`;
+
+  private timeInterval?: ReturnType<typeof setInterval>;
+
+  ngOnInit(): void {
+    this.updateTime();
+    this.timeInterval = setInterval(() => this.updateTime(), 1000);
+    this.filteredNavigationItems = [...this.navigationItems];
+  }
+
+  ngOnDestroy(): void {
+    if (this.timeInterval) {
+      clearInterval(this.timeInterval);
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    // Trigger change detection to update preview width
+    // The getPreviewWidth() method will be called automatically
+  }
+
+  onSearchChange(query: string): void {
+    this.searchQuery = query;
+    if (!query || query.trim() === '') {
+      this.filteredNavigationItems = [...this.navigationItems];
+      return;
+    }
+
+    const lowerQuery = query.toLowerCase().trim();
+    this.filteredNavigationItems = this.navigationItems.filter(item => {
+      const labelMatch = item.label.toLowerCase().includes(lowerQuery);
+      const keywordMatch = (item.keywords || '').toLowerCase().includes(lowerQuery);
+      return labelMatch || keywordMatch;
+    });
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.filteredNavigationItems = [...this.navigationItems];
+  }
+
+  private updateTime(): void {
+    const now = new Date();
+    this.currentTime = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
   }
 }
