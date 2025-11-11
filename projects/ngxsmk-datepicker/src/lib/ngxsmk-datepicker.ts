@@ -1667,4 +1667,3 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 }
-}
