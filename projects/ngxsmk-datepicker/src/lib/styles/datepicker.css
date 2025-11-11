@@ -812,6 +812,7 @@
     left: 50%;
     transform: translate3d(-50%, 0, 0);
     position: fixed;
+    z-index: 999999;
   }
 
   .ngxsmk-popover-container:not(.ngxsmk-inline-container) {

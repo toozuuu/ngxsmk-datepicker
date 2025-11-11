@@ -64,7 +64,7 @@ import {
   template: `
     <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [ngClass]="classes?.wrapper">
       @if (!isInlineMode) {
-        <div class="ngxsmk-input-group" (click)="toggleCalendar($event)" (touchend)="toggleCalendar($event)" (keydown.enter)="toggleCalendar($event)" (keydown.space)="toggleCalendar($event); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
+        <div class="ngxsmk-input-group" (click)="toggleCalendar($event)" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" (keydown.enter)="toggleCalendar($event)" (keydown.space)="toggleCalendar($event); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
           <input type="text" 
                  [value]="displayValue" 
                  [placeholder]="placeholder" 
@@ -225,6 +225,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private isOpeningCalendar: boolean = false;
   private openCalendarTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private lastToggleTime: number = 0;
+  private touchStartTime: number = 0;
+  private touchStartElement: EventTarget | null = null;
+  private clickPreventHandler: ((e: Event) => void) | null = null;
 
   public _internalValue: DatepickerValue = null;
 
@@ -503,35 +506,145 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent | TouchEvent): void {
-    if (this.isOpeningCalendar) {
+    if (!this.isBrowser || this.isInlineMode) {
       return;
     }
     
-    if (this.isBrowser && !this.isInlineMode && this.isCalendarOpen) {
-      const target = event.target as Node;
-      if (target && !this.elementRef.nativeElement.contains(target)) {
-        this.isCalendarOpen = false;
-        this.cdr.markForCheck();
+    const nativeElement = this.elementRef.nativeElement;
+    const target = event.target as Node;
+    
+    if (this.isOpeningCalendar) {
+      if (target && nativeElement && nativeElement.contains(target)) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
       }
+      return;
+    }
+    
+    if (!this.isCalendarOpen) {
+      return;
+    }
+    
+    if (!target || !nativeElement) {
+      return;
+    }
+    
+    if (!nativeElement.contains(target)) {
+      this.isCalendarOpen = false;
+      this.cdr.markForCheck();
     }
   }
 
-  @HostListener('document:touchend', ['$event'])
-  onDocumentTouchEnd(event: TouchEvent): void {
+  @HostListener('document:touchstart', ['$event'])
+  onDocumentTouchStart(event: TouchEvent): void {
+    if (!this.isBrowser || this.isInlineMode) {
+      return;
+    }
+    
     if (this.isOpeningCalendar) {
       return;
     }
     
-    if (this.isBrowser && !this.isInlineMode && this.isCalendarOpen) {
-      const target = event.target as Node;
-      if (target && !this.elementRef.nativeElement.contains(target)) {
-        setTimeout(() => {
-          if (!this.isOpeningCalendar) {
-            this.isCalendarOpen = false;
-            this.cdr.markForCheck();
-          }
-        }, 100);
+    if (!this.isCalendarOpen) {
+      return;
+    }
+    
+    const target = event.target as Node;
+    const nativeElement = this.elementRef.nativeElement;
+    
+    if (!target || !nativeElement) {
+      return;
+    }
+    
+    if (!nativeElement.contains(target)) {
+      this.isCalendarOpen = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  public onTouchStart(event: TouchEvent): void {
+    if (this.disabled || this.isInlineMode) {
+      return;
+    }
+    
+    this.touchStartTime = Date.now();
+    this.touchStartElement = event.currentTarget;
+  }
+
+  public onTouchEnd(event: TouchEvent): void {
+    if (this.disabled || this.isInlineMode) {
+      return;
+    }
+    
+    const touchDuration = Date.now() - this.touchStartTime;
+    
+    if (touchDuration > 500 || touchDuration < 0) {
+      return;
+    }
+    
+    const touch = event.changedTouches[0];
+    if (!touch) {
+      return;
+    }
+    
+    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+    const inputGroup = event.currentTarget as HTMLElement;
+    
+    if (!inputGroup.contains(targetElement)) {
+      return;
+    }
+    
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    
+    const wasOpen = this.isCalendarOpen;
+    this.isCalendarOpen = !this.isCalendarOpen;
+    this.lastToggleTime = Date.now();
+    
+    if (!wasOpen && this.isCalendarOpen) {
+      this.isOpeningCalendar = true;
+      
+      if (this.openCalendarTimeoutId) {
+        clearTimeout(this.openCalendarTimeoutId);
       }
+      
+      this.cdr.markForCheck();
+      
+      if (this.clickPreventHandler) {
+        document.removeEventListener('click', this.clickPreventHandler, true);
+      }
+      
+      this.clickPreventHandler = (e: Event) => {
+        const target = e.target as Node;
+        const nativeElement = this.elementRef.nativeElement;
+        if (target && nativeElement && !nativeElement.contains(target)) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+        }
+      };
+      
+      document.addEventListener('click', this.clickPreventHandler, true);
+      
+      setTimeout(() => {
+        this.openCalendarTimeoutId = setTimeout(() => {
+          this.isOpeningCalendar = false;
+          if (this.clickPreventHandler) {
+            document.removeEventListener('click', this.clickPreventHandler!, true);
+            this.clickPreventHandler = null;
+          }
+          this.openCalendarTimeoutId = null;
+        }, 700);
+      }, 50);
+    } else {
+      this.isOpeningCalendar = false;
+      if (this.openCalendarTimeoutId) {
+        clearTimeout(this.openCalendarTimeoutId);
+        this.openCalendarTimeoutId = null;
+      }
+      this.cdr.markForCheck();
     }
   }
 
@@ -884,25 +997,43 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public toggleCalendar(event?: Event): void {
     if (this.disabled || this.isInlineMode) return;
     
-    if (event && (event.type === 'click' || event.type === 'touchend')) {
+    if (!event) {
+      const wasOpen = this.isCalendarOpen;
+      this.isCalendarOpen = !this.isCalendarOpen;
+      this.updateOpeningState(!wasOpen && this.isCalendarOpen);
+      this.cdr.markForCheck();
+      return;
+    }
+    
+    if (event.type === 'touchstart' || event.type === 'touchend') {
+      return;
+    }
+    
+    if (event.type === 'click') {
       const now = Date.now();
+      if (this.touchStartElement && this.touchStartElement === event.target && now - this.touchStartTime < 500) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      
       if (now - this.lastToggleTime < 300) {
         return;
       }
       this.lastToggleTime = now;
     }
     
-    if (event) {
-      event.stopPropagation();
-      if (event.type === 'touchend') {
-        event.preventDefault();
-      }
-    }
+    event.stopPropagation();
     
     const wasOpen = this.isCalendarOpen;
     this.isCalendarOpen = !this.isCalendarOpen;
+    this.updateOpeningState(!wasOpen && this.isCalendarOpen);
     
-    if (!wasOpen && this.isCalendarOpen) {
+    this.cdr.markForCheck();
+  }
+
+  private updateOpeningState(isOpening: boolean): void {
+    if (isOpening) {
       this.isOpeningCalendar = true;
       
       if (this.openCalendarTimeoutId) {
@@ -912,7 +1043,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.openCalendarTimeoutId = setTimeout(() => {
         this.isOpeningCalendar = false;
         this.openCalendarTimeoutId = null;
-      }, 300);
+      }, 350);
     } else {
       this.isOpeningCalendar = false;
       if (this.openCalendarTimeoutId) {
@@ -920,8 +1051,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.openCalendarTimeoutId = null;
       }
     }
-    
-    this.cdr.markForCheck();
   }
 
   private closeCalendar(): void {
@@ -1531,5 +1660,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       clearTimeout(this.openCalendarTimeoutId);
       this.openCalendarTimeoutId = null;
     }
+    
+    if (this.clickPreventHandler) {
+      document.removeEventListener('click', this.clickPreventHandler, true);
+      this.clickPreventHandler = null;
+    }
   }
+}
 }
