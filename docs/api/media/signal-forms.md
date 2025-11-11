@@ -190,6 +190,25 @@ export class StableFormComponent {
 
 **Note:** The `$any($event)` cast may be needed if there's a type mismatch between `DatepickerValue` and your expected `Date` type.
 
+**Important for server-side data:** If initial values from the server aren't populating, update the underlying `localObject` signal instead of directly mutating the form value:
+
+```typescript
+onMyDateChange(newDate: DatepickerValue | null): void {
+  this.localObject.update(obj => ({
+    ...obj,
+    myDate: newDate instanceof Date ? newDate : new Date(newDate.toLocaleString())
+  }));
+}
+
+updateFromServer(serverDate: Date | string): void {
+  const dateValue = serverDate instanceof Date ? serverDate : new Date(serverDate);
+  this.localObject.update(obj => ({
+    ...obj,
+    myDate: dateValue
+  }));
+}
+```
+
 ## Validation
 
 Signal Forms support validation. The datepicker respects the field's disabled state:
@@ -332,13 +351,31 @@ If the field value isn't updating, ensure:
 ### Initial value not showing
 
 If the initial value from the server isn't showing:
+
+**With `[field]` binding:**
 1. Ensure `localObject` is initialized with the server data
 2. Use `linkedSignal` for reactive server data
 3. Check that the date value is a valid Date object
+4. If using readonly form, consider the manual binding pattern
+
+**With manual `[value]` binding:**
+1. Use a `computed()` signal that reads from `myForm.value().fieldName`
+2. Update the underlying `localObject` signal when server data arrives (don't mutate form value directly)
+3. Ensure the computed signal is properly reactive to form changes
+4. Convert string dates to Date objects if your server returns strings
+
+### Readonly form signal issues
+
+If you're using `protected readonly form = form(...)` and controls aren't updating:
+
+1. **Option 1**: Remove `readonly` if possible
+2. **Option 2**: Use manual binding with `[value]` and `(valueChange)`, updating `localObject` instead of form directly
+3. **Option 3**: Update the underlying `localObject` signal when server data arrives
 
 ### Disabled state not working
 
 The datepicker automatically reads `field.disabled()`. If it's not working:
 1. Ensure the field has a `disabled` property or function
 2. Check that the form validation is set up correctly
+3. When using manual binding, you may need to manually bind `[disabledState]`
 

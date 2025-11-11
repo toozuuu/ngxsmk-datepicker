@@ -291,6 +291,37 @@ export class StableFormComponent {
 
 **Note:** The `$any($event)` cast may be needed if there's a type mismatch between `DatepickerValue` and your expected `Date` type.
 
+**Important:** If you're using this pattern with server-side data and initial values aren't populating, update the underlying `localObject` signal instead of directly mutating the form value. This ensures the form stays in sync:
+
+```typescript
+export class ServerFormComponent {
+  localObject = signal<{ myDate: Date | null }>({
+    myDate: null
+  });
+  
+  myForm = form(this.localObject, objectSchema({
+    myDate: objectSchema<Date | null>()
+  }));
+  
+  myDate = computed(() => this.myForm.value().myDate);
+  
+  onMyDateChange(newDate: DatepickerValue | null): void {
+    this.localObject.update(obj => ({
+      ...obj,
+      myDate: newDate instanceof Date ? newDate : new Date(newDate.toLocaleString())
+    }));
+  }
+  
+  updateFromServer(serverDate: Date | string): void {
+    const dateValue = serverDate instanceof Date ? serverDate : new Date(serverDate);
+    this.localObject.update(obj => ({
+      ...obj,
+      myDate: dateValue
+    }));
+  }
+}
+```
+
 ### 6. Date Range Selection with Time
 
 **Scenario**: Booking system with check-in/check-out dates and times.
