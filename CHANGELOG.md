@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test suite configuration - added missing Zone.js polyfills for library tests
 - Bundle analysis now correctly excludes source maps from size calculations
 - Build warnings from conflicting export conditions resolved
-- Source map removal script made more resilient for CI environments
+- Source map removal script made more resilient for build environments
 
 ## [1.9.0] - 2025-11-10
 
@@ -65,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Zoneless support (works without Zone.js)
 - Immediate value initialization when `[value]` is set programmatically
 - Comprehensive documentation for Signals, Signal Forms, and SSR
-- GitHub Actions CI with Angular 17-21 matrix testing
+- GitHub Pages deployment automation
 
 ### Changed
 - Updated peer dependencies to support Angular 17-21 (`>=17.0.0 <23.0.0`)

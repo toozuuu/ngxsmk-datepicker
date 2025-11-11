@@ -24,7 +24,7 @@ function removeSourceMaps(dir) {
     });
   } catch (error) {
     // Silently handle errors (e.g., permission issues, missing files)
-    // This prevents build failures in CI environments
+    // This prevents build failures in automated build environments
   }
 }
 

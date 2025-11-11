@@ -450,6 +450,15 @@ The demo includes:
 
 ## **🔧 Development**
 
+### **GitHub Actions**
+
+The project uses GitHub Actions for automated deployment:
+
+- **Deploy Demo App**: Automatically deploys the demo application to GitHub Pages on pushes to `main`/`master` branches
+  - Workflow: `.github/workflows/deploy-demo.yml`
+  - Triggers: Push to main/master or manual workflow dispatch
+  - Builds and deploys the demo app to GitHub Pages
+
 ### **Building the Library**
 
 ```bash

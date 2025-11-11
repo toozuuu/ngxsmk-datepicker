@@ -60,7 +60,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 - `test:` - Test additions/changes
 - `chore:` - Build process or auxiliary tool changes
 - `perf:` - Performance improvements
-- `ci:` - CI configuration changes
+- `ci:` - CI/CD configuration changes (GitHub Actions workflows)
 
 Example:
 ```
