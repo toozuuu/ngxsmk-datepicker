@@ -83,7 +83,10 @@ import {
       }
 
       @if (isCalendarVisible) {
-        <div class="ngxsmk-popover-container" [class.ngxsmk-inline-container]="isInlineMode" [ngClass]="classes?.popover">
+        @if (!isInlineMode && isCalendarOpen) {
+          <div class="ngxsmk-backdrop" (click)="isCalendarOpen = false"></div>
+        }
+        <div class="ngxsmk-popover-container" [class.ngxsmk-inline-container]="isInlineMode" (click)="$event.stopPropagation()" [ngClass]="classes?.popover">
           <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
             @if (showRanges && rangesArray.length > 0 && mode === 'range') {
               <div class="ngxsmk-ranges-container">

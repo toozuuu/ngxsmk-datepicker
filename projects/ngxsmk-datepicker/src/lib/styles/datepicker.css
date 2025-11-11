@@ -55,7 +55,41 @@
 }
 
 .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open {
-  z-index: 10000000;
+  z-index: 2147483647;
+  position: relative;
+  isolation: isolate;
+}
+
+@media (max-width: 639px) {
+  .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open {
+    z-index: 2147483647;
+    position: static;
+  }
+}
+
+.ngxsmk-backdrop {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .ngxsmk-backdrop {
+    display: block;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 2147483646 !important;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-tap-highlight-color: transparent;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    pointer-events: auto;
+  }
 }
 
 .ngxsmk-input-group {
@@ -166,7 +200,7 @@
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  z-index: 10000000;
+  z-index: 2147483647;
   animation: fadeInDown 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   min-width: 100%;
@@ -176,6 +210,7 @@
   backface-visibility: hidden;
   transform: translateZ(0);
   isolation: isolate;
+  -webkit-transform: translateZ(0);
 }
 
 @keyframes fadeInDown {
@@ -234,7 +269,7 @@
   margin: 0;
   padding: 0;
   position: relative;
-  z-index: 10000000;
+  z-index: 2147483647;
 }
 
 .ngxsmk-calendar-container {
@@ -255,7 +290,7 @@
   -ms-user-select: none;
   overflow: visible;
   position: relative;
-  z-index: 10000000;
+  z-index: 2147483647;
 }
 
 .ngxsmk-ranges-container {
@@ -267,7 +302,7 @@
   box-sizing: border-box;
   flex-shrink: 0;
   position: relative;
-  z-index: 10000000;
+  z-index: 2147483647;
 }
 
 .ngxsmk-ranges-container ul {
@@ -819,17 +854,33 @@
 
 @media (max-width: 639px) {
   .ngxsmk-popover-container {
-    width: calc(100vw - 16px);
-    max-width: calc(100vw - 16px);
-    left: 50%;
-    transform: translate3d(-50%, 0, 0);
-    position: fixed;
-    z-index: 10000000;
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    left: 50% !important;
+    transform: translate3d(-50%, 0, 0) translateZ(0) !important;
+    -webkit-transform: translate3d(-50%, 0, 0) translateZ(0) !important;
+    position: fixed !important;
+    z-index: 2147483647 !important;
     top: auto !important;
-    bottom: 20px;
-    max-height: calc(100vh - 40px);
+    bottom: 20px !important;
+    max-height: calc(100vh - 40px) !important;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    isolation: isolate !important;
+    will-change: transform;
+    backface-visibility: hidden;
+    pointer-events: auto !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+  
+  @supports (-webkit-overflow-scrolling: touch) {
+    .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
+      -webkit-transform: translate3d(-50%, 0, 0) translateZ(0) scale(1) !important;
+      transform: translate3d(-50%, 0, 0) translateZ(0) scale(1) !important;
+      -webkit-font-smoothing: antialiased;
+    }
   }
 
   .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
@@ -884,6 +935,8 @@
     width: 100%;
     min-width: 0;
     max-width: 100%;
+    position: relative;
+    z-index: 2147483647;
   }
 
   .ngxsmk-calendar-container {
@@ -892,6 +945,13 @@
     min-width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    position: relative;
+    z-index: 2147483647;
+  }
+
+  .ngxsmk-ranges-container {
+    position: relative;
+    z-index: 2147483647;
   }
 
   .ngxsmk-header {

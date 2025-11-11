@@ -1491,3 +1491,63 @@ img {
         top: 42px;
     }
 }
+
+.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open,
+.ngxsmk-popover-container,
+.ngxsmk-datepicker-container,
+.ngxsmk-calendar-container,
+.ngxsmk-ranges-container,
+.ngxsmk-backdrop {
+    z-index: 2147483647 !important;
+    position: relative;
+}
+
+.ngxsmk-popover-container:not(.ngxsmk-inline-container) {
+    z-index: 2147483647 !important;
+}
+
+.ngxsmk-backdrop {
+    z-index: 2147483646 !important;
+    position: fixed !important;
+}
+
+body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) .tsd-page-toolbar,
+body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) .col-sidebar,
+body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) .overlay,
+body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) .tsd-navigation,
+body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) .tsd-page-content {
+    z-index: 1 !important;
+}
+
+.ngxsmk-calendar-open ~ .tsd-page-toolbar,
+.ngxsmk-calendar-open ~ .col-sidebar,
+.ngxsmk-calendar-open ~ .overlay {
+    z-index: 1 !important;
+}
+
+.ngxsmk-datepicker-wrapper {
+    isolation: isolate;
+    position: relative;
+}
+
+.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open {
+    isolation: isolate;
+    z-index: 2147483647 !important;
+}
+
+@media (max-width: 769px) {
+    body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) html .col-sidebar,
+    body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) html .overlay {
+        z-index: 1 !important;
+    }
+    
+    .ngxsmk-backdrop {
+        z-index: 2147483646 !important;
+        position: fixed !important;
+    }
+    
+    .ngxsmk-popover-container {
+        z-index: 2147483647 !important;
+        position: fixed !important;
+    }
+}

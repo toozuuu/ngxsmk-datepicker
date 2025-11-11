@@ -46,6 +46,10 @@ body {
   z-index: 1000;
 }
 
+body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) .tsd-page-toolbar {
+  z-index: 1 !important;
+}
+
 [data-theme="dark"] .tsd-page-toolbar {
   background: rgba(17, 17, 17, 0.95) !important;
 }
@@ -294,6 +298,32 @@ button:hover {
 /* Smooth Transitions */
 * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open,
+.ngxsmk-popover-container:not(.ngxsmk-inline-container),
+.ngxsmk-datepicker-container,
+.ngxsmk-calendar-container,
+.ngxsmk-ranges-container {
+  z-index: 2147483647 !important;
+}
+
+.ngxsmk-backdrop {
+  z-index: 2147483646 !important;
+}
+
+body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) .tsd-page-toolbar {
+  z-index: 1 !important;
+}
+
+.ngxsmk-datepicker-wrapper {
+  isolation: isolate;
+  position: relative;
+}
+
+.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open {
+  z-index: 2147483647 !important;
+  isolation: isolate;
 }
 </style>
 </head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">ngxsmk-datepicker API Documentation - v1.9.0</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>ngxsmk-datepicker API Documentation - v1.9.0</h1></div><div class="tsd-panel tsd-typography"><a id="md:ngxsmk-datepicker" class="tsd-anchor"></a><h1 class="tsd-anchor-link"><strong>ngxsmk-datepicker</strong><a href="#md:ngxsmk-datepicker" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>npm i ngxsmk-datepicker</p>
