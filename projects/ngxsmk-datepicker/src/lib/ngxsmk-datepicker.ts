@@ -62,7 +62,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./styles/datepicker.css'],
   template: `
-    <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [ngClass]="classes?.wrapper">
+    <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [class.ngxsmk-calendar-open]="isCalendarOpen && !isInlineMode" [ngClass]="classes?.wrapper">
       @if (!isInlineMode) {
         <div class="ngxsmk-input-group" (click)="toggleCalendar($event)" (touchstart)="onTouchStart($event); $event.stopPropagation()" (touchend)="onTouchEnd($event)" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)" (keydown.enter)="toggleCalendar($event)" (keydown.space)="toggleCalendar($event); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
           <input type="text" 

@@ -51,6 +51,11 @@
 .ngxsmk-datepicker-wrapper {
   position: relative;
   width: 100%;
+  z-index: 1;
+}
+
+.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open {
+  z-index: 10000000;
 }
 
 .ngxsmk-input-group {
@@ -161,7 +166,7 @@
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  z-index: 999999;
+  z-index: 10000000;
   animation: fadeInDown 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   min-width: 100%;
@@ -170,6 +175,7 @@
   will-change: transform, opacity;
   backface-visibility: hidden;
   transform: translateZ(0);
+  isolation: isolate;
 }
 
 @keyframes fadeInDown {
@@ -227,6 +233,8 @@
   overflow: visible;
   margin: 0;
   padding: 0;
+  position: relative;
+  z-index: 10000000;
 }
 
 .ngxsmk-calendar-container {
@@ -246,6 +254,8 @@
   -moz-user-select: none;
   -ms-user-select: none;
   overflow: visible;
+  position: relative;
+  z-index: 10000000;
 }
 
 .ngxsmk-ranges-container {
@@ -256,6 +266,8 @@
   border: 1px solid var(--datepicker-border-color);
   box-sizing: border-box;
   flex-shrink: 0;
+  position: relative;
+  z-index: 10000000;
 }
 
 .ngxsmk-ranges-container ul {
@@ -812,7 +824,7 @@
     left: 50%;
     transform: translate3d(-50%, 0, 0);
     position: fixed;
-    z-index: 999999;
+    z-index: 10000000;
     top: auto !important;
     bottom: 20px;
     max-height: calc(100vh - 40px);
