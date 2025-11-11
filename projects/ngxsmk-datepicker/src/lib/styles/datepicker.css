@@ -813,6 +813,11 @@
     transform: translate3d(-50%, 0, 0);
     position: fixed;
     z-index: 999999;
+    top: auto !important;
+    bottom: 20px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
