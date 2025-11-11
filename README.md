@@ -453,24 +453,38 @@ The demo includes:
 ### **Building the Library**
 
 ```bash
-# Build the library
+# Build the library (development)
 npm run build
 
-# Build optimized version
+# Build optimized production version
+# - Removes source maps automatically
+# - Optimized TypeScript compilation
+# - Enhanced tree-shaking
 npm run build:optimized
 
-# Analyze bundle size
+# Analyze bundle size (excludes source maps)
 npm run build:analyze
 ```
+
+**Build Output:**
+- Main bundle: `dist/ngxsmk-datepicker/fesm2022/ngxsmk-datepicker.mjs` (~127KB)
+- Type definitions: `dist/ngxsmk-datepicker/index.d.ts`
+- Source maps: Automatically removed from production builds
 
 ### **Running Tests**
 
 ```bash
-# Run unit tests
+# Run all tests (library + demo app)
 npm test
 
-# Run e2e tests
-npm run e2e
+# Run library tests only
+npx ng test ngxsmk-datepicker --no-watch --browsers=ChromeHeadless
+
+# Run specific test file
+npx ng test ngxsmk-datepicker --include="**/issue-13.spec.ts"
+
+# Run tests in watch mode
+npm test -- --watch
 ```
 
 ### **Code Quality Improvements**
@@ -535,6 +549,8 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 📚 **API Documentation**: TypeDoc integration for automatic API documentation generation
 - 🤖 **Semantic Release**: Automated versioning, changelog generation, and npm publishing
 - 🧹 **Code Quality**: Removed unnecessary comments, improved error handling, cleaner codebase
+- 📦 **Bundle Optimization**: Optimized bundle size (~127KB), enhanced tree-shaking, automatic source map removal
+- 🧪 **Test Improvements**: Fixed test configuration, added Zone.js polyfills, improved test reliability
 
 ### **v1.7.0**
 - 🎯 **Signal Forms Support**: Full Angular 21 signal forms integration with writable signals

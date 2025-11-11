@@ -8,15 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- Optimized bundle size with improved TypeScript compiler settings
-- Removed source maps from production builds (saves ~127KB)
-- Enhanced tree-shaking with optimized imports
-- Fixed package.json exports to eliminate build warnings
-- Updated test configuration to include Zone.js polyfills
+- **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings
+  - Main bundle: ~127KB (source maps excluded from published package)
+  - Enhanced tree-shaking with optimized imports and compiler options
+  - Added `importsNotUsedAsValues: "remove"` for smaller output
+  - Disabled `preserveConstEnums` for better inlining
+- **Build Process**: 
+  - Source maps automatically removed from production builds (saves ~127KB)
+  - Improved build scripts with better error handling
+  - Enhanced bundle analysis that excludes source maps
+- **Package Configuration**:
+  - Fixed package.json exports to eliminate build warnings
+  - Optimized `files` array to exclude unnecessary files
+  - Updated exports field for better module resolution
+- **Test Configuration**: 
+  - Added Zone.js polyfills to library test configuration
+  - Updated test commands to explicitly target library project
+  - Improved test reliability across Angular versions
 
 ### Fixed
 - Test suite configuration - added missing Zone.js polyfills for library tests
-- Bundle analysis now correctly excludes source maps
+- Bundle analysis now correctly excludes source maps from size calculations
+- Build warnings from conflicting export conditions resolved
+- Source map removal script made more resilient for CI environments
 
 ## [1.9.0] - 2025-11-10
 

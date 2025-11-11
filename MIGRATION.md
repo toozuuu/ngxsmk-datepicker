@@ -48,6 +48,19 @@ New keyboard shortcuts:
 
 All animations now use GPU acceleration for better performance. No code changes required.
 
+#### Bundle Optimization
+
+The library bundle has been optimized for production:
+- **Bundle Size**: Main bundle is now ~127KB (source maps excluded from published package)
+- **Tree-Shaking**: Enhanced with optimized TypeScript compiler settings
+- **Source Maps**: Automatically removed from production builds (saves ~127KB)
+- **No Breaking Changes**: All optimizations are transparent to end users
+
+**For Developers:**
+- Use `npm run build:optimized` for production builds
+- Use `npm run build:analyze` to check bundle size
+- Source maps are automatically excluded from the published package
+
 ### Breaking Changes
 
 None in v1.9.0.

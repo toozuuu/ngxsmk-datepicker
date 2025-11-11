@@ -156,15 +156,20 @@ Breaking changes require:
 ### Running Tests
 
 ```bash
-# Run all tests
+# Run all tests (library + demo app)
 npm test
+
+# Run library tests only
+npx ng test ngxsmk-datepicker --no-watch --browsers=ChromeHeadless
 
 # Run tests in watch mode
 npm test -- --watch
 
 # Run specific test file
-npm test -- --include="**/issue-13.spec.ts"
+npx ng test ngxsmk-datepicker --include="**/issue-13.spec.ts"
 ```
+
+**Note**: The library tests require Zone.js polyfills, which are automatically configured in `angular.json`. If tests fail, ensure the test configuration includes the polyfills.
 
 ### Writing Tests
 
@@ -172,6 +177,8 @@ npm test -- --include="**/issue-13.spec.ts"
 - Test both happy paths and edge cases
 - Test SSR compatibility when applicable
 - Test accessibility features
+- Ensure tests work with OnPush change detection
+- Test zone-less operation when applicable
 
 ## Documentation
 
@@ -187,13 +194,33 @@ npm test -- --include="**/issue-13.spec.ts"
 - Document parameters and return types
 - Include usage examples in comments
 
+## Build and Bundle Optimization
+
+### Build Scripts
+
+- `npm run build` - Development build
+- `npm run build:optimized` - Production build with optimizations:
+  - Removes source maps automatically
+  - Optimized TypeScript compilation
+  - Enhanced tree-shaking
+- `npm run build:analyze` - Analyze bundle size (excludes source maps)
+
+### Bundle Size Guidelines
+
+- Main bundle target: ~127KB (excluding source maps)
+- Source maps are automatically excluded from published package
+- Use `npm run build:analyze` to verify bundle size before PR
+
 ## Release Process
 
-1. Update version in `package.json`
-2. Update CHANGELOG.md
-3. Create git tag: `git tag v1.x.x`
-4. Push tag: `git push origin v1.x.x`
-5. Publish to npm: `npm publish`
+1. Update version in `package.json` and `projects/ngxsmk-datepicker/package.json`
+2. Update CHANGELOG.md with all changes
+3. Run `npm run build:optimized` to ensure build succeeds
+4. Run `npm run build:analyze` to verify bundle size
+5. Run all tests: `npm test`
+6. Create git tag: `git tag v1.x.x`
+7. Push tag: `git push origin v1.x.x`
+8. Publish to npm: `npm publish` (or use semantic-release)
 
 ## Questions?
 
