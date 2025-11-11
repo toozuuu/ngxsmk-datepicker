@@ -101,7 +101,7 @@
     "semantic-release": "^23.0.0",
     "typedoc": "^0.26.11",
     "typescript": "^5.7.0",
-    "typescript-eslint": "8.46.3",
+    "typescript-eslint": "8.46.4",
     "zone.js": "^0.15.0"
   }
 }
