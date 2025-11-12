@@ -5,5 +5,5 @@
     "entryFile": "src/public-api.ts"
   },
   "allowedNonPeerDependencies": [],
-  "deleteDestPath": false
+  "deleteDestPath": true
 }

@@ -59,8 +59,7 @@
   ],
   "exports": {
     ".": {
-      "import": "./fesm2022/ngxsmk-datepicker.mjs",
-      "require": "./fesm2020/ngxsmk-datepicker.mjs"
+      "import": "./fesm2022/ngxsmk-datepicker.mjs"
     }
   },
   "optimization": {

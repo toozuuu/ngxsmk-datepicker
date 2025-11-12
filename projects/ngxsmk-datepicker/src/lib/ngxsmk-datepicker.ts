@@ -16,6 +16,7 @@ import {
   ChangeDetectorRef,
   PLATFORM_ID,
   effect,
+  AfterViewInit,
 } from '@angular/core';
 import { isPlatformBrowser, CommonModule, DatePipe } from '@angular/common';
 import {
@@ -64,7 +65,7 @@ import {
   template: `
     <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [class.ngxsmk-calendar-open]="isCalendarOpen && !isInlineMode" [ngClass]="classes?.wrapper">
       @if (!isInlineMode) {
-        <div class="ngxsmk-input-group" (click)="toggleCalendar($event)" (touchstart)="onTouchStart($event); $event.stopPropagation()" (touchend)="onTouchEnd($event)" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)" (keydown.enter)="toggleCalendar($event)" (keydown.space)="toggleCalendar($event); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
+        <div class="ngxsmk-input-group" (click)="toggleCalendar($event)" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)" (keydown.enter)="toggleCalendar($event)" (keydown.space)="toggleCalendar($event); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
           <input type="text" 
                  [value]="displayValue" 
                  [placeholder]="placeholder" 
@@ -84,9 +85,17 @@ import {
 
       @if (isCalendarVisible) {
         @if (!isInlineMode && isCalendarOpen) {
-          <div class="ngxsmk-backdrop" (click)="isCalendarOpen = false"></div>
+          <div
+            class="ngxsmk-backdrop"
+            role="button"
+            tabindex="0"
+            aria-label="Close calendar overlay"
+            (click)="onBackdropInteract($event)"
+            (keydown.enter)="onBackdropInteract($event)"
+            (keydown.space)="onBackdropInteract($event)"
+          ></div>
         }
-        <div class="ngxsmk-popover-container" [class.ngxsmk-inline-container]="isInlineMode" (click)="$event.stopPropagation()" [ngClass]="classes?.popover">
+        <div class="ngxsmk-popover-container" [class.ngxsmk-inline-container]="isInlineMode" [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode" [ngClass]="classes?.popover">
           <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
             @if (showRanges && rangesArray.length > 0 && mode === 'range') {
               <div class="ngxsmk-ranges-container">
@@ -142,6 +151,7 @@ import {
                         [attr.aria-label]="day ? getAriaLabel(day) : null"
                         [ngClass]="getDayCellCustomClasses(day)"
                         [attr.title]="day ? getDayCellTooltip(day) : null"
+                        [attr.data-date]="day ? day.getTime() : null"
                         (click)="onDateClick(day)" 
                         (keydown.enter)="onDateClick(day)"
                         (keydown.space)="onDateClick(day); $event.preventDefault()"
@@ -198,7 +208,7 @@ import {
     </div>
   `,
 })
-export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor {
   private static _idCounter = 0;
   public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
   
@@ -386,6 +396,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public hoveredDate: Date | null = null;
   public rangesArray: { key: string; value: [Date, Date] }[] = [];
 
+  // Touch tracking for date cells
+  private dateCellTouchStartTime: number = 0;
+  private dateCellTouchStartDate: Date | null = null;
+  private dateCellTouchStartX: number = 0;
+  private dateCellTouchStartY: number = 0;
+  private isDateCellTouching: boolean = false;
+  private lastDateCellTouchDate: Date | null = null;
+  private dateCellTouchHandled: boolean = false;
+
   private _currentMonth: number = this.currentDate.getMonth();
   private _currentYear: number = this.currentDate.getFullYear();
 
@@ -411,6 +430,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly dateComparator = createDateComparator();
   
+  // Track passive listeners for cleanup
+  private passiveTouchListeners: Array<() => void> = [];
+  
   get isInlineMode(): boolean {
     if (this.inline === true || this.inline === 'always') {
       return true;
@@ -420,6 +442,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         return window.matchMedia('(min-width: 768px)').matches;
       } catch {
         return false;
+      }
+    }
+    return false;
+  }
+
+  private isMobileDevice(): boolean {
+    if (this.isBrowser) {
+      try {
+        return window.matchMedia('(max-width: 1024px)').matches;
+      } catch {
+        // Fallback: check user agent or touch support
+        return 'ontouchstart' in window || (navigator as any).maxTouchPoints > 0;
       }
     }
     return false;
@@ -447,15 +481,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
       
       return this.selectedDate.toLocaleString(this.locale, options);
-    } else if (this.mode === 'range' && this.startDate && this.endDate) {
+    } else if (this.mode === 'range' && this.startDate) {
       const options: Intl.DateTimeFormatOptions = { 
         year: 'numeric', 
         month: 'short', 
         day: '2-digit' 
       };
+      if (this.endDate) {
+        // Both dates selected - show range
       const start = this.startDate.toLocaleString(this.locale, options);
       const end = this.endDate.toLocaleString(this.locale, options);
       return `${start} - ${end}`;
+      } else {
+        // Only start date selected - show start date with indicator
+        const start = this.startDate.toLocaleString(this.locale, options);
+        return `${start}...`;
+      }
     } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
       return `${this.selectedDates.length} dates selected`;
     }
@@ -514,22 +555,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-    const eventTime = Date.now();
-    const timeSinceToggle = eventTime - this.lastToggleTime;
-    
-    if (this.isOpeningCalendar || (timeSinceToggle < 3500 && this.isCalendarOpen)) {
       const target = event.target as Node;
       const nativeElement = this.elementRef.nativeElement;
       
-      if (target && nativeElement && nativeElement.contains(target)) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
+    if (!target || !nativeElement) {
         return;
-      }
     }
     
-    if (this.isOpeningCalendar) {
+    // Check if click originated from within the datepicker component
+    if (nativeElement.contains(target)) {
+      // Click was inside the datepicker, don't close
       return;
     }
     
@@ -537,17 +572,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-    const target = event.target as Node;
-    const nativeElement = this.elementRef.nativeElement;
+    const now = Date.now();
+    const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
     
-    if (!target || !nativeElement) {
+    // On mobile, give more time for the modal to appear before allowing outside clicks to close
+    const protectionTime = this.isMobileDevice() ? 600 : 300;
+    
+    // Protect against immediate closes - this is critical for modal reliability
+    // Increase protection time and check opening state
+    if (this.isOpeningCalendar || timeSinceToggle < protectionTime) {
+      // Within protection window, ignore outside clicks to prevent accidental closes
       return;
     }
     
-    if (!nativeElement.contains(target)) {
-      this.isCalendarOpen = false;
-      this.cdr.markForCheck();
-    }
+    // Only close if click/touch is outside the datepicker and protection time has passed
+    this.isCalendarOpen = false;
+    this.isOpeningCalendar = false;
+    this.cdr.markForCheck();
   }
 
   @HostListener('document:touchstart', ['$event'])
@@ -556,12 +597,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-    if (this.isOpeningCalendar) {
-      const nativeElement = this.elementRef.nativeElement;
       const target = event.target as Node;
-      if (target && nativeElement && nativeElement.contains(target)) {
+    const nativeElement = this.elementRef.nativeElement;
+    
+    if (!target || !nativeElement) {
         return;
       }
+    
+    // Check if touch originated from within the datepicker component
+    if (nativeElement.contains(target)) {
+      // Touch was inside the datepicker, don't close
       return;
     }
     
@@ -569,79 +614,122 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-    const target = event.target as Node;
-    const nativeElement = this.elementRef.nativeElement;
+    const now = Date.now();
+    const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
+    const protectionTime = this.isMobileDevice() ? 600 : 300;
     
-    if (!target || !nativeElement) {
+    // Protect against immediate closes on mobile
+    if (this.isOpeningCalendar || timeSinceToggle < protectionTime) {
+      // Within protection window, ignore outside touches to prevent accidental closes
       return;
     }
     
-    if (!nativeElement.contains(target)) {
-      this.isCalendarOpen = false;
-      this.cdr.markForCheck();
-    }
+    // Only close if touch is outside the datepicker and protection time has passed
+    this.isCalendarOpen = false;
+    this.isOpeningCalendar = false;
+    this.cdr.markForCheck();
   }
 
   public onTouchStart(event: TouchEvent): void {
     if (this.disabled || this.isInlineMode) {
       return;
     }
+    // Record touch start for tap detection
     this.touchStartTime = Date.now();
     this.touchStartElement = event.currentTarget;
+    // Don't prevent default or stop propagation here to allow normal touch behavior
   }
 
   public onTouchEnd(event: TouchEvent): void {
     if (this.disabled || this.isInlineMode) {
+      this.touchStartTime = 0;
+      this.touchStartElement = null;
       return;
     }
     
     const now = Date.now();
-    if (this.touchStartTime === 0 || now - this.touchStartTime > 500) {
+    const timeSinceTouch = this.touchStartTime > 0 ? now - this.touchStartTime : 0;
+    
+    // Only process if touch was quick (tap, not scroll) - increased timeout for better reliability
+    // Also check if touch was on the same element
+    const touch = event.changedTouches[0];
+    const isSameElement = touch && this.touchStartElement && 
+      (touch.target === this.touchStartElement || 
+       (this.touchStartElement as Node).contains && 
+       (this.touchStartElement as Node).contains(touch.target as Node));
+    
+    if (this.touchStartTime === 0 || timeSinceTouch > 800 || !isSameElement) {
       this.touchStartTime = 0;
+      this.touchStartElement = null;
       return;
     }
     
+    // Prevent rapid toggling
+    const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
+    if (timeSinceToggle < 300) {
+      this.touchStartTime = 0;
+      this.touchStartElement = null;
+      return;
+    }
+    
+    // Prevent default to avoid double-firing with click event
     event.preventDefault();
     event.stopPropagation();
-    event.stopImmediatePropagation();
     
     const wasOpen = this.isCalendarOpen;
     
     if (!wasOpen) {
+      // Opening calendar - ensure it opens reliably
       this.isOpeningCalendar = true;
       this.isCalendarOpen = true;
-      this.lastToggleTime = now;
-      this.touchStartTime = 0;
+    this.lastToggleTime = now;
+      
+      // Clear touch tracking
+    this.touchStartTime = 0;
+      this.touchStartElement = null;
       
       if (this.openCalendarTimeoutId) {
         clearTimeout(this.openCalendarTimeoutId);
       }
       
-      this.cdr.markForCheck();
+      this.updateOpeningState(true);
       
+      // Force immediate change detection to show modal - critical for mobile reliability
+      this.cdr.detectChanges();
+      
+      // Also use requestAnimationFrame as backup to ensure DOM is updated
+      // Use double RAF to ensure modal is fully rendered before allowing outside clicks
       if (this.isBrowser) {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            if (this.openCalendarTimeoutId) {
-              clearTimeout(this.openCalendarTimeoutId);
+            this.cdr.detectChanges();
+            // Clear opening flag after modal is fully rendered
+            if (this.isOpeningCalendar) {
+              setTimeout(() => {
+                this.isOpeningCalendar = false;
+    this.cdr.markForCheck();
+              }, 150);
             }
-            
-            this.openCalendarTimeoutId = setTimeout(() => {
-              this.isOpeningCalendar = false;
-              this.openCalendarTimeoutId = null;
-              this.cdr.markForCheck();
-            }, 3000);
           });
         });
       }
     } else {
+      // Closing calendar
       this.isCalendarOpen = false;
       this.isOpeningCalendar = false;
+      this.lastToggleTime = now;
+      
+      // Clear touch tracking
+      this.touchStartTime = 0;
+      this.touchStartElement = null;
+      
       if (this.openCalendarTimeoutId) {
         clearTimeout(this.openCalendarTimeoutId);
         this.openCalendarTimeoutId = null;
       }
-      this.cdr.markForCheck();
+      
+      this.updateOpeningState(false);
+      this.cdr.detectChanges();
     }
   }
 
@@ -662,54 +750,64 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
     
     const now = Date.now();
-    if (this.pointerDownTime === 0 || now - this.pointerDownTime > 500) {
+    const timeSincePointerDown = this.pointerDownTime > 0 ? now - this.pointerDownTime : 0;
+    
+    if (this.pointerDownTime === 0 || timeSincePointerDown > 600) {
       this.isPointerEvent = false;
+      this.pointerDownTime = 0;
+      this.touchStartTime = 0;
+      this.touchStartElement = null;
       return;
     }
     
     event.preventDefault();
     event.stopPropagation();
-    event.stopImmediatePropagation();
     
     const wasOpen = this.isCalendarOpen;
     this.isPointerEvent = false;
     this.pointerDownTime = 0;
     this.touchStartTime = 0;
+    this.touchStartElement = null;
     
     if (!wasOpen) {
+      // Opening calendar
       this.isOpeningCalendar = true;
       this.isCalendarOpen = true;
-      this.lastToggleTime = now;
+    this.lastToggleTime = now;
       
       if (this.openCalendarTimeoutId) {
         clearTimeout(this.openCalendarTimeoutId);
       }
       
-      this.cdr.markForCheck();
+      this.updateOpeningState(true);
       
+      // Force immediate change detection - critical for mobile reliability
+      this.cdr.detectChanges();
+      
+      // Also use requestAnimationFrame as backup
       if (this.isBrowser) {
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (this.openCalendarTimeoutId) {
-              clearTimeout(this.openCalendarTimeoutId);
-            }
-            
-            this.openCalendarTimeoutId = setTimeout(() => {
-              this.isOpeningCalendar = false;
-              this.openCalendarTimeoutId = null;
-              this.cdr.markForCheck();
-            }, 3000);
-          });
+          this.cdr.detectChanges();
         });
+        
+        this.openCalendarTimeoutId = setTimeout(() => {
+          this.isOpeningCalendar = false;
+          this.openCalendarTimeoutId = null;
+    this.cdr.markForCheck();
+        }, 350);
       }
     } else {
+      // Closing calendar
       this.isCalendarOpen = false;
       this.isOpeningCalendar = false;
+      
       if (this.openCalendarTimeoutId) {
         clearTimeout(this.openCalendarTimeoutId);
         this.openCalendarTimeoutId = null;
       }
-      this.cdr.markForCheck();
+      
+      this.updateOpeningState(false);
+      this.cdr.detectChanges();
     }
   }
 
@@ -1062,14 +1160,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public toggleCalendar(event?: Event): void {
     if (this.disabled || this.isInlineMode) return;
     
-    if (!event) {
-      const wasOpen = this.isCalendarOpen;
-      this.isCalendarOpen = !this.isCalendarOpen;
-      this.updateOpeningState(!wasOpen && this.isCalendarOpen);
-      this.cdr.markForCheck();
+    // Prevent rapid toggling - debounce clicks
+    const now = Date.now();
+    const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
+    if (timeSinceToggle < 300) {
+      // Too soon after last toggle, ignore
       return;
     }
     
+    if (!event) {
+      const wasOpen = this.isCalendarOpen;
+      this.isCalendarOpen = !this.isCalendarOpen;
+      this.lastToggleTime = now;
+      this.updateOpeningState(!wasOpen && this.isCalendarOpen);
+      this.cdr.detectChanges();
+      return;
+    }
+    
+    // Ignore touch events - handled by onTouchEnd
     if (event.type === 'touchstart' || event.type === 'touchend') {
       return;
     }
@@ -1077,22 +1185,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (event.type === 'click') {
       const now = Date.now();
       
+      // If this click happened shortly after a touch event on the same element, ignore it
+      // This prevents double-firing on mobile devices
       if (this.touchStartElement && this.touchStartTime > 0) {
         const timeSinceTouch = now - this.touchStartTime;
-        if (timeSinceTouch < 600 && (this.touchStartElement === event.target || 
+        if (timeSinceTouch < 800 && (this.touchStartElement === event.target || 
             (event.target as Node) && this.touchStartElement && 
             (this.touchStartElement as Node).contains && 
             (this.touchStartElement as Node).contains(event.target as Node))) {
-          event.preventDefault();
-          event.stopPropagation();
-          event.stopImmediatePropagation();
+          // Touch event already handled this, ignore click
+          this.touchStartTime = 0;
+          this.touchStartElement = null;
           return;
         }
       }
       
-      if (now - this.lastToggleTime < 400) {
-        event.preventDefault();
-        event.stopPropagation();
+      // Debounce rapid clicks
+      if (now - this.lastToggleTime < 300) {
         return;
       }
       
@@ -1105,6 +1214,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.isCalendarOpen = !this.isCalendarOpen;
     this.updateOpeningState(!wasOpen && this.isCalendarOpen);
     
+    // Force change detection for immediate UI update
+    this.cdr.detectChanges();
+  }
+
+  public onBackdropInteract(event: Event): void {
+    event.stopPropagation();
+    if (event instanceof KeyboardEvent) {
+      event.preventDefault();
+    }
+
+    this.isCalendarOpen = false;
+    this.isOpeningCalendar = false;
+    this.updateOpeningState(false);
+    this.lastToggleTime = Date.now();
     this.cdr.markForCheck();
   }
 
@@ -1116,10 +1239,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         clearTimeout(this.openCalendarTimeoutId);
       }
       
+      // Reduced timeout for faster interaction, but still protect against accidental closes
       this.openCalendarTimeoutId = setTimeout(() => {
         this.isOpeningCalendar = false;
         this.openCalendarTimeoutId = null;
-      }, 350);
+        this.cdr.markForCheck();
+      }, 200);
     } else {
       this.isOpeningCalendar = false;
       if (this.openCalendarTimeoutId) {
@@ -1234,6 +1359,114 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.initializeValue(null);
     }
     this.generateCalendar();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.isBrowser) {
+      // Add passive touch event listeners to date cells to avoid scroll-blocking warnings
+      // Use multiple attempts to ensure DOM is ready
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.setupPassiveTouchListeners();
+          this.setupInputGroupPassiveListeners();
+          
+          // Also setup after a short delay as fallback
+          setTimeout(() => {
+            this.setupInputGroupPassiveListeners();
+          }, 100);
+        });
+      });
+    }
+  }
+
+  private setupInputGroupPassiveListeners(): void {
+    // Retry if element not found (DOM might not be ready)
+    const nativeElement = this.elementRef.nativeElement;
+    if (!nativeElement) {
+      // Retry after a short delay
+      setTimeout(() => this.setupInputGroupPassiveListeners(), 50);
+      return;
+    }
+
+    const inputGroup = nativeElement.querySelector('.ngxsmk-input-group') as HTMLElement;
+    if (!inputGroup) {
+      // Retry after a short delay
+      setTimeout(() => this.setupInputGroupPassiveListeners(), 50);
+      return;
+    }
+
+    // Check if listeners already exist to avoid duplicates
+    if ((inputGroup as any).__ngxsmk_touch_listeners_setup) {
+      return;
+    }
+    (inputGroup as any).__ngxsmk_touch_listeners_setup = true;
+
+    // onTouchStart doesn't call preventDefault, so it can be passive
+    const touchStartHandler = (event: TouchEvent) => {
+      this.onTouchStart(event);
+    };
+    inputGroup.addEventListener('touchstart', touchStartHandler, { passive: true });
+
+    // onTouchEnd calls preventDefault, so it must be non-passive
+    const touchEndHandler = (event: TouchEvent) => {
+      this.onTouchEnd(event);
+    };
+    inputGroup.addEventListener('touchend', touchEndHandler, { passive: false });
+
+    // Store cleanup
+    this.passiveTouchListeners.push(() => {
+      (inputGroup as any).__ngxsmk_touch_listeners_setup = false;
+      inputGroup.removeEventListener('touchstart', touchStartHandler);
+      inputGroup.removeEventListener('touchend', touchEndHandler);
+    });
+  }
+
+  private setupPassiveTouchListeners(): void {
+    // Clean up existing listeners first
+    this.passiveTouchListeners.forEach(cleanup => cleanup());
+    this.passiveTouchListeners = [];
+
+    const nativeElement = this.elementRef.nativeElement;
+    if (!nativeElement) return;
+
+    // Find all date cells
+    const dateCells = nativeElement.querySelectorAll('.ngxsmk-day-cell[data-date]');
+    
+    dateCells.forEach((cell: HTMLElement) => {
+      const dateTimestamp = cell.getAttribute('data-date');
+      if (!dateTimestamp) return;
+      
+      const dateValue = parseInt(dateTimestamp, 10);
+      if (isNaN(dateValue)) return;
+      
+      const day = new Date(dateValue);
+      if (!day || isNaN(day.getTime())) return;
+
+      // Use native addEventListener with passive option for touchstart (doesn't call preventDefault)
+      const touchStartHandler = (event: TouchEvent) => {
+        this.onDateCellTouchStart(event, day);
+      };
+      cell.addEventListener('touchstart', touchStartHandler, { passive: true });
+
+      // touchend may need preventDefault, so non-passive
+      const touchEndHandler = (event: TouchEvent) => {
+        this.onDateCellTouchEnd(event, day);
+      };
+      cell.addEventListener('touchend', touchEndHandler, { passive: false });
+
+      // touchmove may need preventDefault for range selection, so non-passive
+      const touchMoveHandler = (event: TouchEvent) => {
+        this.onDateCellTouchMove(event);
+      };
+      cell.addEventListener('touchmove', touchMoveHandler, { passive: false });
+
+      // Store cleanup functions
+      this.passiveTouchListeners.push(() => {
+        cell.removeEventListener('touchstart', touchStartHandler);
+        cell.removeEventListener('touchend', touchEndHandler);
+        cell.removeEventListener('touchmove', touchMoveHandler);
+      });
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -1554,6 +1787,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public onDateClick(day: Date | null): void {
     if (!day || this.disabled) return;
     
+    // If touch event just handled this (within last 500ms), ignore the click event to prevent double-firing
+    // But only if we actually had a touch event - this allows clicks to work if touch events fail
+    if (this.dateCellTouchHandled && this.isDateCellTouching) {
+      // Touch event handled it, but clear the flag now
+      this.dateCellTouchHandled = false;
+      this.isDateCellTouching = false;
+      return;
+    }
+    
+    // Reset touch tracking if click is being used (fallback for when touch events don't work)
+    this.isDateCellTouching = false;
+    this.dateCellTouchStartTime = 0;
+    this.dateCellTouchStartDate = null;
+    this.lastDateCellTouchDate = null;
+    
     if (this.isCurrentMonth(day) && this.isDateDisabled(day)) return;
 
     const dateToToggle = getStartOfDay(day);
@@ -1568,27 +1816,61 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.selectedDate = this.applyCurrentTime(day);
       this.emitValue(this.selectedDate);
     } else if (this.mode === 'range') {
+      // Improved range selection logic for better mobile support
+      const dayTime = getStartOfDay(day).getTime();
+      const startTime = this.startDate ? getStartOfDay(this.startDate).getTime() : null;
+      
+      // If no start date, or both dates are set, start a new range
       if (!this.startDate || (this.startDate && this.endDate)) {
         this.startDate = this.applyCurrentTime(day);
         this.endDate = null;
-      } else if (day && this.startDate && day >= this.startDate) {
+        this.hoveredDate = null;
+        // Don't emit value until end date is selected - store start date internally only
+        // This prevents form control issues with invalid range values
+      } 
+      // If start date exists but no end date
+      else if (this.startDate && !this.endDate) {
+        // If the clicked day is before start date, make it the new start date
+        if (dayTime < startTime!) {
+          this.startDate = this.applyCurrentTime(day);
+          this.endDate = null;
+          this.hoveredDate = null;
+          // Don't emit value until end date is selected
+        }
+        // If the clicked day is same as start date, clear selection
+        else if (dayTime === startTime!) {
+          // Clear selection on same date click (optional - can be removed if not desired)
+          // this.startDate = null;
+          // this.endDate = null;
+          // this.emitValue(null);
+        }
+        // If the clicked day is after start date, set it as end date
+        else {
         const potentialEndDate = this.applyCurrentTime(day);
         
+          // Validate range if hook is provided
         if (this.hooks?.validateRange) {
           if (!this.hooks.validateRange(this.startDate, potentialEndDate)) {
+              // If validation fails, reset to new start date
             this.startDate = potentialEndDate;
             this.endDate = null;
             this.hoveredDate = null;
+              // Don't emit value until end date is selected
+              this.cdr.markForCheck();
             return;
           }
         }
         
         this.endDate = potentialEndDate;
+          this.hoveredDate = null;
         this.emitValue({start: this.startDate as Date, end: this.endDate as Date});
-      } else {
-        this.startDate = this.applyCurrentTime(day);
-        this.endDate = null;
+          
+          // Force change detection after range selection
+          this.cdr.markForCheck();
+        }
       }
+      
+      // Clear hovered date after selection
       this.hoveredDate = null;
     } else if (this.mode === 'multiple') {
       const existingIndex = this.selectedDates.findIndex(d => this.isSameDay(d, dateToToggle));
@@ -1639,6 +1921,243 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  public onDateCellTouchStart(event: TouchEvent, day: Date | null): void {
+    if (this.disabled || !day || this.isDateDisabled(day)) {
+      return;
+    }
+
+    // Stop propagation to prevent calendar close, but don't prevent default to allow scrolling when needed
+    event.stopPropagation();
+    
+    // Reset handled flag at start of new touch
+    this.dateCellTouchHandled = false;
+    this.isDateCellTouching = true;
+    
+    const touch = event.touches[0];
+    if (touch) {
+      this.dateCellTouchStartTime = Date.now();
+      this.dateCellTouchStartDate = day;
+      this.dateCellTouchStartX = touch.clientX;
+      this.dateCellTouchStartY = touch.clientY;
+      this.lastDateCellTouchDate = day;
+      
+      // For range mode, update hovered date on touch start for preview
+      if (this.mode === 'range' && this.startDate && !this.endDate) {
+        const dayTime = getStartOfDay(day).getTime();
+        const startTime = getStartOfDay(this.startDate).getTime();
+        // Only show preview if day is after start date
+        if (dayTime >= startTime) {
+          this.hoveredDate = day;
+          this.cdr.markForCheck();
+        } else {
+          // If day is before start date, clear preview
+          this.hoveredDate = null;
+          this.cdr.markForCheck();
+        }
+      } else if (this.mode === 'range' && !this.startDate) {
+        // Starting a new range - clear any previous hover state
+        this.hoveredDate = null;
+      }
+    } else {
+      // No touch data - reset
+      this.isDateCellTouching = false;
+    }
+  }
+
+  public onDateCellTouchMove(event: TouchEvent): void {
+    if (this.disabled || !this.isDateCellTouching || !this.dateCellTouchStartDate) {
+      return;
+    }
+
+    // Only handle for range mode when selecting end date
+    if (this.mode === 'range' && this.startDate && !this.endDate) {
+      const touch = event.touches[0];
+      if (touch) {
+        // Check if this is a significant movement (drag for range selection)
+        const deltaX = Math.abs(touch.clientX - this.dateCellTouchStartX);
+        const deltaY = Math.abs(touch.clientY - this.dateCellTouchStartY);
+        const isSignificantMove = deltaX > 5 || deltaY > 5;
+        
+        // Only prevent default if it's a significant move (indicating range selection drag)
+        // This allows normal scrolling for small movements
+        if (isSignificantMove) {
+          event.preventDefault();
+        }
+        
+        // Use elementFromPoint to find the date cell under the touch point
+        try {
+          const elementFromPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (elementFromPoint) {
+            // Find the date cell element (could be the cell itself or a child like day-number)
+            const dateCell = elementFromPoint.closest('.ngxsmk-day-cell') as HTMLElement;
+            if (dateCell && !dateCell.classList.contains('empty') && !dateCell.classList.contains('disabled')) {
+              // Get the date from the data attribute
+              const dateTimestamp = dateCell.getAttribute('data-date');
+              if (dateTimestamp) {
+                const dateValue = parseInt(dateTimestamp, 10);
+                if (!isNaN(dateValue)) {
+                  const day = new Date(dateValue);
+                  if (day && !isNaN(day.getTime()) && !this.isDateDisabled(day)) {
+                    const dayTime = getStartOfDay(day).getTime();
+                    const startTime = getStartOfDay(this.startDate).getTime();
+                    
+                    // Update hovered date for preview - allow dates after start date
+                    if (dayTime >= startTime) {
+                      this.hoveredDate = day;
+                      this.lastDateCellTouchDate = day;
+                      // Force change detection for preview update
+                      this.cdr.detectChanges();
+                    } else {
+                      // If dragging before start date, clear preview but don't update last touched date
+                      this.hoveredDate = null;
+                      this.cdr.detectChanges();
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } catch (e) {
+          // If elementFromPoint fails, ignore and continue
+        }
+      }
+    }
+  }
+
+  public onDateCellTouchEnd(event: TouchEvent, day: Date | null): void {
+    if (this.disabled) {
+      this.isDateCellTouching = false;
+      this.dateCellTouchStartTime = 0;
+      this.dateCellTouchStartDate = null;
+      this.lastDateCellTouchDate = null;
+      return;
+    }
+
+    // If we didn't have a valid touch start, don't process
+    if (!this.isDateCellTouching || !this.dateCellTouchStartDate) {
+      this.isDateCellTouching = false;
+      return;
+    }
+
+    const now = Date.now();
+    const touchDuration = this.dateCellTouchStartTime > 0 ? now - this.dateCellTouchStartTime : 0;
+    const touch = event.changedTouches[0];
+    
+    // Get the date from the touch end location - try elementFromPoint first
+    let endDay: Date | null = day || this.dateCellTouchStartDate;
+    if (touch) {
+      try {
+        const elementFromPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (elementFromPoint) {
+          const dateCell = elementFromPoint.closest('.ngxsmk-day-cell') as HTMLElement;
+          if (dateCell) {
+            const dateTimestamp = dateCell.getAttribute('data-date');
+            if (dateTimestamp) {
+              const dateValue = parseInt(dateTimestamp, 10);
+              if (!isNaN(dateValue)) {
+                const parsedDay = new Date(dateValue);
+                if (parsedDay && !isNaN(parsedDay.getTime())) {
+                  endDay = parsedDay;
+                }
+              }
+            }
+          }
+        }
+      } catch (e) {
+        // If elementFromPoint fails, use the day parameter or start date
+        endDay = day || this.dateCellTouchStartDate;
+      }
+    }
+    
+    // Use the last touched date (from touchmove) or the end day or start day
+    const finalDay = this.lastDateCellTouchDate || endDay || this.dateCellTouchStartDate;
+    
+    if (!finalDay || this.isDateDisabled(finalDay)) {
+      // Reset and allow click event to handle it
+      this.isDateCellTouching = false;
+      this.dateCellTouchStartTime = 0;
+      this.dateCellTouchStartDate = null;
+      this.lastDateCellTouchDate = null;
+      return;
+    }
+    
+    if (touch) {
+      const deltaX = Math.abs(touch.clientX - this.dateCellTouchStartX);
+      const deltaY = Math.abs(touch.clientY - this.dateCellTouchStartY);
+      // Increased thresholds for better tap detection on mobile
+      const isTap = touchDuration < 500 && deltaX < 20 && deltaY < 20;
+      
+      // If it's a tap (not a drag), treat it as a click
+      if (isTap) {
+        // Prevent default to avoid double-firing with click event
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Mark as handled to prevent click event from firing
+        this.dateCellTouchHandled = true;
+        
+        // Use the date from touch start (more reliable for taps)
+        const dateToSelect = this.dateCellTouchStartDate || finalDay;
+        
+        // Call onDateClick directly
+        this.onDateClick(dateToSelect);
+        
+        // Reset touch tracking immediately
+        this.isDateCellTouching = false;
+        this.dateCellTouchStartTime = 0;
+        this.dateCellTouchStartDate = null;
+        this.lastDateCellTouchDate = null;
+        
+        // Clear the handled flag after a delay to allow future clicks
+        setTimeout(() => {
+          this.dateCellTouchHandled = false;
+        }, 500);
+      } else {
+        // It was a drag/swipe - handle based on mode
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Mark as handled to prevent click event from firing
+        this.dateCellTouchHandled = true;
+        
+        if (this.mode === 'range' && this.startDate && !this.endDate) {
+          // For range mode, select the end date from the drag
+          // Call onDateClick - it will handle whether to set as end date or new start date
+          this.onDateClick(finalDay);
+        } else {
+          // For single/multiple mode or when starting a new range, treat drag as selection
+          this.onDateClick(finalDay);
+        }
+        
+        // Reset touch tracking immediately
+        this.isDateCellTouching = false;
+        this.dateCellTouchStartTime = 0;
+        this.dateCellTouchStartDate = null;
+        this.lastDateCellTouchDate = null;
+        
+        // Clear the handled flag after a delay
+        setTimeout(() => {
+          this.dateCellTouchHandled = false;
+        }, 500);
+      }
+    } else {
+      // No touch data - reset tracking and allow click to handle
+      this.isDateCellTouching = false;
+      this.dateCellTouchStartTime = 0;
+      this.dateCellTouchStartDate = null;
+      this.lastDateCellTouchDate = null;
+      return;
+    }
+    
+    // Clear hovered date after selection
+    if (this.mode === 'range') {
+      setTimeout(() => {
+        this.hoveredDate = null;
+        this.cdr.markForCheck();
+      }, 300);
+    }
+  }
+
   public isPreviewInRange(day: Date | null): boolean {
     if (this.mode !== 'range' || !this.startDate || this.endDate || !this.hoveredDate || !day) return false;
     const start = getStartOfDay(this.startDate).getTime();
@@ -1681,6 +2200,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         days: this.daysInMonth.filter(d => d !== null)
       }
     });
+    
+    // Re-setup touch listeners after calendar regenerates (dates may have changed)
+    if (this.isBrowser) {
+      // Use requestAnimationFrame to ensure DOM is updated
+      requestAnimationFrame(() => {
+        this.setupPassiveTouchListeners();
+      });
+    }
   }
 
   private generateDropdownOptions(): void {
@@ -1725,6 +2252,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   ngOnDestroy(): void {
+    // Clean up passive touch listeners
+    this.passiveTouchListeners.forEach(cleanup => cleanup());
+    this.passiveTouchListeners = [];
+    
     this.selectedDate = null;
     this.selectedDates = [];
     this.startDate = null;

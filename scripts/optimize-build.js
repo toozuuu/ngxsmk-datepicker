@@ -15,8 +15,7 @@ packageJson.sideEffects = false;
 // Add module resolution optimizations
 packageJson.exports = {
   '.': {
-    'import': './fesm2022/ngxsmk-datepicker.mjs',
-    'require': './fesm2020/ngxsmk-datepicker.mjs'
+    'import': './fesm2022/ngxsmk-datepicker.mjs'
   }
 };
 

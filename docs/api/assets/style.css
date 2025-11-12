@@ -1535,19 +1535,94 @@ body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) .tsd-page-content {
     z-index: 2147483647 !important;
 }
 
-@media (max-width: 769px) {
+@media (max-width: 1024px) {
     body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) html .col-sidebar,
     body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open) html .overlay {
         z-index: 1 !important;
     }
     
-    .ngxsmk-backdrop {
-        z-index: 2147483646 !important;
+    /* Show backdrop as modal on mobile/tablet */
+    .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode) .ngxsmk-backdrop {
+        display: block !important;
         position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        z-index: 2147483646 !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+        pointer-events: auto !important;
     }
     
-    .ngxsmk-popover-container {
+    /* Datepicker popover as centered modal */
+    .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
         z-index: 2147483647 !important;
         position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        -webkit-transform: translate(-50%, -50%) !important;
+        width: calc(100vw - 32px) !important;
+        max-width: min(calc(100vw - 32px), 500px) !important;
+        max-height: calc(100vh - 32px) !important;
+        max-height: calc(100dvh - 32px) !important;
+        margin: 0 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2) !important;
+        border-radius: 12px !important;
+    }
+    
+    /* Ensure wrapper doesn't interfere with modal */
+    .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode) {
+        isolation: auto !important;
+        transform: none !important;
+        -webkit-transform: none !important;
+        contain: none !important;
+    }
+}
+    
+    /* Ensure code blocks are readable on mobile */
+    pre {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        word-wrap: break-word !important;
+        white-space: pre-wrap !important;
+    }
+    
+    /* Improve toolbar on mobile */
+    .tsd-page-toolbar {
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+    }
+    
+    /* Ensure content doesn't overflow */
+    .col-content {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    /* Better mobile menu */
+    .col-sidebar {
+        box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Ensure search works on mobile */
+    .tsd-page-toolbar input[type="search"] {
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    /* Ensure datepicker popover appears above mobile menu */
+    body > .ngxsmk-backdrop.ngxsmk-backdrop-portal,
+    body > .ngxsmk-popover-container.ngxsmk-popover-portal {
+        z-index: 2147483647 !important;
     }
 }
