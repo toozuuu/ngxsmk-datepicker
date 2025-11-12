@@ -98,7 +98,7 @@ npm audit
 
 Security updates are released as:
 - **Patch versions** (1.8.1, 1.8.2, etc.) for critical security fixes
-- **Minor versions** (1.9.0, 1.10.0, etc.) for non-critical security improvements
+- **Minor versions** (1.9.0, 1.9.1, etc.) for non-critical security improvements
 
 ## Credits
 

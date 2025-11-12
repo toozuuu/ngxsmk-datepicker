@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.10.0] - TBD
+## [1.9.1] - 2025-11-12
 
 ### Changed
 - **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings

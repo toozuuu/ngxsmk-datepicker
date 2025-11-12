@@ -1,8 +1,15 @@
-# **ngxsmk-datepicker**
+# **ngxsmk-datepicker** - Modern Angular Date Picker Component
 
-npm i ngxsmk-datepicker
+[![npm version](https://img.shields.io/npm/v/ngxsmk-datepicker.svg)](https://www.npmjs.com/package/ngxsmk-datepicker)
+[![Angular](https://img.shields.io/badge/Angular-17%2B-red.svg)](https://angular.io/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Bundle Size](https://img.shields.io/badge/bundle-~127KB-green.svg)](https://bundlephobia.com/package/ngxsmk-datepicker)
+
+**npm i ngxsmk-datepicker**
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
+
+**Keywords**: Angular datepicker, Angular date range picker, Angular calendar component, Angular 17 datepicker, Angular 18 datepicker, Angular 19 datepicker, Angular 20 datepicker, Angular 21 datepicker, TypeScript datepicker, standalone Angular component, Signal Forms datepicker, SSR compatible datepicker, zoneless Angular datepicker, lightweight datepicker, customizable datepicker
 
 * Github: [https://github.com/NGXSMK/ngxsmk-datepicker](https://github.com/NGXSMK/ngxsmk-datepicker)
 * **Live Demo**: [https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker](https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker)
@@ -551,7 +558,29 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.10.0** (Latest)
+### **v1.9.1** (Latest)
+- 📦 **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings
+  - Main bundle: ~127KB (source maps excluded from published package)
+  - Enhanced tree-shaking with optimized imports and compiler options
+  - Added `importsNotUsedAsValues: "remove"` for smaller output
+  - Disabled `preserveConstEnums` for better inlining
+- 🔧 **Build Process Improvements**: 
+  - Source maps automatically removed from production builds (saves ~127KB)
+  - Improved build scripts with better error handling
+  - Enhanced bundle analysis that excludes source maps
+- 📦 **Package Configuration**: 
+  - Fixed package.json exports to eliminate build warnings
+  - Optimized `files` array to exclude unnecessary files
+  - Updated exports field for better module resolution
+- 🧪 **Test Configuration**: 
+  - Added Zone.js polyfills to library test configuration
+  - Updated test commands to explicitly target library project
+  - Improved test reliability across Angular versions
+- 🐛 **Bug Fixes**: 
+  - Fixed test suite configuration - added missing Zone.js polyfills for library tests
+  - Bundle analysis now correctly excludes source maps from size calculations
+  - Build warnings from conflicting export conditions resolved
+  - Source map removal script made more resilient for build environments
 
 ### **v1.9.0**
 - 🎣 **Extension Points & Hooks**: Comprehensive hook system for customization (day rendering, validation, keyboard shortcuts, formatting, events)
@@ -696,12 +725,22 @@ Perfect for managing design tokens, creating theme systems, and implementing dar
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
+## **🔍 SEO & Discoverability**
+
+This library is optimized for search engine visibility:
+- **Keywords**: Angular datepicker, date range picker, calendar component, Angular 17-21, TypeScript, Signal Forms, SSR compatible
+- **Meta Tags**: Comprehensive Open Graph and Twitter Card support
+- **Structured Data**: JSON-LD schema markup for better search results
+- **Documentation**: Complete API documentation with examples
+- **Performance**: Optimized bundle size (~127KB) for fast loading
+
 ## **👨‍💻 Author**
 
 **Sachin Dilshan**
 - 📧 Email: [sachindilshan040@gmail.com](mailto:sachindilshan040@gmail.com)
 - 🐙 GitHub: [@toozuuu](https://github.com/toozuuu)
 - 📦 NPM: [ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
+- 💼 LinkedIn: [sachindilshan](https://www.linkedin.com/in/sachindilshan/)
 
 ## **⭐ Support**
 

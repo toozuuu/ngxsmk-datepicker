@@ -5,23 +5,87 @@ This document provides migration instructions for upgrading between major versio
 ## Table of Contents
 
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
-- [v1.9.0 → v1.10.0](#v190---v1100)
+- [v1.9.0 → v1.9.1](#v190---v191)
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
-## v1.9.0 → v1.10.0
+## v1.9.0 → v1.9.1
 
 ### New Features
 
-*No new features in v1.10.0.*
+*No new features in v1.9.1.*
+
+### Changes
+
+#### Bundle Optimization
+
+The library bundle has been further optimized for production:
+
+- **Bundle Size**: Main bundle is now ~127KB (source maps excluded from published package)
+- **TypeScript Compiler**: Enhanced settings for better tree-shaking
+  - Added `importsNotUsedAsValues: "remove"` for smaller output
+  - Disabled `preserveConstEnums` for better inlining
+- **Source Maps**: Automatically removed from production builds (saves ~127KB)
+- **Package Configuration**: Fixed exports to eliminate build warnings
+
+**For Developers:**
+- Use `npm run build:optimized` for production builds
+- Use `npm run build:analyze` to check bundle size
+- Source maps are automatically excluded from the published package
+
+#### Build Process Improvements
+
+- Source maps are now automatically removed from production builds
+- Improved build scripts with better error handling
+- Enhanced bundle analysis that correctly excludes source maps
+
+#### Package Configuration
+
+- Fixed `package.json` exports to eliminate build warnings
+- Optimized `files` array to exclude unnecessary files
+- Updated exports field for better module resolution
+
+#### Test Configuration
+
+- Added Zone.js polyfills to library test configuration
+- Updated test commands to explicitly target library project
+- Improved test reliability across Angular versions
 
 ### Breaking Changes
 
-None in v1.10.0.
+None in v1.9.1.
 
 ### Deprecations
 
-None in v1.10.0.
+None in v1.9.1.
+
+### Migration Steps
+
+No code changes required. This is a transparent update with optimizations and bug fixes:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.1
+   ```
+
+2. Rebuild your application:
+   ```bash
+   npm run build
+   ```
+
+3. Verify bundle size improvements (optional):
+   - Check your application's bundle size
+   - You should see improved tree-shaking benefits
+
+4. Run tests to ensure everything works:
+   ```bash
+   npm test
+   ```
+
+**Note**: If you're a library developer using ngxsmk-datepicker as a dependency, you may notice:
+- Smaller bundle sizes in your application
+- Fewer build warnings related to package exports
+- Improved test reliability if you're running tests with Zone.js
 
 ## v1.8.0 → v1.9.0
 
@@ -213,7 +277,7 @@ If you encounter issues during migration:
 
 | ngxsmk-datepicker | Angular | Node.js |
 |-------------------|---------|---------|
-| 1.10.0+ | 17-21 | 18+ |
+| 1.9.1+ | 17-21 | 18+ |
 | 1.9.0 | 17-21 | 18+ |
 | 1.8.0 | 17-21 | 18+ |
 | 1.7.0 | 17-20 | 18+ |
@@ -229,6 +293,6 @@ When APIs are deprecated:
 Example:
 - v1.8.0: API deprecated
 - v1.9.0: Still works with deprecation warning
-- v1.10.0: Still works with deprecation warning
+- v1.9.1: Still works with deprecation warning
 - v2.0.0: Removed
 
