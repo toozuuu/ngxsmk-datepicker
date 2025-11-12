@@ -551,7 +551,9 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.9.0** (Latest)
+### **v1.10.0** (Latest)
+
+### **v1.9.0**
 - 🎣 **Extension Points & Hooks**: Comprehensive hook system for customization (day rendering, validation, keyboard shortcuts, formatting, events)
 - ⌨️ **Enhanced Keyboard Shortcuts**: Added Y (yesterday), N (tomorrow), W (next week) keys with custom shortcut support
 - 🎨 **UI/UX Improvements**: Modern, polished design with improved spacing, shadows, animations, and accessibility

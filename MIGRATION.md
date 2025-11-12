@@ -5,8 +5,23 @@ This document provides migration instructions for upgrading between major versio
 ## Table of Contents
 
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
+- [v1.9.0 → v1.10.0](#v190---v1100)
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.0 → v1.10.0
+
+### New Features
+
+*No new features in v1.10.0.*
+
+### Breaking Changes
+
+None in v1.10.0.
+
+### Deprecations
+
+None in v1.10.0.
 
 ## v1.8.0 → v1.9.0
 
@@ -198,7 +213,8 @@ If you encounter issues during migration:
 
 | ngxsmk-datepicker | Angular | Node.js |
 |-------------------|---------|---------|
-| 1.9.0+ | 17-21 | 18+ |
+| 1.10.0+ | 17-21 | 18+ |
+| 1.9.0 | 17-21 | 18+ |
 | 1.8.0 | 17-21 | 18+ |
 | 1.7.0 | 17-20 | 18+ |
 
@@ -213,5 +229,6 @@ When APIs are deprecated:
 Example:
 - v1.8.0: API deprecated
 - v1.9.0: Still works with deprecation warning
+- v1.10.0: Still works with deprecation warning
 - v2.0.0: Removed
 

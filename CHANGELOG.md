@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - TBD
+
 ### Changed
 - **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings
   - Main bundle: ~127KB (source maps excluded from published package)
