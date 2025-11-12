@@ -18,6 +18,7 @@
     "prepublishOnly": "npm run build:optimized",
     "prepublish:copy-license": "node -e \"require('fs').copyFileSync('LICENSE', 'dist/ngxsmk-datepicker/LICENSE')\"",
     "publish:lib": "npm run build:optimized && npm run prepublish:copy-license",
+    "publish:patch": "npm run build:optimized && npm run prepublish:copy-license && npm publish --tag patch && npm dist-tag add ngxsmk-datepicker@$(node -p \"require('./package.json').version\") latest",
     "semantic-release": "semantic-release",
     "docs": "typedoc --options typedoc.json && node scripts/enhance-api-docs.js",
     "docs:serve": "npm run docs && npx http-server docs/api -p 8080 -o"

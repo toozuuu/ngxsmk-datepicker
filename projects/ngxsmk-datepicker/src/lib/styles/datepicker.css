@@ -304,6 +304,27 @@
   pointer-events: auto;
 }
 
+.ngxsmk-popover-container.ngxsmk-popover-open {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+}
+
+.ngxsmk-popover-container.ngxsmk-popover-open .ngxsmk-calendar-container {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+}
+
 /* On mobile/tablet, remove isolation that might prevent modal from appearing */
 @media (max-width: 1023px) {
   .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
@@ -322,6 +343,15 @@
     position: fixed !important;
     z-index: 2147483647 !important;
     pointer-events: none !important;
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    min-width: -webkit-fit-content !important;
+    min-width: -moz-fit-content !important;
+    min-width: fit-content !important;
+    max-width: -webkit-fit-content !important;
+    max-width: -moz-fit-content !important;
+    max-width: fit-content !important;
   }
 
   .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode) .ngxsmk-popover-container:not(.ngxsmk-inline-container) > *,
@@ -558,7 +588,12 @@
 }
 
 .ngxsmk-ranges-container {
-  width: 100%;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
   padding: var(--datepicker-spacing-lg);
   background: var(--datepicker-hover-background);
   border-radius: var(--datepicker-radius-lg);
@@ -585,6 +620,10 @@
   list-style: none;
   padding: 0;
   margin: calc(var(--datepicker-spacing-sm) / -2);
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  overflow: visible;
 }
 
 .ngxsmk-ranges-container ul > * {
@@ -1478,19 +1517,23 @@
   }
 
   .ngxsmk-ranges-container {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    min-width: -webkit-fit-content;
+    min-width: -moz-fit-content;
+    min-width: fit-content;
+    overflow: visible;
   }
 
   .ngxsmk-ranges-container ul {
     flex-wrap: nowrap !important;
     justify-content: flex-start;
     gap: var(--datepicker-spacing-xs);
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
+    overflow: visible;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
   }
 
   .ngxsmk-ranges-container li {
@@ -1569,8 +1612,17 @@
     visibility: visible !important;
     opacity: 1 !important;
     pointer-events: none !important;
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    min-width: -webkit-fit-content !important;
+    min-width: -moz-fit-content !important;
+    min-width: fit-content !important;
+    max-width: -webkit-fit-content !important;
+    max-width: -moz-fit-content !important;
+    max-width: fit-content !important;
   }
-
+  
   .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode) .ngxsmk-popover-container:not(.ngxsmk-inline-container) > *,
   .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) > * {
     pointer-events: auto !important;
@@ -1639,7 +1691,12 @@
   }
 
   .ngxsmk-ranges-container {
-    width: 100%;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    min-width: -webkit-fit-content;
+    min-width: -moz-fit-content;
+    min-width: fit-content;
     padding: var(--datepicker-spacing-lg);
     border-right: none;
     border-bottom: 1px solid var(--datepicker-border-color);
@@ -1661,6 +1718,10 @@
     -ms-flex-pack: start;
     justify-content: flex-start;
     gap: var(--datepicker-spacing-xs);
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    overflow: visible;
   }
 
   .ngxsmk-ranges-container li {
@@ -1767,7 +1828,12 @@
   }
 
   .ngxsmk-ranges-container {
-    width: 200px;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    min-width: -webkit-fit-content;
+    min-width: -moz-fit-content;
+    min-width: fit-content;
     padding: var(--datepicker-spacing-xl);
     border-right: 1px solid var(--datepicker-border-color);
     -webkit-border-radius: var(--datepicker-radius-lg) 0 0 var(--datepicker-radius-lg);
@@ -1787,6 +1853,10 @@
     -ms-flex-pack: start;
     justify-content: flex-start;
     gap: var(--datepicker-spacing-xs);
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    overflow: visible;
   }
 
   .ngxsmk-ranges-container li {

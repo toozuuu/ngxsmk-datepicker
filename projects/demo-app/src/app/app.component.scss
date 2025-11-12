@@ -741,10 +741,30 @@
 .code-block {
   background: #1e1e1e;
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   margin: 2rem 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-overflow-scrolling: touch;
+}
+
+.code-block::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .code-header {
@@ -783,8 +803,12 @@
 .code-block pre {
   margin: 0;
   padding: 1.5rem;
-  overflow-x: auto;
+  overflow: visible;
   background: #1e1e1e;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+  min-width: min-content;
 }
 
 .code-block code {
@@ -792,6 +816,11 @@
   font-size: 0.875rem;
   line-height: 1.6;
   color: #d4d4d4;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+  display: block;
+  min-width: max-content;
 }
 
 .api-subsection {
@@ -887,6 +916,8 @@
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 16px;
+  overflow-x: visible;
+  overflow-y: visible;
 }
 
 .docs-container.dark-theme .example-section {
@@ -1540,6 +1571,7 @@
     border-left: none;
     border-right: none;
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     width: calc(100% + 2rem);
   }
@@ -1548,15 +1580,21 @@
     padding: 1rem;
     font-size: 0.75rem;
     line-height: 1.5;
-    overflow-x: auto;
-    word-break: break-word;
-    white-space: pre-wrap;
+    overflow: visible;
+    word-break: normal;
+    overflow-wrap: normal;
+    white-space: pre;
+    min-width: min-content;
   }
 
   .code-block code {
     font-size: 0.75rem;
     line-height: 1.5;
-    word-break: break-word;
+    word-break: normal;
+    overflow-wrap: normal;
+    white-space: pre;
+    display: block;
+    min-width: max-content;
   }
 
   .code-header {
@@ -1849,6 +1887,7 @@
     margin: 1rem -0.75rem;
     width: calc(100% + 1.5rem);
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -1856,15 +1895,21 @@
     padding: 0.875rem;
     font-size: 0.6875rem;
     line-height: 1.5;
-    overflow-x: auto;
-    word-break: break-word;
-    white-space: pre-wrap;
+    overflow: visible;
+    word-break: normal;
+    overflow-wrap: normal;
+    white-space: pre;
+    min-width: min-content;
   }
 
   .code-block code {
     font-size: 0.6875rem;
     line-height: 1.5;
-    word-break: break-word;
+    word-break: normal;
+    overflow-wrap: normal;
+    white-space: pre;
+    display: block;
+    min-width: max-content;
   }
 
   .code-header {
