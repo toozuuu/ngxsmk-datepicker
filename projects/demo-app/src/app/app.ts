@@ -80,6 +80,9 @@ export class App implements OnInit, OnDestroy {
   private readonly today = new Date();
   public readonly JSON = JSON;
   public currentTheme: 'light' | 'dark' = 'light';
+  private darkModeMediaQuery: MediaQueryList | null = null;
+  private darkModeHandler: ((e: MediaQueryList | MediaQueryListEvent) => void) | null = null;
+  private manualThemeOverride: boolean = false;
   public mobileMenuOpen: boolean = false;
   public selectedMobileSize: number = 375;
   public currentTime: string = '9:41';
@@ -105,6 +108,7 @@ export class App implements OnInit, OnDestroy {
     { id: 'getting-started', label: 'Getting Started', sub: false, keywords: 'getting started introduction overview' },
     { id: 'installation', label: 'Installation', sub: false, keywords: 'install setup npm package' },
     { id: 'basic-usage', label: 'Basic Usage', sub: false, keywords: 'basic usage example simple' },
+    { id: 'framework-integration', label: 'Framework Integration', sub: false, keywords: 'angular material ionic html input form field' },
     { id: 'api-reference', label: 'API Reference', sub: false, keywords: 'api reference documentation' },
     { id: 'theming', label: 'Theming', sub: false, keywords: 'theme dark light styling css' },
     { id: 'examples', label: 'Examples', sub: false, keywords: 'examples demo showcase' },
@@ -112,10 +116,14 @@ export class App implements OnInit, OnDestroy {
     { id: 'single-date', label: 'Single Date', sub: true, keywords: 'single date picker selection' },
     { id: 'customization-a11y', label: 'Customization & A11y', sub: true, keywords: 'customization accessibility a11y aria' },
     { id: 'date-range', label: 'Date Range', sub: true, keywords: 'date range selection start end' },
+    { id: 'time-only', label: 'Time Only', sub: true, keywords: 'time only picker time selection no calendar' },
+    { id: 'rtl-support', label: 'RTL Support', sub: true, keywords: 'rtl right to left arabic hebrew persian urdu mirror' },
+    { id: 'timezone-support', label: 'Timezone Support', sub: true, keywords: 'timezone time zone utc iana formatting parsing' },
     { id: 'multiple-dates', label: 'Multiple Dates', sub: true, keywords: 'multiple dates selection array' },
     { id: 'programmatic-value', label: 'Programmatic Value', sub: true, keywords: 'programmatic set value api' },
     { id: 'inline-calendar', label: 'Inline Calendar', sub: true, keywords: 'inline calendar always visible' },
     { id: 'min-max-date', label: 'Min/Max Date', sub: true, keywords: 'min max date limit restriction' },
+    { id: 'calendar-views', label: 'Calendar Views', sub: true, keywords: 'year picker decade picker timeline time slider view mode' },
     { id: 'mobile-playground', label: 'Mobile Playground', sub: true, keywords: 'mobile responsive playground test' },
     { id: 'inputs', label: 'Inputs', sub: false, keywords: 'inputs properties @input parameters' },
     { id: 'outputs', label: 'Outputs', sub: false, keywords: 'outputs events @output emitters' },
@@ -128,8 +136,12 @@ export class App implements OnInit, OnDestroy {
     { property: 'minDate', type: 'DateInput | null', default: 'null', description: 'Minimum selectable date' },
     { property: 'maxDate', type: 'DateInput | null', default: 'null', description: 'Maximum selectable date' },
     { property: 'showTime', type: 'boolean', default: 'false', description: 'Show time selection' },
+    { property: 'timeOnly', type: 'boolean', default: 'false', description: 'Display time picker only (no calendar)' },
+    { property: 'rtl', type: 'boolean | null', default: 'null', description: 'Right-to-left layout support (auto-detects from document.dir or locale)' },
+    { property: 'timezone', type: 'string', default: 'undefined', description: 'IANA timezone name for date formatting (e.g., "America/New_York", "UTC")' },
     { property: 'inline', type: "boolean | 'always' | 'auto'", default: 'false', description: 'Inline calendar display' },
     { property: 'theme', type: "'light' | 'dark'", default: "'light'", description: 'Theme variant' },
+    { property: 'calendarViewMode', type: "'month' | 'year' | 'decade' | 'timeline' | 'time-slider'", default: "'month'", description: 'Calendar view mode (year picker, decade picker, timeline, or time slider)' },
   ];
 
   public outputProperties = [
@@ -156,6 +168,15 @@ export class App implements OnInit, OnDestroy {
 
   public hasDisabledDates: boolean = false;
   public disabledDatesArray: string[] = ['10/21/2025', '08/21/2025', '10/15/2025', '10/8/2025', '10/3/2025'];
+
+  public yearPickerView: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'year';
+  public decadePickerView: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'decade';
+  public timelineView: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'timeline';
+  public timeSliderView: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'time-slider';
+  public yearPickerValue: DatepickerValue = null;
+  public decadePickerValue: DatepickerValue = null;
+  public timelineRange: DatepickerValue = null;
+  public timeSliderRange: DatepickerValue = null;
 
   public programmaticSingleDate: Date | null = null;
   public programmaticRange: { start: Date; end: Date } | null = null;
@@ -193,6 +214,8 @@ export class App implements OnInit, OnDestroy {
       disabled: true
     }),
     rangeWithTime: new FormControl(),
+    timeOnly: new FormControl<DatepickerValue>(null),
+    rtlDate: new FormControl<DatepickerValue>(null),
     multipleDates: new FormControl<Date[] | null>(null),
     minDateDemo: new FormControl(),
     disabledDatesDemo: new FormControl(),
@@ -228,6 +251,132 @@ export class MyComponent {
   </ngxsmk-datepicker>
 </form>`;
 
+  public materialFormCode = `import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-material-form',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgxsmkDatepickerComponent
+  ],
+  template: \`
+    <form [formGroup]="myForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Select Date</mat-label>
+        <ngxsmk-datepicker
+          mode="single"
+          formControlName="date"
+          placeholder="Choose a date">
+        </ngxsmk-datepicker>
+      </mat-form-field>
+    </form>
+  \`
+})
+export class MaterialFormComponent {
+  myForm = new FormGroup({
+    date: new FormControl<Date | null>(null)
+  });
+}`;
+
+  public ionicFormCode = `import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { IonItem, IonLabel } from '@ionic/angular/standalone';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-ionic-form',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    IonItem,
+    IonLabel,
+    NgxsmkDatepickerComponent
+  ],
+  template: \`
+    <form [formGroup]="myForm">
+      <ion-item>
+        <ion-label position="stacked">Appointment Date</ion-label>
+        <ngxsmk-datepicker
+          mode="single"
+          formControlName="appointmentDate"
+          placeholder="Select date">
+        </ngxsmk-datepicker>
+      </ion-item>
+    </form>
+  \`
+})
+export class IonicFormComponent {
+  myForm = new FormGroup({
+    appointmentDate: new FormControl<Date | null>(null)
+  });
+}`;
+
+  public plainHtmlCode = `import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-plain-form',
+  standalone: true,
+  imports: [ReactiveFormsModule, NgxsmkDatepickerComponent],
+  template: \`
+    <form [formGroup]="myForm">
+      <label for="birthdate">Birth Date</label>
+      <ngxsmk-datepicker
+        id="birthdate"
+        mode="single"
+        formControlName="birthdate"
+        placeholder="MM/DD/YYYY">
+      </ngxsmk-datepicker>
+      
+      <button type="submit">Submit</button>
+    </form>
+  \`
+})
+export class PlainFormComponent {
+  myForm = new FormGroup({
+    birthdate: new FormControl<Date | null>(null)
+  });
+}`;
+
+  public materialRangeCode = `<mat-form-field appearance="fill">
+  <mat-label>Date Range</mat-label>
+  <ngxsmk-datepicker
+    mode="range"
+    [showTime]="true"
+    formControlName="dateRange">
+  </ngxsmk-datepicker>
+</mat-form-field>`;
+
+  public ionicRangeCode = `<ion-item>
+  <ion-label>Check-in / Check-out</ion-label>
+  <ngxsmk-datepicker
+    mode="range"
+    [theme]="'light'"
+    formControlName="bookingDates">
+  </ngxsmk-datepicker>
+</ion-item>`;
+
+  public plainHtmlValidationCode = `<form [formGroup]="myForm">
+  <div class="form-group">
+    <label for="event-date">Event Date *</label>
+    <ngxsmk-datepicker
+      id="event-date"
+      mode="single"
+      formControlName="eventDate"
+      [minDate]="today"
+      required>
+    </ngxsmk-datepicker>
+  </div>
+</form>`;
+
   public singleDateCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
     mode="single"
@@ -245,6 +394,59 @@ export class MyComponent {
     formControlName="rangeWithTime">
   </ngxsmk-datepicker>
 </form>`;
+
+  public timeOnlyCode = `<form [formGroup]="datepickerForm">
+  <ngxsmk-datepicker
+    mode="single"
+    [timeOnly]="true"
+    [minuteInterval]="15"
+    formControlName="timeOnly">
+  </ngxsmk-datepicker>
+</form>`;
+
+  public rtlCode = `<form [formGroup]="datepickerForm">
+  <ngxsmk-datepicker
+    mode="single"
+    [rtl]="true"
+    [locale]="'ar-SA'"
+    placeholder="اختر تاريخ"
+    formControlName="rtlDate">
+  </ngxsmk-datepicker>
+</form>`;
+
+  public rtlAutoCode = `<ngxsmk-datepicker
+  mode="single"
+  [locale]="'ar-SA'">
+</ngxsmk-datepicker>
+
+<!-- Auto-detects RTL from locale or document.dir -->`;
+
+  public globalConfigCode = `import { ApplicationConfig } from '@angular/core';
+import { provideDatepickerConfig } from 'ngxsmk-datepicker';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideDatepickerConfig({
+      weekStart: 1, // Monday as first day of week
+      minuteInterval: 15, // 15-minute intervals
+      yearRange: 20, // Show 20 years before/after
+      holidayProvider: myHolidayProvider, // Optional
+      locale: 'en-US' // Optional
+    })
+  ]
+};`;
+
+  public timezoneCode = `<ngxsmk-datepicker
+  mode="single"
+  [timezone]="'America/New_York'"
+  [showTime]="true"
+  placeholder="New York Time">
+</ngxsmk-datepicker>
+
+<!-- Global timezone via config provider -->
+provideDatepickerConfig({
+  timezone: 'America/New_York'
+})`;
 
   public multipleDatesCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
@@ -279,6 +481,37 @@ export class MyComponent {
 </ngxsmk-datepicker>
 
 <p>Signal value: {{ dateSig() | json }}</p>`;
+
+  public calendarViewsCode = `
+<!-- Year Picker -->
+<ngxsmk-datepicker
+  mode="single"
+  calendarViewMode="year"
+  placeholder="Select birth year">
+</ngxsmk-datepicker>
+
+<!-- Decade Picker -->
+<ngxsmk-datepicker
+  mode="single"
+  calendarViewMode="decade"
+  placeholder="Select decade">
+</ngxsmk-datepicker>
+
+<!-- Timeline View (Range Mode) -->
+<ngxsmk-datepicker
+  mode="range"
+  calendarViewMode="timeline"
+  placeholder="Select date range">
+</ngxsmk-datepicker>
+
+<!-- Time Slider View (Range Mode with Time) -->
+<ngxsmk-datepicker
+  mode="range"
+  calendarViewMode="time-slider"
+  [showTime]="true"
+  placeholder="Select time range">
+</ngxsmk-datepicker>
+`;
 
   public inlineCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
@@ -343,19 +576,15 @@ export class MyComponent {
 </div>`;
 
   public designSystemCode = `:host {
-  /* TokiForge integration example */
   --datepicker-primary-color: var(--toki-color-primary, #6d28d9);
   --datepicker-primary-contrast: var(--toki-color-on-primary, #ffffff);
   --datepicker-background: var(--toki-color-surface, #ffffff);
   --datepicker-text-color: var(--toki-color-on-surface, #1f2937);
   --datepicker-border-color: var(--toki-color-outline, #e5e7eb);
   
-  /* Spacing from design system */
   --datepicker-spacing-sm: var(--toki-spacing-sm, 8px);
   --datepicker-spacing-md: var(--toki-spacing-md, 12px);
   --datepicker-spacing-lg: var(--toki-spacing-lg, 16px);
-  
-  /* Border radius from design system */
   --datepicker-radius-md: var(--toki-radius-md, 8px);
   --datepicker-radius-lg: var(--toki-radius-lg, 12px);
 }`;
@@ -383,7 +612,44 @@ export class MyComponent {
   };
 
   toggleTheme(): void {
+    this.manualThemeOverride = true;
     this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+  }
+
+  private detectSystemTheme(): void {
+    if (typeof window === 'undefined' || !window.matchMedia) {
+      return;
+    }
+
+    this.darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    this.darkModeHandler = (e: MediaQueryList | MediaQueryListEvent) => {
+      if (!this.manualThemeOverride) {
+        this.currentTheme = e.matches ? 'dark' : 'light';
+      }
+    };
+
+    if (this.darkModeHandler) {
+      this.darkModeHandler(this.darkModeMediaQuery);
+    }
+    
+    if (this.darkModeMediaQuery.addEventListener) {
+      this.darkModeMediaQuery.addEventListener('change', this.darkModeHandler);
+    } else {
+      this.darkModeMediaQuery.addListener(this.darkModeHandler as any);
+    }
+  }
+
+  private cleanupThemeListener(): void {
+    if (this.darkModeMediaQuery && this.darkModeHandler) {
+      if (this.darkModeMediaQuery.removeEventListener) {
+        this.darkModeMediaQuery.removeEventListener('change', this.darkModeHandler);
+      } else {
+        this.darkModeMediaQuery.removeListener(this.darkModeHandler as any);
+      }
+      this.darkModeMediaQuery = null;
+      this.darkModeHandler = null;
+    }
   }
 
   toggleMobileMenu(): void {
@@ -518,6 +784,7 @@ export class MyComponent {
   }
 
   ngOnDestroy(): void {
+    this.cleanupThemeListener();
     if (this.timeInterval) {
       clearInterval(this.timeInterval);
     }
@@ -525,8 +792,6 @@ export class MyComponent {
 
   @HostListener('window:resize')
   onResize(): void {
-    // Trigger change detection to update preview width
-    // The getPreviewWidth() method will be called automatically
   }
 
   onSearchChange(query: string): void {
@@ -552,5 +817,9 @@ export class MyComponent {
   private updateTime(): void {
     const now = new Date();
     this.currentTime = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+  }
+
+  isDate(value: any): value is Date {
+    return value instanceof Date;
   }
 }

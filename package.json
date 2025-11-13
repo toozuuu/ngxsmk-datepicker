@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "scripts": {
@@ -21,7 +21,9 @@
     "publish:patch": "npm run build:optimized && npm run prepublish:copy-license && npm publish --tag patch && npm dist-tag add ngxsmk-datepicker@$(node -p \"require('./package.json').version\") latest",
     "semantic-release": "semantic-release",
     "docs": "typedoc --options typedoc.json && node scripts/enhance-api-docs.js",
-    "docs:serve": "npm run docs && npx http-server docs/api -p 8080 -o"
+    "docs:serve": "npm run docs && npx http-server docs/api -p 8080 -o",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "@angular/common": ">=17.0.0 <23.0.0",
@@ -115,6 +117,13 @@
     "typedoc": "^0.26.11",
     "typescript": "^5.7.0",
     "typescript-eslint": "8.46.4",
-    "zone.js": "^0.15.0"
+    "zone.js": "^0.15.0",
+    "@storybook/angular": "^10.0.0",
+    "@storybook/addon-essentials": "^10.0.0",
+    "@storybook/addon-interactions": "^10.0.0",
+    "@storybook/addon-controls": "^10.0.0",
+    "@storybook/addon-actions": "^10.0.0",
+    "@storybook/addon-docs": "^10.0.0",
+    "storybook": "^10.0.0"
   }
 }

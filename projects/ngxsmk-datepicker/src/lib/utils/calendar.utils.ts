@@ -89,3 +89,20 @@ export function processDateRanges(ranges: DateRange | null): { [key: string]: [D
     return acc;
   }, {} as { [key: string]: [Date, Date] });
 }
+
+export function generateYearGrid(currentYear: number): number[] {
+  const startYear = Math.floor(currentYear / 10) * 10 - 1;
+  const years: number[] = [];
+  for (let i = 0; i < 12; i++) {
+    years.push(startYear + i);
+  }
+  return years;
+}
+
+export function generateDecadeGrid(currentDecade: number): number[] {
+  const decades: number[] = [];
+  for (let i = 0; i < 12; i++) {
+    decades.push(currentDecade + (i * 10) - 10);
+  }
+  return decades;
+}

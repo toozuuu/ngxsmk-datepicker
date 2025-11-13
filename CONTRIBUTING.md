@@ -171,6 +171,16 @@ npx ng test ngxsmk-datepicker --include="**/issue-13.spec.ts"
 
 **Note**: The library tests require Zone.js polyfills, which are automatically configured in `angular.json`. If tests fail, ensure the test configuration includes the polyfills.
 
+**Test Status**: All 353+ tests should pass. The test suite covers:
+- Component functionality and edge cases
+- Utility functions (date, calendar, timezone, performance)
+- RTL support and locale detection
+- Touch gestures and swipe handling
+- Calendar views (year, decade, timeline, time-slider)
+- Recurring dates and pattern matching
+- SSR compatibility
+- Keyboard navigation
+
 ### Writing Tests
 
 - Use Jasmine/Karma
@@ -179,6 +189,10 @@ npx ng test ngxsmk-datepicker --include="**/issue-13.spec.ts"
 - Test accessibility features
 - Ensure tests work with OnPush change detection
 - Test zone-less operation when applicable
+- Use `.toEqual()` instead of `.toBe()` for Date objects and arrays
+- Properly mock browser APIs (TouchEvent, document.dir) when testing
+- Ensure change detection is called with `fixture.detectChanges()` where needed
+- Verify component state after initialization before testing interactions
 
 ## Documentation
 
@@ -222,11 +236,34 @@ npx ng test ngxsmk-datepicker --include="**/issue-13.spec.ts"
 7. Push tag: `git push origin v1.x.x`
 8. Publish to npm: `npm publish` (or use semantic-release)
 
+## Finding Issues to Work On
+
+### Good First Issues
+
+Look for issues labeled with `good-first-issue` - these are perfect for new contributors:
+- Documentation improvements
+- Small bug fixes
+- Test additions
+- Example code additions
+
+### Help Wanted
+
+Issues labeled with `help-wanted` need community assistance:
+- Feature implementations
+- Performance optimizations
+- Integration examples
+- Documentation enhancements
+
+### Roadmap
+
+Check the [Roadmap](ROADMAP.md) to see planned features and improvements. Issues linked to the roadmap are great candidates for contribution!
+
 ## Questions?
 
-- Open an issue for questions
+- Open an issue for questions (use the Question template)
 - Check existing issues/PRs
-- Review the documentation
+- Review the [documentation](README.md)
+- Check the [roadmap](ROADMAP.md) for planned features
 
 ## License
 

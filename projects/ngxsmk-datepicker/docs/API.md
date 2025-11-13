@@ -31,40 +31,53 @@ The main datepicker component.
 import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 ```
 
-#### Inputs
+#### Complete Inputs/Outputs Reference
 
-| Input | Type | Default | Status | Description |
-|-------|------|---------|--------|-------------|
-| `mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Stable | Selection mode |
-| `value` | `DatepickerValue` | `null` | Stable | Current value (one-way binding) |
-| `field` | `any` | `null` | Stable | Signal form field (Angular 21+) |
-| `placeholder` | `string` | `''` | Stable | Input placeholder text |
-| `disabled` | `boolean` | `false` | Stable | Disable the datepicker |
-| `minDate` | `DateInput \| null` | `null` | Stable | Minimum selectable date |
-| `maxDate` | `DateInput \| null` | `null` | Stable | Maximum selectable date |
-| `disabledDates` | `DateInput[]` | `[]` | Stable | Array of disabled dates |
-| `isInvalidDate` | `(date: Date) => boolean` | `null` | Stable | Custom date validation function |
-| `locale` | `string` | `'en-US'` | Stable | Locale for formatting |
-| `theme` | `'light' \| 'dark'` | `'light'` | Stable | Color theme |
-| `inline` | `boolean \| 'always' \| 'auto'` | `false` | Stable | Inline display mode |
-| `showTime` | `boolean` | `false` | Stable | Show time selection |
-| `minuteInterval` | `number` | `1` | Stable | Minute selection interval |
-| `showRanges` | `boolean` | `false` | Stable | Show predefined ranges (range mode) |
-| `ranges` | `DateRange` | `{}` | Stable | Predefined date ranges |
-| `holidayProvider` | `HolidayProvider \| null` | `null` | Stable | Custom holiday provider |
-| `startAt` | `DateInput \| null` | `null` | Stable | Initial calendar view date |
-| `yearRange` | `number` | `10` | Stable | Years to show in year selector |
-| `classes` | `DatepickerClasses \| null` | `null` | Stable | Custom CSS classes |
-| `hooks` | `DatepickerHooks \| null` | `null` | Stable | Extension points for customization |
-| `enableKeyboardShortcuts` | `boolean` | `true` | Stable | Enable/disable keyboard shortcuts |
-| `customShortcuts` | `{ [key: string]: (context: KeyboardShortcutContext) => boolean } \| null` | `null` | Stable | Custom keyboard shortcuts map |
-| `autoApplyClose` | `boolean` | `false` | Stable | Auto-close calendar after selection (single: after date, range: after end date). Disabled when `showTime` is true. |
+##### Inputs
 
-#### Outputs
+| Input | Type | Default | Status | Description | Example |
+|-------|------|---------|--------|-------------|---------|
+| `mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Stable | Selection mode | `mode="single"` or `[mode]="'range'"` |
+| `value` | `DatepickerValue` | `null` | Stable | Current value (one-way binding) | `[value]="selectedDate"` |
+| `field` | `any` | `null` | Stable | Signal form field (Angular 21+) | `[field]="myForm.dateField"` |
+| `placeholder` | `string \| null` | `'Select Date'` or `'Select Time'` | Stable | Input placeholder text | `placeholder="Choose a date"` |
+| `disabledState` | `boolean` | `false` | Stable | Disable the datepicker | `[disabledState]="isDisabled"` |
+| `minDate` | `DateInput \| null` | `null` | Stable | Minimum selectable date | `[minDate]="today"` |
+| `maxDate` | `DateInput \| null` | `null` | Stable | Maximum selectable date | `[maxDate]="maxBookingDate"` |
+| `disabledDates` | `(string \| Date)[]` | `[]` | Stable | Array of disabled dates | `[disabledDates]="['10/21/2025', new Date()]"` |
+| `isInvalidDate` | `(date: Date) => boolean` | `() => false` | Stable | Custom date validation function | `[isInvalidDate]="isWeekend"` |
+| `locale` | `string` | `'en-US'` | Stable | Locale for formatting | `locale="de-DE"` or `[locale]="'fr-FR'"` |
+| `theme` | `'light' \| 'dark'` | `'light'` | Stable | Color theme | `[theme]="'dark'"` |
+| `inline` | `boolean \| 'always' \| 'auto'` | `false` | Stable | Inline display mode | `[inline]="true"` or `inline="auto"` |
+| `showTime` | `boolean` | `false` | Stable | Show time selection | `[showTime]="true"` |
+| `timeOnly` | `boolean` | `false` | Stable | Display time picker only (no calendar). Automatically enables `showTime`. | `[timeOnly]="true"` |
+| `minuteInterval` | `number` | `1` | Stable | Minute selection interval | `[minuteInterval]="15"` |
+| `showRanges` | `boolean` | `true` | Stable | Show predefined ranges (range mode) | `[showRanges]="true"` |
+| `ranges` | `DateRange` | `null` | Stable | Predefined date ranges | `[ranges]="quickRanges"` |
+| `holidayProvider` | `HolidayProvider \| null` | `null` | Stable | Custom holiday provider | `[holidayProvider]="myHolidayProvider"` |
+| `disableHolidays` | `boolean` | `false` | Stable | Disable holiday dates from selection | `[disableHolidays]="true"` |
+| `startAt` | `DateInput \| null` | `null` | Stable | Initial calendar view date | `[startAt]="nextMonth"` |
+| `weekStart` | `number \| null` | `null` | Stable | Override week start day (0=Sunday, 1=Monday, etc.) | `[weekStart]="1"` |
+| `yearRange` | `number` | `10` | Stable | Years to show in year selector | `[yearRange]="20"` |
+| `classes` | `DatepickerClasses \| null` | `null` | Stable | Custom CSS classes | `[classes]="{ inputGroup: 'custom-class' }"` |
+| `hooks` | `DatepickerHooks \| null` | `null` | Stable | Extension points for customization | `[hooks]="customHooks"` |
+| `enableKeyboardShortcuts` | `boolean` | `true` | Stable | Enable/disable keyboard shortcuts | `[enableKeyboardShortcuts]="false"` |
+| `customShortcuts` | `{ [key: string]: (context: KeyboardShortcutContext) => boolean } \| null` | `null` | Stable | Custom keyboard shortcuts map | `[customShortcuts]="myShortcuts"` |
+| `autoApplyClose` | `boolean` | `false` | Stable | Auto-close calendar after selection | `[autoApplyClose]="true"` |
+| `clearLabel` | `string` | `'Clear'` | Stable | Custom label for clear button | `clearLabel="Reset"` |
+| `closeLabel` | `string` | `'Close'` | Stable | Custom label for close button | `closeLabel="Done"` |
+| `prevMonthAriaLabel` | `string` | `'Previous month'` | Stable | ARIA label for previous month button | `prevMonthAriaLabel="Go to previous month"` |
+| `nextMonthAriaLabel` | `string` | `'Next month'` | Stable | ARIA label for next month button | `nextMonthAriaLabel="Go to next month"` |
+| `clearAriaLabel` | `string` | `'Clear selection'` | Stable | ARIA label for clear button | `clearAriaLabel="Clear selected date"` |
+| `closeAriaLabel` | `string` | `'Close calendar'` | Stable | ARIA label for close button | `closeAriaLabel="Close date picker"` |
+| `rtl` | `boolean \| null` | `null` | Stable | Right-to-left layout (auto-detects from locale or document.dir) | `[rtl]="true"` |
 
-| Output | Type | Status | Description |
-|--------|------|--------|-------------|
-| `valueChange` | `EventEmitter<DatepickerValue>` | Stable | Emitted when value changes |
+##### Outputs
+
+| Output | Type | Status | Description | Example |
+|--------|------|--------|-------------|---------|
+| `valueChange` | `EventEmitter<DatepickerValue>` | Stable | Emitted when value changes | `(valueChange)="onDateChange($event)"` |
+| `action` | `EventEmitter<{ type: string; payload?: any }>` | Stable | Emitted on user actions (dateSelected, timeChanged, etc.) | `(action)="handleAction($event)"` |
 
 #### Methods
 
@@ -74,6 +87,725 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `registerOnChange` | `fn: (value: DatepickerValue) => void` | `void` | Stable | ControlValueAccessor implementation |
 | `registerOnTouched` | `fn: () => void` | `void` | Stable | ControlValueAccessor implementation |
 | `setDisabledState` | `isDisabled: boolean` | `void` | Stable | ControlValueAccessor implementation |
+
+## Form Integration Examples
+
+### Reactive Forms Integration
+
+The datepicker implements `ControlValueAccessor`, making it fully compatible with Angular Reactive Forms.
+
+#### Basic Reactive Forms Example
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-reactive-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent, ReactiveFormsModule, CommonModule],
+  template: `
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Check-in Date</label>
+        <ngxsmk-datepicker
+          mode="single"
+          placeholder="Select check-in date"
+          formControlName="checkInDate">
+        </ngxsmk-datepicker>
+        
+        @if (bookingForm.get('checkInDate')?.hasError('required') && 
+             bookingForm.get('checkInDate')?.touched) {
+          <div class="error">Check-in date is required</div>
+        }
+      </div>
+      
+      <div class="form-group">
+        <label>Check-out Date</label>
+        <ngxsmk-datepicker
+          mode="single"
+          placeholder="Select check-out date"
+          formControlName="checkOutDate"
+          [minDate]="bookingForm.get('checkInDate')?.value">
+        </ngxsmk-datepicker>
+        
+        @if (bookingForm.get('checkOutDate')?.hasError('required') && 
+             bookingForm.get('checkOutDate')?.touched) {
+          <div class="error">Check-out date is required</div>
+        }
+      </div>
+      
+      <button type="submit" [disabled]="bookingForm.invalid">Book Now</button>
+    </form>
+  `
+})
+export class ReactiveFormComponent {
+  bookingForm = new FormGroup({
+    checkInDate: new FormControl<DatepickerValue>(null, [Validators.required]),
+    checkOutDate: new FormControl<DatepickerValue>(null, [Validators.required])
+  });
+  
+  onSubmit() {
+    if (this.bookingForm.valid) {
+      console.log('Form value:', this.bookingForm.value);
+      // Submit to API
+    }
+  }
+}
+```
+
+#### Reactive Forms with Date Range
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue, DateRange } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-range-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="rangeForm">
+      <ngxsmk-datepicker
+        mode="range"
+        [showTime]="true"
+        [minuteInterval]="15"
+        [ranges]="quickRanges"
+        [showRanges]="true"
+        placeholder="Select date range"
+        formControlName="dateRange">
+      </ngxsmk-datepicker>
+      
+      @if (rangeForm.get('dateRange')?.value) {
+        <p>Selected range: {{ rangeForm.get('dateRange')?.value | json }}</p>
+      }
+    </form>
+  `
+})
+export class RangeFormComponent {
+  today = new Date();
+  
+  quickRanges: DateRange = {
+    'Today': [this.today, this.today],
+    'Last 7 Days': [
+      new Date(this.today.getTime() - 6 * 86400000),
+      this.today
+    ],
+    'This Month': [
+      new Date(this.today.getFullYear(), this.today.getMonth(), 1),
+      new Date(this.today.getFullYear(), this.today.getMonth() + 1, 0)
+    ]
+  };
+  
+  rangeForm = new FormGroup({
+    dateRange: new FormControl<DatepickerValue>(null)
+  });
+}
+```
+
+#### Reactive Forms with Custom Validation
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-validated-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="validatedForm">
+      <ngxsmk-datepicker
+        mode="single"
+        placeholder="Select appointment date"
+        [minDate]="today"
+        [isInvalidDate]="isWeekend"
+        formControlName="appointmentDate">
+      </ngxsmk-datepicker>
+      
+      @if (validatedForm.get('appointmentDate')?.hasError('required')) {
+        <div class="error">Date is required</div>
+      }
+      @if (validatedForm.get('appointmentDate')?.hasError('minDate')) {
+        <div class="error">Date must be in the future</div>
+      }
+    </form>
+  `
+})
+export class ValidatedFormComponent {
+  today = new Date();
+  
+  validatedForm = new FormGroup({
+    appointmentDate: new FormControl<DatepickerValue>(null, [
+      Validators.required,
+      this.minDateValidator
+    ])
+  });
+  
+  isWeekend = (date: Date): boolean => {
+    const day = date.getDay();
+    return day === 0 || day === 6; // Sunday or Saturday
+  };
+  
+  minDateValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) return null;
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (value instanceof Date) {
+      const selectedDate = new Date(value);
+      selectedDate.setHours(0, 0, 0, 0);
+      
+      if (selectedDate < today) {
+        return { minDate: true };
+      }
+    }
+    
+    return null;
+  }
+}
+```
+
+#### Reactive Forms with Multiple Date Selection
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+import { CommonModule, DatePipe } from '@angular/common';
+
+@Component({
+  selector: 'app-multiple-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent, ReactiveFormsModule, CommonModule, DatePipe],
+  template: `
+    <form [formGroup]="multipleForm">
+      <ngxsmk-datepicker
+        mode="multiple"
+        placeholder="Select available dates"
+        formControlName="availableDates">
+      </ngxsmk-datepicker>
+      
+      @if (selectedDates.length > 0) {
+        <div class="selected-dates">
+          <h4>Selected Dates ({{ selectedDates.length }}):</h4>
+          <ul>
+            @for (date of selectedDates; track date) {
+              <li>{{ date | date:'short' }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </form>
+  `
+})
+export class MultipleFormComponent {
+  multipleForm = new FormGroup({
+    availableDates: new FormControl<DatepickerValue>(null)
+  });
+  
+  get selectedDates(): Date[] {
+    const value = this.multipleForm.get('availableDates')?.value;
+    return Array.isArray(value) ? value : [];
+  }
+}
+```
+
+### Template-Driven Forms Integration
+
+The datepicker also works seamlessly with Angular Template-Driven Forms using `ngModel`.
+
+#### Basic Template-Driven Forms Example
+
+```typescript
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-template-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent, FormsModule, CommonModule],
+  template: `
+    <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
+      <div class="form-group">
+        <label>Event Date</label>
+        <ngxsmk-datepicker
+          mode="single"
+          placeholder="Select event date"
+          [(ngModel)]="eventDate"
+          name="eventDate"
+          #dateField="ngModel"
+          required>
+        </ngxsmk-datepicker>
+        
+        @if (dateField.invalid && dateField.touched) {
+          <div class="error">Event date is required</div>
+        }
+      </div>
+      
+      <button type="submit" [disabled]="myForm.invalid">Submit</button>
+    </form>
+    
+    @if (eventDate) {
+      <p>Selected: {{ eventDate | date:'medium' }}</p>
+    }
+  `
+})
+export class TemplateFormComponent {
+  eventDate: DatepickerValue = null;
+  
+  onSubmit(form: any) {
+    if (form.valid) {
+      console.log('Form value:', form.value);
+      console.log('Event date:', this.eventDate);
+    }
+  }
+}
+```
+
+#### Template-Driven Forms with Date Range
+
+```typescript
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-template-range',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent, FormsModule],
+  template: `
+    <form #rangeForm="ngForm">
+      <ngxsmk-datepicker
+        mode="range"
+        [showTime]="true"
+        placeholder="Select date range"
+        [(ngModel)]="dateRange"
+        name="dateRange">
+      </ngxsmk-datepicker>
+      
+      @if (dateRange) {
+        <p>
+          From: {{ dateRange.start | date:'short' }} 
+          To: {{ dateRange.end | date:'short' }}
+        </p>
+      }
+    </form>
+  `
+})
+export class TemplateRangeComponent {
+  dateRange: DatepickerValue = null;
+}
+```
+
+#### Template-Driven Forms with Validation
+
+```typescript
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-template-validated',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent, FormsModule],
+  template: `
+    <form #validatedForm="ngForm">
+      <ngxsmk-datepicker
+        mode="single"
+        placeholder="Select date"
+        [(ngModel)]="selectedDate"
+        name="selectedDate"
+        #dateCtrl="ngModel"
+        required
+        [minDate]="today">
+      </ngxsmk-datepicker>
+      
+      @if (dateCtrl.errors?.['required'] && dateCtrl.touched) {
+        <div class="error">Date is required</div>
+      }
+      
+      <button type="submit" [disabled]="validatedForm.invalid">Submit</button>
+    </form>
+  `
+})
+export class TemplateValidatedComponent {
+  today = new Date();
+  selectedDate: DatepickerValue = null;
+}
+```
+
+### Ionic Framework Integration
+
+The datepicker is fully compatible with Ionic Angular applications. Here are comprehensive examples for different Ionic use cases.
+
+#### Basic Ionic Integration
+
+```typescript
+import { Component } from '@angular/core';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel } from '@ionic/angular/standalone';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-ionic-datepicker',
+  standalone: true,
+  imports: [
+    NgxsmkDatepickerComponent,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonItem,
+    IonLabel,
+    FormsModule
+  ],
+  template: `
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Date Picker</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="ion-padding">
+      <ion-item>
+        <ion-label position="stacked">Select Date</ion-label>
+        <ngxsmk-datepicker
+          mode="single"
+          placeholder="Choose a date">
+        </ngxsmk-datepicker>
+      </ion-item>
+    </ion-content>
+  `
+})
+export class IonicDatepickerComponent {}
+```
+
+#### Ionic with Reactive Forms
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+import { 
+  IonContent, 
+  IonHeader, 
+  IonTitle, 
+  IonToolbar, 
+  IonItem, 
+  IonLabel,
+  IonButton,
+  IonList
+} from '@ionic/angular/standalone';
+
+@Component({
+  selector: 'app-ionic-reactive',
+  standalone: true,
+  imports: [
+    NgxsmkDatepickerComponent,
+    ReactiveFormsModule,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonItem,
+    IonLabel,
+    IonButton,
+    IonList
+  ],
+  template: `
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Booking Form</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="ion-padding">
+      <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+        <ion-list>
+          <ion-item>
+            <ion-label position="stacked">Check-in Date</ion-label>
+            <ngxsmk-datepicker
+              mode="single"
+              placeholder="Select check-in"
+              formControlName="checkIn">
+            </ngxsmk-datepicker>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label position="stacked">Check-out Date</ion-label>
+            <ngxsmk-datepicker
+              mode="single"
+              placeholder="Select check-out"
+              formControlName="checkOut"
+              [minDate]="bookingForm.get('checkIn')?.value">
+            </ngxsmk-datepicker>
+          </ion-item>
+        </ion-list>
+        
+        <ion-button expand="block" type="submit" [disabled]="bookingForm.invalid">
+          Book Now
+        </ion-button>
+      </form>
+    </ion-content>
+  `
+})
+export class IonicReactiveComponent {
+  bookingForm = new FormGroup({
+    checkIn: new FormControl<DatepickerValue>(null),
+    checkOut: new FormControl<DatepickerValue>(null)
+  });
+  
+  onSubmit() {
+    if (this.bookingForm.valid) {
+      console.log('Booking:', this.bookingForm.value);
+    }
+  }
+}
+```
+
+#### Ionic with Date Range and Time
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue, DateRange } from 'ngxsmk-datepicker';
+import { 
+  IonContent, 
+  IonHeader, 
+  IonTitle, 
+  IonToolbar,
+  IonItem,
+  IonLabel
+} from '@ionic/angular/standalone';
+
+@Component({
+  selector: 'app-ionic-range',
+  standalone: true,
+  imports: [
+    NgxsmkDatepickerComponent,
+    ReactiveFormsModule,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonItem,
+    IonLabel
+  ],
+  template: `
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Event Range</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="ion-padding">
+      <form [formGroup]="eventForm">
+        <ion-item>
+          <ion-label position="stacked">Event Date & Time Range</ion-label>
+          <ngxsmk-datepicker
+            mode="range"
+            [showTime]="true"
+            [minuteInterval]="15"
+            [ranges]="quickRanges"
+            [showRanges]="true"
+            placeholder="Select event period"
+            formControlName="eventRange">
+          </ngxsmk-datepicker>
+        </ion-item>
+      </form>
+    </ion-content>
+  `
+})
+export class IonicRangeComponent {
+  today = new Date();
+  
+  quickRanges: DateRange = {
+    'Today': [this.today, this.today],
+    'This Week': [
+      new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate() - this.today.getDay()),
+      this.today
+    ]
+  };
+  
+  eventForm = new FormGroup({
+    eventRange: new FormControl<DatepickerValue>(null)
+  });
+}
+```
+
+#### Ionic with Time-Only Picker
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+import { 
+  IonContent, 
+  IonHeader, 
+  IonTitle, 
+  IonToolbar,
+  IonItem,
+  IonLabel
+} from '@ionic/angular/standalone';
+
+@Component({
+  selector: 'app-ionic-time',
+  standalone: true,
+  imports: [
+    NgxsmkDatepickerComponent,
+    ReactiveFormsModule,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonItem,
+    IonLabel
+  ],
+  template: `
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Appointment Time</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="ion-padding">
+      <form [formGroup]="timeForm">
+        <ion-item>
+          <ion-label position="stacked">Select Time</ion-label>
+          <ngxsmk-datepicker
+            mode="single"
+            [timeOnly]="true"
+            [minuteInterval]="15"
+            placeholder="Choose time"
+            formControlName="appointmentTime">
+          </ngxsmk-datepicker>
+        </ion-item>
+      </form>
+    </ion-content>
+  `
+})
+export class IonicTimeComponent {
+  timeForm = new FormGroup({
+    appointmentTime: new FormControl<DatepickerValue>(null)
+  });
+}
+```
+
+#### Ionic with Inline Calendar
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+import { 
+  IonContent, 
+  IonHeader, 
+  IonTitle, 
+  IonToolbar
+} from '@ionic/angular/standalone';
+
+@Component({
+  selector: 'app-ionic-inline',
+  standalone: true,
+  imports: [
+    NgxsmkDatepickerComponent,
+    ReactiveFormsModule,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar
+  ],
+  template: `
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Calendar View</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="ion-padding">
+      <ngxsmk-datepicker
+        mode="range"
+        [inline]="true"
+        placeholder="Select date range">
+      </ngxsmk-datepicker>
+    </ion-content>
+  `
+})
+export class IonicInlineComponent {}
+```
+
+#### Ionic with Dark Theme
+
+```typescript
+import { Component, signal } from '@angular/core';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+import { 
+  IonContent, 
+  IonHeader, 
+  IonTitle, 
+  IonToolbar,
+  IonItem,
+  IonLabel,
+  IonToggle
+} from '@ionic/angular/standalone';
+
+@Component({
+  selector: 'app-ionic-theme',
+  standalone: true,
+  imports: [
+    NgxsmkDatepickerComponent,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonItem,
+    IonLabel,
+    IonToggle
+  ],
+  template: `
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Theme Toggle</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="ion-padding">
+      <ion-item>
+        <ion-label>Dark Mode</ion-label>
+        <ion-toggle 
+          [checked]="isDark()" 
+          (ionChange)="toggleTheme()">
+        </ion-toggle>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label position="stacked">Select Date</ion-label>
+        <ngxsmk-datepicker
+          mode="single"
+          [theme]="isDark() ? 'dark' : 'light'"
+          placeholder="Choose a date">
+        </ngxsmk-datepicker>
+      </ion-item>
+    </ion-content>
+  `
+})
+export class IonicThemeComponent {
+  isDark = signal(false);
+  
+  toggleTheme() {
+    this.isDark.update(v => !v);
+  }
+}
+```
 
 ## Real-World Usage Examples
 
@@ -322,7 +1054,49 @@ export class ServerFormComponent {
 }
 ```
 
-### 6. Date Range Selection with Time
+### 6. Time-Only Picker
+
+**Scenario**: Display only time selection without calendar. Perfect for time selection scenarios where date is not needed.
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-time-only',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="timeForm">
+      <ngxsmk-datepicker
+        mode="single"
+        [timeOnly]="true"
+        [minuteInterval]="15"
+        formControlName="appointmentTime">
+      </ngxsmk-datepicker>
+      
+      @if (timeForm.controls.appointmentTime.value) {
+        <p>Selected time: {{ timeForm.controls.appointmentTime.value | date:'shortTime' }}</p>
+      }
+    </form>
+  `
+})
+export class TimeOnlyComponent {
+  timeForm = new FormGroup({
+    appointmentTime: new FormControl<DatepickerValue>(null)
+  });
+}
+```
+
+**Key Features:**
+- Hides calendar grid completely
+- Shows only time selection controls (hour, minute, AM/PM)
+- Value is still a Date object (uses today's date with selected time)
+- Automatically enables `showTime` when `timeOnly` is true
+- Placeholder defaults to "Select Time"
+
+### 7. Date Range Selection with Time
 
 **Scenario**: Booking system with check-in/check-out dates and times.
 
@@ -376,7 +1150,7 @@ export class BookingComponent {
 }
 ```
 
-### 6. Multiple Date Selection
+### 8. Multiple Date Selection
 
 **Scenario**: Event calendar where users can select multiple dates for availability.
 
@@ -466,7 +1240,7 @@ export class AppointmentComponent {
 }
 ```
 
-### 8. Auto-Close After Selection
+### 9. Auto-Close After Selection
 
 **Scenario**: Automatically close the calendar after date selection for better UX.
 

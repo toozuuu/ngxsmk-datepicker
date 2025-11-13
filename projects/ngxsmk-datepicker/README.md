@@ -76,8 +76,12 @@ export class FormComponent {
 - 📅 **Multiple Selection Modes**: Single, range, and multiple date selection
 - 🎨 **Theming**: Built-in light and dark themes with CSS custom properties
 - 🌍 **i18n Support**: Automatic localization based on browser locale
+- 🌐 **Timezone Support**: Explicit timezone-aware formatting and parsing
 - ⏰ **Time Selection**: Optional time inputs with 12h/24h support
+- 🕐 **Time-Only Mode**: Display only time picker without calendar
+- 🔄 **RTL Support**: Full right-to-left layout support for Arabic, Hebrew, and other RTL languages
 - 🎯 **Signal Forms**: First-class support for Angular 21+ Signal Forms
+- ⚙️ **Global Configuration**: App-wide defaults via provider (weekStart, minuteInterval, timezone, etc.)
 - 🚀 **SSR Compatible**: Fully optimized for Angular Universal
 - ⚡ **Zoneless**: Works with or without Zone.js
 - 🎣 **Extension Points**: Comprehensive hooks system for customization
@@ -94,15 +98,64 @@ export class FormComponent {
 **Zone.js**: Optional (zoneless apps supported)  
 **SSR**: ✅ Fully compatible with Angular Universal
 
+## 🔌 Framework Integration
+
+### Angular Material Form Fields
+
+```typescript
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+<mat-form-field appearance="outline">
+  <mat-label>Select Date</mat-label>
+  <ngxsmk-datepicker
+    mode="single"
+    formControlName="date">
+  </ngxsmk-datepicker>
+</mat-form-field>
+```
+
+### Ionic Components
+
+```typescript
+import { IonItem, IonLabel } from '@ionic/angular/standalone';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+<ion-item>
+  <ion-label position="stacked">Appointment Date</ion-label>
+  <ngxsmk-datepicker
+    mode="single"
+    formControlName="appointmentDate">
+  </ngxsmk-datepicker>
+</ion-item>
+```
+
+### Plain HTML Inputs
+
+```typescript
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+<form [formGroup]="myForm">
+  <label for="birthdate">Birth Date</label>
+  <ngxsmk-datepicker
+    id="birthdate"
+    mode="single"
+    formControlName="birthdate">
+  </ngxsmk-datepicker>
+</form>
+```
+
 ## 📚 Documentation
 
 - **[Full Documentation](https://github.com/NGXSMK/ngxsmk-datepicker#readme)** - Complete guide with examples
 - **[Live Demo](https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker)** - Interactive examples
-- **[GitHub Pages Demo](https://ngxsmk.github.io/ngxsmk-datepicker/)** - Full featured demo app
+- **[GitHub Pages Demo](https://ngxsmk.github.io/ngxsmk-datepicker/)** - Modern, polished demo app with beautiful UI
 - **[API Documentation](./docs/API.md)** - Complete API reference
 - **[Extension Points Guide](./docs/extension-points.md)** - Customization hooks
 - **[Signal Forms Guide](./docs/signal-forms.md)** - Angular 21+ integration
 - **[SSR Guide](./docs/ssr.md)** - Server-side rendering setup
+- **[SSR Example](./docs/SSR-EXAMPLE.md)** - Complete Angular Universal example
+- **[Theme Tokens Reference](./docs/THEME-TOKENS.md)** - CSS custom properties reference
 
 ## 🎯 Common Use Cases
 
@@ -122,6 +175,17 @@ export class FormComponent {
 <ngxsmk-datepicker
   mode="single"
   [disabledDates]="['10/21/2025', '08/21/2025']">
+</ngxsmk-datepicker>
+```
+
+### Time-Only Picker
+
+```html
+<ngxsmk-datepicker
+  mode="single"
+  [timeOnly]="true"
+  [minuteInterval]="15"
+  placeholder="Select time">
 </ngxsmk-datepicker>
 ```
 
@@ -169,7 +233,7 @@ If you find this library helpful, please consider:
 
 ---
 
-**Version**: 1.9.1  
+**Version**: 1.9.3  
 **Last Updated**: 2025-11-12
 
 For the latest updates and changelog, visit the [GitHub repository](https://github.com/NGXSMK/ngxsmk-datepicker).

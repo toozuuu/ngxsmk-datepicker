@@ -143,6 +143,11 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
         transform: translate3d(0, 0, 0);
       }
     }
+    .ngxsmk-options-panel {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    
     .ngxsmk-options-panel ul { 
       list-style: none; 
       padding: 4px; 

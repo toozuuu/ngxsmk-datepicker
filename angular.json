@@ -28,7 +28,15 @@
             "polyfills": [
               "zone.js",
               "zone.js/testing"
-            ]
+            ],
+            "codeCoverage": true,
+            "codeCoverageExclude": [
+              "**/*.spec.ts",
+              "**/node_modules/**",
+              "**/dist/**",
+              "**/*.module.ts"
+            ],
+            "karmaConfig": "projects/ngxsmk-datepicker/karma.conf.js"
           }
         },
         "lint": {
@@ -80,13 +88,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "550kB",
+                  "maximumWarning": "600kB",
                   "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "50kB",
-                  "maximumError": "55kB"
+                  "maximumWarning": "60kB",
+                  "maximumError": "65kB"
                 }
               ],
               "outputHashing": "all"

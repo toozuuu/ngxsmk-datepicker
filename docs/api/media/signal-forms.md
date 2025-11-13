@@ -190,25 +190,6 @@ export class StableFormComponent {
 
 **Note:** The `$any($event)` cast may be needed if there's a type mismatch between `DatepickerValue` and your expected `Date` type.
 
-**Important for server-side data:** If initial values from the server aren't populating, update the underlying `localObject` signal instead of directly mutating the form value:
-
-```typescript
-onMyDateChange(newDate: DatepickerValue | null): void {
-  this.localObject.update(obj => ({
-    ...obj,
-    myDate: newDate instanceof Date ? newDate : new Date(newDate.toLocaleString())
-  }));
-}
-
-updateFromServer(serverDate: Date | string): void {
-  const dateValue = serverDate instanceof Date ? serverDate : new Date(serverDate);
-  this.localObject.update(obj => ({
-    ...obj,
-    myDate: dateValue
-  }));
-}
-```
-
 ## Validation
 
 Signal Forms support validation. The datepicker respects the field's disabled state:
@@ -339,6 +320,95 @@ export class NewFormComponent {
 4. **Type Safety**: Full TypeScript support with proper types
 5. **Performance**: Signals provide better performance than traditional reactive forms
 
+## Server-Side Data with Manual Binding (Workaround Pattern)
+
+If you're experiencing issues with `[field]` binding not populating initial values from the server, or if you need to work around readonly form limitations, use this pattern that ensures both initial population and updates work correctly:
+
+```typescript
+import { Component, signal, computed, form, objectSchema } from '@angular/core';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-server-form-manual',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: `
+    <ngxsmk-datepicker
+      class="w-full border:none"
+      [value]="dateInQuestion()"
+      (valueChange)="onDateChange($any($event))"
+      mode="single"
+      placeholder="Select a date">
+    </ngxsmk-datepicker>
+  `
+})
+export class ServerFormManualComponent {
+  localObject = signal<{ dateInQuestion: Date | null }>({
+    dateInQuestion: null
+  });
+  
+  myForm = form(this.localObject, objectSchema({
+    dateInQuestion: objectSchema<Date | null>()
+  }));
+  
+  dateInQuestion = computed(() => {
+    const value = this.myForm.value().dateInQuestion;
+    if (value && typeof value === 'string') {
+      return new Date(value);
+    }
+    return value;
+  });
+  
+  onDateChange(newDate: DatepickerValue | null): void {
+    if (newDate) {
+      const dateValue = newDate instanceof Date 
+        ? newDate 
+        : new Date(newDate.toLocaleString());
+      
+      this.localObject.update(obj => ({
+        ...obj,
+        dateInQuestion: dateValue
+      }));
+    } else {
+      this.localObject.update(obj => ({
+        ...obj,
+        dateInQuestion: null
+      }));
+    }
+  }
+  
+  updateFormFromServer(serverDate: Date | string): void {
+    const dateValue = serverDate instanceof Date 
+      ? serverDate 
+      : new Date(serverDate);
+    
+    this.localObject.update(obj => ({
+      ...obj,
+      dateInQuestion: dateValue
+    }));
+  }
+  
+  resetForm(): void {
+    this.localObject.set({
+      dateInQuestion: null
+    });
+  }
+}
+```
+
+**Key points of this pattern:**
+- Uses `computed()` to create a reactive signal that reads from the form value
+- Updates the underlying `localObject` signal when dates change, which automatically updates the form
+- Ensures initial server values populate correctly by updating `localObject` when data arrives
+- Works around readonly form limitations by not directly binding to the form field
+- Handles both initial population and subsequent updates
+
+**When to use this pattern:**
+- When `[field]` binding doesn't populate initial server values
+- When working with readonly form signals
+- When you need more control over when form updates occur
+- When you need to handle date format conversions (string to Date)
+
 ## Troubleshooting
 
 ### Field not updating
@@ -356,11 +426,11 @@ If the initial value from the server isn't showing:
 1. Ensure `localObject` is initialized with the server data
 2. Use `linkedSignal` for reactive server data
 3. Check that the date value is a valid Date object
-4. If using readonly form, consider the manual binding pattern
+4. If using readonly form, consider the manual binding pattern above
 
 **With manual `[value]` binding:**
 1. Use a `computed()` signal that reads from `myForm.value().fieldName`
-2. Update the underlying `localObject` signal when server data arrives (don't mutate form value directly)
+2. Update the underlying `localObject` signal when server data arrives
 3. Ensure the computed signal is properly reactive to form changes
 4. Convert string dates to Date objects if your server returns strings
 
@@ -369,8 +439,8 @@ If the initial value from the server isn't showing:
 If you're using `protected readonly form = form(...)` and controls aren't updating:
 
 1. **Option 1**: Remove `readonly` if possible
-2. **Option 2**: Use manual binding with `[value]` and `(valueChange)`, updating `localObject` instead of form directly
-3. **Option 3**: Update the underlying `localObject` signal when server data arrives
+2. **Option 2**: Use the manual binding pattern with `[value]` and `(valueChange)` shown above
+3. **Option 3**: Update the underlying `localObject` signal instead of the form directly
 
 ### Disabled state not working
 
