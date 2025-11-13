@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.3] - 2025-11-13
+
+### Added
+- **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar
+  - Hides calendar grid and shows only time controls (hour, minute, AM/PM)
+  - Automatically enables `showTime` when `timeOnly` is true
+  - Perfect for time selection scenarios where date is not needed
+  - Value is still a Date object using today's date with selected time
+  - Placeholder automatically changes to "Select Time" in time-only mode
+  - Resolves [#29](https://github.com/NGXSMK/ngxsmk-datepicker/issues/29)
+- **Modern Demo App UI**: Complete redesign of the demo application
+  - Modern navbar with glassmorphism effects, search functionality, and improved theme toggle
+  - Redesigned sidebar with gradient backgrounds, smooth animations, and visual indicators
+  - Enhanced icon sizes and better visual hierarchy
+  - Improved responsive design with better mobile experience
+  - Automatic system theme detection (dark/light mode preference)
+  - Gradient accents, shadows, and modern design patterns throughout
+
+### Fixed
+- **Test Suite**: Fixed 25+ failing tests across multiple test files
+  - **Date Utils Tests**: Fixed `normalizeDate` comparison to use `.toEqual()` instead of `.toBe()` and corrected invalid date handling
+  - **Calendar Utils Tests**: Updated `generateMonthOptions` to include required year parameter, fixed `generateTimeOptions` to match new return type (object with `hourOptions`/`minuteOptions`), fixed `generateDecadeGrid` expectations, updated `processDateRanges` to match new return type (object instead of array)
+  - **Timezone Utils Tests**: Updated `formatDateWithTimezone` calls to match new signature (locale, options, timezone)
+  - **Edge Cases Tests**: Fixed `update12HourState` to check component properties instead of return value, changed `previewEndDate` to `hoveredDate`, fixed date validation and normalization expectations, corrected `applyCurrentTime` to use `currentDisplayHour` and `isPm`, fixed touch event mocks, added change detection for calendar toggle, corrected `isDateDisabled` null handling
+  - **Adapters Tests**: Fixed date normalization expectations to match actual behavior
+  - **Performance Utils Tests**: Changed array comparison to use `.toEqual()` instead of `.toBe()` for cached results
+  - **RTL Tests**: Fixed RTL detection from locale and document direction by properly setting document direction in tests
+  - **Touch Gestures Tests**: Fixed swipe handling by creating proper array-like TouchList mock that supports both `item()` and `[0]` indexing
+  - **Calendar Views Tests**: Fixed time slider tests to initialize dates and sliders correctly, fixed timeline generation test to call `generateTimeline()` directly
+  - **Recurring Dates Utils Tests**: Fixed pattern matching test to use correct date (Jan 6 is Monday, not Jan 8)
+- All 353 tests now pass successfully
+
 ## [1.9.1] - 2025-11-12
 
 ### Changed

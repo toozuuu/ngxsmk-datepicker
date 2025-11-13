@@ -36,6 +36,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Holiday Tooltips**: Hover over holiday dates to see holiday names as tooltips.
 * **Disabled Dates**: Disable specific dates by passing an array of date strings or Date objects.
 * **Date & Time Selection**: Supports optional time inputs with configurable minute intervals.
+* **Time-Only Mode**: Display only time picker without calendar using `[timeOnly]="true"`.
 * **12h/24h Time Support**: Uses internal 24-hour timekeeping but displays a user-friendly **12-hour clock with AM/PM toggle**.
 * **Predefined Date Ranges**: Offers quick selection of common ranges (e.g., "Last 7 Days").
 * **Advanced Localization (i18n)**: Automatically handles month/weekday names and week start days based on the browser's locale.
@@ -48,6 +49,11 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Extension Points & Hooks**: Comprehensive customization system with hooks for rendering, validation, keyboard shortcuts, and events.
 * **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
 * **Modern UI/UX**: Polished design with improved spacing, shadows, animations, and accessibility.
+* **Reduced Motion Support**: Respects `prefers-reduced-motion` for accessibility.
+* **Comprehensive Testing**: Full test coverage with 353+ tests covering keyboard navigation, time handling, SSR, RTL, touch gestures, and edge cases.
+* **CI/CD Integration**: Automated testing and coverage reporting via GitHub Actions.
+* **Customizable Calendar Views**: Year-picker, decade-picker, timeline view, and time-slider view for diverse use cases.
+* **Modern Demo App**: Beautiful demo application with glassmorphism effects, gradient themes, and responsive design.
 
 ## **📋 Compatibility**
 
@@ -137,7 +143,9 @@ The `[field]` input provides automatic two-way binding with signal forms - no ma
 - **[Signals Integration Guide](./projects/ngxsmk-datepicker/docs/signals.md)** - Complete guide to using signals with the datepicker
 - **[Signal Forms Guide](./projects/ngxsmk-datepicker/docs/signal-forms.md)** - Deep dive into Signal Forms integration
 - **[SSR Guide](./projects/ngxsmk-datepicker/docs/ssr.md)** - Server-side rendering setup and best practices
+- **[SSR Example](./projects/ngxsmk-datepicker/docs/SSR-EXAMPLE.md)** - Complete Angular Universal example with hydration notes
 - **[Extension Points Guide](./projects/ngxsmk-datepicker/docs/extension-points.md)** - Customization hooks and extension points
+- **[Theme Tokens Reference](./projects/ngxsmk-datepicker/docs/THEME-TOKENS.md)** - Complete CSS custom properties reference with examples
 - **[API Documentation](./projects/ngxsmk-datepicker/docs/API.md)** - Complete public API reference
 
 #### **1. Import the Component**
@@ -241,6 +249,162 @@ class MyHolidayProvider implements HolidayProvider {
 </ngxsmk-datepicker>
 ```
 
+## **🔌 Framework Integration**
+
+### **Angular Material Form Fields**
+
+Integrate with Angular Material's form field components for a seamless Material Design experience:
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-material-form',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgxsmkDatepickerComponent
+  ],
+  template: `
+    <form [formGroup]="myForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Select Date</mat-label>
+        <ngxsmk-datepicker
+          mode="single"
+          formControlName="date"
+          placeholder="Choose a date">
+        </ngxsmk-datepicker>
+      </mat-form-field>
+    </form>
+  `
+})
+export class MaterialFormComponent {
+  myForm = new FormGroup({
+    date: new FormControl<Date | null>(null)
+  });
+}
+```
+
+**With Date Range:**
+```html
+<mat-form-field appearance="fill">
+  <mat-label>Date Range</mat-label>
+  <ngxsmk-datepicker
+    mode="range"
+    [showTime]="true"
+    formControlName="dateRange">
+  </ngxsmk-datepicker>
+</mat-form-field>
+```
+
+### **Ionic Components**
+
+Works seamlessly with Ionic form components and follows Ionic design patterns:
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { IonItem, IonLabel, IonInput } from '@ionic/angular/standalone';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-ionic-form',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    IonItem,
+    IonLabel,
+    IonInput,
+    NgxsmkDatepickerComponent
+  ],
+  template: `
+    <form [formGroup]="myForm">
+      <ion-item>
+        <ion-label position="stacked">Appointment Date</ion-label>
+        <ngxsmk-datepicker
+          mode="single"
+          formControlName="appointmentDate"
+          placeholder="Select date">
+        </ngxsmk-datepicker>
+      </ion-item>
+    </form>
+  `
+})
+export class IonicFormComponent {
+  myForm = new FormGroup({
+    appointmentDate: new FormControl<Date | null>(null)
+  });
+}
+```
+
+**With Ionic Datetime Styling:**
+```html
+<ion-item>
+  <ion-label>Check-in / Check-out</ion-label>
+  <ngxsmk-datepicker
+    mode="range"
+    [theme]="'light'"
+    formControlName="bookingDates">
+  </ngxsmk-datepicker>
+</ion-item>
+```
+
+### **Plain HTML Inputs**
+
+Use with standard HTML form inputs for maximum flexibility:
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-plain-form',
+  standalone: true,
+  imports: [ReactiveFormsModule, NgxsmkDatepickerComponent],
+  template: `
+    <form [formGroup]="myForm">
+      <label for="birthdate">Birth Date</label>
+      <ngxsmk-datepicker
+        id="birthdate"
+        mode="single"
+        formControlName="birthdate"
+        placeholder="MM/DD/YYYY">
+      </ngxsmk-datepicker>
+      
+      <button type="submit">Submit</button>
+    </form>
+  `
+})
+export class PlainFormComponent {
+  myForm = new FormGroup({
+    birthdate: new FormControl<Date | null>(null)
+  });
+}
+```
+
+**With Native HTML5 Validation:**
+```html
+<form [formGroup]="myForm">
+  <div class="form-group">
+    <label for="event-date">Event Date *</label>
+    <ngxsmk-datepicker
+      id="event-date"
+      mode="single"
+      formControlName="eventDate"
+      [minDate]="today"
+      required>
+    </ngxsmk-datepicker>
+  </div>
+</form>
+```
+
 ## **⚙️ API Reference**
 
 ### **Inputs**
@@ -258,6 +422,7 @@ class MyHolidayProvider implements HolidayProvider {
 | ranges         | DateRange                                          | null                  | An object of predefined date ranges.                                                                          |
 | minuteInterval | number                                             | 1                     | Interval for minute dropdown options.                                                                         |
 | showTime       | boolean                                            | false                 | Enables the hour/minute/AM/PM selection section.                                                              |
+| timeOnly       | boolean                                            | false                 | Display time picker only (no calendar). Automatically enables `showTime`. Perfect for time selection scenarios. |
 | value          | DatepickerValue                                    | null                  | Programmatic value setting. Set the datepicker value from code (useful for server-side API data).            |
 | startAt        | DateInput                                          | null                  | The date to initially center the calendar view on.                                                            |
 | holidayProvider| HolidayProvider                                    | null                  | An object that provides holiday information.                                                                  |
@@ -429,7 +594,7 @@ This library has been optimized for maximum performance:
 
 ## **📱 Demo Application**
 
-A comprehensive demo application is included to showcase all features:
+A comprehensive demo application is included to showcase all features with a modern, polished UI:
 
 ```bash
 # Clone the repository
@@ -444,6 +609,9 @@ npm start
 ```
 
 The demo includes:
+- **Modern UI Design**: Beautiful glassmorphism effects, gradient themes, and polished visual hierarchy
+- **Responsive Navigation**: Modern navbar with search, theme toggle, and mobile-friendly menu
+- **Enhanced Sidebar**: Redesigned documentation sidebar with smooth animations and visual indicators
 - **Signal Forms (Angular 21)** with writable signal binding examples
 - **Theming** with CSS variables and Tailwind classes examples
 - **Customization & A11y** with weekStart, yearRange, labels, and aria examples
@@ -453,7 +621,8 @@ The demo includes:
 - **Date Range with Time** selection
 - **Multiple Date Selection** with action tracking
 - **Programmatic Value Setting** for all selection modes
-- **Theme Toggle** (Light/Dark mode)
+- **Theme Toggle** (Light/Dark mode) with automatic system preference detection
+- **Customizable Calendar Views**: Year-picker, decade-picker, timeline view, and time-slider view
 
 ## **🔧 Development**
 
@@ -534,6 +703,10 @@ ngxsmk-datepicker/
 - **Mobile Safari** 14+
 - **Chrome Mobile** 90+
 
+## **🗺️ Roadmap**
+
+Check out our [Roadmap](ROADMAP.md) to see planned features, improvements, and how you can contribute. We're always looking for contributors, especially for issues labeled `good-first-issue` and `help-wanted`!
+
 ## **🤝 Contributions**
 
 We welcome and appreciate contributions from the community! Whether it's reporting a bug, suggesting a new feature, or submitting code, your help is valuable.
@@ -558,7 +731,19 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.9.1** (Latest)
+### **v1.9.3** (Latest)
+- ✨ **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar
+  - Hides calendar grid and shows only time controls (hour, minute, AM/PM)
+  - Automatically enables `showTime` when `timeOnly` is true
+  - Perfect for time selection scenarios where date is not needed
+  - Placeholder automatically changes to "Select Time" in time-only mode
+  - Resolves [#29](https://github.com/NGXSMK/ngxsmk-datepicker/issues/29)
+- 🎨 **Modern Demo App UI**: Complete redesign of the demo application
+  - Modern navbar with glassmorphism effects, search functionality, and improved theme toggle
+  - Redesigned sidebar with gradient backgrounds, smooth animations, and visual indicators
+  - Enhanced icon sizes and better visual hierarchy
+  - Improved responsive design with better mobile experience
+  - Automatic system theme detection (dark/light mode preference)
 - 📦 **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings
   - Main bundle: ~127KB (source maps excluded from published package)
   - Enhanced tree-shaking with optimized imports and compiler options
@@ -572,10 +757,18 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Fixed package.json exports to eliminate build warnings
   - Optimized `files` array to exclude unnecessary files
   - Updated exports field for better module resolution
-- 🧪 **Test Configuration**: 
-  - Added Zone.js polyfills to library test configuration
-  - Updated test commands to explicitly target library project
-  - Improved test reliability across Angular versions
+- 🧪 **Test Suite Fixes**: Fixed 25+ failing tests across multiple test files
+  - Fixed date utils tests (normalizeDate comparisons, invalid date handling)
+  - Fixed calendar utils tests (generateMonthOptions, generateTimeOptions, generateDecadeGrid, processDateRanges)
+  - Fixed timezone utils tests (formatDateWithTimezone signature)
+  - Fixed edge cases tests (update12HourState, previewEndDate, date validation, touch events, calendar toggle)
+  - Fixed adapters tests (date normalization expectations)
+  - Fixed performance utils tests (array comparison methods)
+  - Fixed RTL tests (RTL detection from locale and document direction)
+  - Fixed touch gestures tests (swipe handling with proper TouchList mock)
+  - Fixed calendar views tests (time slider and timeline generation)
+  - Fixed recurring dates utils tests (pattern matching dates)
+  - All 353 tests now pass successfully
 - 🐛 **Bug Fixes**: 
   - Fixed test suite configuration - added missing Zone.js polyfills for library tests
   - Bundle analysis now correctly excludes source maps from size calculations

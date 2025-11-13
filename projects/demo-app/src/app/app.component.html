@@ -3,48 +3,90 @@
     <div class="mobile-menu-overlay" (click)="closeMobileMenu()" (keydown.enter)="closeMobileMenu()" (keydown.escape)="closeMobileMenu()" tabindex="0" role="button" [attr.aria-label]="'Close menu'"></div>
   }
 
-  <!-- API Documentation Header -->
-  <header class="api-docs-header">
-    <div class="header-container">
-      <div class="header-left">
+  <header class="modern-navbar">
+    <div class="navbar-container">
+      <div class="navbar-left">
         <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="mobileMenuOpen ? 'Close menu' : 'Open menu'">
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
         </button>
-        <a href="#getting-started" (click)="scrollToSection($event, 'getting-started')" class="header-logo">
-          <span class="logo-text">ngxsmk-datepicker</span>
-          <span class="logo-version">v1.9.1</span>
+        <a href="#getting-started" (click)="scrollToSection($event, 'getting-started')" class="navbar-logo">
+          <div class="logo-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <div class="logo-content">
+            <span class="logo-text">ngxsmk-datepicker</span>
+            <span class="logo-version">v1.9.3</span>
+          </div>
         </a>
       </div>
-      <div class="header-center">
-        <div class="global-search">
-          <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-          </svg>
-          <input 
-            type="text" 
-            class="search-input" 
-            placeholder="Search documentation..." 
-            [(ngModel)]="searchQuery"
-            (input)="onSearchChange($any($event.target).value || '')"
-            (keydown.escape)="clearSearch()"
-            aria-label="Search documentation">
-          @if (searchQuery) {
-            <button class="search-clear" (click)="clearSearch()" aria-label="Clear search">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          }
+      
+      <nav class="navbar-nav">
+        @for (navItem of navigationItems.slice(0, 5); track navItem.id) {
+          <a 
+            [href]="'#' + navItem.id" 
+            (click)="scrollToSection($event, navItem.id)" 
+            class="nav-item">
+            {{ navItem.label }}
+          </a>
+        }
+      </nav>
+
+      <div class="navbar-right">
+        <div class="navbar-search-wrapper">
+          <div class="global-search">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input 
+              type="text" 
+              class="search-input" 
+              placeholder="Search..." 
+              [(ngModel)]="searchQuery"
+              (input)="onSearchChange($any($event.target).value || '')"
+              (keydown.escape)="clearSearch()"
+              aria-label="Search documentation">
+            @if (searchQuery) {
+              <button class="search-clear" (click)="clearSearch()" aria-label="Clear search">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            }
+          </div>
         </div>
-      </div>
-      <div class="header-right">
-        <button class="header-theme-toggle" (click)="toggleTheme()" [attr.aria-label]="currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
-          {{ currentTheme === 'dark' ? '☀️' : '🌙' }}
+        <button class="theme-toggle-btn" (click)="toggleTheme()" [attr.aria-label]="currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+          @if (currentTheme === 'dark') {
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          } @else {
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          }
         </button>
+        <a href="https://github.com/NGXSMK/ngxsmk-datepicker" target="_blank" class="github-link" aria-label="View on GitHub">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </a>
       </div>
     </div>
   </header>
@@ -76,7 +118,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">Forge your dates. Shape your UI.</p>
-        <p class="hero-version">(v1.9.1)</p>
+        <p class="hero-version">(v1.9.3)</p>
         <p class="hero-description">A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular 17+ applications. Features GPU-accelerated animations, comprehensive theming with CSS variables, extension points & hooks, Signal Forms support, full SSR compatibility, and enhanced keyboard navigation.</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">Get Started</a>
@@ -177,6 +219,52 @@
       <p>For complete theming documentation, see the <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md#13-theming-and-customization" target="_blank">Theming section</a> in the API documentation.</p>
     </section>
 
+    <section id="global-configuration" class="docs-section">
+      <h2 class="section-title">Global Configuration</h2>
+      <p>Set app-wide defaults for all datepicker instances using the <code>provideDatepickerConfig()</code> provider. This eliminates the need to pass the same props to every datepicker component.</p>
+
+      <h3 class="subsection-title">Configuration Options</h3>
+      <p>The following options can be set globally:</p>
+      <ul>
+        <li><code>weekStart</code> - First day of the week (0 = Sunday, 1 = Monday, etc.)</li>
+        <li><code>minuteInterval</code> - Minute step for time selection (1, 5, 15, 30, etc.)</li>
+        <li><code>holidayProvider</code> - Global holiday provider for all datepickers</li>
+        <li><code>yearRange</code> - Year range for year selection dropdown</li>
+        <li><code>locale</code> - Default locale for date formatting</li>
+      </ul>
+
+      <h3 class="subsection-title">Usage Example</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">typescript</span>
+          <button class="code-copy" (click)="copyCode(globalConfigCode)">Copy</button>
+        </div>
+        <pre><code [innerHTML]="globalConfigCode | code"></code></pre>
+      </div>
+
+      <h3 class="subsection-title">Component-Level Override</h3>
+      <p>Component-level inputs always override global defaults. This allows you to have global defaults while still customizing individual datepickers when needed.</p>
+
+      <div class="example-demo">
+        <p style="margin-bottom: 1rem; color: var(--datepicker-subtle-text-color);">
+          <strong>Note:</strong> This demo app has global config set to: weekStart=1 (Monday), minuteInterval=15, yearRange=20
+        </p>
+        <ngxsmk-datepicker
+          mode="single"
+          [theme]="currentTheme"
+          placeholder="Uses global config">
+        </ngxsmk-datepicker>
+        <div style="margin-top: 1rem;">
+          <ngxsmk-datepicker
+            mode="single"
+            [theme]="currentTheme"
+            [minuteInterval]="5"
+            placeholder="Overrides minuteInterval to 5">
+          </ngxsmk-datepicker>
+        </div>
+      </div>
+    </section>
+
     <section id="installation" class="docs-section">
       <h2 class="section-title">Installation</h2>
       <div class="code-block">
@@ -207,6 +295,77 @@
           <button class="code-copy" (click)="copyCode(basicTemplateCode)">Copy</button>
         </div>
         <pre><code [innerHTML]="basicTemplateCode | code"></code></pre>
+      </div>
+    </section>
+
+    <section id="framework-integration" class="docs-section">
+      <h2 class="section-title">Framework Integration</h2>
+      <p>Integrate ngxsmk-datepicker with popular frameworks and form libraries. The component works seamlessly with Angular Material, Ionic, and plain HTML forms.</p>
+
+      <div id="angular-material" class="example-section">
+        <h3 class="example-title">Angular Material Form Fields</h3>
+        <p>Integrate with Angular Material's form field components for a seamless Material Design experience:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(materialFormCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="materialFormCode | code"></code></pre>
+        </div>
+
+        <h4 class="subsection-title" style="margin-top: 1.5rem;">With Date Range</h4>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(materialRangeCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="materialRangeCode | code"></code></pre>
+        </div>
+      </div>
+
+      <div id="ionic-components" class="example-section">
+        <h3 class="example-title">Ionic Components</h3>
+        <p>Works seamlessly with Ionic form components and follows Ionic design patterns:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(ionicFormCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="ionicFormCode | code"></code></pre>
+        </div>
+
+        <h4 class="subsection-title" style="margin-top: 1.5rem;">With Ionic Datetime Styling</h4>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(ionicRangeCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="ionicRangeCode | code"></code></pre>
+        </div>
+      </div>
+
+      <div id="plain-html" class="example-section">
+        <h3 class="example-title">Plain HTML Inputs</h3>
+        <p>Use with standard HTML form inputs for maximum flexibility:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(plainHtmlCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="plainHtmlCode | code"></code></pre>
+        </div>
+
+        <h4 class="subsection-title" style="margin-top: 1.5rem;">With Native HTML5 Validation</h4>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(plainHtmlValidationCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="plainHtmlValidationCode | code"></code></pre>
+        </div>
       </div>
     </section>
 
@@ -389,6 +548,146 @@
         }
       </div>
 
+      <div id="time-only" class="example-section">
+        <h3 class="example-title">Time Only Picker</h3>
+        <p>Display only the time picker without the calendar. Perfect for time selection scenarios where date is not needed.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [timeOnly]="true"
+            [minuteInterval]="15"
+            [theme]="currentTheme"
+            formControlName="timeOnly">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(timeOnlyCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="timeOnlyCode | code"></code></pre>
+        </div>
+
+        @if (datepickerForm.controls.timeOnly.value) {
+          <div class="result-box">
+            @if (isDate(datepickerForm.controls.timeOnly.value)) {
+              <strong>Form Value:</strong> <code>{{ datepickerForm.controls.timeOnly.value | date:'short' }}</code>
+              <br>
+              <strong>Time Only:</strong> <code>{{ datepickerForm.controls.timeOnly.value | date:'shortTime' }}</code>
+            } @else {
+              <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.timeOnly.value) }}</code>
+            }
+          </div>
+        }
+      </div>
+
+      <div id="rtl-support" class="example-section">
+        <h3 class="example-title">RTL (Right-to-Left) Support</h3>
+        <p>Full RTL layout support with automatic detection from document direction or locale. UI elements are mirrored, navigation arrows are flipped, and keyboard navigation is adjusted for RTL languages like Arabic, Hebrew, Persian, and Urdu.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [rtl]="true"
+            [locale]="'ar-SA'"
+            [theme]="currentTheme"
+            placeholder="اختر تاريخ"
+            formControlName="rtlDate">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(rtlCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="rtlCode | code"></code></pre>
+        </div>
+
+        <h4 class="subsection-title" style="margin-top: 1.5rem;">Auto-Detection</h4>
+        <p>The datepicker can automatically detect RTL from the document direction or locale:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(rtlAutoCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="rtlAutoCode | code"></code></pre>
+        </div>
+
+        <div class="result-box">
+          <strong>RTL Features:</strong>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>UI elements mirrored (input group, navigation arrows, footer)</li>
+            <li>Day grid uses RTL direction</li>
+            <li>Week day headers ordered correctly for RTL</li>
+            <li>Keyboard navigation reversed (ArrowLeft/ArrowRight swapped)</li>
+            <li>Popover positioning adjusted for RTL</li>
+            <li>Auto-detection from <code>document.dir</code> or locale (ar, he, fa, ur, etc.)</li>
+          </ul>
+        </div>
+
+        @if (datepickerForm.controls.rtlDate.value) {
+          <div class="result-box">
+            <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.rtlDate.value) }}</code>
+          </div>
+        }
+      </div>
+
+      <div id="timezone-support" class="example-section">
+        <h3 class="example-title">Timezone Support</h3>
+        <p>Format dates in specific timezones using IANA timezone names. JavaScript Date objects are always stored in UTC internally; the timezone setting only affects how dates are displayed.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [timezone]="'America/New_York'"
+            [showTime]="true"
+            [theme]="currentTheme"
+            placeholder="New York Time (EST/EDT)">
+          </ngxsmk-datepicker>
+          <div style="margin-top: 1rem;">
+            <ngxsmk-datepicker
+              mode="single"
+              [timezone]="'Europe/London'"
+              [showTime]="true"
+              [theme]="currentTheme"
+              placeholder="London Time (GMT/BST)">
+            </ngxsmk-datepicker>
+          </div>
+          <div style="margin-top: 1rem;">
+            <ngxsmk-datepicker
+              mode="single"
+              [timezone]="'Asia/Tokyo'"
+              [showTime]="true"
+              [theme]="currentTheme"
+              placeholder="Tokyo Time (JST)">
+            </ngxsmk-datepicker>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(timezoneCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="timezoneCode | code"></code></pre>
+        </div>
+
+        <div class="result-box">
+          <strong>Important Notes:</strong>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li>JavaScript Date objects are <strong>always stored in UTC</strong> internally</li>
+            <li>The <code>timezone</code> property only affects <strong>display formatting</strong>, not storage</li>
+            <li>Use IANA timezone names (e.g., <code>'America/New_York'</code>, <code>'UTC'</code>, <code>'Europe/London'</code>)</li>
+            <li>For advanced timezone operations, consider using <code>date-fns-tz</code> or <code>Luxon</code> alongside this library</li>
+            <li>See <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/TIMEZONE.md" target="_blank">Timezone Documentation</a> for detailed information</li>
+          </ul>
+        </div>
+      </div>
+
       <div id="multiple-dates" class="example-section">
         <h3 class="example-title">Multiple Date Selection</h3>
         <p>Select multiple non-contiguous dates.</p>
@@ -538,6 +837,74 @@
           <pre><code [innerHTML]="minMaxCode | code"></code></pre>
         </div>
       </div>
+
+      <div id="calendar-views" class="example-section">
+        <h3 class="example-title">Customizable Calendar Views</h3>
+        <p>Switch between different calendar view modes: year picker, decade picker, timeline view, and time slider for enhanced date selection.</p>
+        
+        <div class="example-demo">
+          <div style="margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Year Picker</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Perfect for birth date selection - pick a year from a grid.</p>
+            <ngxsmk-datepicker
+              mode="single"
+              [calendarViewMode]="yearPickerView"
+              [value]="yearPickerValue"
+              [theme]="currentTheme"
+              placeholder="Select birth year"
+              (valueChange)="yearPickerValue = $event">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div style="margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Decade Picker</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Navigate decades quickly for historical dates.</p>
+            <ngxsmk-datepicker
+              mode="single"
+              [calendarViewMode]="decadePickerView"
+              [value]="decadePickerValue"
+              [theme]="currentTheme"
+              placeholder="Select decade"
+              (valueChange)="decadePickerValue = $event">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div style="margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Timeline View</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Horizontal timeline for selecting long date ranges with zoom controls.</p>
+            <ngxsmk-datepicker
+              mode="range"
+              [calendarViewMode]="timelineView"
+              [value]="timelineRange"
+              [theme]="currentTheme"
+              placeholder="Select date range"
+              (valueChange)="timelineRange = $event">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div>
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Time Slider View</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Dual sliders for selecting start and end times in a range.</p>
+            <ngxsmk-datepicker
+              mode="range"
+              [calendarViewMode]="timeSliderView"
+              [showTime]="true"
+              [value]="timeSliderRange"
+              [theme]="currentTheme"
+              placeholder="Select time range"
+              (valueChange)="timeSliderRange = $event">
+            </ngxsmk-datepicker>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(calendarViewsCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="calendarViewsCode | code"></code></pre>
+        </div>
+      </div>
       </form>
 
       <div id="mobile-playground" class="example-section">
@@ -589,7 +956,6 @@
     </section>
   </main>
 
-  <!-- TokiForge Promotion Sidebar - Right Side -->
   <aside class="tokiforge-promotion">
     <div class="promotion-content">
       <div class="promotion-icon">🎨</div>

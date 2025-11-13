@@ -1,0 +1,83 @@
+[
+  {
+    "name": "good-first-issue",
+    "color": "7057ff",
+    "description": "Good for newcomers"
+  },
+  {
+    "name": "help-wanted",
+    "color": "008672",
+    "description": "Extra attention is needed"
+  },
+  {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "Something isn't working"
+  },
+  {
+    "name": "enhancement",
+    "color": "a2eeef",
+    "description": "New feature or request"
+  },
+  {
+    "name": "documentation",
+    "color": "0075ca",
+    "description": "Improvements or additions to documentation"
+  },
+  {
+    "name": "performance",
+    "color": "fbca04",
+    "description": "Performance improvements"
+  },
+  {
+    "name": "accessibility",
+    "color": "1d76db",
+    "description": "Accessibility improvements"
+  },
+  {
+    "name": "i18n",
+    "color": "bfd4f2",
+    "description": "Internationalization"
+  },
+  {
+    "name": "styling",
+    "color": "c5def5",
+    "description": "CSS/styling related"
+  },
+  {
+    "name": "question",
+    "color": "d876e3",
+    "description": "Further information is requested"
+  },
+  {
+    "name": "needs-triage",
+    "color": "f9d0c4",
+    "description": "Needs review/prioritization"
+  },
+  {
+    "name": "feature-request",
+    "color": "0e8a16",
+    "description": "Feature request"
+  },
+  {
+    "name": "breaking-change",
+    "color": "b60205",
+    "description": "Breaking change"
+  },
+  {
+    "name": "wontfix",
+    "color": "ffffff",
+    "description": "This will not be worked on"
+  },
+  {
+    "name": "duplicate",
+    "color": "cccccc",
+    "description": "This issue or pull request already exists"
+  },
+  {
+    "name": "invalid",
+    "color": "e4e669",
+    "description": "This doesn't seem right"
+  }
+]
+

@@ -1,0 +1,83 @@
+name: 💬 Question
+description: Ask a question or seek help
+title: "[Question]: "
+labels: ["question", "help-wanted"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your question! We're here to help.
+        
+        **Before asking:**
+        - Check the [documentation](https://github.com/NGXSMK/ngxsmk-datepicker#readme)
+        - Check existing [issues](https://github.com/NGXSMK/ngxsmk-datepicker/issues) and [discussions](https://github.com/NGXSMK/ngxsmk-datepicker/discussions)
+        - Search for similar questions
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What would you like to know?
+      placeholder: Ask your question here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide context about what you're trying to achieve
+      placeholder: |
+        Example:
+        - I'm trying to integrate with Angular Material
+        - I need to customize the date format
+        - I'm having trouble with SSR
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Example
+      description: If applicable, share relevant code
+      placeholder: |
+        ```typescript
+        // Your code here
+        ```
+      render: typescript
+
+  - type: dropdown
+    id: angular-version
+    attributes:
+      label: Angular Version
+      description: Which version of Angular are you using?
+      options:
+        - "17.x"
+        - "18.x"
+        - "19.x"
+        - "20.x"
+        - "21.x"
+        - "22.x"
+        - "Other"
+    validations:
+      required: false
+
+  - type: input
+    id: datepicker-version
+    attributes:
+      label: ngxsmk-datepicker Version
+      description: Which version of ngxsmk-datepicker are you using?
+      placeholder: e.g., 1.9.1
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I have checked the documentation
+          required: true
+        - label: I have searched existing issues and discussions
+          required: true
+

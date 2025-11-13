@@ -1,0 +1,51 @@
+# Auto-label issues based on title patterns
+
+# Bug reports
+bug:
+  - title: '.*\[Bug\].*'
+  - title: '.*bug.*'
+  - title: '.*error.*'
+  - title: '.*broken.*'
+  - title: '.*not working.*'
+
+# Feature requests
+enhancement:
+  - title: '.*\[Feature\].*'
+  - title: '.*feature.*'
+  - title: '.*enhancement.*'
+  - title: '.*improvement.*'
+
+# Documentation
+documentation:
+  - title: '.*\[Docs\].*'
+  - title: '.*documentation.*'
+  - title: '.*readme.*'
+  - title: '.*doc.*'
+
+# Performance
+performance:
+  - title: '.*performance.*'
+  - title: '.*slow.*'
+  - title: '.*optimization.*'
+
+# Accessibility
+accessibility:
+  - title: '.*accessibility.*'
+  - title: '.*a11y.*'
+  - title: '.*screen reader.*'
+  - title: '.*aria.*'
+
+# Internationalization
+i18n:
+  - title: '.*i18n.*'
+  - title: '.*internationalization.*'
+  - title: '.*locale.*'
+  - title: '.*translation.*'
+
+# Styling
+styling:
+  - title: '.*styling.*'
+  - title: '.*css.*'
+  - title: '.*theme.*'
+  - title: '.*design.*'
+

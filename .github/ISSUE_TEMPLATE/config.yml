@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/NGXSMK/ngxsmk-datepicker/discussions
+    about: Ask questions, share ideas, and discuss with the community
+  - name: 📚 Documentation
+    url: https://github.com/NGXSMK/ngxsmk-datepicker#readme
+    about: Check the documentation for usage examples and API reference
+  - name: 🗺️ Roadmap
+    url: https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/ROADMAP.md
+    about: View our roadmap to see planned features and improvements
+

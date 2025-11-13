@@ -1,0 +1,99 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please fill out the form below.
+        
+        **Before submitting:**
+        - Check if the feature has already been requested
+        - Check the [roadmap](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/ROADMAP.md)
+        - Consider if this could be solved with existing features or customization
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like
+      placeholder: A clear and concise description of what you want to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or features you've considered
+      placeholder: A clear description of any alternative solutions or features you've considered
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe a specific use case for this feature
+      placeholder: |
+        Example:
+        - I want to select multiple non-contiguous dates
+        - I need to disable weekends automatically
+        - I want custom date formatting
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Example
+      description: If applicable, show how you would like to use this feature
+      placeholder: |
+        ```typescript
+        // How you would like to use this feature
+        <ngxsmk-datepicker
+          [newFeature]="value">
+        </ngxsmk-datepicker>
+        ```
+      render: typescript
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - "Nice to have"
+        - "Would be helpful"
+        - "Important"
+        - "Critical"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, mockups, or information about the feature request
+      placeholder: Add any other context, screenshots, or mockups here
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues to ensure this feature has not already been requested
+          required: true
+        - label: I have checked the roadmap
+          required: true
+        - label: I'm willing to help implement this feature
+          required: false
+
