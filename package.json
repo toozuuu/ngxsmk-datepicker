@@ -3,6 +3,10 @@
   "version": "1.9.3",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.19.0 || >=22.12.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "ng": "npx ng",
     "start": "npx ng serve demo-app",
