@@ -6,6 +6,8 @@
 
 A modern, powerful, and fully customizable date and date-range picker component for Angular 17+ applications.
 
+> **Stable Version**: `2.0.0` is the current stable release.
+
 ## 📷 Screenshots
 
 <p align="left">
@@ -233,8 +235,8 @@ If you find this library helpful, please consider:
 
 ---
 
-**Version**: 1.9.2  
-**Last Updated**: 2025-11-12
+**Version**: 2.0.0  
+**Last Updated**: 2025-11-13
 
 For the latest updates and changelog, visit the [GitHub repository](https://github.com/NGXSMK/ngxsmk-datepicker).
 
