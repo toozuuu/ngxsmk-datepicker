@@ -731,7 +731,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.9.3** (Latest)
+### **v1.9.2** (Latest)
 - ✨ **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar
   - Hides calendar grid and shows only time controls (hour, minute, AM/PM)
   - Automatically enables `showTime` when `timeOnly` is true
