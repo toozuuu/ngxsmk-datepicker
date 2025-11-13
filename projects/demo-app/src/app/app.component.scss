@@ -1303,33 +1303,44 @@
   flex-direction: column;
   gap: 1rem;
   align-items: flex-start;
+  width: 100%;
 }
 
-.theme-toggle-btn {
-  padding: 0.5rem 1rem;
-  border: 1.5px solid var(--border-color, #e5e7eb);
-  border-radius: 6px;
-  background: var(--background, #ffffff);
-  color: var(--text-color, #1f2937);
+.theme-demo-btn {
+  padding: 0.75rem 1.5rem;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2937;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  min-width: fit-content;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-.theme-toggle-btn:hover {
-  background: var(--hover-background, #f3f4f6);
-  border-color: var(--primary-color, #6d28d9);
+.theme-demo-btn:hover {
+  background: #f9fafb;
+  border-color: #6366f1;
+  color: #6366f1;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px 0 rgba(99, 102, 241, 0.1);
 }
 
-.docs-container.dark-theme .theme-toggle-btn {
-  border-color: var(--border-color, #374151);
-  background: var(--background, #1f2937);
-  color: var(--text-color, #f3f4f6);
+.docs-container.dark-theme .theme-demo-btn {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: #1f2937;
+  color: #f3f4f6;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
 }
 
-.docs-container.dark-theme .theme-toggle-btn:hover {
-  background: var(--hover-background, #374151);
+.docs-container.dark-theme .theme-demo-btn:hover {
+  background: #374151;
+  border-color: #818cf8;
+  color: #818cf8;
+  box-shadow: 0 2px 4px 0 rgba(129, 140, 248, 0.2);
 }
 
 .example-demo {
