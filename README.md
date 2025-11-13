@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `2.0.0` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.3` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -733,7 +733,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v2.0.0** (Stable)
+### **v1.9.3** (Stable)
 - ✨ **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar
   - Hides calendar grid and shows only time controls (hour, minute, AM/PM)
   - Automatically enables `showTime` when `timeOnly` is true
