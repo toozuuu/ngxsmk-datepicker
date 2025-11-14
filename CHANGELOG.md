@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.10] - 2025-11-15 (Stable)
+
+### Changed
+- **Version Update**: Updated to version 1.9.10
+- **Stable Release**: Version 1.9.10 is the current stable version
+
+### Fixed
+- **Async Database Value Loading**: Enhanced datepicker to properly handle database values that load asynchronously after component initialization
+  - Added fallback sync mechanism in `ngAfterViewInit` to catch async database loads
+  - Added delayed sync checks in `ngOnChanges` (100ms and 500ms) to handle field value changes that occur after component initialization
+  - Ensures datepicker properly displays database values even when they load after the component is rendered
+
+### Improved
+- **Async Value Handling**: Improved handling of field values that change asynchronously
+- **Code Cleanup**: Removed unnecessary comments for cleaner codebase
+
 ## [1.9.9] - 2025-11-15 (Stable)
 
 ### Changed

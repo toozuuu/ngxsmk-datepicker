@@ -1776,6 +1776,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           }, 100);
         });
       });
+      
+      if (this._field) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            this.syncFieldValue(this._field);
+          });
+        });
+      }
     }
   }
 
@@ -1907,15 +1915,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (changes['field']) {
       const newField = changes['field'].currentValue;
       if (newField && typeof newField === 'object') {
-        const fieldValue = typeof newField.value === 'function' ? newField.value() : newField.value;
-        if (fieldValue !== undefined && fieldValue !== null) {
-          const normalizedValue = this._normalizeValue(fieldValue);
-          if (!this.isValueEqual(normalizedValue, this._internalValue)) {
-            this._internalValue = normalizedValue;
-            this.initializeValue(normalizedValue);
-            this.generateCalendar();
-            this.cdr.markForCheck();
-          }
+        this.syncFieldValue(newField);
+        
+        if (this.isBrowser) {
+          setTimeout(() => {
+            this.syncFieldValue(newField);
+          }, 100);
+          
+          setTimeout(() => {
+            this.syncFieldValue(newField);
+          }, 500);
         }
       }
     }
