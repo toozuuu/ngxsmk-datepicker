@@ -614,6 +614,288 @@ describe('Issue #13: Programmatic value setting', () => {
         expect(mockField.setValue).toHaveBeenCalled();
       }
     });
+
+    it('should not reset selected date to today when field effect runs after selection', async () => {
+      const initialDate = getStartOfDay(new Date(2024, 5, 15));
+      const selectedDate = getStartOfDay(new Date(2024, 5, 20));
+      let fieldValue = initialDate;
+      
+      const mockField = {
+        value: () => fieldValue,
+        setValue: (val: Date) => { fieldValue = val; },
+        disabled: () => false
+      };
+      
+      component.field = mockField;
+      component.inline = true;
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getTime()).toBe(initialDate.getTime());
+      }
+      
+      const dayCells = fixture.debugElement.queryAll(By.css('.ngxsmk-day-cell'));
+      const day20 = dayCells.find(cell => {
+        const dayNumber = cell.query(By.css('.ngxsmk-day-number'));
+        return dayNumber && dayNumber.nativeElement.textContent.trim() === '20' &&
+               !cell.nativeElement.classList.contains('disabled') &&
+               !cell.nativeElement.classList.contains('empty');
+      });
+      
+      expect(day20).toBeTruthy();
+      day20!.nativeElement.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      await new Promise(resolve => setTimeout(resolve, 10));
+      fixture.detectChanges();
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getTime()).toBe(selectedDate.getTime());
+        expect(component.selectedDate.getTime()).not.toBe(getStartOfDay(new Date()).getTime());
+      }
+      
+      expect(fieldValue.getTime()).toBe(selectedDate.getTime());
+    });
+
+    it('should create new Date object when applying current time (not mutate original)', () => {
+      const testDate = new Date(2024, 5, 15, 10, 30);
+      const originalTime = testDate.getTime();
+      const originalHours = testDate.getHours();
+      const originalMinutes = testDate.getMinutes();
+      
+      component.mode = 'single';
+      component.showTime = true;
+      component.inline = true;
+      fixture.detectChanges();
+      
+      component.currentDisplayHour = 14;
+      component.isPm = false;
+      component.currentMinute = 45;
+      
+      component.onDateClick(testDate);
+      fixture.detectChanges();
+      
+      expect(testDate.getTime()).toBe(originalTime);
+      expect(testDate.getHours()).toBe(originalHours);
+      expect(testDate.getMinutes()).toBe(originalMinutes);
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getHours()).toBe(14);
+        expect(component.selectedDate.getMinutes()).toBe(45);
+        expect(component.selectedDate).not.toBe(testDate);
+        expect(component.selectedDate.getFullYear()).toBe(testDate.getFullYear());
+        expect(component.selectedDate.getMonth()).toBe(testDate.getMonth());
+        expect(component.selectedDate.getDate()).toBe(testDate.getDate());
+      }
+    });
+
+    it('should create new Date object for PM time selection', () => {
+      const testDate = new Date(2024, 5, 15, 8, 15);
+      const originalTime = testDate.getTime();
+      
+      component.mode = 'single';
+      component.showTime = true;
+      component.inline = true;
+      fixture.detectChanges();
+      
+      component.currentDisplayHour = 2;
+      component.isPm = true;
+      component.currentMinute = 30;
+      
+      component.onDateClick(testDate);
+      fixture.detectChanges();
+      
+      expect(testDate.getTime()).toBe(originalTime);
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getHours()).toBe(14);
+        expect(component.selectedDate.getMinutes()).toBe(30);
+        expect(component.selectedDate).not.toBe(testDate);
+      }
+    });
+
+    it('should create new Date object for range mode with time', () => {
+      const startDate = new Date(2024, 5, 15, 9, 0);
+      const endDate = new Date(2024, 5, 20, 17, 0);
+      const originalStartTime = startDate.getTime();
+      const originalEndTime = endDate.getTime();
+      
+      component.mode = 'range';
+      component.showTime = true;
+      component.inline = true;
+      fixture.detectChanges();
+      
+      component.currentDisplayHour = 10;
+      component.isPm = false;
+      component.currentMinute = 15;
+      
+      component.onDateClick(startDate);
+      fixture.detectChanges();
+      
+      expect(startDate.getTime()).toBe(originalStartTime);
+      
+      component.currentDisplayHour = 3;
+      component.isPm = true;
+      component.currentMinute = 45;
+      component.onDateClick(endDate);
+      fixture.detectChanges();
+      
+      expect(endDate.getTime()).toBe(originalEndTime);
+      
+      expect(component.startDate).toBeTruthy();
+      expect(component.endDate).toBeTruthy();
+      if (component.startDate && component.endDate) {
+        expect(component.startDate).not.toBe(startDate);
+        expect(component.endDate).not.toBe(endDate);
+      }
+    });
+
+    it('should handle date from daysInMonth array without mutation', () => {
+      component.mode = 'single';
+      component.inline = true;
+      fixture.detectChanges();
+      
+      component.generateCalendar();
+      fixture.detectChanges();
+      
+      const validDay = component.daysInMonth.find(day => day !== null);
+      expect(validDay).toBeTruthy();
+      
+      if (validDay) {
+        const originalTime = validDay.getTime();
+        const originalDate = validDay.getDate();
+        
+        component.onDateClick(validDay);
+        fixture.detectChanges();
+        
+        expect(validDay.getTime()).toBe(originalTime);
+        expect(validDay.getDate()).toBe(originalDate);
+        
+        expect(component.selectedDate).toBeTruthy();
+        if (component.selectedDate) {
+          expect(component.selectedDate).not.toBe(validDay);
+          expect(component.selectedDate.getTime()).toBe(validDay.getTime());
+        }
+      }
+    });
+
+    it('should prevent field effect from resetting value when updating internally', async () => {
+      const initialDate = getStartOfDay(new Date(2024, 5, 15));
+      const newDate = getStartOfDay(new Date(2024, 5, 25));
+      let fieldValue = initialDate;
+      
+      const mockField = {
+        value: () => fieldValue,
+        setValue: (val: Date) => { 
+          fieldValue = val;
+        },
+        disabled: () => false
+      };
+      
+      component.field = mockField;
+      component.inline = true;
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      const dayCells = fixture.debugElement.queryAll(By.css('.ngxsmk-day-cell'));
+      const day25 = dayCells.find(cell => {
+        const dayNumber = cell.query(By.css('.ngxsmk-day-number'));
+        return dayNumber && dayNumber.nativeElement.textContent.trim() === '25' &&
+               !cell.nativeElement.classList.contains('disabled') &&
+               !cell.nativeElement.classList.contains('empty');
+      });
+      
+      expect(day25).toBeTruthy();
+      day25!.nativeElement.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      await new Promise(resolve => setTimeout(resolve, 10));
+      fixture.detectChanges();
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getTime()).toBe(newDate.getTime());
+      }
+      
+      expect(fieldValue.getTime()).toBe(newDate.getTime());
+    });
+
+    it('should maintain selected date across multiple field effect cycles', async () => {
+      const testDate = getStartOfDay(new Date(2024, 5, 18));
+      let fieldValue: Date | null = null;
+      
+      const mockField = {
+        value: () => fieldValue,
+        setValue: (val: Date) => { fieldValue = val; },
+        disabled: () => false
+      };
+      
+      component.field = mockField;
+      component.inline = true;
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      component.onDateClick(testDate);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      await new Promise(resolve => setTimeout(resolve, 10));
+      fixture.detectChanges();
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getTime()).toBe(testDate.getTime());
+      }
+      expect(fieldValue).toBeTruthy();
+      if (fieldValue) {
+        expect(fieldValue.getTime()).toBe(testDate.getTime());
+      }
+    });
+
+    it('should handle rapid date selections without resetting', async () => {
+      const dates = [
+        getStartOfDay(new Date(2024, 5, 15)),
+        getStartOfDay(new Date(2024, 5, 20)),
+        getStartOfDay(new Date(2024, 5, 25))
+      ];
+      let fieldValue: Date | null = null;
+      
+      const mockField = {
+        value: () => fieldValue,
+        setValue: (val: Date) => { fieldValue = val; },
+        disabled: () => false
+      };
+      
+      component.field = mockField;
+      component.inline = true;
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      for (const date of dates) {
+        component.onDateClick(date);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        await new Promise(resolve => setTimeout(resolve, 10));
+        fixture.detectChanges();
+        
+        expect(component.selectedDate).toBeTruthy();
+        if (component.selectedDate) {
+          expect(component.selectedDate.getTime()).toBe(date.getTime());
+        }
+      }
+      
+      expect(fieldValue).toBeTruthy();
+      if (fieldValue) {
+        expect(fieldValue.getTime()).toBe(dates[dates.length - 1].getTime());
+      }
+    });
   });
 
   describe('Value change event emission', () => {

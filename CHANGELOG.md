@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.8] - 2025-11-14 (Stable)
+
+### Changed
+- **Version Update**: Updated to version 1.9.8
+- **Stable Release**: Version 1.9.8 is the current stable version
+
+### Fixed
+- **Date Selection Reset Issue**: Fixed critical bug where selected dates would reset to today's date when using `[field]` input binding
+  - Fixed `applyCurrentTime` to create a new Date object instead of mutating the original, preventing reference issues
+  - Added `_isUpdatingFromInternal` flag to prevent field effect from resetting the value when updating internally
+  - This ensures selected dates are properly stored in the form field instead of being reset to today
+
+### Improved
+- **Date Mutation Prevention**: Improved date handling to prevent unintended mutations of date objects
+- **Field Update Stability**: Enhanced field binding stability to prevent value resets during internal updates
+
 ## [1.9.7] - 2025-11-14 (Stable)
 
 ### Changed

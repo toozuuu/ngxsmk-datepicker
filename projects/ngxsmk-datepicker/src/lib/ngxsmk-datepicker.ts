@@ -447,12 +447,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private _field: SignalFormField = null;
+  private _isUpdatingFromInternal: boolean = false;
   
   @Input() set field(field: SignalFormField) {
     this._field = field;
     if (field && typeof field === 'object') {
       try {
         effect(() => {
+            if (this._isUpdatingFromInternal) {
+              return;
+            }
+            
             let fieldValue: any = null;
             
             if (typeof field.value === 'function') {
@@ -1475,6 +1480,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._internalValue = val;
     
     if (this._field) {
+      this._isUpdatingFromInternal = true;
       try {
         if (typeof this._field.setValue === 'function') {
           this._field.setValue(val);
@@ -1496,6 +1502,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this._field.value.set(val);
         }
       } catch {
+      } finally {
+        setTimeout(() => {
+          this._isUpdatingFromInternal = false;
+        }, 0);
       }
     }
     
@@ -2000,8 +2010,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private applyCurrentTime(date: Date): Date {
     this.currentHour = this.get24Hour(this.currentDisplayHour, this.isPm);
-    date.setHours(this.currentHour, this.currentMinute, 0, 0);
-    return date;
+    const newDate = new Date(date);
+    newDate.setHours(this.currentHour, this.currentMinute, 0, 0);
+    return newDate;
   }
 
   private initializeValue(value: DatepickerValue): void {
