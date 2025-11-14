@@ -421,19 +421,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() set value(val: DatepickerValue) {
     this._value = val;
     if (!this._field && val !== undefined) {
-      let normalizedValue: DatepickerValue = null;
-      if (val !== null) {
-        if (val instanceof Date) {
-          normalizedValue = this._normalizeDate(val) as DatepickerValue;
-        } else if (typeof val === 'object' && 'start' in val && 'end' in val) {
-          normalizedValue = {
-            start: this._normalizeDate(val.start),
-            end: this._normalizeDate(val.end)
-          } as DatepickerValue;
-        } else if (Array.isArray(val)) {
-          normalizedValue = val.map(d => this._normalizeDate(d)).filter((d): d is Date => d !== null) as DatepickerValue;
-        }
-      }
+      const normalizedValue = this._normalizeValue(val);
       if (!this.isValueEqual(normalizedValue, this._internalValue)) {
         this._internalValue = normalizedValue;
         this.initializeValue(normalizedValue);
@@ -466,9 +454,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
               fieldValue = field.value;
             }
             
-            const normalizedValue = fieldValue !== null && fieldValue !== undefined
-              ? (this._normalizeDate(fieldValue) as DatepickerValue)
-              : null;
+            const normalizedValue = this._normalizeValue(fieldValue);
             
             if (!this.isValueEqual(normalizedValue, this._internalValue)) {
               this._internalValue = normalizedValue;
@@ -500,9 +486,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private syncFieldValue(field: SignalFormField): void {
     if (!field || typeof field !== 'object') return;
     const fieldValue = typeof field.value === 'function' ? field.value() : field.value;
-    const normalizedValue = fieldValue !== null && fieldValue !== undefined
-      ? (this._normalizeDate(fieldValue) as DatepickerValue)
-      : null;
+    const normalizedValue = this._normalizeValue(fieldValue);
     if (!this.isValueEqual(normalizedValue, this._internalValue)) {
       this._internalValue = normalizedValue;
       this.initializeValue(normalizedValue);
@@ -1763,7 +1747,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this._field) {
       const fieldValue = typeof this._field.value === 'function' ? this._field.value() : this._field.value;
       if (fieldValue !== undefined && fieldValue !== null) {
-        initialValue = this._normalizeDate(fieldValue) as DatepickerValue;
+        initialValue = this._normalizeValue(fieldValue);
       }
     } else if (this._value !== null) {
       initialValue = this._value;
@@ -1925,7 +1909,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (newField && typeof newField === 'object') {
         const fieldValue = typeof newField.value === 'function' ? newField.value() : newField.value;
         if (fieldValue !== undefined && fieldValue !== null) {
-          const normalizedValue = this._normalizeDate(fieldValue) as DatepickerValue;
+          const normalizedValue = this._normalizeValue(fieldValue);
           if (!this.isValueEqual(normalizedValue, this._internalValue)) {
             this._internalValue = normalizedValue;
             this.initializeValue(normalizedValue);
@@ -2091,6 +2075,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private _normalizeDate(date: DateInput | null): Date | null {
     return normalizeDate(date);
+  }
+
+  private _normalizeValue(val: any): DatepickerValue {
+    if (val === null || val === undefined) {
+      return null;
+    }
+    
+    if (val instanceof Date) {
+      return this._normalizeDate(val) as DatepickerValue;
+    } else if (typeof val === 'object' && 'start' in val && 'end' in val) {
+      const start = this._normalizeDate(val.start);
+      const end = this._normalizeDate(val.end);
+      if (start && end) {
+        return { start, end } as DatepickerValue;
+      }
+      return null;
+    } else if (Array.isArray(val)) {
+      return val.map(d => this._normalizeDate(d)).filter((d): d is Date => d !== null) as DatepickerValue;
+    } else {
+      const normalized = this._normalizeDate(val);
+      return normalized as DatepickerValue;
+    }
   }
 
   private isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {

@@ -619,6 +619,45 @@ describe('Issue #13: Programmatic value setting', () => {
       expect(mockField.setValue).toHaveBeenCalled();
     });
 
+    it('should populate datepicker with string date from database', async () => {
+      // Simulate a date coming from database as a string (common scenario)
+      const dateString = '2024-06-15T00:00:00.000Z';
+      const expectedDate = new Date(dateString);
+      
+      const mockField = {
+        value: () => dateString, // Database returns string
+        setValue: jasmine.createSpy('setValue'),
+        disabled: () => false
+      };
+      
+      component.field = mockField;
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      // Wait for field effect to initialize - Angular effects may take time
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      // If still not initialized, wait a bit more
+      if (!component.selectedDate) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        fixture.detectChanges();
+        await fixture.whenStable();
+      }
+      
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        // Verify the date was parsed correctly from the string
+        expect(component.selectedDate.getFullYear()).toBe(expectedDate.getFullYear());
+        expect(component.selectedDate.getMonth()).toBe(expectedDate.getMonth());
+        expect(component.selectedDate.getDate()).toBe(expectedDate.getDate());
+        expect(component.displayValue).not.toBe('');
+        expect(component.displayValue).toContain('Jun');
+        expect(component.displayValue).toContain('15');
+      }
+    });
+
     it('should not reset selected date to today when field effect runs after selection', async () => {
       const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
       jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;

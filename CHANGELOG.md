@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.9] - 2025-11-15 (Stable)
+
+### Changed
+- **Version Update**: Updated to version 1.9.9
+- **Stable Release**: Version 1.9.9 is the current stable version
+
+### Fixed
+- **Database Value Population**: Fixed critical issue where datepicker would not populate with values from database when using `[field]` input binding
+  - Added `_normalizeValue()` helper method to properly handle all value types (Date objects, strings, range objects, arrays)
+  - Updated field effect and related methods to use `_normalizeValue()` instead of `_normalizeDate()` which only handled single dates
+  - Fixed issue where string dates from database (common scenario) were not being parsed and displayed correctly
+  - Now properly handles Date objects, string dates, range objects `{start: Date, end: Date}`, and arrays of dates
+
+### Improved
+- **Value Normalization**: Improved value normalization to handle all DatepickerValue types consistently
+- **Database Integration**: Enhanced compatibility with database values in various formats (strings, Date objects, etc.)
+
 ## [1.9.8] - 2025-11-14 (Stable)
 
 ### Changed
