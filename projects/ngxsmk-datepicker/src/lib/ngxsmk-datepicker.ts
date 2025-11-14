@@ -447,12 +447,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private _field: SignalFormField = null;
+  private _isUpdatingFromInternal: boolean = false;
   
   @Input() set field(field: SignalFormField) {
     this._field = field;
     if (field && typeof field === 'object') {
       try {
         effect(() => {
+            if (this._isUpdatingFromInternal) {
+              return;
+            }
+            
             let fieldValue: any = null;
             
             if (typeof field.value === 'function') {
@@ -1472,35 +1477,58 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private emitValue(val: DatepickerValue) {
-    this._internalValue = val;
+    // Normalize the value before setting _internalValue to ensure consistent comparison
+    // The normalization creates a new Date object but preserves the time value
+    const normalizedVal = val !== null && val !== undefined
+      ? (this._normalizeDate(val as any) as DatepickerValue)
+      : null;
+    
+    // Set _internalValue first to ensure field effect comparison works correctly
+    this._internalValue = normalizedVal;
     
     if (this._field) {
+      // Set the flag BEFORE updating the field to prevent field effect from resetting
+      this._isUpdatingFromInternal = true;
       try {
+        // Update the field value with normalized value
         if (typeof this._field.setValue === 'function') {
-          this._field.setValue(val);
+          this._field.setValue(normalizedVal as any);
         } else if (typeof this._field.updateValue === 'function') {
-          this._field.updateValue(() => val);
+          this._field.updateValue(() => normalizedVal);
         } else if (typeof this._field.value === 'function') {
           if (typeof this._field.value.set === 'function') {
-            this._field.value.set(val);
+            this._field.value.set(normalizedVal);
           } else {
             try {
               const valueSignal = this._field.value();
               if (valueSignal && typeof valueSignal.set === 'function') {
-                valueSignal.set(val);
+                valueSignal.set(normalizedVal);
               }
             } catch {
             }
           }
         } else if (this._field.value && typeof this._field.value.set === 'function') {
-          this._field.value.set(val);
+          this._field.value.set(normalizedVal);
         }
+        
+        // Use a microtask to ensure the field value update has been processed
+        // before allowing the field effect to run again
+        Promise.resolve().then(() => {
+          setTimeout(() => {
+            this._isUpdatingFromInternal = false;
+          }, 50);
+        });
       } catch {
+        // If there's an error, still reset the flag after a delay
+        setTimeout(() => {
+          this._isUpdatingFromInternal = false;
+        }, 50);
       }
     }
     
-    this.valueChange.emit(val);
-    this.onChange(val);
+    // Emit the normalized value for consistency
+    this.valueChange.emit(normalizedVal);
+    this.onChange(normalizedVal);
     this.onTouched();
     
     if (!this.isInlineMode && val !== null && !this.timeOnly) {
@@ -2000,8 +2028,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private applyCurrentTime(date: Date): Date {
     this.currentHour = this.get24Hour(this.currentDisplayHour, this.isPm);
-    date.setHours(this.currentHour, this.currentMinute, 0, 0);
-    return date;
+    const newDate = new Date(date);
+    newDate.setHours(this.currentHour, this.currentMinute, 0, 0);
+    return newDate;
+  }
+
+  private applyTimeIfNeeded(date: Date): Date {
+    if (this.showTime || this.timeOnly) {
+      return this.applyCurrentTime(date);
+    }
+    return getStartOfDay(date);
   }
 
   private initializeValue(value: DatepickerValue): void {
@@ -2282,8 +2318,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (this.mode === 'single') {
-      this.selectedDate = this.applyCurrentTime(day);
-      this.emitValue(this.selectedDate);
+      const dateWithTime = this.applyTimeIfNeeded(day);
+      this.selectedDate = dateWithTime;
+      this.emitValue(dateWithTime);
     } else if (this.mode === 'range') {
       // Improved range selection logic for better mobile support
       const dayTime = getStartOfDay(day).getTime();
@@ -2291,7 +2328,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       
       // If no start date, or both dates are set, start a new range
       if (!this.startDate || (this.startDate && this.endDate)) {
-        this.startDate = this.applyCurrentTime(day);
+        this.startDate = this.applyTimeIfNeeded(day);
         this.endDate = null;
         this.hoveredDate = null;
         // Don't emit value until end date is selected - store start date internally only
@@ -2301,7 +2338,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       else if (this.startDate && !this.endDate) {
         // If the clicked day is before start date, make it the new start date
         if (dayTime < startTime!) {
-          this.startDate = this.applyCurrentTime(day);
+          this.startDate = this.applyTimeIfNeeded(day);
           this.endDate = null;
           this.hoveredDate = null;
           // Don't emit value until end date is selected
@@ -2315,7 +2352,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         }
         // If the clicked day is after start date, set it as end date
         else {
-        const potentialEndDate = this.applyCurrentTime(day);
+        const potentialEndDate = this.applyTimeIfNeeded(day);
         
           // Validate range if hook is provided
         if (this.hooks?.validateRange) {
@@ -2357,7 +2394,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         const recurringDates = generateRecurringDates(config);
         
         // Apply time to all dates and add to selection
-        const datesWithTime = recurringDates.map(d => this.applyCurrentTime(d));
+        const datesWithTime = recurringDates.map(d => this.applyTimeIfNeeded(d));
         const uniqueDates = new Map<number, Date>();
         datesWithTime.forEach(d => {
           uniqueDates.set(getStartOfDay(d).getTime(), d);
@@ -2371,7 +2408,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (existingIndex > -1) {
         this.selectedDates.splice(existingIndex, 1);
       } else {
-        const dateWithTime = this.applyCurrentTime(dateToToggle);
+        const dateWithTime = this.applyTimeIfNeeded(dateToToggle);
         this.selectedDates.push(dateWithTime);
         this.selectedDates.sort((a, b) => a.getTime() - b.getTime());
       }
