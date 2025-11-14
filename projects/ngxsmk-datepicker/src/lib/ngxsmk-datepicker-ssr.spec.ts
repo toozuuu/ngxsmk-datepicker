@@ -53,6 +53,77 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
       expect(component.inline).toBe(false);
       expect(component.theme).toBe('light');
     });
+
+    it('should handle range mode on server', () => {
+      component.mode = 'range';
+      fixture.detectChanges();
+
+      expect(component.mode).toBe('range');
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle multiple mode on server', () => {
+      component.mode = 'multiple';
+      fixture.detectChanges();
+
+      expect(component.mode).toBe('multiple');
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle disabled state on server', () => {
+      component.disabled = true;
+      fixture.detectChanges();
+
+      expect(component.disabled).toBe(true);
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle different themes on server', () => {
+      component.theme = 'dark';
+      fixture.detectChanges();
+
+      expect(component.theme).toBe('dark');
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle placeholder on server', () => {
+      component.placeholder = 'Select a date';
+      fixture.detectChanges();
+
+      expect(component.placeholder).toBe('Select a date');
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle inline mode on server', () => {
+      component.inline = true;
+      fixture.detectChanges();
+
+      expect(component.inline).toBe(true);
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle value changes on server', () => {
+      const testDate = new Date('2025-06-15');
+      component.value = testDate;
+      fixture.detectChanges();
+
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle null value on server', () => {
+      component.value = null;
+      fixture.detectChanges();
+
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle timeOnly mode on server', () => {
+      component.timeOnly = true;
+      fixture.detectChanges();
+
+      expect(component.timeOnly).toBe(true);
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
   });
 
   describe('Browser-Side Rendering', () => {
@@ -80,6 +151,22 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
 
       // Should have a locale set (either from input or browser)
       expect(component.locale).toBeTruthy();
+    });
+
+    it('should handle range mode on client', () => {
+      component.mode = 'range';
+      fixture.detectChanges();
+
+      expect(component.mode).toBe('range');
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle multiple mode on client', () => {
+      component.mode = 'multiple';
+      fixture.detectChanges();
+
+      expect(component.mode).toBe('multiple');
+      expect(() => fixture.detectChanges()).not.toThrow();
     });
   });
 
@@ -125,6 +212,33 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
         const input = fixture.debugElement.query(By.css('.ngxsmk-display-input'));
         // Accessing DOM should not throw
       }).not.toThrow();
+    });
+
+    it('should handle range mode after hydration', () => {
+      component.mode = 'range';
+      const startDate = new Date('2025-01-10');
+      const endDate = new Date('2025-01-20');
+      component.value = { start: startDate, end: endDate };
+      fixture.detectChanges();
+
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle multiple dates after hydration', () => {
+      component.mode = 'multiple';
+      const dates = [new Date('2025-01-10'), new Date('2025-01-15'), new Date('2025-01-20')];
+      component.value = dates;
+      fixture.detectChanges();
+
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle locale change after hydration', () => {
+      component.locale = 'fr-FR';
+      fixture.detectChanges();
+
+      expect(component.locale).toBe('fr-FR');
+      expect(() => fixture.detectChanges()).not.toThrow();
     });
   });
 });
