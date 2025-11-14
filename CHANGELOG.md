@@ -14,12 +14,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **Async Database Value Loading**: Enhanced datepicker to properly handle database values that load asynchronously after component initialization
   - Added fallback sync mechanism in `ngAfterViewInit` to catch async database loads
-  - Added delayed sync checks in `ngOnChanges` (100ms and 500ms) to handle field value changes that occur after component initialization
+  - Added delayed sync checks in `ngOnInit`, `ngOnChanges`, and `ngAfterViewInit` to handle field value changes that occur after component initialization
+  - Added sync on calendar open, focus events, and touch events to ensure values are populated
+  - Extended interval sync duration to 30 seconds (from 10 seconds) with 100ms check intervals
   - Ensures datepicker properly displays database values even when they load after the component is rendered
+- **TypeScript Compilation Error**: Fixed `EffectRef` type error when using Angular 17+ `effect()` API
+  - Changed `_fieldEffectDestroy: (() => void) | null` to `_fieldEffectRef: EffectRef | null`
+  - Updated effect cleanup to use `effectRef.destroy()` instead of function call
+  - Added proper `EffectRef` import from `@angular/core`
+- **Test Configuration**: Fixed test configuration for Angular 17+ compatibility
+  - Updated karma configuration to work with `@angular/build:karma` builder
+  - Simplified karma.conf.js to remove deprecated plugins
+  - Updated test script to target correct project
 
 ### Improved
 - **Async Value Handling**: Improved handling of field values that change asynchronously
+- **Effect Management**: Proper effect lifecycle management with `EffectRef` for correct cleanup
 - **Code Cleanup**: Removed unnecessary comments for cleaner codebase
+- **Test Reliability**: Enhanced test configuration for better reliability across Angular versions
 
 ## [1.9.9] - 2025-11-15 (Stable)
 

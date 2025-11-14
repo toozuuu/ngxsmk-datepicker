@@ -620,6 +620,9 @@ describe('Issue #13: Programmatic value setting', () => {
     });
 
     it('should populate datepicker with string date from database', async () => {
+      const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+      
       // Simulate a date coming from database as a string (common scenario)
       const dateString = '2024-06-15T00:00:00.000Z';
       const expectedDate = new Date(dateString);
@@ -634,14 +637,14 @@ describe('Issue #13: Programmatic value setting', () => {
       fixture.detectChanges();
       await fixture.whenStable();
       
-      // Wait for field effect to initialize - Angular effects may take time
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Wait for field effect and sync mechanisms to initialize
+      await new Promise(resolve => setTimeout(resolve, 200));
       fixture.detectChanges();
       await fixture.whenStable();
       
-      // If still not initialized, wait a bit more
+      // If still not initialized, wait a bit more (simulating async database load)
       if (!component.selectedDate) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 300));
         fixture.detectChanges();
         await fixture.whenStable();
       }
@@ -656,6 +659,59 @@ describe('Issue #13: Programmatic value setting', () => {
         expect(component.displayValue).toContain('Jun');
         expect(component.displayValue).toContain('15');
       }
+      
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+    });
+
+    it('should populate datepicker with async database value loading', async () => {
+      const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
+      
+      // Simulate async database loading - value is null initially, then becomes a date
+      let fieldValue: string | null = null;
+      const dateString = '2024-06-15T00:00:00.000Z';
+      const expectedDate = new Date(dateString);
+      
+      const mockField = {
+        value: () => fieldValue,
+        setValue: jasmine.createSpy('setValue'),
+        disabled: () => false
+      };
+      
+      component.field = mockField;
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      // Initially, value should be null
+      expect(component.selectedDate).toBeFalsy();
+      
+      // Simulate database load after delay (async)
+      setTimeout(() => {
+        fieldValue = dateString;
+      }, 500);
+      
+      // Wait for async database load and sync mechanisms
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      // Wait a bit more for sync mechanisms to catch up
+      await new Promise(resolve => setTimeout(resolve, 500));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      
+      // Now value should be populated
+      expect(component.selectedDate).toBeTruthy();
+      if (component.selectedDate) {
+        expect(component.selectedDate.getFullYear()).toBe(expectedDate.getFullYear());
+        expect(component.selectedDate.getMonth()).toBe(expectedDate.getMonth());
+        expect(component.selectedDate.getDate()).toBe(expectedDate.getDate());
+        expect(component.displayValue).not.toBe('');
+        expect(component.displayValue).toContain('Jun');
+        expect(component.displayValue).toContain('15');
+      }
+      
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
 
     it('should not reset selected date to today when field effect runs after selection', async () => {

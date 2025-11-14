@@ -16,7 +16,7 @@
     "build:analyze": "node scripts/analyze-bundle.js",
     "optimize": "node scripts/optimize-build.js",
     "watch": "npx ng build --watch --configuration development",
-    "test": "npx ng test",
+    "test": "npx ng test ngxsmk-datepicker",
     "lint": "npx ng lint",
     "deploy": "npm run build:demo && npx gh-pages -d dist/demo-app/browser",
     "prepublishOnly": "npm run build:optimized",
