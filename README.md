@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.4` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.5` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -732,6 +732,13 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.9.5** (Stable)
+- 🐛 **Bug Fix**: Fixed Angular 21+ Signal Forms TypeScript compilation error
+  - Fixed `Type '() => string' is not assignable to type 'never'` error when using `[field]` input
+  - Updated `SignalFormField` type definition for Angular 21 compatibility
+  - Maintains backward compatibility with Angular 17-20
+  - Resolves [#33](https://github.com/NGXSMK/ngxsmk-datepicker/issues/33)
 
 ### **v1.9.4** (Stable)
 - ✨ **Custom Date Format**: New `[displayFormat]` input property to display dates in custom formats

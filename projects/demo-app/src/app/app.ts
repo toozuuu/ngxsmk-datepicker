@@ -113,6 +113,7 @@ export class App implements OnInit, OnDestroy {
     { id: 'theming', label: 'Theming', sub: false, keywords: 'theme dark light styling css' },
     { id: 'examples', label: 'Examples', sub: false, keywords: 'examples demo showcase' },
     { id: 'signal-forms', label: 'Signal Forms (Angular 21)', sub: true, keywords: 'signal forms angular 21 reactive' },
+    { id: 'signal-forms-field', label: 'Signal Forms [field] Input', sub: true, keywords: 'signal forms field input angular 21 FieldTree type compatibility' },
     { id: 'single-date', label: 'Single Date', sub: true, keywords: 'single date picker selection' },
     { id: 'customization-a11y', label: 'Customization & A11y', sub: true, keywords: 'customization accessibility a11y aria' },
     { id: 'date-range', label: 'Date Range', sub: true, keywords: 'date range selection start end' },
@@ -500,6 +501,93 @@ export class MyComponent {
 </ngxsmk-datepicker>
 
 <p>Signal value: {{ dateSig() | json }}</p>`;
+
+  public signalFormsFieldTsCode = `import { Component, signal, form, objectSchema } from '@angular/core';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: \`
+    <form>
+      <ngxsmk-datepicker
+        [field]="myForm.myDate"
+        mode="single"
+        placeholder="Select a date">
+      </ngxsmk-datepicker>
+    </form>
+  \`
+})
+export class FormComponent {
+  localObject = signal({ myDate: new Date() });
+  
+  myForm = form(this.localObject, objectSchema({
+    myDate: objectSchema<Date>()
+  }));
+}`;
+
+  public signalFormsFieldHtmlCode = `<form>
+  <ngxsmk-datepicker
+    [field]="myForm.myDate"
+    mode="single"
+    placeholder="Select a date">
+  </ngxsmk-datepicker>
+</form>
+
+<!-- The [field] input automatically:
+     - Syncs value from form to datepicker
+     - Updates form when datepicker value changes
+     - Handles disabled state automatically -->`;
+
+  public signalFormsFieldExampleCode = `// Example: Using with validation
+import { Component, signal, form, objectSchema, validators } from '@angular/core';
+
+export class ValidatedFormComponent {
+  localObject = signal({ 
+    myDate: null as Date | null 
+  });
+  
+  myForm = form(this.localObject, objectSchema({
+    myDate: objectSchema<Date | null>({
+      validators: [
+        validators.required()
+      ]
+    })
+  }));
+}
+
+// Example: Date range with Signal Forms
+export class RangeFormComponent {
+  localObject = signal({
+    startDate: new Date(),
+    endDate: new Date()
+  });
+  
+  myForm = form(this.localObject, objectSchema({
+    startDate: objectSchema<Date>(),
+    endDate: objectSchema<Date>()
+  }));
+}
+
+<!-- In template -->
+<ngxsmk-datepicker
+  [field]="myForm.startDate"
+  mode="single"
+  placeholder="Start date">
+</ngxsmk-datepicker>
+
+<ngxsmk-datepicker
+  [field]="myForm.endDate"
+  mode="single"
+  placeholder="End date">
+</ngxsmk-datepicker>
+
+<!-- Or use a single range picker -->
+<ngxsmk-datepicker
+  [field]="myForm.dateRange"
+  mode="range">
+</ngxsmk-datepicker>`;
 
   public calendarViewsCode = `
 <!-- Year Picker -->

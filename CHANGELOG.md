@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.5] - 2025-11-14 (Stable)
+
+### Changed
+- **Version Update**: Updated to version 1.9.5
+- **Stable Release**: Version 1.9.5 is the current stable version
+
+### Fixed
+- **Angular 21+ Signal Forms Type Compatibility**: Fixed TypeScript compilation error with Angular 21+ Signal Forms
+  - Fixed `Type '() => string' is not assignable to type 'never'` error when using `[field]` input
+  - Updated `SignalFormField` type definition to be compatible with Angular 21's `FieldTree<Date, string>` types
+  - Maintains backward compatibility with Angular 17-20 where field input is optional
+  - Resolves [#33](https://github.com/NGXSMK/ngxsmk-datepicker/issues/33)
+
 ## [1.9.4] - 2025-11-14 (Stable)
 
 ### Changed
@@ -25,6 +38,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed unnecessary scrollbars from datepicker wrapper
   - Fixed overflow and positioning issues in time selection context
   - Resolves [#32](https://github.com/NGXSMK/ngxsmk-datepicker/issues/32)
+- **Angular 21+ Signal Forms Type Compatibility**: Fixed TypeScript compilation error with Angular 21+ Signal Forms
+  - Fixed `Type '() => string' is not assignable to type 'never'` error when using `[field]` input
+  - Updated `SignalFormField` type definition to be compatible with Angular 21's `FieldTree<Date, string>` types
+  - Maintains backward compatibility with Angular 17-20 where field input is optional
+  - Resolves [#33](https://github.com/NGXSMK/ngxsmk-datepicker/issues/33)
 
 ## [1.9.3] - 2025-11-13 (Stable)
 
