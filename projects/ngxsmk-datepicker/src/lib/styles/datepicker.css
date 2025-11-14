@@ -375,6 +375,13 @@
     visibility: visible !important;
     opacity: 1 !important;
     position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    -webkit-transform: translate(-50%, -50%) !important;
+    -moz-transform: translate(-50%, -50%) !important;
+    -ms-transform: translate(-50%, -50%) !important;
+    -o-transform: translate(-50%, -50%) !important;
+    transform: translate(-50%, -50%) !important;
     z-index: 2147483647 !important;
     pointer-events: none !important;
     width: -webkit-fit-content !important;
@@ -386,6 +393,14 @@
     max-width: -webkit-fit-content !important;
     max-width: -moz-fit-content !important;
     max-width: fit-content !important;
+  }
+  
+  /* Hide popover when not open on mobile */
+  .ngxsmk-popover-container:not(.ngxsmk-popover-open):not(.ngxsmk-inline-container) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   .ngxsmk-popover-container.ngxsmk-time-only-popover.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
@@ -768,6 +783,12 @@
 
 .ngxsmk-month-year-selects > * {
   margin: calc(var(--datepicker-spacing-sm) / 2);
+  cursor: pointer;
+}
+
+.ngxsmk-month-year-selects ngxsmk-custom-select,
+.ngxsmk-month-year-selects app-custom-select {
+  cursor: pointer;
 }
 
 .ngxsmk-nav-buttons {
@@ -1276,6 +1297,7 @@
   flex-shrink: 0;
   position: relative;
   z-index: 10;
+  cursor: pointer;
 }
 
 .ngxsmk-time-selection ngxsmk-custom-select[data-open="true"],
@@ -1406,8 +1428,8 @@
   outline-offset: 2px;
 }
 
-@media (min-width: 320px) {
-  .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
+@media (min-width: 320px) and (max-width: 1023px) {
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
     position: fixed !important;
     top: 50% !important;
     left: 50% !important;
@@ -1421,13 +1443,16 @@
     width: fit-content !important;
     min-width: 280px !important;
     max-width: min(calc(100vw - 32px), 500px) !important;
-    max-height: calc(100vh - 32px) !important;
-    max-height: calc(100dvh - 32px) !important;
+    max-height: none !important;
     bottom: auto !important;
     z-index: 2147483647 !important;
     margin: 0 !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: auto !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .ngxsmk-popover-container.ngxsmk-has-time-selection.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
@@ -1687,8 +1712,8 @@
 
 @media (min-width: 430px) { }
 
-@media (min-width: 600px) {
-  .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
+@media (min-width: 600px) and (max-width: 1023px) {
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
     width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
@@ -1702,12 +1727,12 @@
     -ms-transform: translate(-50%, -50%) !important;
     -o-transform: translate(-50%, -50%) !important;
     transform: translate(-50%, -50%) !important;
-    max-height: calc(100vh - 32px) !important;
-    max-height: calc(100dvh - 32px) !important;
+    max-height: none !important;
     z-index: 2147483647 !important;
     margin: 0 !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: auto !important;
   }
 
   .ngxsmk-popover-container.ngxsmk-has-time-selection.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
@@ -1777,10 +1802,10 @@
   }
   
   .ngxsmk-calendar-container {
-    max-height: calc(100vh - 150px) !important;
-    max-height: calc(100dvh - 150px) !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
+    max-height: none !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: auto !important;
   }
 
   .ngxsmk-popover-container.ngxsmk-has-time-selection .ngxsmk-calendar-container {
@@ -1792,6 +1817,31 @@
 
   .ngxsmk-calendar-container.ngxsmk-time-only-mode {
     max-height: none !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+}
+
+/* Desktop: Use absolute positioning relative to input field */
+@media (min-width: 1024px) {
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    left: 0 !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    -moz-transform: none !important;
+    -ms-transform: none !important;
+    -o-transform: none !important;
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    min-width: 280px !important;
+    max-width: min(90vw, 500px) !important;
+    max-height: none !important;
+    z-index: 2147483647 !important;
+    margin: 0 !important;
     overflow: visible !important;
     overflow-y: visible !important;
     -webkit-overflow-scrolling: auto !important;

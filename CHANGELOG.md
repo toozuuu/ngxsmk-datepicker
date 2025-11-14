@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.6] - 2025-11-14 (Stable)
+
+### Changed
+- **Version Update**: Updated to version 1.9.6
+- **Stable Release**: Version 1.9.6 is the current stable version
+
+### Fixed
+- **Multiple Datepicker Management**: Fixed issue where multiple datepickers in the same form would open in the same centered location
+- **Outside Click Detection**: Improved click detection to properly close datepicker when clicking outside the popover and input field
+- **Auto-close Other Datepickers**: When opening a datepicker, all other open datepickers in the same form are now automatically closed
+- **Mobile Datepicker Opening**: Fixed issue where datepicker modal would not open on mobile screens
+- **Datepicker Closing on Mobile**: Fixed issue where datepicker would open and immediately disappear on mobile devices
+- **Select Box Cursor**: Added pointer cursor to all select boxes (month, year, hour, minute, AM/PM) in the datepicker
+
+### Improved
+- **Document Click Handler**: Enhanced document click handler to check if clicks are inside the popover container, not just the input group
+- **Touch Event Handling**: Improved touch event handling to prevent premature closing on mobile devices
+- **Instance Management**: Added static instance registry to track all datepicker instances for better coordination
+
 ## [1.9.5] - 2025-11-14 (Stable)
 
 ### Changed
