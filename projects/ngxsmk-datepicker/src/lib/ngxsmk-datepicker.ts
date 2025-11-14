@@ -57,6 +57,14 @@ import {
 } from './interfaces/datepicker-hooks.interface';
 import { DATEPICKER_CONFIG, DatepickerConfig } from './config/datepicker.config';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SignalFormField = {
+  value?: any;
+  disabled?: boolean | (() => boolean);
+  setValue?: (value: any) => void;
+  updateValue?: (updater: () => any) => void;
+} | null | undefined | any;
+
 @Component({
   selector: 'ngxsmk-datepicker',
   standalone: true,
@@ -437,11 +445,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this._internalValue;
   }
 
-  private _field: any = null;
+  private _field: SignalFormField = null;
   
-  @Input() set field(field: any) {
+  @Input() set field(field: SignalFormField) {
     this._field = field;
-    if (field) {
+    if (field && typeof field === 'object') {
       try {
         effect(() => {
             let fieldValue: any = null;
@@ -479,11 +487,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
   }
-  get field(): any {
+  get field(): SignalFormField {
     return this._field;
   }
   
-  private syncFieldValue(field: any): void {
+  private syncFieldValue(field: SignalFormField): void {
+    if (!field || typeof field !== 'object') return;
     const fieldValue = typeof field.value === 'function' ? field.value() : field.value;
     const normalizedValue = fieldValue !== null && fieldValue !== undefined
       ? (this._normalizeDate(fieldValue) as DatepickerValue)
@@ -1808,7 +1817,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (changes['field']) {
       const newField = changes['field'].currentValue;
-      if (newField) {
+      if (newField && typeof newField === 'object') {
         const fieldValue = typeof newField.value === 'function' ? newField.value() : newField.value;
         if (fieldValue !== undefined && fieldValue !== null) {
           const normalizedValue = this._normalizeDate(fieldValue) as DatepickerValue;

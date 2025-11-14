@@ -22,7 +22,7 @@
           </div>
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
-            <span class="logo-version">v1.9.4</span>
+            <span class="logo-version">v1.9.5</span>
           </div>
         </a>
       </div>
@@ -118,7 +118,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">Forge your dates. Shape your UI.</p>
-        <p class="hero-version">(v1.9.4)</p>
+        <p class="hero-version">(v1.9.5)</p>
         <p class="hero-description">A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular 17+ applications. Features GPU-accelerated animations, comprehensive theming with CSS variables, extension points & hooks, Signal Forms support, full SSR compatibility, and enhanced keyboard navigation.</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">Get Started</a>
@@ -460,6 +460,46 @@
             <button class="code-copy" (click)="copyCode(signalFormsHtmlCode)">Copy</button>
           </div>
           <pre><code [innerHTML]="signalFormsHtmlCode | code"></code></pre>
+        </div>
+      </div>
+
+      <div id="signal-forms-field" class="example-section">
+        <h3 class="example-title">Signal Forms with [field] Input (Angular 21+)</h3>
+        <p>Use the <code>[field]</code> input for direct integration with Angular 21+ Signal Forms API. This provides automatic two-way binding without manual event handling.</p>
+        <p class="info-note"><strong>Note:</strong> This feature requires Angular 21+ and uses the <code>form()</code> and <code>objectSchema()</code> APIs. The fix in v1.9.5 resolves TypeScript compilation errors with <code>FieldTree&lt;Date, string&gt;</code> types.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(signalFormsFieldTsCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="signalFormsFieldTsCode | code"></code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(signalFormsFieldHtmlCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="signalFormsFieldHtmlCode | code"></code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(signalFormsFieldExampleCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="signalFormsFieldExampleCode | code"></code></pre>
+        </div>
+
+        <div class="info-box">
+          <strong>Benefits of [field] input:</strong>
+          <ul>
+            <li>Automatic two-way binding - no manual <code>(valueChange)</code> handler needed</li>
+            <li>Automatic disabled state synchronization</li>
+            <li>Works seamlessly with Angular 21's Signal Forms validation</li>
+            <li>Type-safe with <code>FieldTree&lt;Date, string&gt;</code> types (fixed in v1.9.5)</li>
+          </ul>
         </div>
       </div>
 
