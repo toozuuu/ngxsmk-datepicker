@@ -473,15 +473,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
             }
             
             const normalizedValue = this._normalizeValue(fieldValue);
+            
             const valueChanged = !this.isValueEqual(normalizedValue, this._internalValue);
             const isInitialLoad = this._lastKnownFieldValue === undefined && fieldValue !== null && fieldValue !== undefined;
+            const isValueTransition = (this._lastKnownFieldValue === null || this._lastKnownFieldValue === undefined) && 
+                                     fieldValue !== null && fieldValue !== undefined;
             
-            if (valueChanged || isInitialLoad) {
+            if (valueChanged || isInitialLoad || isValueTransition) {
               this._internalValue = normalizedValue;
               this._lastKnownFieldValue = fieldValue;
               this.initializeValue(normalizedValue);
               this.generateCalendar();
               this.cdr.markForCheck();
+              setTimeout(() => {
+                if (this._field === field) {
+                  this.cdr.markForCheck();
+                }
+              }, 0);
               this._stopFieldSyncInterval();
             } else if (this._lastKnownFieldValue !== fieldValue) {
               this._lastKnownFieldValue = fieldValue;
@@ -532,13 +540,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const normalizedValue = this._normalizeValue(fieldValue);
     
     const hasValueChanged = !this.isValueEqual(normalizedValue, this._internalValue);
+    const isInitialLoad = this._lastKnownFieldValue === undefined && fieldValue !== null && fieldValue !== undefined;
+    const isValueTransition = (this._lastKnownFieldValue === null || this._lastKnownFieldValue === undefined) && 
+                             fieldValue !== null && fieldValue !== undefined;
     
-    if (hasValueChanged || (this._lastKnownFieldValue === undefined && fieldValue !== null && fieldValue !== undefined)) {
+    if (hasValueChanged || isInitialLoad || isValueTransition) {
       this._internalValue = normalizedValue;
       this._lastKnownFieldValue = fieldValue;
       this.initializeValue(normalizedValue);
       this.generateCalendar();
       this.cdr.markForCheck();
+      if (this.isBrowser) {
+        setTimeout(() => {
+          this.cdr.markForCheck();
+        }, 0);
+      }
       return true;
     }
     
@@ -1860,6 +1876,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (initialValue) {
       this.initializeValue(initialValue);
       this._internalValue = initialValue;
+      this.cdr.markForCheck();
     } else {
       this.initializeValue(null);
     }
