@@ -366,6 +366,7 @@ type SignalFormField = {
 })
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor {
   private static _idCounter = 0;
+  private static _allInstances: NgxsmkDatepickerComponent[] = [];
   public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
   
   @Input() mode: 'single' | 'range' | 'multiple' = 'single';
@@ -867,14 +868,42 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-      const target = event.target as Node;
-      const nativeElement = this.elementRef.nativeElement;
-      
+    const target = event.target as Node;
+    const nativeElement = this.elementRef.nativeElement;
+    
     if (!target || !nativeElement) {
-        return;
+      return;
     }
     
-    if (nativeElement.contains(target)) {
+    const isInsideInputGroup = nativeElement.contains(target);
+    
+    let isInsidePopover = false;
+    if (this.isBrowser && nativeElement) {
+      const popoverContainer = (nativeElement as HTMLElement).querySelector('.ngxsmk-popover-container');
+      if (popoverContainer && (popoverContainer === target || popoverContainer.contains(target))) {
+        isInsidePopover = true;
+      }
+    }
+    
+    if (isInsideInputGroup || isInsidePopover) {
+      return;
+    }
+    
+    const isInsideOtherDatepicker = NgxsmkDatepickerComponent._allInstances.some(instance => {
+      if (instance === this || instance.isInlineMode) {
+        return false;
+      }
+      const otherElement = instance.elementRef.nativeElement;
+      if (otherElement && (otherElement === target || otherElement.contains(target))) {
+        const otherPopover = (otherElement as HTMLElement).querySelector('.ngxsmk-popover-container');
+        if (otherPopover && (otherPopover === target || otherPopover.contains(target))) {
+          return true;
+        }
+      }
+      return false;
+    });
+    
+    if (isInsideOtherDatepicker) {
       return;
     }
     
@@ -885,7 +914,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const now = Date.now();
     const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
     
-    const protectionTime = this.isMobileDevice() ? 600 : 300;
+    const protectionTime = this.isMobileDevice() ? 1000 : 300;
     
     if (this.isOpeningCalendar || timeSinceToggle < protectionTime) {
       return;
@@ -901,14 +930,42 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-      const target = event.target as Node;
+    const target = event.target as Node;
     const nativeElement = this.elementRef.nativeElement;
     
     if (!target || !nativeElement) {
-        return;
-      }
+      return;
+    }
     
-    if (nativeElement.contains(target)) {
+    const isInsideInputGroup = nativeElement.contains(target);
+    
+    let isInsidePopover = false;
+    if (this.isBrowser && nativeElement) {
+      const popoverContainer = (nativeElement as HTMLElement).querySelector('.ngxsmk-popover-container');
+      if (popoverContainer && (popoverContainer === target || popoverContainer.contains(target))) {
+        isInsidePopover = true;
+      }
+    }
+    
+    if (isInsideInputGroup || isInsidePopover) {
+      return;
+    }
+    
+    const isInsideOtherDatepicker = NgxsmkDatepickerComponent._allInstances.some(instance => {
+      if (instance === this || instance.isInlineMode) {
+        return false;
+      }
+      const otherElement = instance.elementRef.nativeElement;
+      if (otherElement && (otherElement === target || otherElement.contains(target))) {
+        const otherPopover = (otherElement as HTMLElement).querySelector('.ngxsmk-popover-container');
+        if (otherPopover && (otherPopover === target || otherPopover.contains(target))) {
+          return true;
+        }
+      }
+      return false;
+    });
+    
+    if (isInsideOtherDatepicker) {
       return;
     }
     
@@ -918,7 +975,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     
     const now = Date.now();
     const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
-    const protectionTime = this.isMobileDevice() ? 600 : 300;
+    const protectionTime = this.isMobileDevice() ? 1000 : 300;
     
     if (this.isOpeningCalendar || timeSinceToggle < protectionTime) {
       return;
@@ -959,7 +1016,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-    // Prevent rapid toggling
     const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
     if (timeSinceToggle < 300) {
       this.touchStartTime = 0;
@@ -967,21 +1023,29 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-    // Prevent default to avoid double-firing with click event
     event.preventDefault();
     event.stopPropagation();
     
     const wasOpen = this.isCalendarOpen;
     
     if (!wasOpen) {
-      // Opening calendar - ensure it opens reliably
+      NgxsmkDatepickerComponent._allInstances.forEach(instance => {
+        if (instance !== this && instance.isCalendarOpen && !instance.isInlineMode) {
+          instance.isCalendarOpen = false;
+          instance.isOpeningCalendar = false;
+          instance.updateOpeningState(false);
+          instance.cdr.markForCheck();
+        }
+      });
+      
       this.isOpeningCalendar = true;
       this.isCalendarOpen = true;
     this.lastToggleTime = now;
       
-      // Clear touch tracking
-    this.touchStartTime = 0;
-      this.touchStartElement = null;
+      setTimeout(() => {
+        this.touchStartTime = 0;
+        this.touchStartElement = null;
+      }, 500);
       
       if (this.openCalendarTimeoutId) {
         clearTimeout(this.openCalendarTimeoutId);
@@ -989,33 +1053,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       
       this.updateOpeningState(true);
       
-      // Force immediate change detection to show modal - critical for mobile reliability
       this.cdr.detectChanges();
       
-      // Also use requestAnimationFrame as backup to ensure DOM is updated
-      // Use double RAF to ensure modal is fully rendered before allowing outside clicks
       if (this.isBrowser) {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             this.cdr.detectChanges();
-            // Clear opening flag after modal is fully rendered
+            const timeoutDelay = this.isMobileDevice() ? 800 : 300;
             if (this.isOpeningCalendar) {
               setTimeout(() => {
                 this.isOpeningCalendar = false;
-    this.cdr.markForCheck();
-              }, 150);
+                this.cdr.markForCheck();
+              }, timeoutDelay);
             }
           });
         });
       }
     } else {
-      // Closing calendar
       this.isCalendarOpen = false;
       this.isOpeningCalendar = false;
       this.lastToggleTime = now;
       
-      // Clear touch tracking
-      this.touchStartTime = 0;
+    this.touchStartTime = 0;
       this.touchStartElement = null;
       
       if (this.openCalendarTimeoutId) {
@@ -1076,23 +1135,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       
       this.updateOpeningState(true);
       
-      // Force immediate change detection - critical for mobile reliability
       this.cdr.detectChanges();
       
-      // Also use requestAnimationFrame as backup
       if (this.isBrowser) {
         requestAnimationFrame(() => {
           this.cdr.detectChanges();
         });
         
+        const timeoutDelay = this.isMobileDevice() ? 800 : 350;
         this.openCalendarTimeoutId = setTimeout(() => {
           this.isOpeningCalendar = false;
           this.openCalendarTimeoutId = null;
-    this.cdr.markForCheck();
-        }, 350);
+          this.cdr.markForCheck();
+        }, timeoutDelay);
       }
     } else {
-      // Closing calendar
       this.isCalendarOpen = false;
       this.isOpeningCalendar = false;
       
@@ -1470,22 +1527,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-    if (event.type === 'touchstart' || event.type === 'touchend') {
+    if (event.type === 'touchstart') {
       return;
     }
     
     if (event.type === 'click') {
       const now = Date.now();
       
+      const touchDetectionWindow = this.isMobileDevice() ? 600 : 300;
       if (this.touchStartElement && this.touchStartTime > 0) {
         const timeSinceTouch = now - this.touchStartTime;
-        if (timeSinceTouch < 800 && (this.touchStartElement === event.target || 
+        if (timeSinceTouch < touchDetectionWindow && (this.touchStartElement === event.target || 
             (event.target as Node) && this.touchStartElement && 
             (this.touchStartElement as Node).contains && 
             (this.touchStartElement as Node).contains(event.target as Node))) {
-          this.touchStartTime = 0;
-          this.touchStartElement = null;
-          return;
+          if (this.isOpeningCalendar || (timeSinceTouch < 500 && this.isCalendarOpen)) {
+            return;
+          }
         }
       }
       if (now - this.lastToggleTime < 300) {
@@ -1498,8 +1556,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     event.stopPropagation();
     
     const wasOpen = this.isCalendarOpen;
-    this.isCalendarOpen = !this.isCalendarOpen;
-    this.updateOpeningState(!wasOpen && this.isCalendarOpen);
+    const willOpen = !wasOpen;
+    
+    if (willOpen) {
+      NgxsmkDatepickerComponent._allInstances.forEach(instance => {
+        if (instance !== this && instance.isCalendarOpen && !instance.isInlineMode) {
+          instance.isCalendarOpen = false;
+          instance.isOpeningCalendar = false;
+          instance.updateOpeningState(false);
+          instance.cdr.markForCheck();
+        }
+      });
+    }
+    
+    this.isCalendarOpen = !wasOpen;
+    this.updateOpeningState(willOpen && this.isCalendarOpen);
     
     this.cdr.detectChanges();
   }
@@ -1525,12 +1596,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         clearTimeout(this.openCalendarTimeoutId);
       }
       
-      // Reduced timeout for faster interaction, but still protect against accidental closes
+      const timeoutDelay = this.isMobileDevice() ? 800 : 200;
       this.openCalendarTimeoutId = setTimeout(() => {
         this.isOpeningCalendar = false;
         this.openCalendarTimeoutId = null;
         this.cdr.markForCheck();
-      }, 200);
+      }, timeoutDelay);
     } else {
       this.isOpeningCalendar = false;
       if (this.openCalendarTimeoutId) {
@@ -1606,6 +1677,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   ngOnInit(): void {
+    NgxsmkDatepickerComponent._allInstances.push(this);
+    
     this.applyGlobalConfig();
     
     if (this._locale === 'en-US' && this.isBrowser && typeof navigator !== 'undefined' && navigator.language) {
@@ -1673,14 +1746,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   ngAfterViewInit(): void {
     if (this.isBrowser) {
-      // Add passive touch event listeners to date cells to avoid scroll-blocking warnings
-      // Use multiple attempts to ensure DOM is ready
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           this.setupPassiveTouchListeners();
           this.setupInputGroupPassiveListeners();
           
-          // Also setup after a short delay as fallback
           setTimeout(() => {
             this.setupInputGroupPassiveListeners();
           }, 100);
@@ -1692,7 +1762,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private setupInputGroupPassiveListeners(): void {
     const nativeElement = this.elementRef.nativeElement;
     if (!nativeElement) {
-      // Retry after a short delay
       setTimeout(() => this.setupInputGroupPassiveListeners(), 50);
       return;
     }
@@ -2944,6 +3013,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   ngOnDestroy(): void {
+    const index = NgxsmkDatepickerComponent._allInstances.indexOf(this);
+    if (index > -1) {
+      NgxsmkDatepickerComponent._allInstances.splice(index, 1);
+    }
+    
     // Clean up passive touch listeners
     this.passiveTouchListeners.forEach(cleanup => cleanup());
     this.passiveTouchListeners = [];

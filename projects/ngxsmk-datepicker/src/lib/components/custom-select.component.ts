@@ -81,6 +81,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
       text-align: left; 
       height: 38px;
       font-weight: 500;
+      cursor: pointer;
       transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
       user-select: none;
