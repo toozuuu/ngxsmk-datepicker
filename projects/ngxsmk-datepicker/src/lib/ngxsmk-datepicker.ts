@@ -978,6 +978,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         clearTimeout(this.openCalendarTimeoutId);
       }
       
+      this.generateCalendar();
       this.updateOpeningState(true);
       
       // Force immediate change detection to show modal - critical for mobile reliability
@@ -1454,9 +1455,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     
     if (!event) {
       const wasOpen = this.isCalendarOpen;
-      this.isCalendarOpen = !this.isCalendarOpen;
+      const willOpen = !wasOpen;
+      this.isCalendarOpen = !wasOpen;
       this.lastToggleTime = now;
-      this.updateOpeningState(!wasOpen && this.isCalendarOpen);
+      if (willOpen) {
+        this.generateCalendar();
+      }
+      this.updateOpeningState(willOpen && this.isCalendarOpen);
       this.cdr.detectChanges();
       return;
     }
@@ -1489,8 +1494,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     event.stopPropagation();
     
     const wasOpen = this.isCalendarOpen;
-    this.isCalendarOpen = !this.isCalendarOpen;
-    this.updateOpeningState(!wasOpen && this.isCalendarOpen);
+    const willOpen = !wasOpen;
+    
+    if (willOpen) {
+      this.generateCalendar();
+    }
+    
+    this.isCalendarOpen = !wasOpen;
+    this.updateOpeningState(willOpen && this.isCalendarOpen);
     
     this.cdr.detectChanges();
   }
