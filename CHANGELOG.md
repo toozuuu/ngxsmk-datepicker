@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.7] - 2025-11-14 (Stable)
+
+### Changed
+- **Version Update**: Updated to version 1.9.7
+- **Stable Release**: Version 1.9.7 is the current stable version
+
+### Fixed
+- **Calendar Population**: Fixed critical issue where datepicker calendar would not populate with dates when opened, especially when multiple datepickers were present in the same form
+- **Calendar Generation**: Ensured `generateCalendar()` is called when opening the datepicker via click, touch, or programmatic methods
+
+### Improved
+- **Calendar Initialization**: Improved calendar initialization to ensure dates are always generated before the calendar becomes visible
+
 ## [1.9.6] - 2025-11-14 (Stable)
 
 ### Changed
