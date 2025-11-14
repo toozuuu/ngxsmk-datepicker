@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.3` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.4` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -732,6 +732,18 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.9.4** (Stable)
+- ✨ **Custom Date Format**: New `[displayFormat]` input property to display dates in custom formats
+  - Supports format strings like "MM/DD/YYYY hh:mm A"
+  - Works with date adapters (date-fns, dayjs, luxon) or built-in simple formatter
+  - Supports common format tokens: YYYY, MM, DD, hh, mm, A, etc.
+  - Resolves [#31](https://github.com/NGXSMK/ngxsmk-datepicker/issues/31)
+- 🐛 **Fixed Time Selection Dropdowns**: Fixed visibility issues with time selection dropdowns
+  - Dropdowns now properly display and are not clipped by parent containers
+  - Improved z-index handling for time selection dropdowns
+  - Removed unnecessary scrollbars from datepicker wrapper
+  - Resolves [#32](https://github.com/NGXSMK/ngxsmk-datepicker/issues/32)
 
 ### **v1.9.3** (Stable)
 - ✨ **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar

@@ -34,6 +34,7 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  overflow: visible;
 }
 
 /* Reduced motion support */
@@ -68,6 +69,7 @@
   position: relative;
   width: 100%;
   z-index: 1;
+  overflow: visible;
 }
 
 .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open {
@@ -611,6 +613,7 @@
   min-width: -webkit-fit-content;
   min-width: -moz-fit-content;
   min-width: fit-content;
+  overflow: visible;
 }
 
 .ngxsmk-calendar-container.ngxsmk-time-only-mode {
@@ -1240,7 +1243,7 @@
   padding-top: var(--datepicker-spacing-lg);
   border-top: 1px solid var(--datepicker-border-color);
   width: 100%;
-  overflow: visible;
+  overflow: visible !important;
   position: relative;
   z-index: 1;
   min-width: 0;
@@ -1277,8 +1280,26 @@
 
 .ngxsmk-time-selection ngxsmk-custom-select[data-open="true"],
 .ngxsmk-time-selection app-custom-select[data-open="true"] {
-  z-index: 10000000;
+  z-index: 10000000 !important;
   position: relative;
+}
+
+.ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] .ngxsmk-options-panel,
+.ngxsmk-time-selection app-custom-select[data-open="true"] .ngxsmk-options-panel {
+  z-index: 10000001 !important;
+  position: absolute !important;
+}
+
+.ngxsmk-popover-container.ngxsmk-has-time-selection {
+  overflow: visible !important;
+}
+
+.ngxsmk-popover-container.ngxsmk-has-time-selection .ngxsmk-datepicker-container {
+  overflow: visible !important;
+}
+
+.ngxsmk-popover-container.ngxsmk-has-time-selection .ngxsmk-calendar-container {
+  overflow: visible !important;
 }
 
 .ngxsmk-time-label {
@@ -1409,11 +1430,24 @@
     -webkit-overflow-scrolling: touch !important;
   }
 
+  .ngxsmk-popover-container.ngxsmk-has-time-selection.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+
   .ngxsmk-popover-container.ngxsmk-time-only-popover.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
     overflow: visible !important;
     overflow-y: visible !important;
     max-height: none !important;
     -webkit-overflow-scrolling: auto !important;
+  }
+
+  .ngxsmk-popover-container.ngxsmk-has-time-selection.ngxsmk-popover-open:not(.ngxsmk-inline-container) .ngxsmk-datepicker-container {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    max-height: none !important;
   }
 
   .ngxsmk-popover-container.ngxsmk-time-only-popover.ngxsmk-popover-open:not(.ngxsmk-inline-container) .ngxsmk-datepicker-container {
@@ -1676,11 +1710,24 @@
     -webkit-overflow-scrolling: touch !important;
   }
 
+  .ngxsmk-popover-container.ngxsmk-has-time-selection.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+
   .ngxsmk-popover-container.ngxsmk-time-only-popover.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
     overflow: visible !important;
     overflow-y: visible !important;
     max-height: none !important;
     -webkit-overflow-scrolling: auto !important;
+  }
+
+  .ngxsmk-popover-container.ngxsmk-has-time-selection.ngxsmk-popover-open:not(.ngxsmk-inline-container) .ngxsmk-datepicker-container {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    max-height: none !important;
   }
 
   .ngxsmk-popover-container.ngxsmk-time-only-popover.ngxsmk-popover-open:not(.ngxsmk-inline-container) .ngxsmk-datepicker-container {
@@ -1734,6 +1781,13 @@
     max-height: calc(100dvh - 150px) !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
+  }
+
+  .ngxsmk-popover-container.ngxsmk-has-time-selection .ngxsmk-calendar-container {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+    -webkit-overflow-scrolling: auto !important;
   }
 
   .ngxsmk-calendar-container.ngxsmk-time-only-mode {

@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.4] - 2025-11-14 (Stable)
+
+### Changed
+- **Major Version Release**: Updated to version 1.9.4
+- **Stable Release**: Version 1.9.4 is the current stable version
+
+### Added
+- **Custom Date Format**: New `[displayFormat]` input property to display dates in custom formats
+  - Supports format strings like "MM/DD/YYYY hh:mm A"
+  - Works with date adapters (date-fns, dayjs, luxon) or built-in simple formatter
+  - Supports common format tokens: YYYY, MM, DD, hh, mm, A, etc.
+  - Resolves [#31](https://github.com/NGXSMK/ngxsmk-datepicker/issues/31)
+
+### Fixed
+- **Time Selection Dropdowns**: Fixed visibility issues with time selection dropdowns
+  - Dropdowns now properly display and are not clipped by parent containers
+  - Improved z-index handling for time selection dropdowns
+  - Removed unnecessary scrollbars from datepicker wrapper
+  - Fixed overflow and positioning issues in time selection context
+  - Resolves [#32](https://github.com/NGXSMK/ngxsmk-datepicker/issues/32)
+
 ## [1.9.3] - 2025-11-13 (Stable)
 
 ### Changed

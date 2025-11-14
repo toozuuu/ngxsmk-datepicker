@@ -22,7 +22,7 @@
           </div>
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
-            <span class="logo-version">v1.9.3</span>
+            <span class="logo-version">v1.9.4</span>
           </div>
         </a>
       </div>
@@ -118,7 +118,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">Forge your dates. Shape your UI.</p>
-        <p class="hero-version">(v1.9.3)</p>
+        <p class="hero-version">(v1.9.4)</p>
         <p class="hero-description">A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular 17+ applications. Features GPU-accelerated animations, comprehensive theming with CSS variables, extension points & hooks, Signal Forms support, full SSR compatibility, and enhanced keyboard navigation.</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">Get Started</a>
@@ -581,6 +581,64 @@
             }
           </div>
         }
+      </div>
+
+      <div id="custom-format" class="example-section">
+        <h3 class="example-title">Custom Date Format</h3>
+        <p>Display dates in custom formats using format strings. Supports common format tokens like MM/DD/YYYY, hh:mm A, etc. Works with or without date adapters (date-fns, dayjs, luxon).</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [displayFormat]="'MM/DD/YYYY hh:mm A'"
+            [showTime]="true"
+            [theme]="currentTheme"
+            placeholder="Select Date & Time"
+            formControlName="customFormat">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(customFormatCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="customFormatCode | code"></code></pre>
+        </div>
+
+        @if (datepickerForm.controls.customFormat.value) {
+          <div class="result-box">
+            @if (isDate(datepickerForm.controls.customFormat.value)) {
+              <strong>Form Value:</strong> <code>{{ datepickerForm.controls.customFormat.value | date:'short' }}</code>
+              <br>
+              <strong>Display Format:</strong> <code>MM/DD/YYYY hh:mm A</code>
+            } @else {
+              <strong>Form Value:</strong> <code>{{ JSON.stringify(datepickerForm.controls.customFormat.value) }}</code>
+            }
+          </div>
+        }
+
+        <div class="format-examples">
+          <h4>Format Token Reference:</h4>
+          <ul>
+            <li><code>YYYY</code> - 4-digit year (e.g., 2025)</li>
+            <li><code>YY</code> - 2-digit year (e.g., 25)</li>
+            <li><code>MM</code> - 2-digit month (e.g., 01-12)</li>
+            <li><code>M</code> - Month without leading zero (e.g., 1-12)</li>
+            <li><code>DD</code> - 2-digit day (e.g., 01-31)</li>
+            <li><code>D</code> - Day without leading zero (e.g., 1-31)</li>
+            <li><code>hh</code> - 12-hour format with leading zero (e.g., 01-12)</li>
+            <li><code>h</code> - 12-hour format without leading zero (e.g., 1-12)</li>
+            <li><code>HH</code> - 24-hour format with leading zero (e.g., 00-23)</li>
+            <li><code>H</code> - 24-hour format without leading zero (e.g., 0-23)</li>
+            <li><code>mm</code> - Minutes with leading zero (e.g., 00-59)</li>
+            <li><code>m</code> - Minutes without leading zero (e.g., 0-59)</li>
+            <li><code>ss</code> - Seconds with leading zero (e.g., 00-59)</li>
+            <li><code>s</code> - Seconds without leading zero (e.g., 0-59)</li>
+            <li><code>A</code> - AM/PM (uppercase)</li>
+            <li><code>a</code> - am/pm (lowercase)</li>
+          </ul>
+        </div>
       </div>
 
       <div id="rtl-support" class="example-section">

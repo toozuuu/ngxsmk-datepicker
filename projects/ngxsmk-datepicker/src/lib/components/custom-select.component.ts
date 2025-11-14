@@ -49,6 +49,9 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
     :host[data-open="true"] {
       z-index: 10000000;
     }
+    .ngxsmk-time-selection :host[data-open="true"] {
+      z-index: 10000000 !important;
+    }
     .ngxsmk-select-container { 
       cursor: pointer; 
       position: relative;
@@ -60,6 +63,9 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
     }
     .ngxsmk-select-container.is-open {
       z-index: 10000000;
+    }
+    .ngxsmk-time-selection .ngxsmk-select-container.is-open {
+      z-index: 10000000 !important;
     }
     .ngxsmk-select-display {
       display: flex; 
@@ -129,6 +135,16 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
+      visibility: visible !important;
+      opacity: 1 !important;
+      display: block !important;
+    }
+    .ngxsmk-time-selection .ngxsmk-options-panel {
+      z-index: 10000001 !important;
+      position: absolute !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      display: block !important;
     }
     .ngxsmk-options-panel.fixed-position {
       position: fixed !important;
@@ -255,14 +271,12 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const buttonRect = this.button.nativeElement.getBoundingClientRect();
-    
     const isInTimeSelection = this.container.nativeElement.closest('.ngxsmk-time-selection');
     if (isInTimeSelection) {
-      this.panelPosition = 'fixed';
-      this.panelWidth = buttonRect.width;
-      this.panelLeft = buttonRect.left;
-      this.panelTop = buttonRect.bottom + 4;
+      this.panelPosition = 'absolute';
+      this.panelLeft = 0;
+      this.panelTop = 0;
+      this.panelWidth = 0;
     } else {
       this.panelPosition = 'absolute';
       this.panelLeft = 0;

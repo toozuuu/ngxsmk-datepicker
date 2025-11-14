@@ -117,6 +117,7 @@ export class App implements OnInit, OnDestroy {
     { id: 'customization-a11y', label: 'Customization & A11y', sub: true, keywords: 'customization accessibility a11y aria' },
     { id: 'date-range', label: 'Date Range', sub: true, keywords: 'date range selection start end' },
     { id: 'time-only', label: 'Time Only', sub: true, keywords: 'time only picker time selection no calendar' },
+    { id: 'custom-format', label: 'Custom Format', sub: true, keywords: 'custom format display format date format string MM DD YYYY hh mm' },
     { id: 'rtl-support', label: 'RTL Support', sub: true, keywords: 'rtl right to left arabic hebrew persian urdu mirror' },
     { id: 'timezone-support', label: 'Timezone Support', sub: true, keywords: 'timezone time zone utc iana formatting parsing' },
     { id: 'multiple-dates', label: 'Multiple Dates', sub: true, keywords: 'multiple dates selection array' },
@@ -137,6 +138,7 @@ export class App implements OnInit, OnDestroy {
     { property: 'maxDate', type: 'DateInput | null', default: 'null', description: 'Maximum selectable date' },
     { property: 'showTime', type: 'boolean', default: 'false', description: 'Show time selection' },
     { property: 'timeOnly', type: 'boolean', default: 'false', description: 'Display time picker only (no calendar)' },
+    { property: 'displayFormat', type: 'string', default: 'undefined', description: 'Custom date format string (e.g., "MM/DD/YYYY hh:mm A"). Works with date adapters or built-in simple formatter.' },
     { property: 'rtl', type: 'boolean | null', default: 'null', description: 'Right-to-left layout support (auto-detects from document.dir or locale)' },
     { property: 'timezone', type: 'string', default: 'undefined', description: 'IANA timezone name for date formatting (e.g., "America/New_York", "UTC")' },
     { property: 'inline', type: "boolean | 'always' | 'auto'", default: 'false', description: 'Inline calendar display' },
@@ -215,6 +217,7 @@ export class App implements OnInit, OnDestroy {
     }),
     rangeWithTime: new FormControl(),
     timeOnly: new FormControl<DatepickerValue>(null),
+    customFormat: new FormControl<DatepickerValue>(null),
     rtlDate: new FormControl<DatepickerValue>(null),
     multipleDates: new FormControl<Date[] | null>(null),
     minDateDemo: new FormControl(),
@@ -403,6 +406,22 @@ export class PlainFormComponent {
     formControlName="timeOnly">
   </ngxsmk-datepicker>
 </form>`;
+
+  public customFormatCode = `<form [formGroup]="datepickerForm">
+  <ngxsmk-datepicker
+    mode="single"
+    [displayFormat]="'MM/DD/YYYY hh:mm A'"
+    [showTime]="true"
+    placeholder="Select Date & Time"
+    formControlName="customFormat">
+  </ngxsmk-datepicker>
+</form>
+
+<!-- Other format examples: -->
+<!-- [displayFormat]="'YYYY-MM-DD'" -->
+<!-- [displayFormat]="'DD/MM/YYYY'" -->
+<!-- [displayFormat]="'MMM DD, YYYY hh:mm A'" -->
+<!-- [displayFormat]="'MM/DD/YYYY'" -->`;
 
   public rtlCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker

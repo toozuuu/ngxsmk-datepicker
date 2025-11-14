@@ -101,7 +101,7 @@ import { DATEPICKER_CONFIG, DatepickerConfig } from './config/datepicker.config'
             (keydown.space)="onBackdropInteract($event)"
           ></div>
         }
-        <div class="ngxsmk-popover-container" [class.ngxsmk-inline-container]="isInlineMode" [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode" [class.ngxsmk-time-only-popover]="timeOnly" [ngClass]="classes?.popover">
+        <div class="ngxsmk-popover-container" [class.ngxsmk-inline-container]="isInlineMode" [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode" [class.ngxsmk-time-only-popover]="timeOnly" [class.ngxsmk-has-time-selection]="showTime || timeOnly" [ngClass]="classes?.popover">
           <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
             @if (showRanges && rangesArray.length > 0 && mode === 'range' && !timeOnly) {
               <div class="ngxsmk-ranges-container">
@@ -396,6 +396,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() enableKeyboardShortcuts: boolean = true;
   @Input() customShortcuts: { [key: string]: (context: KeyboardShortcutContext) => boolean } | null = null;
   @Input() autoApplyClose: boolean = false;
+  @Input() displayFormat?: string;
   public isCalendarOpen: boolean = false;
   private isOpeningCalendar: boolean = false;
   private openCalendarTimeoutId: ReturnType<typeof setTimeout> | null = null;
@@ -668,6 +669,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return this.hooks.formatDisplayValue(this._internalValue, this.mode);
     }
     
+    // Use custom format if provided
+    if (this.displayFormat) {
+      return this.formatWithCustomFormat();
+    }
+    
     if (this.timeOnly) {
       if (this.mode === 'single' && this.selectedDate) {
         const options: Intl.DateTimeFormatOptions = { 
@@ -724,6 +730,80 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return `${this.selectedDates.length} dates selected`;
     }
     return '';
+  }
+
+  private formatWithCustomFormat(): string {
+    if (!this.displayFormat) return '';
+    
+    const adapter = this.globalConfig?.dateAdapter;
+    
+    // Use date adapter if available (date-fns, dayjs, luxon)
+    if (adapter && typeof adapter.format === 'function') {
+      if (this.mode === 'single' && this.selectedDate) {
+        return adapter.format(this.selectedDate, this.displayFormat, this.locale);
+      } else if (this.mode === 'range' && this.startDate) {
+        if (this.endDate) {
+          const start = adapter.format(this.startDate, this.displayFormat, this.locale);
+          const end = adapter.format(this.endDate, this.displayFormat, this.locale);
+          return `${start} - ${end}`;
+        } else {
+          return adapter.format(this.startDate, this.displayFormat, this.locale) + '...';
+        }
+      } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
+        return `${this.selectedDates.length} dates selected`;
+      }
+    }
+    
+    // Fallback: simple formatter for common patterns
+    if (this.mode === 'single' && this.selectedDate) {
+      return this.formatDateSimple(this.selectedDate, this.displayFormat);
+    } else if (this.mode === 'range' && this.startDate) {
+      if (this.endDate) {
+        const start = this.formatDateSimple(this.startDate, this.displayFormat);
+        const end = this.formatDateSimple(this.endDate, this.displayFormat);
+        return `${start} - ${end}`;
+      } else {
+        return this.formatDateSimple(this.startDate, this.displayFormat) + '...';
+      }
+    } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
+      return `${this.selectedDates.length} dates selected`;
+    }
+    
+    return '';
+  }
+
+  private formatDateSimple(date: Date, format: string): string {
+    if (!date || isNaN(date.getTime())) return '';
+    
+    const pad = (n: number, len: number = 2) => n.toString().padStart(len, '0');
+    
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours % 12 || 12;
+    
+    // Map common format tokens
+    return format
+      .replace(/YYYY/g, year.toString())
+      .replace(/YY/g, year.toString().slice(-2))
+      .replace(/MM/g, pad(month))
+      .replace(/M/g, month.toString())
+      .replace(/DD/g, pad(day))
+      .replace(/D/g, day.toString())
+      .replace(/hh/g, pad(hours12))
+      .replace(/h/g, hours12.toString())
+      .replace(/HH/g, pad(hours))
+      .replace(/H/g, hours.toString())
+      .replace(/mm/g, pad(minutes))
+      .replace(/m/g, minutes.toString())
+      .replace(/ss/g, pad(seconds))
+      .replace(/s/g, seconds.toString())
+      .replace(/a/g, ampm.toLowerCase())
+      .replace(/A/g, ampm);
   }
 
   get isBackArrowDisabled(): boolean {
