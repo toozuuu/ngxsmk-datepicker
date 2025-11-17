@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { NgxsmkDatepickerComponent } from './ngxsmk-datepicker';
-import { getStartOfDay } from './utils/date.utils';
+import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+import { getStartOfDay } from '../utils/date.utils';
 
 describe('NgxsmkDatepickerComponent - Time Handling', () => {
   let component: NgxsmkDatepickerComponent;

@@ -119,6 +119,7 @@ export class App implements OnInit, OnDestroy {
     { id: 'date-range', label: 'Date Range', sub: true, keywords: 'date range selection start end' },
     { id: 'time-only', label: 'Time Only', sub: true, keywords: 'time only picker time selection no calendar' },
     { id: 'custom-format', label: 'Custom Format', sub: true, keywords: 'custom format display format date format string MM DD YYYY hh mm' },
+    { id: 'moment-js-integration', label: 'Moment.js Integration', sub: true, keywords: 'moment js integration custom format fix' },
     { id: 'rtl-support', label: 'RTL Support', sub: true, keywords: 'rtl right to left arabic hebrew persian urdu mirror' },
     { id: 'timezone-support', label: 'Timezone Support', sub: true, keywords: 'timezone time zone utc iana formatting parsing' },
     { id: 'multiple-dates', label: 'Multiple Dates', sub: true, keywords: 'multiple dates selection array' },
@@ -187,6 +188,89 @@ export class App implements OnInit, OnDestroy {
   public lastProgrammaticChange: Date | null = null;
 
   public signalDate = signal<DatepickerValue>(null);
+  
+  // Moment.js Integration properties
+  public momentDateValue = signal<DatepickerValue>(null);
+  public momentIntegrationTsCode = `import { Component, signal } from '@angular/core';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-moment-integration',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: \`
+    <ngxsmk-datepicker
+      mode="single"
+      [displayFormat]="'MM/DD/YYYY hh:mm a'"
+      [showTime]="true"
+      [value]="dateValue()"
+      (valueChange)="onDateChange($event)"
+      placeholder="Select Date & Time">
+    </ngxsmk-datepicker>
+    
+    <div class="controls">
+      <button (click)="setCurrentDate()">Set Current Date</button>
+      <button (click)="setFormattedDate()">Set Formatted Date</button>
+      <button (click)="clearDate()">Clear</button>
+    </div>
+    
+    <div class="result">
+      <p>Date Value: {{ dateValue() | date:'medium' }}</p>
+      <p>Formatted: {{ formatDate(dateValue()) }}</p>
+    </div>
+  \`
+})
+export class MomentIntegrationComponent {
+  dateValue = signal<DatepickerValue>(null);
+  
+  onDateChange(newDate: Date) {
+    console.log('Date changed:', newDate);
+    this.dateValue.set(newDate);
+  }
+  
+  setCurrentDate() {
+    this.dateValue.set(new Date());
+  }
+  
+  setFormattedDate() {
+    // This was the problematic case that is now fixed
+    this.dateValue.set('11/17/2025 09:30 am');
+  }
+  
+  clearDate() {
+    this.dateValue.set(null);
+  }
+  
+  formatDate(date: DatepickerValue): string {
+    if (!date || !(date instanceof Date)) return '';
+    const d = date as Date;
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const day = d.getDate().toString().padStart(2, '0');
+    const year = d.getFullYear();
+    const hours = d.getHours().toString().padStart(2, '0');
+    const minutes = d.getMinutes().toString().padStart(2, '0');
+    const ampm = d.getHours() >= 12 ? 'pm' : 'am';
+    return \`\${month}/\${day}/\${year} \${hours}:\${minutes} \${ampm}\`;
+  }
+}`;
+
+  public momentIntegrationHtmlCode = `<ngxsmk-datepicker
+  mode="single"
+  [displayFormat]="'MM/DD/YYYY hh:mm a'"
+  [showTime]="true"
+  [value]="dateValue()"
+  (valueChange)="onDateChange($event)"
+  placeholder="Select Date & Time">
+</ngxsmk-datepicker>
+
+<!-- Control buttons -->
+<button (click)="setCurrentDate()">Set Current Date</button>
+<button (click)="setFormattedDate()">Set Formatted Date</button>
+<button (click)="clearDate()">Clear</button>
+
+<!-- Display values -->
+<p>Date Value: {{ dateValue() | date:'medium' }}</p>
+<p>Formatted: {{ formatDate(dateValue()) }}</p>`;
 
   public weekStartDemo: number = 1;
   public yearRangeDemo: number = 20;
@@ -928,5 +1012,37 @@ export class RangeFormComponent {
 
   isDate(value: any): value is Date {
     return value instanceof Date;
+  }
+
+  // Moment.js Integration methods
+  setCurrentDate(): void {
+    this.momentDateValue.set(new Date());
+  }
+
+  setFormattedDate(): void {
+    // This was the problematic case that is now fixed
+    // Create a Date object that matches the format
+    const date = new Date();
+    date.setHours(9, 30); // 9:30 AM
+    this.momentDateValue.set(date);
+  }
+
+  clearDate(): void {
+    this.momentDateValue.set(null);
+  }
+
+  onDateChange(newDate: DatepickerValue): void {
+    console.log('Date changed:', newDate);
+    // Update the signal value
+    this.momentDateValue.set(newDate);
+  }
+
+  formatMomentDateValue(): string {
+    const value = this.momentDateValue();
+    if (!value) return 'Not set';
+    if (value instanceof Date) {
+      return value.toLocaleString();
+    }
+    return JSON.stringify(value);
   }
 }

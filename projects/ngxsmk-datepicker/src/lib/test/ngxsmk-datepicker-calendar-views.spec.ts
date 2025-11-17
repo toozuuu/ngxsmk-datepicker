@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxsmkDatepickerComponent } from './ngxsmk-datepicker';
-import { getStartOfDay, getEndOfDay } from './utils/date.utils';
+import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 
 describe('NgxsmkDatepickerComponent - Calendar Views', () => {
   let component: NgxsmkDatepickerComponent;

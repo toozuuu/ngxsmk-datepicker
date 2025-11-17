@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxsmkDatepickerComponent } from './ngxsmk-datepicker';
+import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 
 describe('NgxsmkDatepickerComponent - Touch Gestures', () => {
   let component: NgxsmkDatepickerComponent;
