@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { PLATFORM_ID } from '@angular/core';
-import { NgxsmkDatepickerComponent } from './ngxsmk-datepicker';
+import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 
 describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
   let component: NgxsmkDatepickerComponent;

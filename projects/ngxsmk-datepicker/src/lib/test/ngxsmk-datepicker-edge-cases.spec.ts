@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { NgxsmkDatepickerComponent } from './ngxsmk-datepicker';
-import { getStartOfDay, getEndOfDay } from './utils/date.utils';
+import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 
 describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () => {
   let component: NgxsmkDatepickerComponent;

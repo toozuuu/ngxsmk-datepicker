@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxsmkDatepickerComponent } from './ngxsmk-datepicker';
-import { getStartOfDay } from './utils/date.utils';
-import { generateRecurringDates } from './utils/recurring-dates.utils';
+import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+import { getStartOfDay } from '../utils/date.utils';
+import { generateRecurringDates } from '../utils/recurring-dates.utils';
 
 describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
   let component: NgxsmkDatepickerComponent;
