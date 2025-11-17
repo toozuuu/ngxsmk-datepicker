@@ -189,7 +189,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Recurring Dates Utils Tests**: Fixed pattern matching test to use correct date (Jan 6 is Monday, not Jan 8)
 - All 353 tests now pass successfully
 
-## [1.9.1] - 2025-11-12
+## [1.9.2] - 2025-11-12
 
 ### Changed
 - **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings
@@ -197,7 +197,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced tree-shaking with optimized imports and compiler options
   - Added `importsNotUsedAsValues: "remove"` for smaller output
   - Disabled `preserveConstEnums` for better inlining
-- **Build Process**: 
+- **Build Process**:
   - Source maps automatically removed from production builds (saves ~127KB)
   - Improved build scripts with better error handling
   - Enhanced bundle analysis that excludes source maps
@@ -205,7 +205,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed package.json exports to eliminate build warnings
   - Optimized `files` array to exclude unnecessary files
   - Updated exports field for better module resolution
-- **Test Configuration**: 
+- **Test Configuration**:
   - Added Zone.js polyfills to library test configuration
   - Updated test commands to explicitly target library project
   - Improved test reliability across Angular versions
@@ -215,6 +215,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bundle analysis now correctly excludes source maps from size calculations
 - Build warnings from conflicting export conditions resolved
 - Source map removal script made more resilient for build environments
+
+## [1.9.1] - 2025-11-11
+
+### Fixed
+- Minor bug fixes and improvements
 
 ## [1.9.0] - 2025-11-10
 

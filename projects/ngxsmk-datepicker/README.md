@@ -6,7 +6,7 @@
 
 A modern, powerful, and fully customizable date and date-range picker component for Angular 17+ applications.
 
-> **Stable Version**: `1.9.10` is the current stable release.
+> **Stable Version**: `1.9.11` is the current stable release.
 
 ## 📷 Screenshots
 
