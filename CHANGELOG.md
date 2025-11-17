@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.11] - 2025-11-17 (Stable)
+
+### Fixed
+- **Moment.js Integration with Custom Formats**: Fixed critical issue where Moment.js objects with custom date formats would not populate correctly
+  - Added `isMomentObject()` helper method to safely detect Moment.js instances
+  - Enhanced `_normalizeValue()` method to handle Moment.js objects directly by extracting native Date using `.toDate()`
+  - Improved `parseCustomDateString()` method to use bracket notation for TypeScript compatibility with dynamic object properties
+  - Added comprehensive support for format tokens: YYYY, YY, MM, M, DD, D, hh, h, HH, H, mm, m, ss, s, a, A
+  - Resolves issue where `moment(this.date).utcOffset(timezone).format('MM/DD/YYYY hh:mm a')` with `displayFormat="MM/DD/YYYY hh:mm a"` would not populate correctly
+  - Maintains full backward compatibility with Date objects, strings, and all other supported formats
+
+### Improved
+- **Custom Format Parser**: Enhanced format token parsing with better TypeScript compatibility
+- **Moment.js Detection**: More robust detection of Moment.js objects across different versions
+- **Demo Application**: Added working Moment.js integration example with interactive controls
+
 ## [1.9.10] - 2025-11-15 (Stable)
 
 ### Changed

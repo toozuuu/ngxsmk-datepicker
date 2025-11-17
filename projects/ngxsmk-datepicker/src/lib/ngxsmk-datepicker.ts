@@ -2267,6 +2267,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     
     if (val instanceof Date) {
       return this._normalizeDate(val) as DatepickerValue;
+    } else if (this.isMomentObject(val)) {
+      // Handle Moment.js objects directly
+      return this._normalizeDate(val.toDate()) as DatepickerValue;
     } else if (typeof val === 'object' && 'start' in val && 'end' in val) {
       const start = this._normalizeDate(val.start);
       const end = this._normalizeDate(val.end);
@@ -2276,10 +2279,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return null;
     } else if (Array.isArray(val)) {
       return val.map(d => this._normalizeDate(d)).filter((d): d is Date => d !== null) as DatepickerValue;
+    } else if (typeof val === 'string' && this.displayFormat) {
+      // Try to parse the string using the custom display format
+      const parsedDate = this.parseCustomDateString(val, this.displayFormat);
+      return parsedDate as DatepickerValue;
     } else {
       const normalized = this._normalizeDate(val);
       return normalized as DatepickerValue;
     }
+  }
+
+  /**
+   * Check if the provided value is a Moment.js object
+   */
+  private isMomentObject(val: any): boolean {
+    return val &&
+           typeof val === 'object' &&
+           typeof val.format === 'function' &&
+           typeof val.toDate === 'function' &&
+           typeof val.isMoment === 'function' &&
+           val.isMoment();
   }
 
   private isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {
@@ -2317,6 +2336,141 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
       return getStartOfDay(date);
     } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Parse a date string using the custom display format
+   * Supports common format tokens: YYYY, YY, MM, M, DD, D, hh, h, HH, H, mm, m, ss, s, a, A
+   */
+  private parseCustomDateString(dateString: string, format: string): Date | null {
+    if (!dateString || !format) return null;
+    
+    try {
+      // Create a mapping of format tokens to their regex patterns and extractors
+      const formatTokens: { [key: string]: { regex: RegExp; extractor: (match: RegExpMatchArray) => number } } = {
+        'YYYY': {
+          regex: /(\d{4})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'YY': {
+          regex: /(\d{2})/,
+          extractor: (match) => 2000 + parseInt(match[1], 10)
+        },
+        'MM': {
+          regex: /(\d{2})/,
+          extractor: (match) => parseInt(match[1], 10) - 1 // JavaScript months are 0-indexed
+        },
+        'M': {
+          regex: /(\d{1,2})/,
+          extractor: (match) => parseInt(match[1], 10) - 1
+        },
+        'DD': {
+          regex: /(\d{2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'D': {
+          regex: /(\d{1,2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'hh': {
+          regex: /(\d{2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'h': {
+          regex: /(\d{1,2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'HH': {
+          regex: /(\d{2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'H': {
+          regex: /(\d{1,2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'mm': {
+          regex: /(\d{2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'm': {
+          regex: /(\d{1,2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'ss': {
+          regex: /(\d{2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        's': {
+          regex: /(\d{1,2})/,
+          extractor: (match) => parseInt(match[1], 10)
+        },
+        'a': {
+          regex: /(am|pm)/i,
+          extractor: (match) => match[1].toLowerCase() === 'pm' ? 1 : 0
+        },
+        'A': {
+          regex: /(AM|PM)/,
+          extractor: (match) => match[1] === 'PM' ? 1 : 0
+        }
+      };
+      
+      // Extract values from date string using format
+      const dateParts: { [key: string]: number } = {};
+      let remainingFormat = format;
+      let remainingString = dateString;
+      
+      // Process tokens in order of length (longest first) to avoid conflicts
+      const sortedTokens = Object.keys(formatTokens).sort((a, b) => b.length - a.length);
+      
+      for (const token of sortedTokens) {
+        if (remainingFormat.includes(token)) {
+          const tokenInfo = formatTokens[token];
+          const match = remainingString.match(tokenInfo.regex);
+          
+          if (match) {
+            dateParts[token] = tokenInfo.extractor(match);
+            // Remove the matched part from both strings
+            const matchIndex = remainingString.indexOf(match[0]);
+            remainingString = remainingString.substring(0, matchIndex) + remainingString.substring(matchIndex + match[0].length);
+            remainingFormat = remainingFormat.replace(token, '');
+          }
+        }
+      }
+      
+      // Create a new Date object with the parsed values
+      const now = new Date();
+      const year = dateParts['YYYY'] !== undefined ? dateParts['YYYY'] : now.getFullYear();
+      const month = dateParts['MM'] !== undefined ? dateParts['MM'] : (dateParts['M'] !== undefined ? dateParts['M'] : now.getMonth());
+      const day = dateParts['DD'] !== undefined ? dateParts['DD'] : (dateParts['D'] !== undefined ? dateParts['D'] : now.getDate());
+      
+      let hours = 0;
+      let minutes = 0;
+      let seconds = 0;
+      
+      // Handle 12-hour format with AM/PM
+      if (dateParts['hh'] !== undefined || dateParts['h'] !== undefined) {
+        const hour12 = dateParts['hh'] !== undefined ? dateParts['hh'] : (dateParts['h'] !== undefined ? dateParts['h'] : 0);
+        const isPm = dateParts['a'] !== undefined ? dateParts['a'] : (dateParts['A'] !== undefined ? dateParts['A'] : 0);
+        hours = (hour12 % 12) + (isPm ? 12 : 0);
+      } else if (dateParts['HH'] !== undefined || dateParts['H'] !== undefined) {
+        hours = dateParts['HH'] !== undefined ? dateParts['HH'] : (dateParts['H'] !== undefined ? dateParts['H'] : 0);
+      }
+      
+      minutes = dateParts['mm'] !== undefined ? dateParts['mm'] : (dateParts['m'] !== undefined ? dateParts['m'] : 0);
+      seconds = dateParts['ss'] !== undefined ? dateParts['ss'] : (dateParts['s'] !== undefined ? dateParts['s'] : 0);
+      
+      const date = new Date(year, month, day, hours, minutes, seconds);
+      
+      // Validate the date
+      if (isNaN(date.getTime())) {
+        return null;
+      }
+      
+      return date;
+    } catch (error) {
+      console.warn('Failed to parse custom date string:', dateString, 'with format:', format, error);
       return null;
     }
   }
