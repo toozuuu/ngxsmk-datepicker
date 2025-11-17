@@ -235,8 +235,8 @@ If you find this library helpful, please consider:
 
 ---
 
-**Version**: 1.9.10  
-**Last Updated**: 2025-11-15
+**Version**: 1.9.11
+**Last Updated**: 2025-11-17
 
 For the latest updates and changelog, visit the [GitHub repository](https://github.com/NGXSMK/ngxsmk-datepicker).
 
