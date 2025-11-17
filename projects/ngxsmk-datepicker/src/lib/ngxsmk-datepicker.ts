@@ -2352,67 +2352,67 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const formatTokens: { [key: string]: { regex: RegExp; extractor: (match: RegExpMatchArray) => number } } = {
         'YYYY': {
           regex: /(\d{4})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'YY': {
           regex: /(\d{2})/,
-          extractor: (match) => 2000 + parseInt(match[1], 10)
+          extractor: (match) => 2000 + parseInt(match[1] || '0', 10)
         },
         'MM': {
           regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1], 10) - 1 // JavaScript months are 0-indexed
+          extractor: (match) => parseInt(match[1] || '0', 10) - 1 // JavaScript months are 0-indexed
         },
         'M': {
           regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1], 10) - 1
+          extractor: (match) => parseInt(match[1] || '0', 10) - 1
         },
         'DD': {
           regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'D': {
           regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'hh': {
           regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'h': {
           regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'HH': {
           regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'H': {
           regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'mm': {
           regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'm': {
           regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'ss': {
           regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         's': {
           regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1], 10)
+          extractor: (match) => parseInt(match[1] || '0', 10)
         },
         'a': {
           regex: /(am|pm)/i,
-          extractor: (match) => match[1].toLowerCase() === 'pm' ? 1 : 0
+          extractor: (match) => (match[1] || '').toLowerCase() === 'pm' ? 1 : 0
         },
         'A': {
           regex: /(AM|PM)/,
-          extractor: (match) => match[1] === 'PM' ? 1 : 0
+          extractor: (match) => (match[1] || '') === 'PM' ? 1 : 0
         }
       };
       
@@ -2427,6 +2427,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       for (const token of sortedTokens) {
         if (remainingFormat.includes(token)) {
           const tokenInfo = formatTokens[token];
+          if (!tokenInfo) continue;
+          
           const match = remainingString.match(tokenInfo.regex);
           
           if (match) {
