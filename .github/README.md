@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.3` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.11` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -733,8 +733,27 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.9.3** (Stable)
-- ✨ **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar
+### **v1.9.11** (Stable)
+- 🐛 **Bug Fix**: Fixed import path errors in test files that were preventing test suite from running
+  - Fixed `Type '() => string' is not assignable to type 'never'` error when using `[field]` input
+  - Updated `SignalFormField` type definition for Angular 21 compatibility
+  - Maintains backward compatibility with Angular 17-20
+  - Resolves [#33](https://github.com/NGXSMK/ngxsmk-datepicker/issues/33)
+
+### **v1.9.11** (Stable)
+- 🐛 **Bug Fix**: Fixed import path errors in test files that were preventing test suite from running
+  - Supports format strings like "MM/DD/YYYY hh:mm A"
+  - Works with date adapters (date-fns, dayjs, luxon) or built-in simple formatter
+  - Supports common format tokens: YYYY, MM, DD, hh, mm, A, etc.
+  - Resolves [#31](https://github.com/NGXSMK/ngxsmk-datepicker/issues/31)
+- 🐛 **Fixed Time Selection Dropdowns**: Fixed visibility issues with time selection dropdowns
+  - Dropdowns now properly display and are not clipped by parent containers
+  - Improved z-index handling for time selection dropdowns
+  - Removed unnecessary scrollbars from datepicker wrapper
+  - Resolves [#32](https://github.com/NGXSMK/ngxsmk-datepicker/issues/32)
+
+### **v1.9.11** (Stable)
+- 🐛 **Bug Fix**: Fixed import path errors in test files that were preventing test suite from running
   - Hides calendar grid and shows only time controls (hour, minute, AM/PM)
   - Automatically enables `showTime` when `timeOnly` is true
   - Perfect for time selection scenarios where date is not needed
@@ -777,8 +796,8 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Build warnings from conflicting export conditions resolved
   - Source map removal script made more resilient for build environments
 
-### **v1.9.0**
-- 🎣 **Extension Points & Hooks**: Comprehensive hook system for customization (day rendering, validation, keyboard shortcuts, formatting, events)
+### **v1.9.11**
+- 🐛 **Bug Fix**: Fixed import path errors in test files that were preventing test suite from running
 - ⌨️ **Enhanced Keyboard Shortcuts**: Added Y (yesterday), N (tomorrow), W (next week) keys with custom shortcut support
 - 🎨 **UI/UX Improvements**: Modern, polished design with improved spacing, shadows, animations, and accessibility
 - 📚 **API Documentation**: TypeDoc integration for automatic API documentation generation
