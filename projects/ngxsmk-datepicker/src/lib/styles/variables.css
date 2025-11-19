@@ -1,0 +1,104 @@
+/**
+ * CSS Variables for ngxsmk-datepicker
+ * These variables can be overridden for custom theming
+ */
+
+:host {
+  /* Color Palette */
+  --datepicker-primary-color: #6d28d9;
+  --datepicker-primary-contrast: #ffffff;
+  --datepicker-range-background: #f5f3ff;
+  --datepicker-background: #ffffff;
+  --datepicker-text-color: #1f2937;
+  --datepicker-subtle-text-color: #6b7280;
+  --datepicker-border-color: #e5e7eb;
+  --datepicker-hover-background: #f3f4f6;
+  
+  /* Shadows */
+  --datepicker-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --datepicker-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --datepicker-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Typography */
+  --datepicker-font-size-xs: 10px;
+  --datepicker-font-size-sm: 12px;
+  --datepicker-font-size-base: 14px;
+  --datepicker-font-size-lg: 16px;
+  --datepicker-font-size-xl: 18px;
+  --datepicker-line-height: 1.5;
+  --datepicker-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  
+  /* Spacing */
+  --datepicker-spacing-xs: 4px;
+  --datepicker-spacing-sm: 8px;
+  --datepicker-spacing-md: 12px;
+  --datepicker-spacing-lg: 16px;
+  --datepicker-spacing-xl: 20px;
+  --datepicker-spacing-2xl: 24px;
+  
+  /* Border Radius */
+  --datepicker-radius-sm: 6px;
+  --datepicker-radius-md: 8px;
+  --datepicker-radius-lg: 12px;
+  --datepicker-radius-xl: 16px;
+  --datepicker-border-radius: var(--datepicker-radius-md);
+  
+  /* Transitions - Can be customized via AnimationConfig */
+  --datepicker-transition-duration: 150ms;
+  --datepicker-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --datepicker-transition-property: all;
+  --datepicker-transition: var(--datepicker-transition-property) var(--datepicker-transition-duration) var(--datepicker-transition-easing);
+  
+  /* Z-index */
+  --datepicker-z-index-base: 2147483647;
+  --datepicker-z-index-backdrop: 2147483646;
+}
+
+/* Dark Theme Override */
+:host(.dark-theme) {
+  --datepicker-range-background: rgba(139, 92, 246, 0.15);
+  --datepicker-background: #1f2937;
+  --datepicker-text-color: #f3f4f6;
+  --datepicker-subtle-text-color: #9ca3af;
+  --datepicker-border-color: #374151;
+  --datepicker-hover-background: #374151;
+  --datepicker-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --datepicker-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :host {
+    --datepicker-border-color: #000000;
+    --datepicker-text-color: #000000;
+    --datepicker-subtle-text-color: #666666;
+  }
+  
+  .ngxsmk-day-cell.disabled {
+    opacity: 0.3;
+  }
+  
+  .ngxsmk-day-cell:focus-visible .ngxsmk-day-number {
+    outline: 3px solid;
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --datepicker-transition: none;
+  }
+  
+  :host *,
+  :host *::before,
+  :host *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

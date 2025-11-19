@@ -34,11 +34,11 @@ This roadmap outlines the planned features, improvements, and enhancements for n
   - Year selection mode
   - *Label: `enhancement`, `feature-request`*
 
-- [ ] **Custom Date Formatting**
-  - Custom format strings (similar to Angular DatePipe)
+- [x] **Custom Date Formatting** ✅ (Implemented in v1.9.4)
+  - Custom format strings (similar to Angular DatePipe) - `[displayFormat]` input
   - Format validation
   - Format presets
-  - *Label: `enhancement`, `good-first-issue`*
+  - *Available in v1.9.4+*
 
 - [ ] **Animation Customization**
   - Configurable animation durations
@@ -48,7 +48,7 @@ This roadmap outlines the planned features, improvements, and enhancements for n
 
 - [ ] **Enhanced Time Selection**
   - Seconds selection
-  - Timezone-aware time display
+  - Timezone-aware time display (✅ Timezone utilities available via `timezone.utils`)
   - Time range selection
   - *Label: `enhancement`, `feature-request`*
 
@@ -67,10 +67,10 @@ This roadmap outlines the planned features, improvements, and enhancements for n
   - Preset categories
   - *Label: `enhancement`, `feature-request`*
 
-- [ ] **Export/Import Functionality**
-  - Export selected dates to various formats (JSON, CSV, ICS)
-  - Import dates from external sources
-  - *Label: `enhancement`, `feature-request`*
+- [x] **Export/Import Functionality** ✅ (Implemented)
+  - Export selected dates to various formats (JSON, CSV, ICS) - Available via `exportToJson`, `exportToCsv`, `exportToIcs`
+  - Import dates from external sources - Available via `importFromJson`, `importFromCsv`, `importFromIcs`
+  - *Available in utils exports: `import { exportToJson, importFromJson } from 'ngxsmk-datepicker/utils'`*
 
 - [ ] **Advanced Styling**
   - CSS-in-JS support

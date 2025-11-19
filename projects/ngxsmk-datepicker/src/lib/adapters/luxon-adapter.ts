@@ -25,7 +25,7 @@ export class LuxonAdapter implements DateAdapter {
   constructor() {
     try {
       this.DateTime = require('luxon').DateTime;
-    } catch (e) {
+    } catch {
       throw new Error('luxon is not installed. Please install it: npm install luxon');
     }
   }

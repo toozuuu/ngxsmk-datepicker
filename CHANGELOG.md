@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2025-11-19 (Stable)
+
+### Changed
+- **Version Update**: Updated to version 1.10.0
+- **Stable Release**: Version 1.10.0 is the current stable version
+
+### Added
+- **Major Version Release**: Version 1.10.0 introduces new features and improvements
+
+### Migration Notes
+- This is a minor version update with backward compatibility
+- No breaking changes from v1.9.11
+- See [MIGRATION.md](MIGRATION.md) for detailed migration guide
+
 ## [1.9.11] - 2025-11-17 (Stable)
 
 ### Fixed

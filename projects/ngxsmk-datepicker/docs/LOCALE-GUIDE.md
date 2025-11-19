@@ -264,7 +264,7 @@ describe('Locale: [Your Locale]', () => {
 ```typescript
 <ngxsmk-datepicker
   [locale]="'en-US'"
-  [weekStart]="1"> <!-- Force Monday -->
+  [weekStart]="1">
 </ngxsmk-datepicker>
 ```
 

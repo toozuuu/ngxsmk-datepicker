@@ -1,13 +1,18 @@
-import {Component, HostBinding, OnInit, OnDestroy, HostListener, signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, HostBinding, OnInit, OnDestroy, AfterViewInit, HostListener, signal, inject, PLATFORM_ID, computed, ChangeDetectorRef, effect, ViewChild, ElementRef} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {
   DateRange,
   NgxsmkDatepickerComponent,
   HolidayProvider,
   DatepickerValue,
+  PartialDatepickerTranslations,
 } from "ngxsmk-datepicker";
 import {CodePipe} from './code.pipe';
+import {DemoTranslationsService, DemoTranslations} from './demo-translations.service';
+import {exportToJson, importFromJson, exportToCsv, importFromCsv, exportToIcs, importFromIcs} from 'ngxsmk-datepicker';
+import {ThemeBuilderService, DatePresetsService, DatepickerTheme, DatePreset} from 'ngxsmk-datepicker';
+import {AnimationConfig} from 'ngxsmk-datepicker';
 
 function getStartOfDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
@@ -73,10 +78,10 @@ class SampleHolidayProvider implements HolidayProvider {
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, CodePipe],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  templateUrl: './app.html',
+  styleUrls: ['./app.scss']
 })
-export class App implements OnInit, OnDestroy {
+export class App implements OnInit, OnDestroy, AfterViewInit {
   private readonly today = new Date();
   public readonly JSON = JSON;
   public currentTheme: 'light' | 'dark' = 'light';
@@ -87,50 +92,73 @@ export class App implements OnInit, OnDestroy {
   public selectedMobileSize: number = 375;
   public currentTime: string = '9:41';
   public searchQuery: string = '';
-  public filteredNavigationItems: Array<{ id: string; label: string; sub: boolean; keywords: string }> = [];
+  // Computed navigation items with translations
+  public navigationItems = computed(() => {
+    const t = this.t();
+    return [
+      { id: 'getting-started', label: t.gettingStarted, sub: false, keywords: 'getting started introduction overview' },
+      { id: 'installation', label: t.installation, sub: false, keywords: 'install setup npm package' },
+      { id: 'basic-usage', label: t.basicUsage, sub: false, keywords: 'basic usage example simple' },
+      { id: 'framework-integration', label: t.frameworkIntegration, sub: false, keywords: 'angular material ionic html input form field' },
+      { id: 'api-reference', label: t.apiReference, sub: false, keywords: 'api reference documentation' },
+      { id: 'theming', label: t.theming, sub: false, keywords: 'theme dark light styling css' },
+      { id: 'examples', label: t.examples, sub: false, keywords: 'examples demo showcase' },
+      { id: 'signal-forms', label: t.signalForms, sub: true, keywords: 'signal forms angular 21 reactive' },
+      { id: 'signal-forms-field', label: t.signalFormsField, sub: true, keywords: 'signal forms field input angular 21 FieldTree type compatibility' },
+      { id: 'single-date', label: t.singleDate, sub: true, keywords: 'single date picker selection' },
+      { id: 'customization-a11y', label: t.customizationA11y, sub: true, keywords: 'customization accessibility a11y aria' },
+      { id: 'date-range', label: t.dateRange, sub: true, keywords: 'date range selection start end' },
+      { id: 'time-only', label: t.timeOnly, sub: true, keywords: 'time only picker time selection no calendar' },
+      { id: 'custom-format', label: t.customFormat, sub: true, keywords: 'custom format display format date format string MM DD YYYY hh mm' },
+      { id: 'moment-js-integration', label: t.momentJsIntegration, sub: true, keywords: 'moment js integration custom format fix' },
+      { id: 'rtl-support', label: t.rtlSupport, sub: true, keywords: 'rtl right to left arabic hebrew persian urdu mirror' },
+      { id: 'translations-i18n', label: t.translationsI18n, sub: true, keywords: 'translations i18n internationalization locale language translation service' },
+      { id: 'timezone-support', label: t.timezoneSupport, sub: true, keywords: 'timezone time zone utc iana formatting parsing' },
+      { id: 'multiple-dates', label: t.multipleDates, sub: true, keywords: 'multiple dates selection array' },
+      { id: 'programmatic-value', label: t.programmaticValue, sub: true, keywords: 'programmatic set value api' },
+      { id: 'inline-calendar', label: t.inlineCalendar, sub: true, keywords: 'inline calendar always visible' },
+      { id: 'min-max-date', label: t.minMaxDate, sub: true, keywords: 'min max date limit restriction' },
+      { id: 'calendar-views', label: t.calendarViews, sub: true, keywords: 'year picker decade picker timeline time slider view mode' },
+      { id: 'mobile-playground', label: t.mobilePlayground, sub: true, keywords: 'mobile responsive playground test' },
+      { id: 'inputs', label: t.inputs, sub: false, keywords: 'inputs properties @input parameters' },
+      { id: 'outputs', label: t.outputs, sub: false, keywords: 'outputs events @output emitters' },
+    ];
+  });
 
-  public features = [
-    { icon: '🚀', title: 'Zero Dependencies', description: 'No external dependencies, just Angular' },
-    { icon: '⚡', title: 'High Performance', description: 'GPU-accelerated animations with transform3d, optimized rendering' },
-    { icon: '🎨', title: 'Fully Customizable', description: '28+ CSS variables, built-in themes, and extension points' },
-    { icon: '📱', title: 'Responsive', description: 'Mobile-first design, works great on all device sizes' },
-    { icon: '🔧', title: 'Type Safe', description: 'Full TypeScript support with comprehensive type definitions' },
-    { icon: '♿', title: 'Accessible', description: 'ARIA attributes, keyboard navigation, screen reader support' },
-    { icon: '📦', title: 'Lightweight', description: 'Small bundle size, minimal overhead, tree-shakeable' },
-    { icon: '🔄', title: 'Form Integration', description: 'Reactive Forms, Signal Forms (Angular 21+), ControlValueAccessor' },
-    { icon: '🎯', title: 'Extension Points', description: 'Comprehensive hooks for customization, validation, and events' },
-    { icon: '⌨️', title: 'Keyboard Shortcuts', description: 'Enhanced navigation with custom shortcuts (Y, N, W, T keys)' },
-    { icon: '🌐', title: 'SSR Ready', description: 'Fully compatible with Angular Universal, platform-safe' },
-    { icon: '⚙️', title: 'Zoneless Support', description: 'Works with or without Zone.js, OnPush change detection' },
-  ];
+  public filteredNavigationItems = computed(() => {
+    if (!this.searchQuery || this.searchQuery.trim() === '') {
+      return this.navigationItems();
+    }
+    const lowerQuery = this.searchQuery.toLowerCase().trim();
+    return this.navigationItems().filter(item => {
+      const labelMatch = item.label.toLowerCase().includes(lowerQuery);
+      const keywordMatch = (item.keywords || '').toLowerCase().includes(lowerQuery);
+      return labelMatch || keywordMatch;
+    });
+  });
 
-  public navigationItems = [
-    { id: 'getting-started', label: 'Getting Started', sub: false, keywords: 'getting started introduction overview' },
-    { id: 'installation', label: 'Installation', sub: false, keywords: 'install setup npm package' },
-    { id: 'basic-usage', label: 'Basic Usage', sub: false, keywords: 'basic usage example simple' },
-    { id: 'framework-integration', label: 'Framework Integration', sub: false, keywords: 'angular material ionic html input form field' },
-    { id: 'api-reference', label: 'API Reference', sub: false, keywords: 'api reference documentation' },
-    { id: 'theming', label: 'Theming', sub: false, keywords: 'theme dark light styling css' },
-    { id: 'examples', label: 'Examples', sub: false, keywords: 'examples demo showcase' },
-    { id: 'signal-forms', label: 'Signal Forms (Angular 21)', sub: true, keywords: 'signal forms angular 21 reactive' },
-    { id: 'signal-forms-field', label: 'Signal Forms [field] Input', sub: true, keywords: 'signal forms field input angular 21 FieldTree type compatibility' },
-    { id: 'single-date', label: 'Single Date', sub: true, keywords: 'single date picker selection' },
-    { id: 'customization-a11y', label: 'Customization & A11y', sub: true, keywords: 'customization accessibility a11y aria' },
-    { id: 'date-range', label: 'Date Range', sub: true, keywords: 'date range selection start end' },
-    { id: 'time-only', label: 'Time Only', sub: true, keywords: 'time only picker time selection no calendar' },
-    { id: 'custom-format', label: 'Custom Format', sub: true, keywords: 'custom format display format date format string MM DD YYYY hh mm' },
-    { id: 'moment-js-integration', label: 'Moment.js Integration', sub: true, keywords: 'moment js integration custom format fix' },
-    { id: 'rtl-support', label: 'RTL Support', sub: true, keywords: 'rtl right to left arabic hebrew persian urdu mirror' },
-    { id: 'timezone-support', label: 'Timezone Support', sub: true, keywords: 'timezone time zone utc iana formatting parsing' },
-    { id: 'multiple-dates', label: 'Multiple Dates', sub: true, keywords: 'multiple dates selection array' },
-    { id: 'programmatic-value', label: 'Programmatic Value', sub: true, keywords: 'programmatic set value api' },
-    { id: 'inline-calendar', label: 'Inline Calendar', sub: true, keywords: 'inline calendar always visible' },
-    { id: 'min-max-date', label: 'Min/Max Date', sub: true, keywords: 'min max date limit restriction' },
-    { id: 'calendar-views', label: 'Calendar Views', sub: true, keywords: 'year picker decade picker timeline time slider view mode' },
-    { id: 'mobile-playground', label: 'Mobile Playground', sub: true, keywords: 'mobile responsive playground test' },
-    { id: 'inputs', label: 'Inputs', sub: false, keywords: 'inputs properties @input parameters' },
-    { id: 'outputs', label: 'Outputs', sub: false, keywords: 'outputs events @output emitters' },
-  ];
+  // Computed features with translations
+  public features = computed(() => {
+    const t = this.t();
+    return [
+      { icon: '🚀', title: t.zeroDependencies, description: 'No external dependencies, just Angular' },
+      { icon: '⚡', title: t.highPerformance, description: 'GPU-accelerated animations with transform3d, optimized rendering' },
+      { icon: '🎨', title: t.fullyCustomizable, description: '28+ CSS variables, built-in themes, and extension points' },
+      { icon: '📱', title: t.responsive, description: 'Mobile-first design, works great on all device sizes' },
+      { icon: '🔧', title: t.typeSafe, description: 'Full TypeScript support with comprehensive type definitions' },
+      { icon: '♿', title: t.accessible, description: 'ARIA attributes, keyboard navigation, screen reader support' },
+      { icon: '📦', title: t.lightweight, description: 'Small bundle size, minimal overhead, tree-shakeable' },
+      { icon: '🔄', title: t.formIntegration, description: 'Reactive Forms, Signal Forms (Angular 21+), ControlValueAccessor' },
+      { icon: '🎯', title: t.extensionPoints, description: 'Comprehensive hooks for customization, validation, and events' },
+      { icon: '⌨️', title: t.keyboardShortcuts, description: 'Enhanced navigation with custom shortcuts (Y, N, W, T keys)' },
+      { icon: '🌐', title: t.ssrReady, description: 'Fully compatible with Angular Universal, platform-safe' },
+      { icon: '⚙️', title: t.zonelessSupport, description: 'Works with or without Zone.js, OnPush change detection' },
+      { icon: '📤', title: t.exportImport, description: 'Export and import dates in JSON, CSV, and ICS formats' },
+      { icon: '🎬', title: t.animationCustomization, description: 'Configure animations with custom transitions and easing functions' },
+      { icon: '🎨', title: t.advancedStyling, description: 'CSS-in-JS support and theme builder for advanced customization' },
+      { icon: '📋', title: t.datePresets, description: 'Create and save user-defined date presets with local storage persistence' },
+    ];
+  });
 
   public inputProperties = [
     { property: 'mode', type: "'single' | 'range' | 'multiple'", default: "'single'", description: 'Selection mode' },
@@ -142,6 +170,9 @@ export class App implements OnInit, OnDestroy {
     { property: 'timeOnly', type: 'boolean', default: 'false', description: 'Display time picker only (no calendar)' },
     { property: 'displayFormat', type: 'string', default: 'undefined', description: 'Custom date format string (e.g., "MM/DD/YYYY hh:mm A"). Works with date adapters or built-in simple formatter.' },
     { property: 'rtl', type: 'boolean | null', default: 'null', description: 'Right-to-left layout support (auto-detects from document.dir or locale)' },
+    { property: 'locale', type: 'string', default: "'en-US'", description: 'Locale for date formatting and translations (e.g., "en-US", "es-ES", "fr-FR")' },
+    { property: 'translations', type: 'PartialDatepickerTranslations', default: 'undefined', description: 'Custom translations object to override default translations' },
+    { property: 'translationService', type: 'TranslationService', default: 'undefined', description: 'Custom translation service for integration with Angular i18n or other translation libraries' },
     { property: 'timezone', type: 'string', default: 'undefined', description: 'IANA timezone name for date formatting (e.g., "America/New_York", "UTC")' },
     { property: 'inline', type: "boolean | 'always' | 'auto'", default: 'false', description: 'Inline calendar display' },
     { property: 'theme', type: "'light' | 'dark'", default: "'light'", description: 'Theme variant' },
@@ -153,12 +184,15 @@ export class App implements OnInit, OnDestroy {
     { event: 'action', type: 'EventEmitter<{ type: string; payload?: any }>', description: 'Emitted on user actions' },
   ];
 
-  public programmaticActions = [
-    { label: 'Set Single Date', action: () => this.setSingleDateFromApi() },
-    { label: 'Set Date Range', action: () => this.setRangeFromApi() },
-    { label: 'Set Multiple Dates', action: () => this.setMultipleDatesFromApi() },
-    { label: 'Clear', action: () => this.clearProgrammaticValue() },
-  ];
+  public programmaticActions = computed(() => {
+    const t = this.t();
+    return [
+      { label: t.setSingleDate, action: () => this.setSingleDateFromApi() },
+      { label: t.setDateRange, action: () => this.setRangeFromApi() },
+      { label: t.setMultipleDates, action: () => this.setMultipleDatesFromApi() },
+      { label: t.clearProgrammatic, action: () => this.clearProgrammaticValue() },
+    ];
+  });
 
   public minDate: Date = getStartOfDay(this.today);
   public maxDate: Date = getEndOfDay(addMonths(this.today, 1));
@@ -524,6 +558,148 @@ export class PlainFormComponent {
 </ngxsmk-datepicker>
 
 <!-- Auto-detects RTL from locale or document.dir -->`;
+
+  public translationsCode = `import { Component } from '@angular/core';
+import { NgxsmkDatepickerComponent, PartialDatepickerTranslations } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-translations',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: \`
+    <ngxsmk-datepicker
+      [locale]="'es-ES'"
+      [translations]="customTranslations">
+    </ngxsmk-datepicker>
+  \`
+})
+export class TranslationsComponent {
+  customTranslations: PartialDatepickerTranslations = {
+    selectDate: 'Seleccionar fecha',
+    clear: 'Limpiar',
+    close: 'Cerrar',
+    previousMonth: 'Mes anterior',
+    nextMonth: 'Mes siguiente'
+  };
+}`;
+
+  public translationsAutoCode = `<!-- Automatic locale detection (demo app) -->
+<ngxsmk-datepicker
+  mode="single"
+  [locale]="detectedLocale">
+</ngxsmk-datepicker>
+
+<!-- Manual locale setting -->
+<ngxsmk-datepicker
+  mode="single"
+  [locale]="'es-ES'">
+</ngxsmk-datepicker>
+
+<!-- The datepicker automatically uses translations for the specified locale -->
+<!-- In production, you can detect the user's locale using: -->
+<!-- navigator.language or Intl.DateTimeFormat().resolvedOptions().locale -->`;
+
+  public translationServiceCode = `import { Component, inject } from '@angular/core';
+import { NgxsmkDatepickerComponent, TranslationService } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-i18n',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: \`
+    <ngxsmk-datepicker
+      [translationService]="myTranslationService">
+    </ngxsmk-datepicker>
+  \`
+})
+export class I18nComponent {
+  myTranslationService: TranslationService = inject(MyTranslationService);
+}`;
+
+  public availableLocales = [
+    { code: 'en-US', name: 'English', nativeName: 'English' },
+    { code: 'es-ES', name: 'Spanish', nativeName: 'Español' },
+    { code: 'fr-FR', name: 'French', nativeName: 'Français' },
+    { code: 'de-DE', name: 'German', nativeName: 'Deutsch' },
+    { code: 'ar-SA', name: 'Arabic (RTL)', nativeName: 'العربية' },
+    { code: 'zh-CN', name: 'Chinese (Simplified)', nativeName: '简体中文' },
+    { code: 'zh-TW', name: 'Chinese (Traditional)', nativeName: '繁體中文' },
+    { code: 'ja-JP', name: 'Japanese', nativeName: '日本語' },
+    { code: 'ko-KR', name: 'Korean', nativeName: '한국어' },
+    { code: 'pt-BR', name: 'Portuguese (Brazil)', nativeName: 'Português (Brasil)' },
+    { code: 'ru-RU', name: 'Russian', nativeName: 'Русский' },
+    { code: 'sv-SE', name: 'Swedish', nativeName: 'Svenska' },
+  ];
+
+  public selectedLocale = signal<string>('en-US');
+  public detectedLocale = signal<string | null>(null);
+  public isLocaleAutoDetected = signal<boolean>(false);
+  public languageDropdownOpen = signal<boolean>(false);
+  public customTranslations: PartialDatepickerTranslations = {};
+  public translationDatepickerValue: DatepickerValue = null;
+  
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly demoTranslationsService = inject(DemoTranslationsService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  
+  // Computed translations based on selected locale
+  public t = computed<DemoTranslations>(() => {
+    return this.demoTranslationsService.getTranslations(this.selectedLocale());
+  });
+
+  // New feature services
+  private readonly themeBuilder = inject(ThemeBuilderService);
+  private readonly datePresets = inject(DatePresetsService);
+
+  // Export/Import demo
+  public exportImportValue: DatepickerValue = null;
+  public exportJsonResult: string = '';
+  public exportCsvResult: string = '';
+  public exportIcsResult: string = '';
+  public importJsonInput: string = '';
+  public importCsvInput: string = '';
+  public importIcsInput: string = '';
+
+  // Theme builder demo
+  public customTheme: DatepickerTheme = {
+    colors: {
+      primary: '#6d28d9',
+      background: '#ffffff',
+      text: '#1f2937',
+    },
+    spacing: {
+      md: '12px',
+      lg: '16px',
+    },
+  };
+  public themeApplied: boolean = false;
+
+  // Date presets demo
+  public presetName: string = '';
+  public presetCategory: string = '';
+  public presetDescription: string = '';
+  public savedPresets: DatePreset[] = [];
+  public selectedPresetId: string | null = null;
+
+  // Animation config demo
+  public animationConfig: AnimationConfig = {
+    enabled: true,
+    duration: 150,
+    easing: 'ease-in-out',
+    property: 'all',
+    respectReducedMotion: true,
+  };
+
+  constructor() {
+    // Effect to ensure locale changes trigger change detection
+    effect(() => {
+      this.selectedLocale();
+      this.cdr.markForCheck();
+    });
+
+    // Load saved presets
+    this.loadPresets();
+  }
 
   public globalConfigCode = `import { ApplicationConfig } from '@angular/core';
 import { provideDatepickerConfig } from 'ngxsmk-datepicker';
@@ -971,7 +1147,113 @@ export class RangeFormComponent {
   ngOnInit(): void {
     this.updateTime();
     this.timeInterval = setInterval(() => this.updateTime(), 1000);
-    this.filteredNavigationItems = [...this.navigationItems];
+    this.detectAndSetLocale();
+  }
+  
+  /**
+   * Detects the user's browser locale and maps it to a supported locale
+   */
+  private detectAndSetLocale(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      // SSR: Use default locale
+      this.selectedLocale.set('en-US');
+      return;
+    }
+    
+    // Try multiple methods to detect locale
+    let browserLocale: string | null = null;
+    
+    // Method 1: navigator.language (most common)
+    if (typeof navigator !== 'undefined' && navigator.language) {
+      browserLocale = navigator.language;
+    }
+    
+    // Method 2: Intl.DateTimeFormat().resolvedOptions().locale (more accurate)
+    if (!browserLocale && typeof Intl !== 'undefined') {
+      try {
+        browserLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+      } catch {
+        // Fallback if Intl is not available
+      }
+    }
+    
+    // Method 3: navigator.languages (first preferred language)
+    if (!browserLocale && typeof navigator !== 'undefined' && navigator.languages && navigator.languages.length > 0) {
+      browserLocale = navigator.languages[0];
+    }
+    
+    if (browserLocale) {
+      const mappedLocale = this.mapBrowserLocaleToSupported(browserLocale);
+      this.detectedLocale.set(browserLocale);
+      this.selectedLocale.set(mappedLocale);
+      this.isLocaleAutoDetected.set(true);
+    } else {
+      // Fallback to default
+      this.selectedLocale.set('en-US');
+      this.isLocaleAutoDetected.set(false);
+    }
+  }
+  
+  /**
+   * Maps a browser locale to one of the supported locales
+   * Uses fallback logic: exact match -> language code match -> default
+   */
+  private mapBrowserLocaleToSupported(browserLocale: string): string {
+    const normalized = browserLocale.toLowerCase();
+    
+    // Try exact match first
+    const exactMatch = this.availableLocales.find(locale => 
+      locale.code.toLowerCase() === normalized
+    );
+    if (exactMatch) {
+      return exactMatch.code;
+    }
+    
+    // Try language code match (e.g., 'en' from 'en-CA' -> 'en-US')
+    const languageCode = normalized.split('-')[0];
+    const languageMatch = this.availableLocales.find(locale => {
+      const localeLang = locale.code.toLowerCase().split('-')[0];
+      return localeLang === languageCode;
+    });
+    if (languageMatch) {
+      return languageMatch.code;
+    }
+    
+    // Try common locale mappings
+    const localeMappings: { [key: string]: string } = {
+      'en-ca': 'en-US',
+      'en-au': 'en-GB',
+      'en-nz': 'en-GB',
+      'en-ie': 'en-GB',
+      'es-mx': 'es-ES',
+      'es-ar': 'es-ES',
+      'es-co': 'es-ES',
+      'es-cl': 'es-ES',
+      'fr-ca': 'fr-FR',
+      'fr-be': 'fr-FR',
+      'fr-ch': 'fr-FR',
+      'de-at': 'de-DE',
+      'de-ch': 'de-DE',
+      'pt-pt': 'pt-BR',
+      'zh-hk': 'zh-TW',
+      'zh-sg': 'zh-CN',
+      'ar-eg': 'ar-SA',
+      'ar-ae': 'ar-SA',
+      'ar-jo': 'ar-SA',
+      'ru-by': 'ru-RU',
+      'ru-kz': 'ru-RU',
+      'sv-fi': 'sv-SE',
+      'ko-kp': 'ko-KR',
+      'ja-jp': 'ja-JP',
+    };
+    
+    const mapped = localeMappings[normalized];
+    if (mapped) {
+      return mapped;
+    }
+    
+    // Default fallback
+    return 'en-US';
   }
 
   ngOnDestroy(): void {
@@ -980,6 +1262,49 @@ export class RangeFormComponent {
       clearInterval(this.timeInterval);
     }
   }
+  
+  /**
+   * Handles locale change from header selector
+   */
+  onLocaleChange(locale: string): void {
+    this.selectedLocale.set(locale);
+    this.isLocaleAutoDetected.set(false);
+    this.languageDropdownOpen.set(false);
+  }
+  
+  toggleLanguageDropdown(): void {
+    this.languageDropdownOpen.update(open => !open);
+  }
+  
+  closeLanguageDropdown(): void {
+    this.languageDropdownOpen.set(false);
+  }
+  
+  getSelectedLocaleName(): string {
+    const locale = this.availableLocales.find(l => l.code === this.selectedLocale());
+    return locale ? locale.nativeName : 'English';
+  }
+  
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target && !target.closest('.language-selector-wrapper')) {
+      this.languageDropdownOpen.set(false);
+    }
+  }
+  
+  /**
+   * Gets a short display name for the locale (e.g., "EN" for "en-US", "ES" for "es-ES")
+   */
+  getLocaleDisplayName(localeCode: string): string {
+    const locale = this.availableLocales.find(l => l.code === localeCode);
+    if (locale) {
+      // Return language code in uppercase (e.g., "EN", "ES", "FR")
+      const langCode = localeCode.split('-')[0].toUpperCase();
+      return langCode;
+    }
+    return localeCode.split('-')[0].toUpperCase();
+  }
 
   @HostListener('window:resize')
   onResize(): void {
@@ -987,22 +1312,12 @@ export class RangeFormComponent {
 
   onSearchChange(query: string): void {
     this.searchQuery = query;
-    if (!query || query.trim() === '') {
-      this.filteredNavigationItems = [...this.navigationItems];
-      return;
-    }
-
-    const lowerQuery = query.toLowerCase().trim();
-    this.filteredNavigationItems = this.navigationItems.filter(item => {
-      const labelMatch = item.label.toLowerCase().includes(lowerQuery);
-      const keywordMatch = (item.keywords || '').toLowerCase().includes(lowerQuery);
-      return labelMatch || keywordMatch;
-    });
+    // filteredNavigationItems is now computed, so it will update automatically
   }
 
   clearSearch(): void {
     this.searchQuery = '';
-    this.filteredNavigationItems = [...this.navigationItems];
+    // filteredNavigationItems is now computed, so it will update automatically
   }
 
   private updateTime(): void {
@@ -1045,4 +1360,336 @@ export class RangeFormComponent {
     }
     return JSON.stringify(value);
   }
+
+  // Export/Import methods
+  exportAsJson(): void {
+    if (this.exportImportValue) {
+      this.exportJsonResult = exportToJson(this.exportImportValue, { includeTime: true });
+    }
+  }
+
+  exportAsCsv(): void {
+    if (this.exportImportValue) {
+      this.exportCsvResult = exportToCsv(this.exportImportValue, { includeTime: true });
+    }
+  }
+
+  exportAsIcs(): void {
+    if (this.exportImportValue) {
+      this.exportIcsResult = exportToIcs(this.exportImportValue, {
+        includeTime: true,
+        summary: 'Date Selection',
+        description: 'Exported from ngxsmk-datepicker',
+      });
+    }
+  }
+
+  importFromJsonString(): void {
+    try {
+      this.exportImportValue = importFromJson(this.importJsonInput);
+      this.importJsonInput = '';
+    } catch (error) {
+      alert(`Import error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  importFromCsvString(): void {
+    try {
+      this.exportImportValue = importFromCsv(this.importCsvInput);
+      this.importCsvInput = '';
+    } catch (error) {
+      alert(`Import error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  importFromIcsString(): void {
+    try {
+      this.exportImportValue = importFromIcs(this.importIcsInput);
+      this.importIcsInput = '';
+    } catch (error) {
+      alert(`Import error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  downloadJson(): void {
+    if (this.exportJsonResult) {
+      const blob = new Blob([this.exportJsonResult], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'datepicker-export.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  downloadCsv(): void {
+    if (this.exportCsvResult) {
+      const blob = new Blob([this.exportCsvResult], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'datepicker-export.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  downloadIcs(): void {
+    if (this.exportIcsResult) {
+      const blob = new Blob([this.exportIcsResult], { type: 'text/calendar' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'datepicker-export.ics';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  // Theme builder methods
+  @ViewChild('themeBuilderDatepicker', { static: false, read: ElementRef }) themeBuilderDatepickerEl?: ElementRef<HTMLElement>;
+  
+  // Animation config methods
+  @ViewChild('animationDatepicker', { static: false, read: ElementRef }) animationDatepickerEl?: ElementRef<HTMLElement>;
+
+  ngAfterViewInit(): void {
+    // Apply initial theme after view is initialized
+    setTimeout(() => {
+      this.applyCustomTheme();
+      this.applyAnimationConfig();
+    }, 100);
+  }
+
+  applyCustomTheme(): void {
+    // Use setTimeout to ensure view is ready
+    setTimeout(() => {
+      if (this.themeBuilderDatepickerEl?.nativeElement) {
+        const datepickerElement = this.themeBuilderDatepickerEl.nativeElement;
+        // First remove any existing theme
+        this.themeBuilder.removeTheme(datepickerElement);
+        // Apply theme directly to datepicker element - this overrides :host variables
+        this.themeBuilder.applyTheme(this.customTheme, datepickerElement);
+        this.themeApplied = true;
+      }
+    }, 0);
+  }
+
+  removeCustomTheme(): void {
+    setTimeout(() => {
+      if (this.themeBuilderDatepickerEl?.nativeElement) {
+        // Remove theme from datepicker element
+        this.themeBuilder.removeTheme(this.themeBuilderDatepickerEl.nativeElement);
+        this.themeApplied = false;
+      }
+    }, 0);
+  }
+
+  onColorChange(): void {
+    // Automatically apply theme when color changes
+    this.applyCustomTheme();
+  }
+
+  generateStyleObject(): Record<string, string> {
+    return this.themeBuilder.generateStyleObject(this.customTheme);
+  }
+
+  // Animation config methods
+  onAnimationConfigChange(): void {
+    // Automatically apply animation config when it changes
+    this.applyAnimationConfig();
+  }
+
+  applyAnimationConfig(): void {
+    setTimeout(() => {
+      if (this.animationDatepickerEl?.nativeElement) {
+        const element = this.animationDatepickerEl.nativeElement;
+        const prefersReducedMotion = this.animationConfig.respectReducedMotion && 
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!this.animationConfig.enabled || prefersReducedMotion) {
+          element.style.setProperty('--datepicker-transition-duration', '0ms', 'important');
+          element.style.setProperty('--datepicker-transition', 'none', 'important');
+          return;
+        }
+
+        const duration = `${this.animationConfig.duration || 150}ms`;
+        const easing = this.animationConfig.easing || 'ease-in-out';
+        const property = this.animationConfig.property || 'all';
+
+        element.style.setProperty('--datepicker-transition-duration', duration, 'important');
+        element.style.setProperty('--datepicker-transition-easing', easing, 'important');
+        element.style.setProperty('--datepicker-transition-property', property, 'important');
+        element.style.setProperty(
+          '--datepicker-transition',
+          `${property} ${duration} ${easing}`,
+          'important'
+        );
+      }
+    }, 0);
+  }
+
+  // Date presets methods
+  savePreset(): void {
+    if (!this.presetName || !this.exportImportValue) {
+      alert('Please provide a preset name and select a date value');
+      return;
+    }
+
+    this.datePresets.savePreset({
+      name: this.presetName,
+      value: this.exportImportValue,
+      category: this.presetCategory || undefined,
+      description: this.presetDescription || undefined,
+    });
+
+    this.presetName = '';
+    this.presetCategory = '';
+    this.presetDescription = '';
+    this.loadPresets();
+  }
+
+  loadPresets(): void {
+    this.savedPresets = this.datePresets.getAllPresets();
+  }
+
+  applyPreset(presetId: string): void {
+    const value = this.datePresets.applyPreset(presetId);
+    if (value) {
+      this.exportImportValue = value;
+      this.selectedPresetId = presetId;
+    }
+  }
+
+  deletePreset(presetId: string): void {
+    if (confirm('Are you sure you want to delete this preset?')) {
+      this.datePresets.deletePreset(presetId);
+      this.loadPresets();
+      if (this.selectedPresetId === presetId) {
+        this.selectedPresetId = null;
+      }
+    }
+  }
+
+  exportPresets(): void {
+    const json = this.datePresets.exportPresets();
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'datepicker-presets.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  importPresets(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const result = this.datePresets.importPresets(e.target?.result as string, true);
+        alert(`Imported ${result.imported} presets. ${result.errors} errors.`);
+        this.loadPresets();
+      } catch (error) {
+        alert(`Import error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Code examples
+  public exportImportCode = `import { exportToJson, exportToCsv, exportToIcs, importFromJson, importFromCsv, importFromIcs } from 'ngxsmk-datepicker';
+
+// Export to JSON
+const json = exportToJson(dateValue, { includeTime: true });
+
+// Export to CSV
+const csv = exportToCsv(dateValue, { includeTime: true });
+
+// Export to ICS (iCalendar)
+const ics = exportToIcs(dateValue, { 
+  includeTime: true,
+  summary: 'Event Title',
+  description: 'Event Description'
+});
+
+// Import from JSON
+const importedValue = importFromJson(jsonString);
+
+// Import from CSV
+const importedValue = importFromCsv(csvString);
+
+// Import from ICS
+const importedValue = importFromIcs(icsString);`;
+
+  public animationConfigCode = `import { provideDatepickerConfig, AnimationConfig } from 'ngxsmk-datepicker';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideDatepickerConfig({
+      animations: {
+        enabled: true,
+        duration: 200, // milliseconds
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        property: 'all',
+        respectReducedMotion: true, // Respects prefers-reduced-motion
+      }
+    })
+  ]
+};`;
+
+  public themeBuilderCode = `import { ThemeBuilderService, DatepickerTheme } from 'ngxsmk-datepicker';
+
+@Component({...})
+export class MyComponent {
+  private themeBuilder = inject(ThemeBuilderService);
+
+  applyTheme() {
+    const theme: DatepickerTheme = {
+      colors: {
+        primary: '#6d28d9',
+        background: '#ffffff',
+        text: '#1f2937',
+      },
+      spacing: {
+        md: '12px',
+        lg: '16px',
+      },
+    };
+
+    // Apply globally
+    this.themeBuilder.applyTheme(theme);
+
+    // Or generate CSS-in-JS style object
+    const styles = this.themeBuilder.generateStyleObject(theme);
+  }
+}`;
+
+  public datePresetsCode = `import { DatePresetsService } from 'ngxsmk-datepicker';
+
+@Component({...})
+export class MyComponent {
+  private presets = inject(DatePresetsService);
+
+  savePreset() {
+    this.presets.savePreset({
+      name: 'Next Week',
+      value: nextWeekDate,
+      category: 'Quick Select',
+      description: 'Selects next week'
+    });
+  }
+
+  loadPreset(id: string) {
+    const value = this.presets.applyPreset(id);
+    // Use the value...
+  }
+
+  getAllPresets() {
+    return this.presets.getAllPresets();
+  }
+}`;
 }

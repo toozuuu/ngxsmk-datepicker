@@ -191,7 +191,6 @@ import { formatInTimeZone } from 'date-fns-tz';
       (valueChange)="onDateChange($event)">
     </ngxsmk-datepicker>
     
-    <!-- Custom formatting with date-fns-tz -->
     <p>Formatted: {{ formatDate(date) }}</p>
   `
 })

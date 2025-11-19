@@ -25,7 +25,7 @@ export class DateFnsAdapter implements DateAdapter {
   constructor() {
     try {
       this.dateFns = require('date-fns');
-    } catch (e) {
+    } catch {
       throw new Error('date-fns is not installed. Please install it: npm install date-fns');
     }
   }

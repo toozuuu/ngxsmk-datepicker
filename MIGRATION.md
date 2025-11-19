@@ -4,10 +4,266 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
-- [v1.9.0 → v2.0.0](#v190---v200) (Future)
+- [v1.9.11 → v1.10.0](#v1911---v1100)
+- [v1.9.10 → v1.9.11](#v1910---v1911)
+- [v1.9.9 → v1.9.10](#v199---v1910)
+- [v1.9.8 → v1.9.9](#v198---v199)
+- [v1.9.7 → v1.9.8](#v197---v198)
+- [v1.9.6 → v1.9.7](#v196---v197)
+- [v1.9.5 → v1.9.6](#v195---v196)
+- [v1.9.4 → v1.9.5](#v194---v195)
+- [v1.9.3 → v1.9.4](#v193---v194)
+- [v1.9.2 → v1.9.3](#v192---v193)
+- [v1.9.1 → v1.9.2](#v191---v192)
 - [v1.9.0 → v1.9.1](#v190---v191)
 - [v1.8.0 → v1.9.0](#v180---v190)
+- [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.11 → v1.10.0
+
+### Changed
+
+- **Version Update**: Updated to version 1.10.0
+- **Stable Release**: Version 1.10.0 is the current stable version
+
+### Migration Steps
+
+No code changes required. This is a minor version update with backward compatibility:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.10.0
+   ```
+
+2. Rebuild your application:
+   ```bash
+   npm run build
+   ```
+
+3. Run tests to ensure everything works:
+   ```bash
+   npm test
+   ```
+
+**Note**: This version maintains full backward compatibility with v1.9.11. All existing code will continue to work without modifications.
+
+## v1.9.10 → v1.9.11
+
+### Fixed
+
+- **Moment.js Integration**: Fixed critical issue where Moment.js objects with custom date formats would not populate correctly
+  - Added support for Moment.js objects via `.toDate()` method
+  - Enhanced format token parsing (YYYY, YY, MM, M, DD, D, hh, h, HH, H, mm, m, ss, s, a, A)
+  - Improved TypeScript compatibility with dynamic object properties
+
+### Migration Steps
+
+No code changes required. This is a bug fix release:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.11
+   ```
+
+2. If you're using Moment.js with custom formats, the datepicker will now properly handle Moment.js objects.
+
+## v1.9.9 → v1.9.10
+
+### Fixed
+
+- **Async Database Value Loading**: Enhanced datepicker to properly handle database values that load asynchronously
+  - Added fallback sync mechanisms for async database loads
+  - Extended sync duration to 30 seconds with 100ms check intervals
+- **TypeScript Compilation Error**: Fixed `EffectRef` type error when using Angular 17+ `effect()` API
+- **Test Configuration**: Fixed test configuration for Angular 17+ compatibility
+
+### Migration Steps
+
+No code changes required. This is a bug fix release:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.10
+   ```
+
+2. If you're experiencing issues with database values not populating, this version should resolve them.
+
+## v1.9.8 → v1.9.9
+
+### Fixed
+
+- **Database Value Population**: Fixed critical issue where datepicker would not populate with values from database when using `[field]` input binding
+  - Now properly handles Date objects, string dates, range objects, and arrays of dates
+
+### Migration Steps
+
+No code changes required. This is a bug fix release:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.9
+   ```
+
+## v1.9.7 → v1.9.8
+
+### Fixed
+
+- **Date Selection Reset Issue**: Fixed critical bug where selected dates would reset to today's date when using `[field]` input binding
+  - Fixed date mutation issues
+  - Added internal update flag to prevent value resets
+
+### Migration Steps
+
+No code changes required. This is a bug fix release:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.8
+   ```
+
+## v1.9.6 → v1.9.7
+
+### Fixed
+
+- **Calendar Population**: Fixed critical issue where datepicker calendar would not populate with dates when opened
+  - Fixed issue when multiple datepickers were present in the same form
+
+### Migration Steps
+
+No code changes required. This is a bug fix release:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.7
+   ```
+
+## v1.9.5 → v1.9.6
+
+### Fixed
+
+- **Multiple Datepicker Management**: Fixed issue where multiple datepickers in the same form would open in the same centered location
+- **Outside Click Detection**: Improved click detection to properly close datepicker
+- **Auto-close Other Datepickers**: When opening a datepicker, all other open datepickers are now automatically closed
+- **Mobile Datepicker**: Fixed issues with mobile datepicker opening and closing
+- **Select Box Cursor**: Added pointer cursor to all select boxes
+
+### Migration Steps
+
+No code changes required. This is a bug fix release:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.6
+   ```
+
+## v1.9.4 → v1.9.5
+
+### Fixed
+
+- **Angular 21+ Signal Forms Type Compatibility**: Fixed TypeScript compilation error with Angular 21+ Signal Forms
+  - Fixed `Type '() => string' is not assignable to type 'never'` error when using `[field]` input
+  - Updated `SignalFormField` type definition to be compatible with Angular 21's `FieldTree<Date, string>` types
+  - Maintains backward compatibility with Angular 17-20
+
+### Migration Steps
+
+No code changes required. This is a bug fix release:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.5
+   ```
+
+2. If you were experiencing TypeScript errors with Signal Forms in Angular 21+, they should now be resolved.
+
+## v1.9.3 → v1.9.4
+
+### Added
+
+- **Custom Date Format**: New `[displayFormat]` input property to display dates in custom formats
+  - Supports format strings like "MM/DD/YYYY hh:mm A"
+  - Works with date adapters (date-fns, dayjs, luxon) or built-in simple formatter
+  - Supports common format tokens: YYYY, MM, DD, hh, mm, A, etc.
+
+### Fixed
+
+- **Time Selection Dropdowns**: Fixed visibility issues with time selection dropdowns
+  - Dropdowns now properly display and are not clipped by parent containers
+  - Improved z-index handling for time selection dropdowns
+
+### Migration Steps
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.4
+   ```
+
+2. **Optional**: Use the new `[displayFormat]` input for custom date formatting:
+   ```html
+   <ngxsmk-datepicker
+     [displayFormat]="'MM/DD/YYYY hh:mm A'"
+     mode="single">
+   </ngxsmk-datepicker>
+   ```
+
+## v1.9.2 → v1.9.3
+
+### Added
+
+- **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar
+  - Hides calendar grid and shows only time controls (hour, minute, AM/PM)
+  - Automatically enables `showTime` when `timeOnly` is true
+  - Perfect for time selection scenarios where date is not needed
+
+### Fixed
+
+- **Test Suite**: Fixed 25+ failing tests across multiple test files
+  - All 353 tests now pass successfully
+
+### Migration Steps
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.3
+   ```
+
+2. **Optional**: Use the new `[timeOnly]` input for time-only selection:
+   ```html
+   <ngxsmk-datepicker
+     [timeOnly]="true"
+     placeholder="Select Time">
+   </ngxsmk-datepicker>
+   ```
+
+## v1.9.1 → v1.9.2
+
+### Changed
+
+- **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings
+  - Main bundle: ~127KB (source maps excluded from published package)
+  - Enhanced tree-shaking with optimized imports and compiler options
+  - Source maps automatically removed from production builds
+
+### Fixed
+
+- Test suite configuration improvements
+- Bundle analysis now correctly excludes source maps
+- Build warnings from conflicting export conditions resolved
+
+### Migration Steps
+
+No code changes required. This is a transparent update with optimizations:
+
+1. Update package version:
+   ```bash
+   npm install ngxsmk-datepicker@^1.9.2
+   ```
+
+2. Rebuild your application to benefit from bundle optimizations:
+   ```bash
+   npm run build
+   ```
 
 ## v1.9.0 → v1.9.1
 
@@ -277,7 +533,18 @@ If you encounter issues during migration:
 
 | ngxsmk-datepicker | Angular | Node.js |
 |-------------------|---------|---------|
-| 1.9.1+ | 17-21 | 18+ |
+| 1.10.0+ | 17-21 | 18+ |
+| 1.9.11 | 17-21 | 18+ |
+| 1.9.10 | 17-21 | 18+ |
+| 1.9.9 | 17-21 | 18+ |
+| 1.9.8 | 17-21 | 18+ |
+| 1.9.7 | 17-21 | 18+ |
+| 1.9.6 | 17-21 | 18+ |
+| 1.9.5 | 17-21 | 18+ |
+| 1.9.4 | 17-21 | 18+ |
+| 1.9.3 | 17-21 | 18+ |
+| 1.9.2 | 17-21 | 18+ |
+| 1.9.1 | 17-21 | 18+ |
 | 1.9.0 | 17-21 | 18+ |
 | 1.8.0 | 17-21 | 18+ |
 | 1.7.0 | 17-20 | 18+ |

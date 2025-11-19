@@ -1,67 +1,12 @@
 :host {
-  --datepicker-primary-color: #6d28d9;
-  --datepicker-primary-contrast: #ffffff;
-  --datepicker-range-background: #f5f3ff;
-  --datepicker-background: #ffffff;
-  --datepicker-text-color: #1f2937;
-  --datepicker-subtle-text-color: #6b7280;
-  --datepicker-border-color: #e5e7eb;
-  --datepicker-hover-background: #f3f4f6;
-  --datepicker-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --datepicker-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --datepicker-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --datepicker-font-size-base: 14px;
-  --datepicker-font-size-sm: 12px;
-  --datepicker-font-size-lg: 16px;
-  --datepicker-font-size-xl: 18px;
-  --datepicker-line-height: 1.5;
-  --datepicker-spacing-xs: 4px;
-  --datepicker-spacing-sm: 8px;
-  --datepicker-spacing-md: 12px;
-  --datepicker-spacing-lg: 16px;
-  --datepicker-spacing-xl: 20px;
-  --datepicker-spacing-2xl: 24px;
-  --datepicker-radius-sm: 6px;
-  --datepicker-radius-md: 8px;
-  --datepicker-radius-lg: 12px;
-  --datepicker-radius-xl: 16px;
-  --datepicker-transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-block;
   position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: var(--datepicker-font-family);
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   overflow: visible;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :host {
-    --datepicker-transition: none;
-  }
-  
-  :host *,
-  :host *::before,
-  :host *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-:host(.dark-theme) {
-  --datepicker-range-background: rgba(139, 92, 246, 0.15);
-  --datepicker-background: #1f2937;
-  --datepicker-text-color: #f3f4f6;
-  --datepicker-subtle-text-color: #9ca3af;
-  --datepicker-border-color: #374151;
-  --datepicker-hover-background: #374151;
-  --datepicker-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --datepicker-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
 .ngxsmk-datepicker-wrapper {
@@ -72,7 +17,7 @@
 }
 
 .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open {
-  z-index: 2147483647;
+  z-index: var(--datepicker-z-index-base);
   position: relative;
   isolation: isolate;
 }
@@ -126,7 +71,7 @@
     width: 100vw !important;
     height: 100vh !important;
     height: 100dvh !important;
-    z-index: 2147483646 !important;
+    z-index: var(--datepicker-z-index-backdrop) !important;
     background: rgba(0, 0, 0, 0.5) !important;
     -webkit-backdrop-filter: blur(4px) !important;
     backdrop-filter: blur(4px) !important;
@@ -191,9 +136,6 @@
   box-shadow: var(--datepicker-shadow-md);
 }
 
-.ngxsmk-input-group.has-value {
-  border-color: var(--datepicker-primary-color);
-}
 
 .ngxsmk-input-group.disabled {
   cursor: not-allowed;
@@ -295,11 +237,11 @@
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  z-index: 2147483647;
-  -webkit-animation: fadeInDown 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  -moz-animation: fadeInDown 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  -o-animation: fadeInDown 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: fadeInDown 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: var(--datepicker-z-index-base);
+  -webkit-animation: fadeInDown var(--datepicker-transition-duration) var(--datepicker-transition-easing);
+  -moz-animation: fadeInDown var(--datepicker-transition-duration) var(--datepicker-transition-easing);
+  -o-animation: fadeInDown var(--datepicker-transition-duration) var(--datepicker-transition-easing);
+  animation: fadeInDown var(--datepicker-transition-duration) var(--datepicker-transition-easing);
   width: 100%;
   min-width: 100%;
   max-width: 100%;
@@ -621,7 +563,7 @@
   margin: 0;
   padding: 0;
   position: relative;
-  z-index: 2147483647;
+  z-index: var(--datepicker-z-index-base);
   pointer-events: auto;
 }
 
@@ -684,7 +626,7 @@
   box-sizing: border-box;
   flex-shrink: 0;
   position: relative;
-  z-index: 2147483647;
+  z-index: var(--datepicker-z-index-base);
 }
 
 .ngxsmk-ranges-container ul {
@@ -804,8 +746,7 @@
   cursor: pointer;
 }
 
-.ngxsmk-month-year-selects ngxsmk-custom-select,
-.ngxsmk-month-year-selects app-custom-select {
+.ngxsmk-month-year-selects ngxsmk-custom-select {
   cursor: pointer;
 }
 
@@ -1306,8 +1247,7 @@
   flex-shrink: 0;
 }
 
-.ngxsmk-time-selection ngxsmk-custom-select,
-.ngxsmk-time-selection app-custom-select {
+.ngxsmk-time-selection ngxsmk-custom-select {
   --custom-select-width: 75px;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
@@ -1317,14 +1257,12 @@
   cursor: pointer;
 }
 
-.ngxsmk-time-selection ngxsmk-custom-select[data-open="true"],
-.ngxsmk-time-selection app-custom-select[data-open="true"] {
+.ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] {
   z-index: 10000000 !important;
   position: relative;
 }
 
-.ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] .ngxsmk-options-panel,
-.ngxsmk-time-selection app-custom-select[data-open="true"] .ngxsmk-options-panel {
+.ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] .ngxsmk-options-panel {
   z-index: 10000001 !important;
   position: absolute !important;
 }
@@ -1715,19 +1653,10 @@
     min-width: fit-content;
     max-width: 100%;
     position: relative;
-    z-index: 2147483647;
+    z-index: var(--datepicker-z-index-base);
   }
 }
 
-@media (min-width: 360px) { }
-
-@media (min-width: 375px) { }
-
-@media (min-width: 390px) { }
-
-@media (min-width: 414px) { }
-
-@media (min-width: 430px) { }
 
 @media (min-width: 600px) and (max-width: 1023px) {
   .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
@@ -2012,9 +1941,6 @@
   }
 }
 
-@media (min-width: 768px) { }
-
-@media (min-width: 834px) { }
 
 @media (min-width: 1024px) {
   .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
@@ -2124,9 +2050,6 @@
   }
 }
 
-@media (orientation: portrait) { }
-
-@media (orientation: landscape) { }
 
 @media (hover: none) and (pointer: coarse) {
   .ngxsmk-nav-button:hover:not(:disabled) {
@@ -2159,47 +2082,9 @@
   }
 }
 
-@media (hover: hover) and (pointer: fine) { }
-
-@media 
-  only screen and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (min-resolution: 192dpi) { }
-
-@media 
-  only screen and (-webkit-min-device-pixel-ratio: 3),
-  only screen and (min-resolution: 288dpi) { }
-
-@media (min-width: 1280px) { }
-
-@media (min-width: 1440px) { }
-
-@media (min-width: 1920px) { }
 
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-@media (prefers-contrast: high) {
-  :host {
-    --datepicker-border-color: #000000;
-    --datepicker-text-color: #000000;
-    --datepicker-subtle-text-color: #666666;
-  }
-
-  .ngxsmk-day-cell.disabled {
-    opacity: 0.3;
-  }
-
-  .ngxsmk-day-cell:focus-visible .ngxsmk-day-number {
-    outline: 3px solid;
-    outline-offset: 2px;
-  }
-}
+/* High contrast and reduced motion are handled in variables.css */
 
 @media print {
   .ngxsmk-datepicker-wrapper {
@@ -2267,14 +2152,14 @@
 .ngxsmk-year-cell,
 .ngxsmk-decade-cell {
   padding: var(--datepicker-spacing-md);
-  border: 1px solid var(--datepicker-border-color, #e5e7eb);
-  border-radius: var(--datepicker-border-radius, 8px);
-  background: var(--datepicker-background, #fff);
-  color: var(--datepicker-text-color, #1f2937);
+  border: 1px solid var(--datepicker-border-color);
+  border-radius: var(--datepicker-border-radius);
+  background: var(--datepicker-background);
+  color: var(--datepicker-text-color);
   font-size: var(--datepicker-font-size-base);
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: var(--datepicker-transition);
   text-align: center;
 }
 
@@ -2284,19 +2169,19 @@
 
 .ngxsmk-year-cell:hover:not(:disabled),
 .ngxsmk-decade-cell:hover:not(:disabled) {
-  background: var(--datepicker-hover-background, #f3f4f6);
-  border-color: var(--datepicker-primary-color, #6d28d9);
+  background: var(--datepicker-hover-background);
+  border-color: var(--datepicker-primary-color);
 }
 
 .ngxsmk-year-cell.selected,
 .ngxsmk-decade-cell.selected {
-  background: var(--datepicker-primary-color, #6d28d9);
-  color: var(--datepicker-primary-contrast, #fff);
-  border-color: var(--datepicker-primary-color, #6d28d9);
+  background: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  border-color: var(--datepicker-primary-color);
 }
 
 .ngxsmk-year-cell.today {
-  border-color: var(--datepicker-primary-color, #6d28d9);
+  border-color: var(--datepicker-primary-color);
   font-weight: 600;
 }
 
@@ -2314,23 +2199,23 @@
   justify-content: center;
   font-size: var(--datepicker-font-size-base);
   font-weight: 600;
-  color: var(--datepicker-text-color, #1f2937);
+  color: var(--datepicker-text-color);
 }
 
 .ngxsmk-view-toggle {
   background: transparent;
   border: none;
-  color: var(--datepicker-text-color, #1f2937);
+  color: var(--datepicker-text-color);
   font-size: var(--datepicker-font-size-base);
   font-weight: 600;
   cursor: pointer;
   padding: var(--datepicker-spacing-sm) var(--datepicker-spacing-md);
-  border-radius: var(--datepicker-border-radius, 8px);
-  transition: background 0.15s ease;
+  border-radius: var(--datepicker-border-radius);
+  transition: var(--datepicker-transition);
 }
 
 .ngxsmk-view-toggle:hover:not(:disabled) {
-  background: var(--datepicker-hover-background, #f3f4f6);
+  background: var(--datepicker-hover-background);
 }
 
 .ngxsmk-view-toggle:disabled {
@@ -2357,14 +2242,14 @@
 .ngxsmk-timeline-zoom-out {
   width: 32px;
   height: 32px;
-  border: 1px solid var(--datepicker-border-color, #e5e7eb);
-  border-radius: var(--datepicker-border-radius, 8px);
-  background: var(--datepicker-background, #fff);
-  color: var(--datepicker-text-color, #1f2937);
+  border: 1px solid var(--datepicker-border-color);
+  border-radius: var(--datepicker-border-radius);
+  background: var(--datepicker-background);
+  color: var(--datepicker-text-color);
   font-size: var(--datepicker-font-size-lg);
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: var(--datepicker-transition);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2372,8 +2257,8 @@
 
 .ngxsmk-timeline-zoom-in:hover:not(:disabled),
 .ngxsmk-timeline-zoom-out:hover:not(:disabled) {
-  background: var(--datepicker-hover-background, #f3f4f6);
-  border-color: var(--datepicker-primary-color, #6d28d9);
+  background: var(--datepicker-hover-background);
+  border-color: var(--datepicker-primary-color);
 }
 
 .ngxsmk-timeline-zoom-in:disabled,
@@ -2384,7 +2269,7 @@
 
 .ngxsmk-timeline-range {
   font-size: var(--datepicker-font-size-sm);
-  color: var(--datepicker-subtle-text-color, #6b7280);
+  color: var(--datepicker-subtle-text-color);
   font-weight: 500;
 }
 
@@ -2405,12 +2290,12 @@
 .ngxsmk-timeline-month {
   min-width: 80px;
   padding: var(--datepicker-spacing-md);
-  border: 1px solid var(--datepicker-border-color, #e5e7eb);
-  border-radius: var(--datepicker-border-radius, 8px);
-  background: var(--datepicker-background, #fff);
-  color: var(--datepicker-text-color, #1f2937);
+  border: 1px solid var(--datepicker-border-color);
+  border-radius: var(--datepicker-border-radius);
+  background: var(--datepicker-background);
+  color: var(--datepicker-text-color);
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: var(--datepicker-transition);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -2418,14 +2303,14 @@
 }
 
 .ngxsmk-timeline-month:hover:not(.selected) {
-  background: var(--datepicker-hover-background, #f3f4f6);
-  border-color: var(--datepicker-primary-color, #6d28d9);
+  background: var(--datepicker-hover-background);
+  border-color: var(--datepicker-primary-color);
 }
 
 .ngxsmk-timeline-month.selected {
-  background: var(--datepicker-primary-color, #6d28d9);
-  color: var(--datepicker-primary-contrast, #fff);
-  border-color: var(--datepicker-primary-color, #6d28d9);
+  background: var(--datepicker-primary-color);
+  color: var(--datepicker-primary-contrast);
+  border-color: var(--datepicker-primary-color);
 }
 
 .ngxsmk-timeline-month-label {
@@ -2453,13 +2338,13 @@
 .ngxsmk-time-slider-label {
   font-size: var(--datepicker-font-size-sm);
   font-weight: 600;
-  color: var(--datepicker-text-color, #1f2937);
+  color: var(--datepicker-text-color);
 }
 
 .ngxsmk-time-slider-value {
   font-size: var(--datepicker-font-size-base);
   font-weight: 600;
-  color: var(--datepicker-primary-color, #6d28d9);
+  color: var(--datepicker-primary-color);
   font-variant-numeric: tabular-nums;
 }
 
@@ -2471,7 +2356,7 @@
   width: 100%;
   height: 8px;
   border-radius: 4px;
-  background: var(--datepicker-hover-background, #f3f4f6);
+  background: var(--datepicker-hover-background);
   outline: none;
   -webkit-appearance: none;
   appearance: none;
@@ -2482,29 +2367,29 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--datepicker-primary-color, #6d28d9);
+  background: var(--datepicker-primary-color);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: var(--datepicker-transition);
 }
 
 .ngxsmk-time-slider::-webkit-slider-thumb:hover {
   transform: scale(1.1);
-  box-shadow: 0 2px 8px rgba(109, 40, 217, 0.3);
+  box-shadow: var(--datepicker-shadow-md);
 }
 
 .ngxsmk-time-slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--datepicker-primary-color, #6d28d9);
+  background: var(--datepicker-primary-color);
   cursor: pointer;
   border: none;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: var(--datepicker-transition);
 }
 
 .ngxsmk-time-slider::-moz-range-thumb:hover {
   transform: scale(1.1);
-  box-shadow: 0 2px 8px rgba(109, 40, 217, 0.3);
+  box-shadow: var(--datepicker-shadow-md);
 }
 
 .ngxsmk-time-slider:disabled {

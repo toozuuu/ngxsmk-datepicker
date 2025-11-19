@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { NgxsmkDatepickerComponent } from './ngxsmk-datepicker';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { moduleMetadata, applicationConfig } from '@storybook/angular';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { importProvidersFrom } from '@angular/core';
 
 const meta: Meta<NgxsmkDatepickerComponent> = {
