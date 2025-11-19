@@ -27,6 +27,7 @@ This document provides migration instructions for upgrading between major versio
 
 - **valueChange Event Bug**: Fixed issue where `(valueChange)` event was emitting `null` instead of the date value for range mode when using template-driven forms with `[(ngModel)]`
 - **Range Mode Date Selection**: Fixed issue where dates became disabled/unclickable after navigating to previous or next months in range mode
+- **Moment.js Object Handling**: Fixed issue where Moment.js objects in range values and arrays were not being properly normalized and converted to Date objects
 
 ### Changed
 

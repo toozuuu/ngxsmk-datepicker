@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed `onYearClick()`, `onYearSelectChange()`, and `onDecadeClick()` to update signals
   - Ensures memoized `isDateDisabledMemo` function uses correct month/year values after navigation
   - Dates in previous/next months are now properly selectable without needing to close and reopen the datepicker
+- **Moment.js Object Handling**: Fixed issue where Moment.js objects in range values and arrays were not being properly normalized
+  - Enhanced `_normalizeValue()` method to explicitly detect and convert Moment.js objects in range objects (`{ start, end }`)
+  - Enhanced array value normalization to properly handle Moment.js objects in multiple date selections
+  - Ensures Moment.js objects are correctly converted to Date objects before emission in `valueChange` event
 
 ### Changed
 - **Version Update**: Updated to version 1.9.13

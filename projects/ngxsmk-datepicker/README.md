@@ -739,6 +739,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 ### **v1.9.13** (Stable)
 - 🐛 **Bug Fixes**: Fixed `valueChange` event emitting null for range mode with ngModel
 - 🐛 **Bug Fixes**: Fixed date selection becoming disabled after month navigation in range mode
+- 🐛 **Bug Fixes**: Fixed Moment.js object handling in range values and arrays
 - 🎉 **Version Update**: Updated to version 1.9.13
 - ✅ **Stable Release**: Version 1.9.13 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.12
