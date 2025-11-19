@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.13 → v1.9.14](#v1913---v1914)
 - [v1.9.12 → v1.9.13](#v1912---v1913)
 - [v1.9.11 → v1.9.12](#v1911---v1912)
 - [v1.9.10 → v1.9.11](#v1910---v1911)
@@ -20,6 +21,33 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.13 → v1.9.14
+
+### Fixed
+
+- **Date Picker Selection Issue**: Fixed issue where date picker was not working properly when selecting dates, especially in range mode
+  - Added proper change detection scheduling when setting start date in range mode
+  - Added memo cache invalidation to ensure UI updates correctly reflect selected dates
+  - Fixed UI not updating when only start date is selected in range mode
+- **Moment.js Timezone Offset Preservation**: Fixed issue where Moment.js objects with timezone offsets (e.g., `moment().utcOffset('-0600')`) were not preserving the timezone offset when converted to Date objects
+  - Added `momentToDate()` method that detects and preserves timezone offsets from Moment.js objects
+  - Now correctly handles `moment().utcOffset('-0600')` without requiring `toDate()` which loses timezone information
+
+### Changed
+
+- **Version Update**: Updated to version 1.9.14
+- **Stable Release**: Version 1.9.14 is the current stable version
+
+### Migration Steps
+
+No migration steps required. This is a patch version with bug fixes only. Simply update your package version:
+
+```bash
+npm install ngxsmk-datepicker@1.9.14
+```
+
+All fixes are backward compatible and require no code changes.
 
 ## v1.9.12 → v1.9.13
 
@@ -557,7 +585,7 @@ If you encounter issues during migration:
 
 | ngxsmk-datepicker | Angular | Node.js |
 |-------------------|---------|---------|
-| 1.9.13+ | 17-21 | 18+ |
+| 1.9.14+ | 17-21 | 18+ |
 | 1.9.11 | 17-21 | 18+ |
 | 1.9.10 | 17-21 | 18+ |
 | 1.9.9 | 17-21 | 18+ |

@@ -2488,23 +2488,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (val instanceof Date) {
       return this._normalizeDate(val) as DatepickerValue;
     } else if (this.isMomentObject(val)) {
-      const momentObj = val as { toDate: () => Date };
-      return this._normalizeDate(momentObj.toDate()) as DatepickerValue;
+      const momentObj = val as { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string };
+      return this._normalizeDate(this.momentToDate(momentObj)) as DatepickerValue;
     } else if (typeof val === 'object' && val !== null && 'start' in val && 'end' in val) {
       const rangeVal = val as { start: unknown; end: unknown };
       let start: Date | null;
       let end: Date | null;
       
       if (this.isMomentObject(rangeVal.start)) {
-        const momentStart = rangeVal.start as { toDate: () => Date };
-        start = this._normalizeDate(momentStart.toDate());
+        const momentStart = rangeVal.start as { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string };
+        start = this._normalizeDate(this.momentToDate(momentStart));
       } else {
         start = this._normalizeDate(rangeVal.start as DateInput);
       }
       
       if (this.isMomentObject(rangeVal.end)) {
-        const momentEnd = rangeVal.end as { toDate: () => Date };
-        end = this._normalizeDate(momentEnd.toDate());
+        const momentEnd = rangeVal.end as { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string };
+        end = this._normalizeDate(this.momentToDate(momentEnd));
       } else {
         end = this._normalizeDate(rangeVal.end as DateInput);
       }
@@ -2516,8 +2516,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     } else if (Array.isArray(val)) {
       return val.map(d => {
         if (this.isMomentObject(d)) {
-          const momentObj = d as { toDate: () => Date };
-          return this._normalizeDate(momentObj.toDate());
+          const momentObj = d as { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string };
+          return this._normalizeDate(this.momentToDate(momentObj));
         }
         return this._normalizeDate(d as DateInput);
       }).filter((d): d is Date => d !== null) as DatepickerValue;
@@ -2545,6 +2545,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       typeof obj['isMoment'] === 'function' &&
       typeof (obj['isMoment'] as () => boolean)() === 'boolean' &&
       (obj['isMoment'] as () => boolean)() === true;
+  }
+
+  /**
+   * Convert a Moment.js object to a Date, preserving timezone offset
+   */
+  private momentToDate(momentObj: { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string }): Date {
+    if (typeof momentObj.utcOffset === 'function' && typeof momentObj.format === 'function') {
+      const offset = momentObj.utcOffset();
+      if (offset !== undefined && offset !== null) {
+        try {
+          const formatted = momentObj.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+          const date = new Date(formatted);
+          if (!isNaN(date.getTime())) {
+            return date;
+          }
+        } catch {
+        }
+      }
+    }
+    return momentObj.toDate();
   }
 
   private isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {
@@ -2943,15 +2963,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.startDate = this.applyTimeIfNeeded(day);
         this.endDate = null;
         this.hoveredDate = null;
+        this._invalidateMemoCache();
+        this.scheduleChangeDetection();
       }
       else if (this.startDate && !this.endDate) {
         if (dayTime < startTime!) {
           this.startDate = this.applyTimeIfNeeded(day);
           this.endDate = null;
           this.hoveredDate = null;
+          this._invalidateMemoCache();
+          this.scheduleChangeDetection();
         }
         else if (dayTime === startTime!) {
-          // Same day selected - no action needed
         }
         else {
           const potentialEndDate = this.applyTimeIfNeeded(day);
@@ -2961,6 +2984,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
               this.startDate = potentialEndDate;
               this.endDate = null;
               this.hoveredDate = null;
+              this._invalidateMemoCache();
               this.scheduleChangeDetection();
               return;
             }
@@ -2968,6 +2992,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
           this.endDate = potentialEndDate;
           this.hoveredDate = null;
+          this._invalidateMemoCache();
           this.emitValue({ start: this.startDate as Date, end: this.endDate as Date });
           
           const startFormatted = formatDateWithTimezone(this.startDate, this.locale, { 

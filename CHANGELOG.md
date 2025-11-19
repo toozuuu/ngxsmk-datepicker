@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.14] - 2025-01-XX (Stable)
+
+### Fixed
+- **Date Picker Selection Issue**: Fixed issue where date picker was not working properly when selecting dates, especially in range mode
+  - Added proper change detection scheduling when setting start date in range mode
+  - Added memo cache invalidation to ensure UI updates correctly reflect selected dates
+  - Fixed UI not updating when only start date is selected in range mode
+  - Dates now properly show as selected and calendar updates correctly in all selection modes
+- **Moment.js Timezone Offset Preservation**: Fixed issue where Moment.js objects with timezone offsets (e.g., `moment().utcOffset('-0600')`) were not preserving the timezone offset when converted to Date objects
+  - Added `momentToDate()` method that detects and preserves timezone offsets from Moment.js objects
+  - Uses moment's `format('YYYY-MM-DDTHH:mm:ss.SSSZ')` to preserve offset information
+  - Now correctly handles `moment().utcOffset('-0600')` without requiring `toDate()` which loses timezone information
+  - Works for single dates, range values, and array of dates
+
+### Changed
+- **Version Update**: Updated to version 1.9.14
+- **Stable Release**: Version 1.9.14 is the current stable version
+
+### Migration Notes
+- This is a patch version update with bug fixes only
+- No breaking changes from v1.9.13
+- All fixes are backward compatible
+
 ## [1.9.13] - 2025-11-19 (Stable)
 
 ### Fixed
