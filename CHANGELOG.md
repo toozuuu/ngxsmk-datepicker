@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.13] - 2025-11-19 (Stable)
+
+### Fixed
+- **valueChange Event Bug**: Fixed issue where `(valueChange)` event was emitting `null` instead of the date value for range mode when using template-driven forms with `[(ngModel)]`
+  - Changed `emitValue` method to use `_normalizeValue()` instead of `_normalizeDate()` to properly handle range objects `{ start: Date, end: Date }`
+  - Now correctly emits date values for all modes (single, range, multiple)
+- **Range Mode Date Selection**: Fixed issue where dates became disabled/unclickable after navigating to previous or next months in range mode
+  - Updated `changeMonth()` method to properly update month/year signals when navigating
+  - Fixed `onDateClick()` for all modes (single, range, multiple) to update signals when clicking dates in different months
+  - Fixed `onYearClick()`, `onYearSelectChange()`, and `onDecadeClick()` to update signals
+  - Ensures memoized `isDateDisabledMemo` function uses correct month/year values after navigation
+  - Dates in previous/next months are now properly selectable without needing to close and reopen the datepicker
+
+### Changed
+- **Version Update**: Updated to version 1.9.13
+- **Stable Release**: Version 1.9.13 is the current stable version
+
+### Migration Notes
+- This is a patch version update with bug fixes only
+- No breaking changes from v1.9.12
+- All fixes are backward compatible
+
 ## [1.9.12] - 2025-11-19 (Stable)
 
 ### Added

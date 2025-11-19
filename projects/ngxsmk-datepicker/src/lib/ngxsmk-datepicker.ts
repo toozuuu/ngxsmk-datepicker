@@ -1760,7 +1760,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private emitValue(val: DatepickerValue) {
     const normalizedVal = val !== null && val !== undefined
-      ? (this._normalizeDate(val as any) as DatepickerValue)
+      ? (this._normalizeValue(val) as DatepickerValue)
       : null;
 
     this._internalValue = normalizedVal;
@@ -2888,6 +2888,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (!this.isCurrentMonth(day)) {
         this._currentMonth = day.getMonth();
         this._currentYear = day.getFullYear();
+        this._currentMonthSignal.set(this._currentMonth);
+        this._currentYearSignal.set(this._currentYear);
         this.currentDate = new Date(day);
         this.generateCalendar();
       }
@@ -2907,6 +2909,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (!this.isCurrentMonth(day)) {
         this._currentMonth = day.getMonth();
         this._currentYear = day.getFullYear();
+        this._currentMonthSignal.set(this._currentMonth);
+        this._currentYearSignal.set(this._currentYear);
         this.currentDate = new Date(day);
         this.generateCalendar();
       }
@@ -2965,6 +2969,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (!this.isCurrentMonth(day)) {
         this._currentMonth = day.getMonth();
         this._currentYear = day.getFullYear();
+        this._currentMonthSignal.set(this._currentMonth);
+        this._currentYearSignal.set(this._currentYear);
         this.currentDate = new Date(day);
         this.generateCalendar();
       }
@@ -3345,6 +3351,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public onYearClick(year: number): void {
     if (this.disabled) return;
     this._currentYear = year;
+    this._currentYearSignal.set(year);
     this.currentDate.setFullYear(year);
     if (this.calendarViewMode === 'year') {
       this.calendarViewMode = 'month';
@@ -3357,6 +3364,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this.disabled) return;
     this._currentDecade = decade;
     this._currentYear = decade;
+    this._currentYearSignal.set(decade);
     this.currentDate.setFullYear(decade);
     if (this.calendarViewMode === 'decade') {
       this.calendarViewMode = 'year';
@@ -3387,6 +3395,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public onYearSelectChange(year: number): void {
     this._currentYear = year;
+    this._currentYearSignal.set(year);
     this.currentDate.setFullYear(year);
     this._invalidateMemoCache();
     this.generateYearGrid();
@@ -3574,6 +3583,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.currentDate = newDate;
     this._currentMonth = newDate.getMonth();
     this._currentYear = newDate.getFullYear();
+    this._currentMonthSignal.set(this._currentMonth);
+    this._currentYearSignal.set(this._currentYear);
     this._invalidateMemoCache();
     this.generateCalendar();
     

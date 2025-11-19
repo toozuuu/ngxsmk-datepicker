@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.12 → v1.9.13](#v1912---v1913)
 - [v1.9.11 → v1.9.12](#v1911---v1912)
 - [v1.9.10 → v1.9.11](#v1910---v1911)
 - [v1.9.9 → v1.9.10](#v199---v1910)
@@ -19,6 +20,28 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.12 → v1.9.13
+
+### Fixed
+
+- **valueChange Event Bug**: Fixed issue where `(valueChange)` event was emitting `null` instead of the date value for range mode when using template-driven forms with `[(ngModel)]`
+- **Range Mode Date Selection**: Fixed issue where dates became disabled/unclickable after navigating to previous or next months in range mode
+
+### Changed
+
+- **Version Update**: Updated to version 1.9.13
+- **Stable Release**: Version 1.9.13 is the current stable version
+
+### Migration Steps
+
+No migration steps required. This is a patch version with bug fixes only. Simply update your package version:
+
+```bash
+npm install ngxsmk-datepicker@1.9.13
+```
+
+All fixes are backward compatible and require no code changes.
 
 ## v1.9.11 → v1.9.12
 
@@ -533,7 +556,7 @@ If you encounter issues during migration:
 
 | ngxsmk-datepicker | Angular | Node.js |
 |-------------------|---------|---------|
-| 1.9.12+ | 17-21 | 18+ |
+| 1.9.13+ | 17-21 | 18+ |
 | 1.9.11 | 17-21 | 18+ |
 | 1.9.10 | 17-21 | 18+ |
 | 1.9.9 | 17-21 | 18+ |
