@@ -132,7 +132,13 @@ type SignalFormField = {
                 </ul>
               </div>
             }
-            <div class="ngxsmk-calendar-container" [class.ngxsmk-time-only-mode]="timeOnly" [ngClass]="classes?.calendar">
+            <div class="ngxsmk-calendar-container" 
+                 [class.ngxsmk-time-only-mode]="timeOnly"
+                 [class.ngxsmk-has-multi-calendar]="calendarCount > 1"
+                 [class.ngxsmk-calendar-layout-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
+                 [class.ngxsmk-calendar-layout-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
+                 [class.ngxsmk-calendar-layout-auto]="calendarCount > 1 && calendarLayout === 'auto'"
+                 [ngClass]="classes?.calendar">
               @if (!timeOnly) {
                 @if (calendarViewMode === 'month') {
                 <div class="ngxsmk-header" [ngClass]="classes?.header">
@@ -156,17 +162,29 @@ type SignalFormField = {
                     </button>
                   </div>
                 </div>
+                <div class="ngxsmk-multi-calendar-container" 
+                     [class.ngxsmk-multi-calendar]="calendarCount > 1"
+                     [class.ngxsmk-calendar-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
+                     [class.ngxsmk-calendar-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
+                     [class.ngxsmk-calendar-auto]="calendarCount > 1 && calendarLayout === 'auto'">
+                  @for (calendarMonth of multiCalendarMonths; track trackByCalendarMonth($index, calendarMonth)) {
+                    <div class="ngxsmk-calendar-month" [class.ngxsmk-calendar-month-multi]="calendarCount > 1">
+                      @if (calendarCount > 1) {
+                        <div class="ngxsmk-calendar-month-header">
+                          <span class="ngxsmk-calendar-month-title">{{ getMonthYearLabel(calendarMonth.month, calendarMonth.year) }}</span>
+                        </div>
+                      }
                   <div class="ngxsmk-days-grid-wrapper" 
                        (touchstart)="onCalendarSwipeStart($event)"
                        (touchmove)="onCalendarSwipeMove($event)"
                        (touchend)="onCalendarSwipeEnd($event)">
-                  <div class="ngxsmk-days-grid" role="grid" [attr.aria-label]="getCalendarAriaLabel()">
+                        <div class="ngxsmk-days-grid" role="grid" [attr.aria-label]="getCalendarAriaLabelForMonth(calendarMonth.month, calendarMonth.year)">
                     @for (day of weekDays; track day) {
                       <div class="ngxsmk-day-name">{{ day }}</div>
                     }
-                    @for (day of daysInMonth; track trackByDay($index, day)) {
+                          @for (day of calendarMonth.days; track trackByDay($index, day)) {
                       <div class="ngxsmk-day-cell" [ngClass]="classes?.dayCell"
-                          [class.empty]="!isCurrentMonthMemo(day)" [class.disabled]="isDateDisabledMemo(day)" 
+                                [class.empty]="!isCurrentMonthForCalendar(day, calendarMonth.month, calendarMonth.year)" [class.disabled]="isDateDisabledMemo(day)" 
                           [class.today]="isSameDayMemo(day, today)"
                           [class.holiday]="isHolidayMemo(day)"
                           [class.selected]="mode === 'single' && isSameDayMemo(day, selectedDate)"
@@ -193,7 +211,10 @@ type SignalFormField = {
                         }
                       </div>
                     }
+                        </div>
                   </div>
+                    </div>
+                  }
                 </div>
                 }
                 
@@ -446,6 +467,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() customShortcuts: { [key: string]: (context: KeyboardShortcutContext) => boolean } | null = null;
   @Input() autoApplyClose: boolean = false;
   @Input() displayFormat?: string;
+  @Input() calendarCount: number = 1;
+  @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
+  @Input() defaultMonthOffset: number = 0;
 
   private _isCalendarOpen = signal<boolean>(false);
   public get isCalendarOpen(): boolean {
@@ -659,6 +683,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public currentDate: Date = new Date();
   public daysInMonth: (Date | null)[] = [];
+  public multiCalendarMonths: Array<{month: number; year: number; days: (Date | null)[]}> = [];
   public weekDays: string[] = [];
   public readonly today: Date = getStartOfDay(new Date());
   public selectedDate: Date | null = null;
@@ -1110,6 +1135,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return day ? day.getTime().toString() : `empty-${index}`;
   }
 
+  trackByCalendarMonth(_index: number, calendarMonth: {month: number; year: number; days: (Date | null)[]}): string {
+    return `${calendarMonth.year}-${calendarMonth.month}`;
+  }
+
   trackByRange(_index: number, range: { key: string; value: [Date, Date] }): string {
     return range.key;
   }
@@ -1306,6 +1335,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.touchStartTime = 0;
         this.touchStartElement = null;
       }, 500);
+
+      if (this.defaultMonthOffset !== 0 && !this._internalValue && !this._startAtDate) {
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + this.defaultMonthOffset);
+        nextMonth.setDate(1);
+        this.currentDate = nextMonth;
+        this._currentMonth = nextMonth.getMonth();
+        this._currentYear = nextMonth.getFullYear();
+        this._invalidateMemoCache();
+      }
 
       if (this.openCalendarTimeoutId) {
         clearTimeout(this.openCalendarTimeoutId);
@@ -1756,6 +1795,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.isCalendarOpen = !wasOpen;
       this.lastToggleTime = now;
       if (willOpen) {
+        if (this.defaultMonthOffset !== 0 && !this._internalValue && !this._startAtDate) {
+          const nextMonth = new Date();
+          nextMonth.setMonth(nextMonth.getMonth() + this.defaultMonthOffset);
+          nextMonth.setDate(1);
+          this.currentDate = nextMonth;
+          this._currentMonth = nextMonth.getMonth();
+          this._currentYear = nextMonth.getFullYear();
+          this._invalidateMemoCache();
+        }
         this.generateCalendar();
       }
       this.updateOpeningState(willOpen && this.isCalendarOpen);
@@ -1823,6 +1871,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
       if (this._field) {
         this.syncFieldValue(this._field);
+      }
+
+      if (this.defaultMonthOffset !== 0 && !this._internalValue && !this._startAtDate) {
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + this.defaultMonthOffset);
+        nextMonth.setDate(1);
+        this.currentDate = nextMonth;
+        this._currentMonth = nextMonth.getMonth();
+        this._currentYear = nextMonth.getFullYear();
+        this._invalidateMemoCache();
       }
 
       this.generateCalendar();
@@ -3207,26 +3265,46 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public generateCalendar(): void {
     this.daysInMonth = [];
+    this.multiCalendarMonths = [];
+    
+    const count = Math.max(1, Math.min(this.calendarCount || 1, 12));
     const year = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
     this._currentMonth = month;
     this._currentYear = year;
     this.generateDropdownOptions();
-    const firstDayOfMonth = new Date(year, month, 1);
-    const lastDayOfMonth = new Date(year, month + 1, 0);
+
+    for (let calIndex = 0; calIndex < count; calIndex++) {
+      const calMonth = (month + calIndex) % 12;
+      const calYear = year + Math.floor((month + calIndex) / 12);
+      const days: (Date | null)[] = [];
+      
+      const firstDayOfMonth = new Date(calYear, calMonth, 1);
+      const lastDayOfMonth = new Date(calYear, calMonth + 1, 0);
     const startDayOfWeek = firstDayOfMonth.getDay();
     const emptyCellCount = (startDayOfWeek - this.firstDayOfWeek + 7) % 7;
 
-    const previousMonth = month === 0 ? 11 : month - 1;
-    const previousYear = month === 0 ? year - 1 : year;
+      const previousMonth = calMonth === 0 ? 11 : calMonth - 1;
+      const previousYear = calMonth === 0 ? calYear - 1 : calYear;
     const lastDayOfPreviousMonth = new Date(previousYear, previousMonth + 1, 0);
 
     for (let i = 0; i < emptyCellCount; i++) {
       const dayNumber = lastDayOfPreviousMonth.getDate() - emptyCellCount + i + 1;
-      this.daysInMonth.push(this._normalizeDate(new Date(previousYear, previousMonth, dayNumber)));
+        days.push(this._normalizeDate(new Date(previousYear, previousMonth, dayNumber)));
     }
     for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
-      this.daysInMonth.push(this._normalizeDate(new Date(year, month, i)));
+        days.push(this._normalizeDate(new Date(calYear, calMonth, i)));
+      }
+
+      this.multiCalendarMonths.push({
+        month: calMonth,
+        year: calYear,
+        days: days
+      });
+
+      if (calIndex === 0) {
+        this.daysInMonth = days;
+      }
     }
 
     this.cdr.markForCheck();
@@ -3236,7 +3314,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       payload: {
         month: month,
         year: year,
-        days: this.daysInMonth.filter(d => d !== null)
+        days: this.daysInMonth.filter(d => d !== null),
+        multiCalendar: this.multiCalendarMonths.map(m => ({
+          month: m.month,
+          year: m.year,
+          days: m.days.filter(d => d !== null)
+        }))
       }
     });
 
@@ -3615,6 +3698,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const month = this.currentDate.toLocaleDateString(this.locale, { month: 'long' });
     const year = this.currentDate.getFullYear();
     return this.getTranslation('calendarFor', undefined, { month, year: String(year) });
+  }
+
+  getCalendarAriaLabelForMonth(month: number, year: number): string {
+    const monthName = new Date(year, month, 1).toLocaleDateString(this.locale, { month: 'long' });
+    return this.getTranslation('calendarFor', undefined, { month: monthName, year: String(year) });
+  }
+
+  getMonthYearLabel(month: number, year: number): string {
+    const monthName = new Date(year, month, 1).toLocaleDateString(this.locale, { month: 'long' });
+    return `${monthName} ${year}`;
+  }
+
+  isCurrentMonthForCalendar(day: Date | null, targetMonth: number, targetYear: number): boolean {
+    if (!day) return false;
+    return day.getMonth() === targetMonth && day.getFullYear() === targetYear;
   }
 
   /**

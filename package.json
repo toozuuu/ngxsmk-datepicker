@@ -17,6 +17,7 @@
     "optimize": "node scripts/optimize-build.js",
     "watch": "npx ng build --watch --configuration development",
     "test": "npx ng test ngxsmk-datepicker",
+    "demo": "npx ng serve demo-app",
     "lint": "npx ng lint",
     "deploy": "npm run build:demo && npx gh-pages -d dist/demo-app/browser",
     "prepublishOnly": "npm run build:optimized",
@@ -33,7 +34,8 @@
   "peerDependencies": {
     "@angular/common": ">=17.0.0 <23.0.0",
     "@angular/core": ">=17.0.0 <23.0.0",
-    "@angular/forms": ">=17.0.0 <23.0.0"
+    "@angular/forms": ">=17.0.0 <23.0.0",
+    "luxon": "^3.0.0"
   },
   "peerDependenciesMeta": {
     "zone.js": {
@@ -79,7 +81,31 @@
     "typescript",
     "date-selection",
     "i18n",
-    "localization"
+    "localization",
+    "signal-forms",
+    "SSR",
+    "server-side-rendering",
+    "angular-universal",
+    "zoneless",
+    "lightweight",
+    "customizable",
+    "open-source",
+    "MIT",
+    "date-picker",
+    "time-picker",
+    "date-time-picker",
+    "holiday-calendar",
+    "accessibility",
+    "a11y",
+    "responsive",
+    "mobile-friendly",
+    "touch-gestures",
+    "keyboard-navigation",
+    "RTL",
+    "right-to-left",
+    "theming",
+    "dark-mode",
+    "light-mode"
   ],
   "exports": {
     ".": {
@@ -129,6 +155,8 @@
     "@storybook/addon-controls": "^8.6.14",
     "@storybook/addon-actions": "^8.6.14",
     "@storybook/addon-docs": "^8.6.14",
-    "storybook": "^8.6.14"
+    "storybook": "^8.6.14",
+    "luxon": "^3.4.4",
+    "@types/luxon": "^3.3.7"
   }
 }

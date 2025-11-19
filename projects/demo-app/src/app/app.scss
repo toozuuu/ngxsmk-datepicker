@@ -64,6 +64,81 @@
   box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
 }
 
+// Enhanced select input styling
+.docs-container select {
+  padding: 0.625rem 2.5rem 0.625rem 0.875rem !important;
+  border-radius: 8px !important;
+  border: 1.5px solid var(--border-color) !important;
+  background-color: var(--bg-secondary) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 4L6 8L10 4' stroke='%2364758b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.75rem center !important;
+  background-size: 12px 12px !important;
+  color: var(--text-primary) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  min-height: 40px !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.docs-container select:hover:not(:disabled) {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  background-color: rgba(99, 102, 241, 0.03) !important;
+  box-shadow: 0 2px 4px 0 rgba(99, 102, 241, 0.1) !important;
+}
+
+.docs-container select:focus {
+  outline: none !important;
+  border-color: #6366f1 !important;
+  background-color: var(--bg-secondary) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1), 0 2px 4px 0 rgba(99, 102, 241, 0.1) !important;
+}
+
+.docs-container select:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  background-color: rgba(0, 0, 0, 0.02) !important;
+}
+
+.docs-container.dark-theme select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 4L6 8L10 4' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.docs-container.dark-theme select:hover:not(:disabled) {
+  border-color: rgba(129, 140, 248, 0.3) !important;
+  background-color: rgba(129, 140, 248, 0.05) !important;
+  box-shadow: 0 2px 4px 0 rgba(129, 140, 248, 0.15) !important;
+}
+
+.docs-container.dark-theme select:focus {
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2), 0 2px 4px 0 rgba(129, 140, 248, 0.15) !important;
+}
+
+.docs-container.dark-theme select:disabled {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+// Select option styling
+.docs-container select option {
+  padding: 0.5rem !important;
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  font-size: 0.875rem !important;
+}
+
+.docs-container.dark-theme select option {
+  background-color: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
 .docs-header {
   position: fixed;
   top: 0;

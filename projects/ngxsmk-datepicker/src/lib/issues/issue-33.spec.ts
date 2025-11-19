@@ -129,9 +129,19 @@ describe('Issue #33: Angular 21+ Signal Forms Type Compatibility', () => {
           } else {
              console.log('Day 20 does not exist in DOM');
           }
+          
+          // Collect day numbers for debugging
+          const dayNumbers = dayCells
+            .map(cell => {
+              const dayNumber = cell.query(By.css('.ngxsmk-day-number'));
+              return dayNumber ? dayNumber.nativeElement.textContent.trim() : null;
+            })
+            .filter((num): num is string => num !== null && num !== '');
+          
+          expect(day20).toBeTruthy(`Day 20 should be found in the calendar. Found days: ${dayNumbers.join(', ')}`);
+      } else {
+          expect(day20).toBeTruthy();
       }
-      
-      expect(day20).toBeTruthy(`Day 20 should be found in the calendar. Found days: ${dayNumbers.join(', ')}`);
       
       if (day20) {
         day20.nativeElement.click();

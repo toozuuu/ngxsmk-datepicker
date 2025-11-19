@@ -56,33 +56,33 @@ This roadmap outlines the planned features, improvements, and enhancements for n
 
 ### Features Under Discussion
 
-- [ ] **Multi-Calendar Support**
-  - Display multiple months side-by-side
-  - Configurable calendar count
-  - *Label: `enhancement`, `feature-request`*
+- [x] **Multi-Calendar Support** ✅ (Implemented in v1.10.0)
+  - Display multiple months side-by-side - Available via `[calendarCount]` input
+  - Configurable calendar count - Set `calendarCount` from 1 to 12
+  - *Available via: `<ngxsmk-datepicker [calendarCount]="2">`*
 
-- [ ] **Date Presets**
-  - User-defined date presets
-  - Preset management API
-  - Preset categories
-  - *Label: `enhancement`, `feature-request`*
+- [x] **Date Presets** ✅ (Implemented in v1.10.0)
+  - User-defined date presets - Available via `DatePresetsService.savePreset()`
+  - Preset management API - Full CRUD operations via `DatePresetsService`
+  - Preset categories - Supported via `category` property
+  - *Available via: `import { DatePresetsService } from 'ngxsmk-datepicker'`*
 
 - [x] **Export/Import Functionality** ✅ (Implemented)
   - Export selected dates to various formats (JSON, CSV, ICS) - Available via `exportToJson`, `exportToCsv`, `exportToIcs`
   - Import dates from external sources - Available via `importFromJson`, `importFromCsv`, `importFromIcs`
   - *Available in utils exports: `import { exportToJson, importFromJson } from 'ngxsmk-datepicker/utils'`*
 
-- [ ] **Advanced Styling**
-  - CSS-in-JS support
-  - Theme builder tool
-  - Component variants
-  - *Label: `enhancement`, `styling`*
+- [x] **Advanced Styling** ✅ (Implemented in v1.10.0)
+  - CSS-in-JS support - Available via `ThemeBuilderService.generateStyleObject()`
+  - Theme builder tool - Available via `ThemeBuilderService.applyTheme()`
+  - Component variants - Supported via theme customization
+  - *Available via: `import { ThemeBuilderService, DatepickerTheme } from 'ngxsmk-datepicker'`*
 
-- [ ] **Integration Examples**
-  - Angular Material integration guide
-  - Ionic integration guide
-  - Tailwind CSS integration guide
-  - *Label: `documentation`, `good-first-issue`*
+- [x] **Integration Examples** ✅ (Implemented in v1.10.0)
+  - Angular Material integration guide - Available in `docs/INTEGRATION.md`
+  - Ionic integration guide - Available in `docs/INTEGRATION.md`
+  - Tailwind CSS integration guide - Available in `docs/INTEGRATION.md`
+  - *See: `projects/ngxsmk-datepicker/docs/INTEGRATION.md`*
 
 ## 🐛 Known Issues & Improvements
 

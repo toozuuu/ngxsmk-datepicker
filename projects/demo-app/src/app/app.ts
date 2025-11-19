@@ -119,6 +119,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
       { id: 'inline-calendar', label: t.inlineCalendar, sub: true, keywords: 'inline calendar always visible' },
       { id: 'min-max-date', label: t.minMaxDate, sub: true, keywords: 'min max date limit restriction' },
       { id: 'calendar-views', label: t.calendarViews, sub: true, keywords: 'year picker decade picker timeline time slider view mode' },
+      { id: 'multi-calendar', label: 'Multi-Calendar', sub: true, keywords: 'multi calendar multiple months side by side calendar count' },
       { id: 'mobile-playground', label: t.mobilePlayground, sub: true, keywords: 'mobile responsive playground test' },
       { id: 'inputs', label: t.inputs, sub: false, keywords: 'inputs properties @input parameters' },
       { id: 'outputs', label: t.outputs, sub: false, keywords: 'outputs events @output emitters' },
@@ -220,6 +221,13 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   public programmaticRange: { start: Date; end: Date } | null = null;
   public programmaticMultipleDates: Date[] | null = null;
   public lastProgrammaticChange: Date | null = null;
+
+  public multiCalendarVertical: DatepickerValue = null;
+  public multiCalendarHorizontal: DatepickerValue = null;
+  public multiCalendarAuto: DatepickerValue = null;
+  public multiCalendarConfigurable: DatepickerValue = null;
+  public calendarCountSlider: number = 2;
+  public calendarLayoutSlider: 'horizontal' | 'vertical' | 'auto' = 'auto';
 
   public signalDate = signal<DatepickerValue>(null);
   
@@ -1529,6 +1537,11 @@ export class RangeFormComponent {
     }, 0);
   }
 
+  // Multi-calendar methods
+  onCalendarCountChange(count: number): void {
+    this.calendarCountSlider = count;
+  }
+
   // Date presets methods
   savePreset(): void {
     if (!this.presetName || !this.exportImportValue) {
@@ -1691,5 +1704,115 @@ export class MyComponent {
   getAllPresets() {
     return this.presets.getAllPresets();
   }
+}`;
+
+  public multiCalendarCode = `<!-- Horizontal layout (one by one right) -->
+<ngxsmk-datepicker
+  mode="range"
+  [calendarCount]="2"
+  calendarLayout="horizontal"
+  [value]="dateRange"
+  (valueChange)="dateRange = $event"
+  placeholder="Select date range">
+</ngxsmk-datepicker>
+
+<!-- Vertical layout (one by one down) -->
+<ngxsmk-datepicker
+  mode="single"
+  [calendarCount]="3"
+  calendarLayout="vertical"
+  [value]="selectedDate"
+  (valueChange)="selectedDate = $event"
+  placeholder="Select a date">
+</ngxsmk-datepicker>
+
+<!-- Auto layout (responsive - horizontal on desktop, vertical on mobile) -->
+<ngxsmk-datepicker
+  mode="single"
+  [calendarCount]="3"
+  calendarLayout="auto"
+  [value]="selectedDate"
+  (valueChange)="selectedDate = $event"
+  placeholder="Select a date">
+</ngxsmk-datepicker>
+
+<!-- Configurable calendar count and layout -->
+<ngxsmk-datepicker
+  mode="single"
+  [calendarCount]="calendarCount"
+  [calendarLayout]="layout"
+  [value]="selectedDate"
+  (valueChange)="selectedDate = $event"
+  placeholder="Select a date">
+</ngxsmk-datepicker>`;
+
+  public multiCalendarTsCode = `import { Component } from '@angular/core';
+import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-multi-calendar',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: \`
+    <!-- Horizontal layout: calendars side-by-side (one by one right) -->
+    <ngxsmk-datepicker
+      mode="range"
+      [calendarCount]="2"
+      calendarLayout="horizontal"
+      [value]="dateRange"
+      (valueChange)="dateRange = $event"
+      placeholder="Select date range">
+    </ngxsmk-datepicker>
+
+    <!-- Vertical layout: calendars stacked (one by one down) -->
+    <ngxsmk-datepicker
+      mode="single"
+      [calendarCount]="3"
+      calendarLayout="vertical"
+      [value]="selectedDate"
+      (valueChange)="selectedDate = $event"
+      placeholder="Select a date">
+    </ngxsmk-datepicker>
+
+    <!-- Auto layout: responsive (horizontal on desktop, vertical on mobile) -->
+    <ngxsmk-datepicker
+      mode="single"
+      [calendarCount]="3"
+      calendarLayout="auto"
+      [value]="selectedDate"
+      (valueChange)="selectedDate = $event"
+      placeholder="Select a date">
+    </ngxsmk-datepicker>
+
+    <!-- Dynamic calendar count and layout -->
+    <div>
+      <label>
+        Calendar Count:
+        <input type="range" min="1" max="12" [(ngModel)]="calendarCount">
+        <span>{{ calendarCount }}</span>
+      </label>
+      <label>
+        Layout:
+        <select [(ngModel)]="layout">
+          <option value="auto">Auto (Responsive)</option>
+          <option value="horizontal">Horizontal (Right)</option>
+          <option value="vertical">Vertical (Down)</option>
+        </select>
+      </label>
+      <ngxsmk-datepicker
+        mode="single"
+        [calendarCount]="calendarCount"
+        [calendarLayout]="layout"
+        [value]="selectedDate"
+        (valueChange)="selectedDate = $event">
+      </ngxsmk-datepicker>
+    </div>
+  \`
+})
+export class MultiCalendarComponent {
+  dateRange: { start: Date; end: Date } | null = null;
+  selectedDate: Date | null = null;
+  calendarCount: number = 2;
+  layout: 'horizontal' | 'vertical' | 'auto' = 'auto';
 }`;
 }

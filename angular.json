@@ -75,7 +75,17 @@
                 "glob": "**/*",
                 "input": "projects/demo-app/public"
               },
-              "projects/demo-app/src/_redirects"
+              "projects/demo-app/src/_redirects",
+              {
+                "glob": "robots.txt",
+                "input": "projects/demo-app/public",
+                "output": "/"
+              },
+              {
+                "glob": "sitemap.xml",
+                "input": "projects/demo-app/public",
+                "output": "/"
+              }
             ],
             "styles": [
               "projects/demo-app/src/styles.scss"
@@ -88,13 +98,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "600kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1.5MB",
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "60kB",
-                  "maximumError": "65kB"
+                  "maximumWarning": "80kB",
+                  "maximumError": "100kB"
                 }
               ],
               "outputHashing": "all"

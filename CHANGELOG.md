@@ -7,17 +7,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.10.0] - 2025-11-19 (Stable)
 
+### Added
+- **SEO Optimization**: Comprehensive search engine optimization improvements
+  - Enhanced meta tags with expanded keywords, geo-location, and Apple mobile web app tags
+  - Complete Open Graph implementation for social media sharing (Facebook, LinkedIn)
+  - Enhanced Twitter Card metadata with additional labels and image alt text
+  - Multi-locale Open Graph support (en_US, es_ES, fr_FR, de_DE)
+  - Structured data (Schema.org) with SoftwareApplication, WebPage, and HowTo schemas
+  - robots.txt file with proper crawl directives and sitemap reference
+  - sitemap.xml with all important pages, priorities, and change frequencies
+  - SEO documentation guide (docs/SEO.md) with best practices and monitoring recommendations
+- **Package Keywords Expansion**: Expanded npm package keywords from 14 to 38 keywords
+  - Added keywords for features (signal-forms, SSR, zoneless, accessibility)
+  - Added keywords for use cases (date-picker, time-picker, holiday-calendar)
+  - Added keywords for qualities (lightweight, customizable, open-source, MIT)
+  - Improved discoverability on npm and search engines
+- **README SEO Enhancements**: Added downloads badge and expanded SEO keywords section
+  - More comprehensive keyword coverage for better search visibility
+  - Enhanced description with additional relevant terms
+
 ### Changed
 - **Version Update**: Updated to version 1.10.0
 - **Stable Release**: Version 1.10.0 is the current stable version
+- **Multi-Calendar Spacing**: Increased gap between multiple calendars from 16px to 32px for better visual separation
+  - Applied to horizontal, vertical, and auto layouts
+  - Improved spacing consistency across all multi-calendar configurations
+- **Multi-Calendar Container Sizing**: Enhanced container width handling for multi-calendar layouts
+  - Changed from fixed `width: 100%` to `width: fit-content` for better content fitting
+  - Increased max-width from 1200px to 1400px to accommodate more calendars
+  - Containers now properly expand to fit all calendars without overlapping
+- **Demo App Select Inputs**: Enhanced styling for all select inputs in the demo application
+  - Custom dropdown arrow icons with theme-aware colors
+  - Improved hover and focus states with smooth transitions
+  - Better visual consistency with the overall design system
+  - Full dark theme support
+- **Build Configuration**: Updated angular.json to include SEO files in build output
+  - robots.txt and sitemap.xml now properly copied to build root
+  - Files accessible at site root for search engine crawlers
 
-### Added
-- **Major Version Release**: Version 1.10.0 introduces new features and improvements
+### Removed
+- **Demo App Sections**: Removed "2 Calendars Side-by-Side" and "3 Calendars Side-by-Side" demo sections
+  - Cleaned up unused TypeScript variables (`multiCalendarRange2`, `multiCalendarSingle3`)
+
+### Fixed
+- **Multi-Calendar Overlapping**: Fixed issue where multiple calendars would overlap when displayed side-by-side
+  - Added proper `box-sizing: border-box` to calendar months
+  - Reduced container padding for multi-calendar layouts to provide more space
+  - Ensured containers expand to fit content with proper gap spacing
+- **Test Suite**: Fixed TypeScript compilation error in issue-33.spec.ts
+  - Fixed undefined `dayNumbers` variable in test assertion
+  - Added proper day number collection for debugging when test fails
+  - Improved test error messages with actual day numbers found
 
 ### Migration Notes
 - This is a minor version update with backward compatibility
 - No breaking changes from v1.9.11
+- SEO improvements are automatic and require no code changes
 - See [MIGRATION.md](MIGRATION.md) for detailed migration guide
+- See [docs/SEO.md](projects/ngxsmk-datepicker/docs/SEO.md) for SEO best practices
 
 ## [1.9.11] - 2025-11-17 (Stable)
 

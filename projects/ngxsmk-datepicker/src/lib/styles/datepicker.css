@@ -567,6 +567,14 @@
   pointer-events: auto;
 }
 
+.ngxsmk-datepicker-container:has(.ngxsmk-calendar-container.ngxsmk-has-multi-calendar) {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+}
+
 .ngxsmk-calendar-container {
   font-size: var(--datepicker-font-size-base);
   line-height: var(--datepicker-line-height);
@@ -589,6 +597,26 @@
   min-width: -moz-fit-content;
   min-width: fit-content;
   overflow: visible;
+}
+
+.ngxsmk-calendar-container.ngxsmk-has-multi-calendar,
+.ngxsmk-calendar-container:has(.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar) {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: auto;
+  max-width: 100%;
+  padding: var(--datepicker-spacing-md, 16px);
+  box-sizing: border-box;
+}
+
+.ngxsmk-calendar-container.ngxsmk-calendar-layout-horizontal,
+.ngxsmk-calendar-container:has(.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal) {
+  width: -webkit-fit-content !important;
+  width: -moz-fit-content !important;
+  width: fit-content !important;
+  min-width: auto !important;
+  max-width: 100% !important;
 }
 
 .ngxsmk-calendar-container.ngxsmk-time-only-mode {
@@ -836,6 +864,11 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.ngxsmk-calendar-month.ngxsmk-calendar-month-multi .ngxsmk-days-grid-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
 .ngxsmk-days-grid {
   display: -ms-grid;
   display: grid;
@@ -853,6 +886,11 @@
   -ms-touch-action: manipulation;
   touch-action: manipulation;
   margin: calc(var(--datepicker-spacing-xs) / -2);
+}
+
+.ngxsmk-calendar-month.ngxsmk-calendar-month-multi .ngxsmk-days-grid {
+  width: 100%;
+  max-width: 100%;
 }
 
 .ngxsmk-days-grid > * {
@@ -904,6 +942,15 @@
   .ngxsmk-clear-button-footer {
     min-height: 44px;
     padding: var(--datepicker-spacing-md) var(--datepicker-spacing-lg);
+  }
+
+  .ngxsmk-input-group {
+    min-width: 100%;
+  }
+
+  .ngxsmk-display-input {
+    font-size: 16px;
+    min-height: 44px;
   }
 }
 
@@ -1398,16 +1445,35 @@
     width: fit-content !important;
     min-width: 280px !important;
     max-width: min(calc(100vw - 32px), 500px) !important;
-    max-height: none !important;
+    max-height: calc(100vh - 64px) !important;
     bottom: auto !important;
     z-index: 2147483647 !important;
     margin: 0 !important;
-    overflow: visible !important;
-    overflow-y: visible !important;
-    -webkit-overflow-scrolling: auto !important;
+    overflow-y: auto !important;
+    overflow-x: visible !important;
+    -webkit-overflow-scrolling: touch !important;
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+  }
+
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container):has(.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar),
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container):has(.ngxsmk-calendar-container.ngxsmk-has-multi-calendar) {
+    max-width: calc(100vw - 16px) !important;
+    width: calc(100vw - 16px) !important;
+    min-width: calc(100vw - 16px) !important;
+    height: -webkit-fit-content !important;
+    height: -moz-fit-content !important;
+    height: fit-content !important;
+    max-height: calc(100vh - 64px) !important;
+  }
+
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container):has(.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal),
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container):has(.ngxsmk-calendar-container.ngxsmk-calendar-layout-horizontal) {
+    max-width: 100vw !important;
+    width: 100vw !important;
+    min-width: 100vw !important;
+    overflow-x: visible !important;
   }
 
   .ngxsmk-popover-container.ngxsmk-has-time-selection.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
@@ -1464,30 +1530,31 @@
   }
 
   .ngxsmk-display-input {
-    font-size: 14px;
-    padding: 8px 12px;
+    font-size: 16px;
+    padding: 10px 14px;
+    min-height: 44px;
   }
 
   .ngxsmk-day-cell {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    max-width: 36px;
-    min-height: 36px;
-    max-height: 36px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
     -webkit-flex-shrink: 0;
     -ms-flex-negative: 0;
     flex-shrink: 0;
   }
 
   .ngxsmk-day-number {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    max-width: 32px;
-    min-height: 32px;
-    max-height: 32px;
-    font-size: var(--datepicker-font-size-sm);
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    max-width: 36px;
+    min-height: 36px;
+    max-height: 36px;
+    font-size: var(--datepicker-font-size-base);
   }
 
   .ngxsmk-day-name {
@@ -1505,7 +1572,7 @@
     min-width: -webkit-fit-content;
     min-width: -moz-fit-content;
     min-width: fit-content;
-    max-width: calc(100vw - 64px);
+    max-width: calc(100vw - 16px);
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -1520,6 +1587,12 @@
     padding: 0;
   }
 
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi .ngxsmk-days-grid-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin: var(--datepicker-spacing-xs) 0 0 0;
+  }
+
   .ngxsmk-days-grid {
     gap: 4px;
     padding: 0;
@@ -1531,6 +1604,12 @@
     width: -moz-fit-content;
     width: fit-content;
     margin: 0 auto;
+  }
+
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi .ngxsmk-days-grid {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
   }
 
   .ngxsmk-header {
@@ -1558,14 +1637,14 @@
   }
 
   .ngxsmk-nav-button {
-    padding: 6px;
-    min-width: 32px;
-    min-height: 32px;
+    padding: 8px;
+    min-width: 40px;
+    min-height: 40px;
   }
 
   .ngxsmk-nav-button svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
   }
 
   .ngxsmk-time-selection {
@@ -1613,9 +1692,10 @@
     -webkit-flex: 1 1 auto;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
-    min-width: 100px;
-    padding: 10px 16px;
-    font-size: 14px;
+    min-width: 120px;
+    padding: 12px 16px;
+    font-size: 15px;
+    min-height: 44px;
   }
 
   .ngxsmk-ranges-container {
@@ -1652,8 +1732,17 @@
     min-width: -moz-fit-content;
     min-width: fit-content;
     max-width: 100%;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
     position: relative;
     z-index: var(--datepicker-z-index-base);
+  }
+
+  .ngxsmk-datepicker-container:has(.ngxsmk-calendar-container.ngxsmk-has-multi-calendar) {
+    height: -webkit-fit-content !important;
+    height: -moz-fit-content !important;
+    height: fit-content !important;
   }
 }
 
@@ -1792,6 +1881,24 @@
     -webkit-overflow-scrolling: auto !important;
   }
 
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container):has(.ngxsmk-calendar-container.ngxsmk-has-multi-calendar),
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container):has(.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar) {
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    min-width: auto !important;
+    max-width: min(95vw, 1400px) !important;
+  }
+
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container):has(.ngxsmk-calendar-container.ngxsmk-calendar-layout-horizontal),
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container):has(.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal) {
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    min-width: auto !important;
+    max-width: min(95vw, 1400px) !important;
+  }
+
   .ngxsmk-datepicker-container {
     display: -webkit-box;
     display: -webkit-flex;
@@ -1825,6 +1932,27 @@
     max-width: 100%;
     margin: 0 auto;
   }
+
+  .ngxsmk-calendar-container.ngxsmk-has-multi-calendar,
+  .ngxsmk-calendar-container:has(.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar) {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    min-width: auto;
+    max-width: 100%;
+    margin: 0;
+    padding: var(--datepicker-spacing-md, 16px);
+    box-sizing: border-box;
+  }
+
+  .ngxsmk-calendar-container.ngxsmk-calendar-layout-horizontal,
+  .ngxsmk-calendar-container:has(.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal) {
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    min-width: auto !important;
+    max-width: 100% !important;
+  }
   
   .ngxsmk-days-grid-wrapper {
     width: -webkit-fit-content;
@@ -1832,12 +1960,24 @@
     width: fit-content;
     margin: var(--datepicker-spacing-sm) auto 0;
   }
+
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi .ngxsmk-days-grid-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin: var(--datepicker-spacing-sm) 0 0 0;
+  }
   
   .ngxsmk-days-grid {
     width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
     margin: 0 auto;
+  }
+
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi .ngxsmk-days-grid {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
   }
 
   .ngxsmk-ranges-container {
@@ -1949,6 +2089,22 @@
     max-width: 800px;
   }
 
+  .ngxsmk-popover-container:not(.ngxsmk-inline-container):has(.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar) {
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    min-width: auto !important;
+    max-width: min(95vw, 1400px) !important;
+  }
+
+  .ngxsmk-popover-container:not(.ngxsmk-inline-container):has(.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal) {
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    min-width: auto !important;
+    max-width: min(95vw, 1400px) !important;
+  }
+
   .ngxsmk-datepicker-container {
     display: -webkit-box;
     display: -webkit-flex;
@@ -1967,6 +2123,14 @@
     box-sizing: border-box;
   }
 
+  .ngxsmk-datepicker-container:has(.ngxsmk-calendar-container.ngxsmk-has-multi-calendar) {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 100%;
+    min-width: 0;
+  }
+
   .ngxsmk-calendar-container {
     padding: var(--datepicker-spacing-2xl);
     width: -webkit-fit-content;
@@ -1978,6 +2142,26 @@
     min-width: -webkit-fit-content;
     min-width: -moz-fit-content;
     min-width: fit-content;
+  }
+
+  .ngxsmk-calendar-container.ngxsmk-has-multi-calendar,
+  .ngxsmk-calendar-container:has(.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar) {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    min-width: auto;
+    max-width: 100%;
+    padding: var(--datepicker-spacing-md, 16px);
+    box-sizing: border-box;
+  }
+
+  .ngxsmk-calendar-container.ngxsmk-calendar-layout-horizontal,
+  .ngxsmk-calendar-container:has(.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal) {
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    min-width: auto !important;
+    max-width: 100% !important;
   }
 
   .ngxsmk-ranges-container {
@@ -2082,9 +2266,6 @@
   }
 }
 
-
-
-/* High contrast and reduced motion are handled in variables.css */
 
 @media print {
   .ngxsmk-datepicker-wrapper {
@@ -2470,6 +2651,403 @@
   .ngxsmk-datepicker-wrapper.ngxsmk-rtl .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
     left: auto !important;
     right: auto !important;
+  }
+}
+
+/* Multi-Calendar Support */
+.ngxsmk-multi-calendar-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--datepicker-spacing-xl, 32px);
+  width: 100%;
+  align-items: stretch;
+}
+
+.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  gap: var(--datepicker-spacing-xl, 32px);
+}
+
+.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal,
+.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-horizontal {
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  gap: var(--datepicker-spacing-xl, 32px) !important;
+}
+
+.ngxsmk-multi-calendar-container.ngxsmk-calendar-vertical,
+.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-vertical {
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: var(--datepicker-spacing-xl, 32px) !important;
+}
+
+.ngxsmk-multi-calendar-container.ngxsmk-calendar-vertical .ngxsmk-calendar-month.ngxsmk-calendar-month-multi,
+.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-vertical .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+}
+
+.ngxsmk-multi-calendar-container.ngxsmk-calendar-auto,
+.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-auto {
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.ngxsmk-calendar-month {
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+  flex: 0 0 auto;
+  min-width: 280px;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal .ngxsmk-calendar-month.ngxsmk-calendar-month-multi,
+.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-horizontal .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.ngxsmk-calendar-month .ngxsmk-days-grid-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+.ngxsmk-calendar-month .ngxsmk-days-grid {
+  width: 100%;
+  max-width: 100%;
+}
+
+.ngxsmk-calendar-month-header {
+  padding: var(--datepicker-spacing-sm, 8px) var(--datepicker-spacing-md, 12px);
+  text-align: center;
+  font-weight: 600;
+  font-size: var(--datepicker-font-size-base, 14px);
+  color: var(--datepicker-text-color, #1f2937);
+  border-bottom: 1px solid var(--datepicker-border-color, #e5e7eb);
+  margin-bottom: var(--datepicker-spacing-sm, 8px);
+}
+
+.ngxsmk-calendar-month-title {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-auto,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-auto {
+    flex-direction: column;
+    gap: var(--datepicker-spacing-lg, 24px);
+  }
+
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-horizontal {
+    flex-direction: row !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100% !important;
+    gap: var(--datepicker-spacing-lg, 24px) !important;
+    padding: 0 8px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal .ngxsmk-calendar-month.ngxsmk-calendar-month-multi,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-horizontal .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+    scroll-snap-align: start;
+  }
+
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-vertical,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-vertical {
+    gap: var(--datepicker-spacing-lg, 24px) !important;
+  }
+
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+    min-width: 260px;
+    max-width: 260px;
+    flex-shrink: 0;
+    width: 260px;
+  }
+
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi .ngxsmk-days-grid-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi .ngxsmk-days-grid {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ngxsmk-popover-container:not(.ngxsmk-inline-container):has(.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal),
+  .ngxsmk-popover-container:not(.ngxsmk-inline-container):has(.ngxsmk-calendar-container.ngxsmk-calendar-layout-horizontal) {
+    max-width: 100vw !important;
+    overflow-x: visible !important;
+  }
+
+  .ngxsmk-calendar-container.ngxsmk-has-multi-calendar,
+  .ngxsmk-calendar-container:has(.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar) {
+    padding: var(--datepicker-spacing-sm, 8px) !important;
+    max-width: 100% !important;
+    height: -webkit-fit-content !important;
+    height: -moz-fit-content !important;
+    height: fit-content !important;
+  }
+
+  .ngxsmk-multi-calendar-container {
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+    min-width: 260px;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
+    max-width: calc(100vw - 8px) !important;
+    min-width: calc(100vw - 8px) !important;
+    width: calc(100vw - 8px) !important;
+    max-height: calc(100vh - 16px) !important;
+    top: 8px !important;
+    left: 4px !important;
+    right: 4px !important;
+    bottom: 8px !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    -moz-transform: none !important;
+    -ms-transform: none !important;
+    -o-transform: none !important;
+    border-radius: 12px !important;
+  }
+
+  .ngxsmk-calendar-container {
+    max-width: 100% !important;
+    padding: var(--datepicker-spacing-xs) !important;
+    width: 100% !important;
+  }
+
+  .ngxsmk-day-cell {
+    width: calc((100vw - 64px) / 7);
+    min-width: calc((100vw - 64px) / 7);
+    max-width: calc((100vw - 64px) / 7);
+    height: calc((100vw - 64px) / 7);
+    min-height: calc((100vw - 64px) / 7);
+    max-height: calc((100vw - 64px) / 7);
+  }
+
+  .ngxsmk-day-number {
+    width: calc((100vw - 80px) / 7);
+    min-width: calc((100vw - 80px) / 7);
+    max-width: calc((100vw - 80px) / 7);
+    height: calc((100vw - 80px) / 7);
+    min-height: calc((100vw - 80px) / 7);
+    max-height: calc((100vw - 80px) / 7);
+    font-size: 14px;
+  }
+
+  .ngxsmk-day-name {
+    font-size: 11px;
+    padding: 6px 0;
+  }
+
+  .ngxsmk-header {
+    padding: 0 4px;
+    margin-bottom: var(--datepicker-spacing-xs);
+    gap: 6px;
+  }
+
+  .ngxsmk-nav-button {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 6px;
+  }
+
+  .ngxsmk-nav-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ngxsmk-month-year-selects {
+    gap: 6px;
+    font-size: 13px;
+  }
+
+  .ngxsmk-time-selection {
+    gap: 6px;
+    padding: var(--datepicker-spacing-xs) 0;
+    margin-top: var(--datepicker-spacing-xs);
+  }
+
+  .ngxsmk-time-label {
+    font-size: 13px;
+  }
+
+  .ngxsmk-footer {
+    gap: 6px;
+    padding: var(--datepicker-spacing-xs) 0;
+    margin-top: var(--datepicker-spacing-xs);
+  }
+
+  .ngxsmk-clear-button-footer,
+  .ngxsmk-close-button {
+    min-width: calc(50% - 3px);
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-auto,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-auto {
+    flex-direction: column !important;
+    gap: var(--datepicker-spacing-md, 16px) !important;
+  }
+
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-horizontal {
+    gap: var(--datepicker-spacing-md, 16px) !important;
+    padding: 0 4px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal .ngxsmk-calendar-month.ngxsmk-calendar-month-multi,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-horizontal .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+    scroll-snap-align: start;
+  }
+
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-vertical,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-vertical {
+    gap: var(--datepicker-spacing-md, 16px) !important;
+  }
+
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+    min-width: calc(100vw - 40px);
+    max-width: calc(100vw - 40px);
+    width: calc(100vw - 40px);
+    flex-shrink: 0;
+  }
+
+  .ngxsmk-calendar-container.ngxsmk-has-multi-calendar,
+  .ngxsmk-calendar-container:has(.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar) {
+    padding: var(--datepicker-spacing-xs, 4px) !important;
+    max-width: 100% !important;
+    overflow-x: visible !important;
+    height: -webkit-fit-content !important;
+    height: -moz-fit-content !important;
+    height: fit-content !important;
+  }
+
+  .ngxsmk-multi-calendar-container {
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+
+  .ngxsmk-popover-container:not(.ngxsmk-inline-container):has(.ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal),
+  .ngxsmk-popover-container:not(.ngxsmk-inline-container):has(.ngxsmk-calendar-container.ngxsmk-calendar-layout-horizontal) {
+    max-width: 100vw !important;
+    overflow-x: visible !important;
+  }
+
+  .ngxsmk-ranges-container {
+    padding: var(--datepicker-spacing-sm);
+  }
+
+  .ngxsmk-ranges-container li {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 375px) {
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
+    max-width: 100vw !important;
+    min-width: 100vw !important;
+    width: 100vw !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    border-radius: 0 !important;
+    max-height: 100vh !important;
+  }
+
+  .ngxsmk-day-cell {
+    width: calc((100vw - 48px) / 7);
+    min-width: calc((100vw - 48px) / 7);
+    max-width: calc((100vw - 48px) / 7);
+    height: calc((100vw - 48px) / 7);
+    min-height: calc((100vw - 48px) / 7);
+    max-height: calc((100vw - 48px) / 7);
+  }
+
+  .ngxsmk-day-number {
+    width: calc((100vw - 64px) / 7);
+    min-width: calc((100vw - 64px) / 7);
+    max-width: calc((100vw - 64px) / 7);
+    height: calc((100vw - 64px) / 7);
+    min-height: calc((100vw - 64px) / 7);
+    max-height: calc((100vw - 64px) / 7);
+  }
+
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-auto,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-auto {
+    flex-direction: column !important;
+    gap: var(--datepicker-spacing-sm, 8px) !important;
+  }
+
+  .ngxsmk-multi-calendar-container.ngxsmk-calendar-horizontal,
+  .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-horizontal {
+    gap: var(--datepicker-spacing-sm, 8px) !important;
+    padding: 0 2px;
+  }
+
+  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+    min-width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+    width: calc(100vw - 16px);
+    flex-shrink: 0;
+  }
+
+  .ngxsmk-calendar-container.ngxsmk-has-multi-calendar,
+  .ngxsmk-calendar-container:has(.ngxsmk-multi-calendar-container.ngxsmk-multi-calendar) {
+    padding: var(--datepicker-spacing-xs, 4px) !important;
+    max-width: 100% !important;
+    height: -webkit-fit-content !important;
+    height: -moz-fit-content !important;
+    height: fit-content !important;
+  }
+
+  .ngxsmk-multi-calendar-container {
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
   }
 }
 

@@ -14,7 +14,6 @@ ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-r
 **Keywords**: Angular datepicker, Angular date range picker, Angular calendar component, Angular 17 datepicker, Angular 18 datepicker, Angular 19 datepicker, Angular 20 datepicker, Angular 21 datepicker, TypeScript datepicker, standalone Angular component, Signal Forms datepicker, SSR compatible datepicker, zoneless Angular datepicker, lightweight datepicker, customizable datepicker
 
 * Github: [https://github.com/NGXSMK/ngxsmk-datepicker](https://github.com/NGXSMK/ngxsmk-datepicker)
-* **Live Demo**: [https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker](https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker)
 * **GitHub Pages Demo**: [https://ngxsmk.github.io/ngxsmk-datepicker/](https://ngxsmk.github.io/ngxsmk-datepicker/)
 
 Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
