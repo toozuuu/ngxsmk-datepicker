@@ -1045,11 +1045,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       disabledRanges: this.disabledRanges.length > 0 ? this.disabledRanges : null
     };
 
+    const currentMonth = this._currentMonthSignal();
+    const currentYear = this._currentYearSignal();
+
     const stateChanged =
       disabledState.minDate !== currentDisabledState.minDate ||
       disabledState.maxDate !== currentDisabledState.maxDate ||
       disabledState.disabledDates !== currentDisabledState.disabledDates ||
-      disabledState.disabledRanges !== currentDisabledState.disabledRanges;
+      disabledState.disabledRanges !== currentDisabledState.disabledRanges ||
+      deps.month !== currentMonth ||
+      deps.year !== currentYear;
 
     if (this._cachedIsDateDisabledMemo && !stateChanged) {
       return this._cachedIsDateDisabledMemo;
@@ -1741,8 +1746,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
 
   writeValue(val: DatepickerValue): void {
-    this._internalValue = val;
-    this.initializeValue(val);
+    const normalizedVal = val !== null && val !== undefined
+      ? this._normalizeValue(val) as DatepickerValue
+      : null;
+    this._internalValue = normalizedVal;
+    this.initializeValue(normalizedVal);
     this.generateCalendar();
   }
 

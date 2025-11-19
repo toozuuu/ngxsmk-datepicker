@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.14 → v1.9.15](#v1914---v1915)
 - [v1.9.13 → v1.9.14](#v1913---v1914)
 - [v1.9.12 → v1.9.13](#v1912---v1913)
 - [v1.9.11 → v1.9.12](#v1911---v1912)
@@ -21,6 +22,34 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.14 → v1.9.15
+
+### Fixed
+
+- **Moment Object Binding with ngModel**: Fixed issue where Moment.js objects passed via `[(ngModel)]` were not binding correctly with the datepicker
+  - Updated `writeValue()` method to normalize Moment.js objects before passing to `initializeValue()`
+  - Ensures Moment.js objects (including those with `utcOffset()` applied) are properly converted to Date objects when binding with template-driven forms
+  - Now correctly handles `moment(response.Date).utcOffset(timezone)` when setting via ngModel
+- **Date Clicks After Month Navigation**: Fixed issue where dates became unclickable after navigating backward or forward months
+  - Updated `isDateDisabledMemo` getter to properly invalidate cached memoized function when month/year changes
+  - Added month/year change detection to ensure disabled date cache is refreshed after navigation
+  - Dates in previous/next months are now properly clickable without needing to close and reopen the datepicker
+
+### Changed
+
+- **Version Update**: Updated to version 1.9.15
+- **Stable Release**: Version 1.9.15 is the current stable version
+
+### Migration Steps
+
+No migration steps required. This is a patch version with bug fixes only. Simply update your package version:
+
+```bash
+npm install ngxsmk-datepicker@1.9.15
+```
+
+All fixes are backward compatible and require no code changes. This version is compatible with Angular 17 and up versions.
 
 ## v1.9.13 → v1.9.14
 
@@ -585,7 +614,8 @@ If you encounter issues during migration:
 
 | ngxsmk-datepicker | Angular | Node.js |
 |-------------------|---------|---------|
-| 1.9.14+ | 17-21 | 18+ |
+| 1.9.15+ | 17-21 | 18+ |
+| 1.9.14 | 17-21 | 18+ |
 | 1.9.11 | 17-21 | 18+ |
 | 1.9.10 | 17-21 | 18+ |
 | 1.9.9 | 17-21 | 18+ |

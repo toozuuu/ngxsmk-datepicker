@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.15] - 2025-01-XX (Stable)
+
+### Fixed
+- **Moment Object Binding with ngModel**: Fixed issue where Moment.js objects passed via `[(ngModel)]` were not binding correctly with the datepicker
+  - Updated `writeValue()` method to normalize Moment.js objects before passing to `initializeValue()`
+  - Ensures Moment.js objects (including those with `utcOffset()` applied) are properly converted to Date objects when binding with template-driven forms
+  - Now correctly handles `moment(response.Date).utcOffset(timezone)` when setting via ngModel
+- **Date Clicks After Month Navigation**: Fixed issue where dates became unclickable after navigating backward or forward months
+  - Updated `isDateDisabledMemo` getter to properly invalidate cached memoized function when month/year changes
+  - Added month/year change detection to ensure disabled date cache is refreshed after navigation
+  - Dates in previous/next months are now properly clickable without needing to close and reopen the datepicker
+
+### Changed
+- **Version Update**: Updated to version 1.9.15
+- **Stable Release**: Version 1.9.15 is the current stable version
+
+### Migration Notes
+- This is a patch version update with bug fixes only
+- No breaking changes from v1.9.14
+- All fixes are backward compatible
+- Compatible with Angular 17 and up versions
+
 ## [1.9.14] - 2025-01-XX (Stable)
 
 ### Fixed
