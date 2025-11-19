@@ -2492,14 +2492,35 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return this._normalizeDate(momentObj.toDate()) as DatepickerValue;
     } else if (typeof val === 'object' && val !== null && 'start' in val && 'end' in val) {
       const rangeVal = val as { start: unknown; end: unknown };
-      const start = this._normalizeDate(rangeVal.start as DateInput);
-      const end = this._normalizeDate(rangeVal.end as DateInput);
+      let start: Date | null;
+      let end: Date | null;
+      
+      if (this.isMomentObject(rangeVal.start)) {
+        const momentStart = rangeVal.start as { toDate: () => Date };
+        start = this._normalizeDate(momentStart.toDate());
+      } else {
+        start = this._normalizeDate(rangeVal.start as DateInput);
+      }
+      
+      if (this.isMomentObject(rangeVal.end)) {
+        const momentEnd = rangeVal.end as { toDate: () => Date };
+        end = this._normalizeDate(momentEnd.toDate());
+      } else {
+        end = this._normalizeDate(rangeVal.end as DateInput);
+      }
+      
       if (start && end) {
         return { start, end } as DatepickerValue;
       }
       return null;
     } else if (Array.isArray(val)) {
-      return val.map(d => this._normalizeDate(d)).filter((d): d is Date => d !== null) as DatepickerValue;
+      return val.map(d => {
+        if (this.isMomentObject(d)) {
+          const momentObj = d as { toDate: () => Date };
+          return this._normalizeDate(momentObj.toDate());
+        }
+        return this._normalizeDate(d as DateInput);
+      }).filter((d): d is Date => d !== null) as DatepickerValue;
     } else if (typeof val === 'string' && this.displayFormat) {
       const parsedDate = this.parseCustomDateString(val, this.displayFormat);
       return parsedDate as DatepickerValue;

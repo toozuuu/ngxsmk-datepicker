@@ -139,14 +139,20 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     
     component.toggleCalendar();
     fixture.detectChanges();
-    tick(150);
+    tick(200);
     flushMicrotasks();
+    
+    const liveRegionBefore = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
+    if (liveRegionBefore) {
+      liveRegionBefore.textContent = '';
+    }
     
     announceSpy.calls.reset();
     
     const today = new Date();
     component.onDateClick(today);
     fixture.detectChanges();
+    tick(10);
     flushMicrotasks();
     
     expect(announceSpy).toHaveBeenCalled();
@@ -154,15 +160,17 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     const announcedMessage = announceSpy.calls.mostRecent()?.args[0] || '';
     expect(announcedMessage.length).toBeGreaterThan(0, 
       `Announce was called with empty message.`);
+    expect(announcedMessage).toContain('selected', 
+      `Date selection announcement should mention selection. Got: "${announcedMessage}"`);
     
     const liveRegion = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
     expect(liveRegion).toBeTruthy('Live region should exist');
     
     const textContent = liveRegion?.textContent || '';
     
-    if (textContent === '' && announcedMessage) {
-      expect(announceSpy).toHaveBeenCalledWith(announcedMessage, 'polite');
-    } else {
+    expect(announceSpy).toHaveBeenCalledWith(announcedMessage, 'polite');
+    
+    if (textContent && textContent !== '') {
       expect(textContent).toBe(announcedMessage, 
         `Live region text should match announced message. Got: "${textContent}", Expected: "${announcedMessage}"`);
     }
@@ -174,10 +182,9 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     
     component.toggleCalendar();
     fixture.detectChanges();
-    tick(200); // Wait for calendar opened announcement to complete (100ms setTimeout + buffer)
+    tick(200);
     flushMicrotasks();
     
-    // Clear the live region to ensure we're testing the month change announcement
     const liveRegionBefore = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
     if (liveRegionBefore) {
       liveRegionBefore.textContent = '';
@@ -187,7 +194,7 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     
     component.changeMonth(1);
     fixture.detectChanges();
-    tick(10); // Small delay to ensure announcement is set
+    tick(10);
     flushMicrotasks();
     
     expect(announceSpy).toHaveBeenCalled();
@@ -203,10 +210,8 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     
     const textContent = liveRegion?.textContent || '';
     
-    // Check that the spy was called with the correct message
     expect(announceSpy).toHaveBeenCalledWith(announcedMessage, 'polite');
     
-    // If live region has content, it should match the announced message
     if (textContent && textContent !== '') {
       expect(textContent).toBe(announcedMessage, 
         `Live region text should match announced message. Got: "${textContent}", Expected: "${announcedMessage}"`);
