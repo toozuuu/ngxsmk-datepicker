@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 

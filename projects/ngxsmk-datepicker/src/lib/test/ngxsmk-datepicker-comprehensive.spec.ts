@@ -386,7 +386,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.currentDisplayHour = 2;
       component.currentMinute = 30;
       component.isPm = true;
-      component.onTimeChange();
+      component.timeChange();
       fixture.detectChanges();
 
       expect(component.selectedDate).toBeTruthy();
@@ -617,7 +617,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
   describe('Placeholder Configuration', () => {
     it('should have default placeholder', () => {
-      expect(component.placeholder).toBe('Select Date');
+      expect(component.placeholder).toBe('Select date');
     });
 
     it('should use custom placeholder', () => {

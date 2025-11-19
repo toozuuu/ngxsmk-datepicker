@@ -628,12 +628,12 @@ describe('Issue #13: Programmatic value setting', () => {
       const expectedDate = new Date(dateString);
       
       const mockField = {
-        value: () => dateString, // Database returns string
-        setValue: jasmine.createSpy('setValue'),
+        value: () => dateString as any, // Database returns string, will be normalized by component
+        setValue: jasmine.createSpy('setValue') as (value: DatepickerValue) => void,
         disabled: () => false
       };
       
-      component.field = mockField;
+      component.field = mockField as any;
       fixture.detectChanges();
       await fixture.whenStable();
       
@@ -673,12 +673,12 @@ describe('Issue #13: Programmatic value setting', () => {
       const expectedDate = new Date(dateString);
       
       const mockField = {
-        value: () => fieldValue,
-        setValue: jasmine.createSpy('setValue'),
+        value: () => fieldValue as any, // String will be normalized by component
+        setValue: jasmine.createSpy('setValue') as (value: DatepickerValue) => void,
         disabled: () => false
       };
       
-      component.field = mockField;
+      component.field = mockField as any;
       fixture.detectChanges();
       await fixture.whenStable();
       
@@ -688,6 +688,10 @@ describe('Issue #13: Programmatic value setting', () => {
       // Simulate database load after delay (async)
       setTimeout(() => {
         fieldValue = dateString;
+        // Manually trigger sync after value changes since effect won't track closure variable changes
+        if (typeof component['syncFieldValue'] === 'function') {
+          component['syncFieldValue'](mockField as any);
+        }
       }, 500);
       
       // Wait for async database load and sync mechanisms
@@ -724,7 +728,7 @@ describe('Issue #13: Programmatic value setting', () => {
       
       const mockField = {
         value: () => fieldValue,
-        setValue: (val: Date) => { fieldValue = val; },
+        setValue: (val: DatepickerValue) => { fieldValue = val as Date; },
         disabled: () => false
       };
       
@@ -735,7 +739,7 @@ describe('Issue #13: Programmatic value setting', () => {
       // Manually trigger field value sync to ensure initialization
       // This simulates what the field effect should do
       if (typeof component['syncFieldValue'] === 'function') {
-        component['syncFieldValue'](mockField);
+        component['syncFieldValue'](mockField as any);
         fixture.detectChanges();
       }
       
@@ -932,8 +936,8 @@ describe('Issue #13: Programmatic value setting', () => {
       
       const mockField = {
         value: () => fieldValue,
-        setValue: (val: Date) => { 
-          fieldValue = val;
+        setValue: (val: DatepickerValue) => { 
+          fieldValue = val as Date;
         },
         disabled: () => false
       };
@@ -945,7 +949,7 @@ describe('Issue #13: Programmatic value setting', () => {
       // Manually trigger field value sync to ensure initialization
       // This simulates what the field effect should do
       if (typeof component['syncFieldValue'] === 'function') {
-        component['syncFieldValue'](mockField);
+        component['syncFieldValue'](mockField as any);
         fixture.detectChanges();
       }
       
@@ -1008,7 +1012,7 @@ describe('Issue #13: Programmatic value setting', () => {
       
       const mockField = {
         value: () => fieldValue,
-        setValue: (val: Date) => { fieldValue = val; },
+        setValue: (val: DatepickerValue) => { fieldValue = val as Date; },
         disabled: () => false
       };
       
@@ -1019,7 +1023,7 @@ describe('Issue #13: Programmatic value setting', () => {
       // Manually trigger field value sync to ensure initialization
       // This simulates what the field effect should do
       if (typeof component['syncFieldValue'] === 'function') {
-        component['syncFieldValue'](mockField);
+        component['syncFieldValue'](mockField as any);
         fixture.detectChanges();
       }
       
@@ -1065,7 +1069,7 @@ describe('Issue #13: Programmatic value setting', () => {
       
       const mockField = {
         value: () => fieldValue,
-        setValue: (val: Date) => { fieldValue = val; },
+        setValue: (val: DatepickerValue) => { fieldValue = val as Date; },
         disabled: () => false
       };
       

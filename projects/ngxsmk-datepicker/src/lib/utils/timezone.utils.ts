@@ -1,8 +1,4 @@
 /**
- * Timezone utility functions for date formatting and parsing
- */
-
-/**
  * Format a date with timezone support
  * @param date The date to format
  * @param locale The locale for formatting
@@ -28,9 +24,6 @@ export function formatDateWithTimezone(
 
 /**
  * Parse a date string with timezone awareness
- * Note: JavaScript Date objects are always stored in UTC internally.
- * When parsing, we interpret the input in the specified timezone (or local timezone if not specified).
- * 
  * @param dateString The date string to parse
  * @param timezone Optional timezone for parsing (IANA timezone name)
  * @returns Date object (always in UTC internally)
@@ -38,15 +31,10 @@ export function formatDateWithTimezone(
 export function parseDateWithTimezone(dateString: string, timezone?: string): Date | null {
   if (!dateString) return null;
 
-  // If timezone is specified, we need to parse the date as if it's in that timezone
   if (timezone) {
     try {
-      // Create a date formatter to parse the date in the specified timezone
-      // This is a simplified approach - for complex parsing, consider using date-fns-tz or Luxon
       const date = new Date(dateString);
-      
-      // If the date string doesn't include timezone info, we interpret it in the specified timezone
-      // by adjusting for the timezone offset
+
       if (isNaN(date.getTime())) {
         return null;
       }
@@ -57,16 +45,12 @@ export function parseDateWithTimezone(dateString: string, timezone?: string): Da
     }
   }
 
-  // Default parsing (uses local timezone)
   const date = new Date(dateString);
   return isNaN(date.getTime()) ? null : date;
 }
 
 /**
  * Convert a date from one timezone to another
- * Note: JavaScript Date objects are always UTC internally.
- * This function helps format a date as if it were in a different timezone.
- * 
  * @param date The date to convert
  * @param fromTimezone Source timezone (IANA name)
  * @param _toTimezone Target timezone (IANA name) - currently unused in simplified implementation
@@ -77,7 +61,6 @@ export function convertTimezone(
   fromTimezone: string,
   _toTimezone: string
 ): Date {
-  // Get the date components in the source timezone
   const fromFormatter = new Intl.DateTimeFormat('en-US', {
     timeZone: fromTimezone,
     year: 'numeric',
@@ -113,22 +96,19 @@ export function getTimezoneOffset(timezone: string, date: Date = new Date()): nu
       timeZone: timezone,
       timeZoneName: 'longOffset',
     });
-    
-    // Get offset string like "GMT+5:30" or "GMT-8:00"
+
     const parts = formatter.formatToParts(date);
     const offsetPart = parts.find(p => p.type === 'timeZoneName');
-    
+
     if (offsetPart) {
-      // Parse offset string (simplified - for production use a proper parser)
       const offsetStr = offsetPart.value.replace('GMT', '').trim();
       const sign = offsetStr[0] === '-' ? -1 : 1;
       const [hours = 0, minutes = 0] = offsetStr.slice(1).split(':').map(Number);
       return sign * (hours * 60 + minutes);
     }
   } catch {
-    // Fallback to local timezone offset
   }
-  
+
   return date.getTimezoneOffset();
 }
 

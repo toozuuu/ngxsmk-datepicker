@@ -1,8 +1,5 @@
 import { getStartOfDay, getEndOfDay } from './date.utils';
 
-/**
- * Recurring date pattern types
- */
 export type RecurringPattern = 
   | 'daily'
   | 'weekly'
@@ -12,49 +9,17 @@ export type RecurringPattern =
   | 'weekends'
   | 'custom';
 
-/**
- * Configuration for recurring date selection
- */
 export interface RecurringDateConfig {
-  /**
-   * Pattern type
-   */
   pattern: RecurringPattern;
-  
-  /**
-   * Start date for the recurring pattern
-   */
   startDate: Date;
-  
-  /**
-   * End date for the recurring pattern (optional)
-   */
   endDate?: Date;
-  
-  /**
-   * Number of occurrences (optional, used if endDate is not provided)
-   */
   occurrences?: number;
-  
-  /**
-   * For weekly pattern: day of week (0=Sunday, 1=Monday, etc.)
-   * For monthly pattern: day of month (1-31)
-   * For yearly pattern: month and day (e.g., { month: 0, day: 1 } for January 1)
-   */
   dayOfWeek?: number;
   dayOfMonth?: number;
   monthAndDay?: { month: number; day: number };
-  
-  /**
-   * Interval for pattern (e.g., every 2 weeks, every 3 months)
-   * Default: 1
-   */
   interval?: number;
 }
 
-/**
- * Generate dates based on a recurring pattern
- */
 export function generateRecurringDates(config: RecurringDateConfig): Date[] {
   const dates: Date[] = [];
   const interval = config.interval || 1;
@@ -172,9 +137,6 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
   return dates;
 }
 
-/**
- * Check if a date matches a recurring pattern
- */
 export function matchesRecurringPattern(date: Date, config: RecurringDateConfig): boolean {
   const generatedDates = generateRecurringDates(config);
   const dateTime = getStartOfDay(date).getTime();

@@ -4,17 +4,17 @@
 [![Angular](https://img.shields.io/badge/Angular-17%2B-red.svg)](https://angular.io/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Bundle Size](https://img.shields.io/badge/bundle-~127KB-green.svg)](https://bundlephobia.com/package/ngxsmk-datepicker)
+[![Downloads](https://img.shields.io/npm/dm/ngxsmk-datepicker.svg)](https://www.npmjs.com/package/ngxsmk-datepicker)
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.11` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.10.0` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
-**Keywords**: Angular datepicker, Angular date range picker, Angular calendar component, Angular 17 datepicker, Angular 18 datepicker, Angular 19 datepicker, Angular 20 datepicker, Angular 21 datepicker, TypeScript datepicker, standalone Angular component, Signal Forms datepicker, SSR compatible datepicker, zoneless Angular datepicker, lightweight datepicker, customizable datepicker
+**SEO Keywords**: Angular datepicker, Angular date range picker, Angular calendar component, Angular 17 datepicker, Angular 18 datepicker, Angular 19 datepicker, Angular 20 datepicker, Angular 21 datepicker, TypeScript datepicker, standalone Angular component, Signal Forms datepicker, SSR compatible datepicker, zoneless Angular datepicker, lightweight datepicker, customizable datepicker, open source datepicker, free Angular datepicker, MIT license datepicker, accessible datepicker, responsive datepicker, mobile datepicker, touch-friendly datepicker, keyboard accessible datepicker, RTL datepicker, internationalized datepicker, i18n datepicker, localized datepicker, holiday calendar, date time picker, time selection, 12 hour clock, 24 hour clock, date validation, min max dates, disabled dates, date presets, recurring dates, timezone support
 
 * Github: [https://github.com/NGXSMK/ngxsmk-datepicker](https://github.com/NGXSMK/ngxsmk-datepicker)
-* **Live Demo**: [https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker](https://stackblitz.com/~/github.com/NGXSMK/ngxsmk-datepicker)
 * **GitHub Pages Demo**: [https://ngxsmk.github.io/ngxsmk-datepicker/](https://ngxsmk.github.io/ngxsmk-datepicker/)
 
 Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
@@ -59,18 +59,24 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 
 ## **📋 Compatibility**
 
-| Angular Version | Status | Notes |
-|----------------|--------|-------|
-| Angular 17 | ✅ Fully Supported | All features available |
-| Angular 18 | ✅ Fully Supported | All features available |
-| Angular 19 | ✅ Fully Supported | All features available |
-| Angular 20 | ✅ Fully Supported | All features available |
-| Angular 21 | ✅ Fully Supported | Signal Forms support, SSR optimized |
-| Angular 22+ | 🔄 Future Support | Peer dependency range: `>=17.0.0 <23.0.0` |
+For detailed compatibility information, see [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
+
+### Quick Reference
+
+| Angular Version | Status | Core Features | Signal Forms | SSR | Zoneless |
+|----------------|--------|---------------|--------------|-----|----------|
+| Angular 17 | ✅ Fully Supported | ✅ All | ❌ | ✅ | ✅ |
+| Angular 18 | ✅ Fully Supported | ✅ All | ❌ | ✅ | ✅ |
+| Angular 19 | ✅ Fully Supported | ✅ All | ❌ | ✅ | ✅ |
+| Angular 20 | ✅ Fully Supported | ✅ All | ❌ | ✅ | ✅ |
+| Angular 21 | ✅ Fully Supported | ✅ All | ✅ | ✅ | ✅ |
+| Angular 22+ | 🔄 Future Support | ✅ All | ✅ | ✅ | ✅ |
 
 **Zone.js**: Optional - The library works with or without Zone.js (zoneless apps supported)
 
 **SSR**: ✅ Fully compatible with Angular Universal and server-side rendering
+
+**Peer Dependencies**: `@angular/core >=17.0.0 <23.0.0`
 
 ## **🚀 Installation**
 
@@ -186,9 +192,8 @@ In your component file (e.g., app.component.ts), import NgxsmkDatepickerComponen
 
 Use the `<ngxsmk-datepicker>` selector in your HTML template.
 
-<!-- app.component.html -->
-
-    <h2>Advanced Date Range Picker</h2>  
+```html
+<h2>Advanced Date Range Picker</h2>  
       
     <ngxsmk-datepicker    
       [mode]="'range'"    
@@ -493,10 +498,8 @@ To enable the dark theme, simply bind the theme input:
 The `locale` input controls all internationalization. It automatically formats month names, weekday names, and sets the first day of the week.
 
 ```html
-<!-- Renders the calendar in German -->    
 <ngxsmk-datepicker [locale]="'de-DE'"></ngxsmk-datepicker>
 
-<!-- Renders the calendar in French -->    
 <ngxsmk-datepicker [locale]="'fr-FR'"></ngxsmk-datepicker>
 ```
 
@@ -732,6 +735,12 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.10.0** (Stable)
+- 🎉 **Version Update**: Updated to version 1.10.0
+- ✅ **Stable Release**: Version 1.10.0 is the current stable version
+- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.11
+- 📚 **Migration Guide**: See [MIGRATION.md](../../MIGRATION.md) for detailed migration instructions
 
 ### **v1.9.11** (Stable)
 - 🐛 **Moment.js Integration**: Fixed critical issue where Moment.js objects with custom date formats would not populate correctly

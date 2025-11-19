@@ -11,7 +11,7 @@ describe('Recurring Dates Utils', () => {
         interval: 1,
         occurrences: 5
       });
-      
+
       expect(dates.length).toBe(5);
       expect(dates[0].getTime()).toBe(startDate.getTime());
     });
@@ -25,7 +25,7 @@ describe('Recurring Dates Utils', () => {
         interval: 1,
         occurrences: 4
       });
-      
+
       expect(dates.length).toBe(4);
       dates.forEach(date => {
         expect(date.getDay()).toBe(1);
@@ -41,7 +41,7 @@ describe('Recurring Dates Utils', () => {
         interval: 1,
         occurrences: 6
       });
-      
+
       expect(dates.length).toBe(6);
       dates.forEach(date => {
         expect(date.getDate()).toBe(15);
@@ -57,7 +57,7 @@ describe('Recurring Dates Utils', () => {
         interval: 1,
         occurrences: 3
       });
-      
+
       expect(dates.length).toBe(3);
       dates.forEach(date => {
         expect(date.getMonth()).toBe(5);
@@ -73,7 +73,7 @@ describe('Recurring Dates Utils', () => {
         interval: 1,
         occurrences: 10
       });
-      
+
       expect(dates.length).toBeGreaterThan(0);
       dates.forEach(date => {
         const dayOfWeek = date.getDay();
@@ -90,7 +90,7 @@ describe('Recurring Dates Utils', () => {
         interval: 1,
         occurrences: 10
       });
-      
+
       expect(dates.length).toBeGreaterThan(0);
       dates.forEach(date => {
         const dayOfWeek = date.getDay();
@@ -107,7 +107,7 @@ describe('Recurring Dates Utils', () => {
         endDate: endDate,
         interval: 1
       });
-      
+
       expect(dates.length).toBeLessThanOrEqual(10);
       dates.forEach(date => {
         expect(date.getTime()).toBeLessThanOrEqual(endDate.getTime());
@@ -122,7 +122,7 @@ describe('Recurring Dates Utils', () => {
         interval: 2,
         occurrences: 5
       });
-      
+
       expect(dates.length).toBe(5);
       expect(dates[1].getDate() - dates[0].getDate()).toBe(2);
     });
@@ -130,16 +130,15 @@ describe('Recurring Dates Utils', () => {
 
   describe('matchesRecurringPattern', () => {
     it('should match date in recurring pattern', () => {
-      const startDate = getStartOfDay(new Date(2025, 0, 1)); // Jan 1, 2025 is Wednesday (day 3)
-      // For weekly pattern with dayOfWeek=1 (Monday), the first occurrence would be Jan 6, 2025 (Monday)
-      const testDate = getStartOfDay(new Date(2025, 0, 6)); // Jan 6, 2025 is Monday
+      const startDate = getStartOfDay(new Date(2025, 0, 1));
+      const testDate = getStartOfDay(new Date(2025, 0, 6));
       const config: RecurringDateConfig = {
         pattern: 'weekly',
         startDate: startDate,
-        dayOfWeek: 1, // Monday
+        dayOfWeek: 1,
         interval: 1
       };
-      
+
       const matches = matchesRecurringPattern(testDate, config);
       expect(matches).toBe(true);
     });
@@ -153,7 +152,7 @@ describe('Recurring Dates Utils', () => {
         dayOfWeek: 1,
         interval: 1
       };
-      
+
       const matches = matchesRecurringPattern(testDate, config);
       expect(matches).toBe(false);
     });

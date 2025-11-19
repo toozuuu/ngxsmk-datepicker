@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay } from '../utils/date.utils';
-import { PLATFORM_ID } from '@angular/core';
 
 describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
   let component: NgxsmkDatepickerComponent;

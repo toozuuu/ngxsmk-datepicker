@@ -161,7 +161,6 @@ describe('Calendar Utils', () => {
       const grid = generateYearGrid(2025);
       
       expect(grid.length).toBe(12);
-      // Year grid starts at decade boundary - 1: Math.floor(2025/10)*10 - 1 = 2019
       expect(grid[0]).toBe(2019);
       expect(grid[11]).toBe(2030);
     });
@@ -172,8 +171,6 @@ describe('Calendar Utils', () => {
       const grid = generateDecadeGrid(2025);
       
       expect(grid.length).toBe(12);
-      // Formula: currentDecade + (i * 10) - 10, starting at i=0
-      // For 2025: 2025 + (0*10) - 10 = 2015
       expect(grid[0]).toBe(2015);
       expect(grid[11]).toBe(2025 + (11 * 10) - 10);
     });

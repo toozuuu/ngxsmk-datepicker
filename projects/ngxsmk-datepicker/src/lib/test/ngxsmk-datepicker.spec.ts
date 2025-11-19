@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { SimpleChange } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay } from '../utils/date.utils';
 

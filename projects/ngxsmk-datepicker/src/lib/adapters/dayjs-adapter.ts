@@ -25,7 +25,7 @@ export class DayjsAdapter implements DateAdapter {
   constructor() {
     try {
       this.dayjs = require('dayjs');
-    } catch (e) {
+    } catch {
       throw new Error('dayjs is not installed. Please install it: npm install dayjs');
     }
   }

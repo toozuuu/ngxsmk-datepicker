@@ -34,7 +34,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
 
       component.currentDisplayHour = 2; // 2 PM
       component.isPm = true;
-      component.onTimeChange();
+      component.timeChange();
 
       expect(component.selectedDate).toBeTruthy();
       if (component.selectedDate) {
@@ -50,7 +50,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       fixture.detectChanges();
 
       component.currentMinute = 30;
-      component.onTimeChange();
+      component.timeChange();
 
       expect(component.selectedDate).toBeTruthy();
       if (component.selectedDate) {
@@ -67,7 +67,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
 
       component.isPm = true;
       component.currentDisplayHour = 2; // 2 PM
-      component.onTimeChange();
+      component.timeChange();
 
       expect(component.selectedDate).toBeTruthy();
       if (component.selectedDate) {
@@ -88,7 +88,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       component.currentDisplayHour = 10;
       component.currentMinute = 30;
       component.isPm = false;
-      component.onTimeChange();
+      component.timeChange();
 
       expect(component.selectedDate).toBeTruthy();
       if (component.selectedDate) {
@@ -100,10 +100,14 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
     });
 
     it('should hide calendar in time-only mode', () => {
-      component.timeOnly = true;
+      component.inline = true; // Ensure calendar is visible
+      component.timeOnly = true; // Set timeOnly BEFORE generating calendar
+      component.calendarViewMode = 'month'; // Ensure we're in month view
       component.ngOnChanges({ timeOnly: { currentValue: true, previousValue: false, firstChange: false, isFirstChange: () => false } as any });
+      component.generateCalendar(); // Generate calendar AFTER setting timeOnly
       fixture.detectChanges();
 
+      // The header should be hidden in time-only mode (it's inside @if (!timeOnly))
       const calendarHeader = fixture.debugElement.query(By.css('.ngxsmk-header'));
       expect(calendarHeader).toBeFalsy();
     });
@@ -129,7 +133,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       component.currentDisplayHour = 3; // 3 PM
       component.isPm = true;
       component.currentMinute = 45;
-      component.onTimeChange();
+      component.timeChange();
 
       expect(component.startDate).toBeTruthy();
       expect(component.endDate).toBeTruthy();
@@ -157,7 +161,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       component.currentDisplayHour = 12;
       component.isPm = true; // Noon
       component.currentMinute = 0;
-      component.onTimeChange();
+      component.timeChange();
 
       expect(component.selectedDates.length).toBe(2);
       component.selectedDates.forEach(date => {
@@ -209,7 +213,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       component.selectedDate = getStartOfDay(new Date());
       component.currentDisplayHour = 2;
       component.isPm = true;
-      component.onTimeChange();
+      component.timeChange();
       fixture.detectChanges();
 
       expect(component.currentHour).toBe(14);

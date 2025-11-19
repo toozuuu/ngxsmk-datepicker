@@ -1,4 +1,4 @@
-import { getStartOfDay, getEndOfDay, addMonths, subtractDays, getStartOfMonth, getEndOfMonth, isSameDay, normalizeDate, DateInput } from './date.utils';
+import { getStartOfDay, getEndOfDay, addMonths, subtractDays, getStartOfMonth, getEndOfMonth, isSameDay, normalizeDate } from './date.utils';
 
 describe('Date Utils', () => {
   describe('getStartOfDay', () => {

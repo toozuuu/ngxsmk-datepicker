@@ -1253,28 +1253,24 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
   standalone: true,
   imports: [NgxsmkDatepickerComponent],
   template: `
-    <!-- Single date - closes after selection -->
     <ngxsmk-datepicker
       mode="single"
       [autoApplyClose]="true"
       placeholder="Select a date">
     </ngxsmk-datepicker>
     
-    <!-- Range - closes after end date is selected -->
     <ngxsmk-datepicker
       mode="range"
       [autoApplyClose]="true"
       placeholder="Select date range">
     </ngxsmk-datepicker>
     
-    <!-- With time selection - auto-close is disabled -->
     <ngxsmk-datepicker
       mode="single"
       [showTime]="true"
       [autoApplyClose]="true"
       placeholder="Select date and time">
     </ngxsmk-datepicker>
-    <!-- Note: When showTime is true, autoApplyClose is automatically disabled -->
   `
 })
 export class AutoCloseComponent {}
@@ -2172,7 +2168,7 @@ type DateInput =
 
 ### DatepickerHooks
 
-**Status**: Stable (v1.9.11+)
+**Status**: Stable (v1.10.0+)
 
 Comprehensive hook interface for customizing datepicker behavior.
 
@@ -2196,7 +2192,7 @@ interface DatepickerHooks {
 
 ### KeyboardShortcutContext
 
-**Status**: Stable (v1.9.11+)
+**Status**: Stable (v1.10.0+)
 
 Context object provided to keyboard shortcut handlers.
 

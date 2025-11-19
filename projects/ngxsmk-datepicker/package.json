@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.9.11",
+  "version": "1.10.0",
   "author": {
     "name": "Sachin Dilshan",
     "url": "https://www.linkedin.com/in/sachindilshan/"
@@ -59,6 +59,15 @@
   ],
   "exports": {
     ".": {
+      "import": "./fesm2022/ngxsmk-datepicker.mjs"
+    },
+    "./adapters": {
+      "import": "./fesm2022/ngxsmk-datepicker.mjs"
+    },
+    "./utils": {
+      "import": "./fesm2022/ngxsmk-datepicker.mjs"
+    },
+    "./services": {
       "import": "./fesm2022/ngxsmk-datepicker.mjs"
     }
   },
