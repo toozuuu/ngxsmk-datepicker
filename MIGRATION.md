@@ -4,7 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
-- [v1.9.11 → v1.10.0](#v1911---v1100)
+- [v1.9.11 → v1.9.12](#v1911---v1912)
 - [v1.9.10 → v1.9.11](#v1910---v1911)
 - [v1.9.9 → v1.9.10](#v199---v1910)
 - [v1.9.8 → v1.9.9](#v198---v199)
@@ -20,12 +20,12 @@ This document provides migration instructions for upgrading between major versio
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
-## v1.9.11 → v1.10.0
+## v1.9.11 → v1.9.12
 
 ### Changed
 
-- **Version Update**: Updated to version 1.10.0
-- **Stable Release**: Version 1.10.0 is the current stable version
+- **Version Update**: Updated to version 1.9.12
+- **Stable Release**: Version 1.9.12 is the current stable version
 
 ### Migration Steps
 
@@ -33,7 +33,7 @@ No code changes required. This is a minor version update with backward compatibi
 
 1. Update package version:
    ```bash
-   npm install ngxsmk-datepicker@^1.10.0
+   npm install ngxsmk-datepicker@^1.9.12
    ```
 
 2. Rebuild your application:
@@ -533,7 +533,7 @@ If you encounter issues during migration:
 
 | ngxsmk-datepicker | Angular | Node.js |
 |-------------------|---------|---------|
-| 1.10.0+ | 17-21 | 18+ |
+| 1.9.12+ | 17-21 | 18+ |
 | 1.9.11 | 17-21 | 18+ |
 | 1.9.10 | 17-21 | 18+ |
 | 1.9.9 | 17-21 | 18+ |

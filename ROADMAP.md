@@ -56,12 +56,12 @@ This roadmap outlines the planned features, improvements, and enhancements for n
 
 ### Features Under Discussion
 
-- [x] **Multi-Calendar Support** ✅ (Implemented in v1.10.0)
+- [x] **Multi-Calendar Support** ✅ (Implemented in v1.9.12)
   - Display multiple months side-by-side - Available via `[calendarCount]` input
   - Configurable calendar count - Set `calendarCount` from 1 to 12
   - *Available via: `<ngxsmk-datepicker [calendarCount]="2">`*
 
-- [x] **Date Presets** ✅ (Implemented in v1.10.0)
+- [x] **Date Presets** ✅ (Implemented in v1.9.12)
   - User-defined date presets - Available via `DatePresetsService.savePreset()`
   - Preset management API - Full CRUD operations via `DatePresetsService`
   - Preset categories - Supported via `category` property
@@ -72,13 +72,13 @@ This roadmap outlines the planned features, improvements, and enhancements for n
   - Import dates from external sources - Available via `importFromJson`, `importFromCsv`, `importFromIcs`
   - *Available in utils exports: `import { exportToJson, importFromJson } from 'ngxsmk-datepicker/utils'`*
 
-- [x] **Advanced Styling** ✅ (Implemented in v1.10.0)
+- [x] **Advanced Styling** ✅ (Implemented in v1.9.12)
   - CSS-in-JS support - Available via `ThemeBuilderService.generateStyleObject()`
   - Theme builder tool - Available via `ThemeBuilderService.applyTheme()`
   - Component variants - Supported via theme customization
   - *Available via: `import { ThemeBuilderService, DatepickerTheme } from 'ngxsmk-datepicker'`*
 
-- [x] **Integration Examples** ✅ (Implemented in v1.10.0)
+- [x] **Integration Examples** ✅ (Implemented in v1.9.12)
   - Angular Material integration guide - Available in `docs/INTEGRATION.md`
   - Ionic integration guide - Available in `docs/INTEGRATION.md`
   - Tailwind CSS integration guide - Available in `docs/INTEGRATION.md`

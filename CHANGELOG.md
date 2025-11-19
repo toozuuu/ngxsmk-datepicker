@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.0] - 2025-11-19 (Stable)
+## [1.9.12] - 2025-11-19 (Stable)
 
 ### Added
 - **SEO Optimization**: Comprehensive search engine optimization improvements
@@ -27,8 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced description with additional relevant terms
 
 ### Changed
-- **Version Update**: Updated to version 1.10.0
-- **Stable Release**: Version 1.10.0 is the current stable version
+- **Version Update**: Updated to version 1.9.12
+- **Stable Release**: Version 1.9.12 is the current stable version
 - **Multi-Calendar Spacing**: Increased gap between multiple calendars from 16px to 32px for better visual separation
   - Applied to horizontal, vertical, and auto layouts
   - Improved spacing consistency across all multi-calendar configurations
