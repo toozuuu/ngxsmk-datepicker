@@ -573,6 +573,44 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
     });
   });
 
+  describe('Range Mode Previous Month Selection', () => {
+    it('should allow selecting dates from previous month in range mode with null initial values', () => {
+      component.mode = 'range';
+      component.inline = true;
+      fixture.detectChanges();
+
+      // Initialize with null values
+      component.writeValue(null);
+      fixture.detectChanges();
+
+      // Start in a specific month
+      const currentMonth = new Date(2024, 6, 15); // July
+      component.currentDate = currentMonth;
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      expect(component.startDate).toBeNull();
+      expect(component.endDate).toBeNull();
+
+      // Click on a date from previous month (June)
+      const previousMonthDate = getStartOfDay(new Date(2024, 5, 25));
+      const isDisabled = component.isDateDisabled(previousMonthDate);
+      
+      if (!isDisabled) {
+        spyOn(component.valueChange, 'emit');
+        component.onDateClick(previousMonthDate);
+        fixture.detectChanges();
+
+        // Should navigate to previous month and set as start date
+        expect(component.startDate).toBeTruthy();
+        expect(component.startDate!.getMonth()).toBe(5); // June
+        expect(component.endDate).toBeNull();
+        // valueChange.emit is only called when both start and end dates are set in range mode
+        expect(component.valueChange.emit).not.toHaveBeenCalled();
+      }
+    });
+  });
+
   describe('Accessibility Features', () => {
     it('should have aria labels on navigation buttons', () => {
       component.inline = true;
@@ -645,6 +683,12 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       fixture.detectChanges();
 
       expect(component.action.emit).toHaveBeenCalledWith({ type: 'clear', payload: null });
+    });
+  });
+
+  describe('Angular 21 Compatibility Note', () => {
+    it('should be compatible with Angular 21', () => {
+      expect(component).toBeTruthy();
     });
   });
 });

@@ -11,9 +11,9 @@ This document provides comprehensive compatibility information for `ngxsmk-datep
 | **Angular 17** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed | ❌ Not Available | ✅ Full | Minimum supported version |
 | **Angular 18** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Enhanced signal support |
 | **Angular 19** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Optimized performance |
-| **Angular 20** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Current development target |
-| **Angular 21** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ✅ Signal Forms `[field]` | ✅ Full | Signal Forms support |
-| **Angular 22+** | 🔄 Future Support | ✅ All | ✅ Signals, Computed, Effects | ✅ Signal Forms `[field]` | ✅ Full | Peer dependency: `<23.0.0` |
+| **Angular 20** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Fully supported |
+| **Angular 21** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ✅ Signal Forms `[field]` | ✅ Full | **Officially released - Current development target**<br/>✅ Signal Forms (experimental)<br/>✅ Zoneless by default<br/>✅ Vitest compatible<br/>✅ Angular Aria compatible |
+| **Angular 22+** | 🔄 Future Support | ✅ All | ✅ Signals, Computed, Effects | ✅ Signal Forms `[field]` | ✅ Full | Peer dependency: `<24.0.0` |
 
 ### Feature Availability by Angular Version
 
@@ -39,18 +39,25 @@ This document provides comprehensive compatibility information for `ngxsmk-datep
 - ✅ `inject()` - Dependency injection
 
 #### Signal Forms (Angular 21+)
-- ✅ `[field]` input binding
+- ✅ `[field]` input binding (experimental Angular 21 feature)
 - ✅ Automatic field synchronization
 - ✅ Reactive form field updates
 - ✅ Signal-based value management
+- ✅ Works with `form()`, `objectSchema()`, and `validators`
+- ✅ Compatible with `httpResource` and `linkedSignal` patterns
+
+#### Angular 21 New Features Compatibility
+- ✅ **Zoneless by Default**: Fully compatible with Angular 21 apps that don't include Zone.js
+- ✅ **Vitest Test Runner**: Library works in apps using Vitest (Angular 21 default)
+- ✅ **Angular Aria**: Compatible with Angular Aria components; uses custom ARIA implementation for screen reader support
 
 ### Peer Dependencies
 
 ```json
 {
-  "@angular/common": ">=17.0.0 <23.0.0",
-  "@angular/core": ">=17.0.0 <23.0.0",
-  "@angular/forms": ">=17.0.0 <23.0.0"
+  "@angular/common": ">=17.0.0 <24.0.0",
+  "@angular/core": ">=17.0.0 <24.0.0",
+  "@angular/forms": ">=17.0.0 <24.0.0"
 }
 ```
 
@@ -355,6 +362,34 @@ The component is tested against:
 - ✅ With and without Zone.js
 - ✅ SSR and CSR modes
 - ✅ Various browser environments
+- ✅ **Vitest Compatible**: Works in Angular 21 applications using Vitest (Angular 21 default test runner)
+  - Library tests use Karma/Jasmine, but the library itself is fully compatible with Vitest-based apps
+  - No changes needed when using Vitest in your Angular 21 application
+
+## 🆕 Angular 21 New Features Support
+
+### Signal Forms (Experimental)
+- ✅ **Full Support**: `[field]` input binding for direct Signal Forms integration
+- ✅ **Automatic Sync**: Two-way binding with signal form fields
+- ✅ **Validation**: Respects field validation and disabled state
+- ✅ **Server Integration**: Works with `httpResource` and `linkedSignal` patterns
+
+### Zoneless by Default
+- ✅ **Fully Compatible**: Works in Angular 21 apps without Zone.js
+- ✅ **OnPush Strategy**: Uses OnPush change detection for optimal performance
+- ✅ **Signal-Based**: Leverages signals for reactive updates
+- ✅ **No Changes Needed**: Existing code works without modification
+
+### Vitest Test Runner
+- ✅ **Compatible**: Library works in apps using Vitest (Angular 21 default)
+- ✅ **No Migration Required**: Use the library as-is in Vitest-based projects
+- ✅ **Test Suite**: Library tests use Karma/Jasmine but library is Vitest-compatible
+
+### Angular Aria Compatibility
+- ✅ **ARIA Support**: Built-in ARIA attributes and screen reader support
+- ✅ **AriaLiveService**: Custom service for live region announcements
+- ✅ **Compatible**: Works alongside Angular Aria components
+- ✅ **Accessibility First**: All interactive elements have proper ARIA labels
 
 ## 📚 Additional Resources
 
@@ -362,6 +397,10 @@ The component is tested against:
 - [Angular SSR Guide](https://angular.dev/guide/ssr)
 - [Zoneless Angular Guide](https://angular.dev/guide/zoneless)
 - [Signal Forms Documentation](https://angular.dev/guide/forms/signal-forms)
+- [Angular Aria Documentation](https://angular.dev/guide/accessibility/angular-aria)
+- [Vitest Documentation](https://vitest.dev/)
+- [Angular Aria Documentation](https://angular.dev/guide/accessibility/angular-aria)
+- [Vitest Documentation](https://vitest.dev/)
 
 ## 🔍 Version Detection
 

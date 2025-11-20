@@ -1,14 +1,14 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.9.15",
+  "version": "1.9.16",
   "author": {
     "name": "Sachin Dilshan",
     "url": "https://www.linkedin.com/in/sachindilshan/"
   },
   "peerDependencies": {
-    "@angular/common": ">=17.0.0 <23.0.0",
-    "@angular/core": ">=17.0.0 <23.0.0",
-    "@angular/forms": ">=17.0.0 <23.0.0"
+    "@angular/common": ">=17.0.0 <24.0.0",
+    "@angular/core": ">=17.0.0 <24.0.0",
+    "@angular/forms": ">=17.0.0 <24.0.0"
   },
   "peerDependenciesMeta": {
     "zone.js": {

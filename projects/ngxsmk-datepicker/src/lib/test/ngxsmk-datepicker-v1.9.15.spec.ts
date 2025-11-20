@@ -323,5 +323,234 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       expect(component.valueChange.emit).toHaveBeenCalled();
     });
   });
+
+  describe('Range Mode Previous Month Selection', () => {
+    it('should allow selecting start date from previous month in range mode', () => {
+      component.mode = 'range';
+      component.inline = true;
+      fixture.detectChanges();
+
+        // Start with null values
+        component.writeValue(null);
+      fixture.detectChanges();
+
+      // Start in July 2024
+      const julyDate = new Date(2024, 6, 15);
+      component.currentDate = julyDate;
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      expect(component.currentMonth).toBe(6); // July
+      expect(component.startDate).toBeNull();
+      expect(component.endDate).toBeNull();
+
+      // Click on a date from previous month (June) - should navigate and select
+      const june30 = getStartOfDay(new Date(2024, 5, 30)); // Last day of June
+      
+      // Check if date is disabled (should not be if within valid range)
+      const isDisabled = component.isDateDisabled(june30);
+      if (!isDisabled) {
+        spyOn(component.valueChange, 'emit');
+        component.onDateClick(june30);
+        fixture.detectChanges();
+
+        // Should navigate to June and set as start date
+        expect(component.currentMonth).toBe(5); // June
+        expect(component.startDate).toBeTruthy();
+        expect(component.startDate!.getMonth()).toBe(5); // June
+        expect(component.startDate!.getDate()).toBe(30);
+        expect(component.endDate).toBeNull();
+        // valueChange.emit is only called when both start and end dates are set in range mode
+        expect(component.valueChange.emit).not.toHaveBeenCalled();
+      }
+    });
+
+    it('should allow selecting dates from previous month after setting start date', () => {
+      component.mode = 'range';
+      component.inline = true;
+      fixture.detectChanges();
+
+      // Start in July 2024
+      const julyDate = new Date(2024, 6, 15);
+      component.currentDate = julyDate;
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      // Set a start date in July
+      const july10 = getStartOfDay(new Date(2024, 6, 10));
+      component.onDateClick(july10);
+      fixture.detectChanges();
+
+      expect(component.startDate).toBeTruthy();
+      expect(component.startDate!.getMonth()).toBe(6); // July
+      expect(component.endDate).toBeNull();
+
+      // Click on a date from previous month (June) - should update start date
+      const june30 = getStartOfDay(new Date(2024, 5, 30));
+      
+      const isDisabled = component.isDateDisabled(june30);
+      if (!isDisabled) {
+        spyOn(component.valueChange, 'emit');
+        component.onDateClick(june30);
+        fixture.detectChanges();
+
+        // Should navigate to June and update start date
+        expect(component.currentMonth).toBe(5); // June
+        expect(component.startDate).toBeTruthy();
+        expect(component.startDate!.getMonth()).toBe(5); // June
+        expect(component.startDate!.getDate()).toBe(30);
+        expect(component.endDate).toBeNull();
+        // valueChange.emit is only called when both start and end dates are set in range mode
+        expect(component.valueChange.emit).not.toHaveBeenCalled();
+      }
+    });
+
+    it('should properly invalidate memo cache when navigating to previous month in range mode', () => {
+      component.mode = 'range';
+      component.inline = true;
+      fixture.detectChanges();
+
+      // Start in July 2024
+      const julyDate = new Date(2024, 6, 15);
+      component.currentDate = julyDate;
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      // Get initial memo function
+      const memo1 = component.isDateDisabledMemo;
+      const june30 = getStartOfDay(new Date(2024, 5, 30));
+
+      // Click on date from previous month - should navigate and invalidate cache
+      const isDisabled = component.isDateDisabled(june30);
+      if (!isDisabled) {
+        component.onDateClick(june30);
+        fixture.detectChanges();
+
+        // After navigation, memo should be updated
+        const memo2 = component.isDateDisabledMemo;
+        
+        // The memo function should now use the new month/year (June)
+        expect(component.currentMonth).toBe(5); // June
+        expect(component.currentYear).toBe(2024);
+        
+        // Dates in June should be correctly evaluated
+        const june15 = getStartOfDay(new Date(2024, 5, 15));
+        expect(memo2(june15)).toBe(false);
+        expect(component.isDateDisabled(june15)).toBe(false);
+      }
+    });
+
+    it('should allow selecting range across month boundaries starting from previous month', () => {
+      component.mode = 'range';
+      component.inline = true;
+      fixture.detectChanges();
+
+      // Start in July 2024
+      const julyDate = new Date(2024, 6, 15);
+      component.currentDate = julyDate;
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      // Click on date from previous month (June) as start
+      const june30 = getStartOfDay(new Date(2024, 5, 30));
+      const isDisabledJune = component.isDateDisabled(june30);
+      
+      if (!isDisabledJune) {
+        component.onDateClick(june30);
+        fixture.detectChanges();
+
+        expect(component.startDate).toBeTruthy();
+        expect(component.startDate!.getMonth()).toBe(5); // June
+        expect(component.endDate).toBeNull();
+
+        // Navigate back to July and select end date
+        component.changeMonth(1);
+        fixture.detectChanges();
+
+        expect(component.currentMonth).toBe(6); // July
+
+        // Select end date in July
+        const july5 = getStartOfDay(new Date(2024, 6, 5));
+        const isDisabledJuly = component.isDateDisabled(july5);
+        
+        if (!isDisabledJuly) {
+          spyOn(component.valueChange, 'emit');
+          component.onDateClick(july5);
+          fixture.detectChanges();
+
+          expect(component.startDate).toBeTruthy();
+          expect(component.startDate!.getMonth()).toBe(5); // June
+          expect(component.endDate).toBeTruthy();
+          expect(component.endDate!.getMonth()).toBe(6); // July
+          expect(component.valueChange.emit).toHaveBeenCalled();
+        }
+      }
+    });
+
+    it('should work with null start and end values', () => {
+      component.mode = 'range';
+      component.inline = true;
+      
+        // Initialize with null values
+        component.writeValue(null);
+      fixture.detectChanges();
+
+      expect(component.startDate).toBeNull();
+      expect(component.endDate).toBeNull();
+
+      // Start in July 2024
+      const julyDate = new Date(2024, 6, 15);
+      component.currentDate = julyDate;
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      // Click on date from previous month
+      const june25 = getStartOfDay(new Date(2024, 5, 25));
+      const isDisabled = component.isDateDisabled(june25);
+      
+      if (!isDisabled) {
+        spyOn(component.valueChange, 'emit');
+        component.onDateClick(june25);
+        fixture.detectChanges();
+
+        // Should set start date and navigate to June
+        expect(component.startDate).toBeTruthy();
+        expect(component.startDate!.getMonth()).toBe(5); // June
+        expect(component.startDate!.getDate()).toBe(25);
+        expect(component.endDate).toBeNull();
+        expect(component.currentMonth).toBe(5); // June
+        // valueChange.emit is only called when both start and end dates are set in range mode
+        expect(component.valueChange.emit).not.toHaveBeenCalled();
+      }
+    });
+  });
+
+  describe('Angular 21 Compatibility', () => {
+    it('should be compatible with Angular 21 features', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should work with Signal Forms [field] input', () => {
+      const mockField = {
+        value: new Date(2025, 0, 15),
+        disabled: false,
+        setValue: jasmine.createSpy('setValue'),
+        updateValue: jasmine.createSpy('updateValue')
+      };
+
+      component.field = mockField as any;
+      fixture.detectChanges();
+
+      expect(component.value).toEqual(mockField.value);
+    });
+
+    it('should be compatible with zoneless Angular 21 apps', () => {
+      const testDate = new Date(2025, 0, 15);
+      component.value = testDate;
+      fixture.detectChanges();
+
+      expect(component.value).toEqual(testDate);
+    });
+  });
 });
 

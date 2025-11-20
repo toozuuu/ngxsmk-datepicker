@@ -93,16 +93,21 @@ type SignalFormField = {
       @if (!isInlineMode) {
         <div class="ngxsmk-input-group" (click)="toggleCalendar($event)" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)" (focus)="onInputGroupFocus()" (keydown.enter)="toggleCalendar($event)" (keydown.space)="toggleCalendar($event); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
           <input type="text" 
-                 [value]="displayValue" 
+                 #dateInput
+                 [value]="allowTyping ? (typedInputValue || displayValue) : displayValue" 
                  [placeholder]="placeholder" 
-                 readonly 
+                 [readonly]="!allowTyping"
                  [disabled]="disabled"
                  [attr.aria-label]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
                  [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
                  class="ngxsmk-display-input"
                  [ngClass]="classes?.input"
-                 (keydown.enter)="toggleCalendar($event)"
-                 (keydown.space)="toggleCalendar($event); $event.preventDefault()">
+                 (keydown.enter)="onInputKeyDown($any($event))"
+                 (keydown.space)="onInputKeyDown($any($event))"
+                 (keydown.escape)="onInputKeyDown($any($event))"
+                 (input)="onInputChange($event)"
+                 (blur)="onInputBlur($event)"
+                 (focus)="onInputFocus($event)">
           <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event)" [disabled]="disabled" *ngIf="displayValue" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
           </button>
@@ -467,6 +472,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() customShortcuts: { [key: string]: (context: KeyboardShortcutContext) => boolean } | null = null;
   @Input() autoApplyClose: boolean = false;
   @Input() displayFormat?: string;
+  @Input() allowTyping: boolean = false;
   @Input() calendarCount: number = 1;
   @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
   @Input() defaultMonthOffset: number = 0;
@@ -750,7 +756,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly dateComparator = createDateComparator();
 
+  // Typed input handling
+  public typedInputValue: string = '';
+  private isTyping: boolean = false;
+
   @ViewChild('popoverContainer', { static: false }) popoverContainer?: ElementRef<HTMLElement>;
+  @ViewChild('dateInput', { static: false }) dateInput?: ElementRef<HTMLInputElement>;
   private focusTrapCleanup: (() => void) | null = null;
 
   // Translation management
@@ -850,38 +861,56 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   get displayValue(): string {
     if (this.hooks?.formatDisplayValue) {
-      return this.hooks.formatDisplayValue(this._internalValue, this.mode);
+      const value = this.hooks.formatDisplayValue(this._internalValue, this.mode);
+      // Sync typedInputValue when not typing
+      if (!this.isTyping && this.allowTyping) {
+        this.typedInputValue = value || '';
+      }
+      return value;
     }
 
     if (this.displayFormat) {
-      return this.formatWithCustomFormat();
+      const value = this.formatWithCustomFormat();
+      // Sync typedInputValue when not typing
+      if (!this.isTyping && this.allowTyping) {
+        this.typedInputValue = value || '';
+      }
+      return value;
     }
 
     if (this.timeOnly) {
+      let timeResult = '';
       if (this.mode === 'single' && this.selectedDate) {
         const options: Intl.DateTimeFormatOptions = {
           hour: '2-digit',
           minute: '2-digit'
         };
-        return formatDateWithTimezone(this.selectedDate, this.locale, options, this.timezone);
+        timeResult = formatDateWithTimezone(this.selectedDate, this.locale, options, this.timezone);
       } else if (this.mode === 'range' && this.startDate) {
         if (this.endDate) {
           const startOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
           const endOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
           const start = formatDateWithTimezone(this.startDate, this.locale, startOptions, this.timezone);
           const end = formatDateWithTimezone(this.endDate, this.locale, endOptions, this.timezone);
-          return `${start} - ${end}`;
+          timeResult = `${start} - ${end}`;
         } else {
           const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
           const start = formatDateWithTimezone(this.startDate, this.locale, options, this.timezone);
-          return `${start}...`;
+          timeResult = `${start}...`;
         }
       } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
-        return this.getTranslation('timesSelected', undefined, { count: this.selectedDates.length });
+        timeResult = this.getTranslation('timesSelected', undefined, { count: this.selectedDates.length });
       }
-      return '';
+      
+      // Sync typedInputValue when not typing
+      if (!this.isTyping && this.allowTyping) {
+        this.typedInputValue = timeResult;
+      }
+      
+      return timeResult;
     }
 
+    let result = '';
     if (this.mode === 'single' && this.selectedDate) {
       const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
@@ -894,7 +923,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         options.minute = '2-digit';
       }
 
-      return formatDateWithTimezone(this.selectedDate, this.locale, options, this.timezone);
+      result = formatDateWithTimezone(this.selectedDate, this.locale, options, this.timezone);
     } else if (this.mode === 'range' && this.startDate) {
       const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
@@ -904,15 +933,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (this.endDate) {
         const start = formatDateWithTimezone(this.startDate, this.locale, options, this.timezone);
         const end = formatDateWithTimezone(this.endDate, this.locale, options, this.timezone);
-        return `${start} - ${end}`;
+        result = `${start} - ${end}`;
       } else {
         const start = formatDateWithTimezone(this.startDate, this.locale, options, this.timezone);
-        return `${start}...`;
+        result = `${start}...`;
       }
     } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
-      return this.getTranslation('datesSelected', undefined, { count: this.selectedDates.length });
+      result = this.getTranslation('datesSelected', undefined, { count: this.selectedDates.length });
     }
-    return '';
+    
+    // Sync typedInputValue when not typing
+    if (!this.isTyping && this.allowTyping) {
+      this.typedInputValue = result;
+    }
+    
+    return result;
   }
 
   private formatWithCustomFormat(): string {
@@ -1841,6 +1876,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (event.type === 'click') {
+      // Don't toggle calendar if clicking on input field and allowTyping is enabled
+      const target = event.target as HTMLElement;
+      if (this.allowTyping && target && target.tagName === 'INPUT' && target.classList.contains('ngxsmk-display-input')) {
+        return;
+      }
+
       const now = Date.now();
 
       const touchDetectionWindow = this.isMobileDevice() ? 600 : 300;
@@ -2124,6 +2165,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   ngAfterViewInit(): void {
+    // Initialize typedInputValue if allowTyping is enabled and we have a display value
+    if (this.allowTyping && this.displayValue) {
+      this.typedInputValue = this.displayValue;
+    }
+    
     if (this.isBrowser) {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -2747,6 +2793,285 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * Handles input focus event when allowTyping is enabled
+   */
+  onInputFocus(_event: FocusEvent): void {
+    if (!this.allowTyping) return;
+    this.isTyping = true;
+    // Initialize typedInputValue with current display value if empty
+    if (!this.typedInputValue || this.typedInputValue === '') {
+      this.typedInputValue = this.displayValue || '';
+    }
+  }
+
+  /**
+   * Handles input change event when user types
+   */
+  onInputChange(event: Event): void {
+    if (!this.allowTyping) return;
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    
+    // Apply input mask if displayFormat is set
+    if (this.displayFormat) {
+      this.typedInputValue = this.applyInputMask(value, this.displayFormat);
+    } else {
+      this.typedInputValue = value;
+    }
+    
+    // Update the input value with masked value
+    if (input.value !== this.typedInputValue) {
+      const cursorPosition = input.selectionStart || 0;
+      input.value = this.typedInputValue;
+      // Restore cursor position after masking
+      setTimeout(() => {
+        input.setSelectionRange(cursorPosition, cursorPosition);
+      }, 0);
+    }
+    
+    this.scheduleChangeDetection();
+  }
+
+  /**
+   * Handles input blur event - validates and applies the typed date
+   */
+  onInputBlur(event: FocusEvent): void {
+    if (!this.allowTyping) return;
+    this.isTyping = false;
+    const input = event.target as HTMLInputElement;
+    const value = input.value.trim();
+    
+    if (!value) {
+      // Clear the value if input is empty
+      this.clearValue();
+      this.typedInputValue = '';
+      this.scheduleChangeDetection();
+      return;
+    }
+    
+    // Parse and validate the typed input
+    const parsedDate = this.parseTypedInput(value);
+    
+    if (parsedDate && this.isValidDate(parsedDate)) {
+      // Apply the parsed date
+      this.applyTypedDate(parsedDate);
+      // Update typedInputValue to match the formatted display value
+      this.typedInputValue = this.displayValue;
+    } else {
+      // Invalid input - revert to display value
+      this.typedInputValue = this.displayValue;
+      this.scheduleChangeDetection();
+    }
+  }
+
+  /**
+   * Handles keydown events on the input
+   */
+  onInputKeyDown(event: KeyboardEvent): void {
+    if (!this.allowTyping) {
+      // If typing is not allowed, use default behavior (toggle calendar)
+      if (event.key === 'Enter' || event.key === ' ') {
+        this.toggleCalendar(event);
+        if (event.key === ' ') {
+          event.preventDefault();
+        }
+      }
+      return;
+    }
+    
+    // If typing is allowed, handle Enter key to apply the date
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const input = event.target as HTMLInputElement;
+      const value = input.value.trim();
+      
+      if (!value) {
+        this.clearValue();
+        this.typedInputValue = '';
+        return;
+      }
+      
+      const parsedDate = this.parseTypedInput(value);
+      if (parsedDate !== null && this.isValidDate(parsedDate)) {
+        this.applyTypedDate(parsedDate);
+        this.typedInputValue = this.displayValue;
+        input.blur(); // Remove focus after applying
+      } else {
+        // Invalid input - revert
+        this.typedInputValue = this.displayValue;
+        this.scheduleChangeDetection();
+      }
+    } else if (event.key === 'Escape') {
+      // Revert to display value on Escape
+      this.typedInputValue = this.displayValue;
+      const input = event.target as HTMLInputElement;
+      input.blur();
+      this.scheduleChangeDetection();
+    }
+  }
+
+  /**
+   * Applies input mask based on displayFormat
+   */
+  private applyInputMask(value: string, format: string): string {
+    // Remove all non-digit and non-separator characters
+    const digits = value.replace(/[^\d]/g, '');
+    let masked = '';
+    let digitIndex = 0;
+    let i = 0;
+    
+    // Build masked string based on format tokens
+    while (i < format.length && digitIndex < digits.length) {
+      // Check for multi-character tokens first (longest first)
+      if (format.substring(i, i + 4) === 'YYYY') {
+        const yearDigits = digits.substring(digitIndex, digitIndex + 4);
+        masked += yearDigits.padEnd(4, '0');
+        digitIndex += Math.min(4, digits.length - digitIndex);
+        i += 4;
+      } else if (format.substring(i, i + 2) === 'YY' || format.substring(i, i + 2) === 'MM' || 
+                 format.substring(i, i + 2) === 'DD' || format.substring(i, i + 2) === 'HH' || 
+                 format.substring(i, i + 2) === 'hh' || format.substring(i, i + 2) === 'mm' || 
+                 format.substring(i, i + 2) === 'ss') {
+        const tokenDigits = digits.substring(digitIndex, digitIndex + 2);
+        masked += tokenDigits.padEnd(2, '0');
+        digitIndex += Math.min(2, digits.length - digitIndex);
+        i += 2;
+      } else if (format[i] === 'Y' || format[i] === 'M' || format[i] === 'D' || 
+                 format[i] === 'H' || format[i] === 'h' || format[i] === 'm' || format[i] === 's') {
+        // Single character token
+        masked += digits[digitIndex] || '';
+        digitIndex++;
+        i++;
+      } else {
+        // Preserve separators and other characters
+        masked += format[i];
+        i++;
+      }
+    }
+    
+    return masked;
+  }
+
+  /**
+   * Parses typed input string into a Date object
+   */
+  private parseTypedInput(value: string): Date | null {
+    if (!value || !value.trim()) return null;
+    
+    // If displayFormat is set, use parseCustomDateString
+    if (this.displayFormat) {
+      return this.parseCustomDateString(value, this.displayFormat);
+    }
+    
+    // Otherwise, try to parse as ISO date or use native Date parsing
+    // Try ISO format first
+    const isoDate = new Date(value);
+    if (!isNaN(isoDate.getTime())) {
+      return isoDate;
+    }
+    
+    // Try common date formats
+    const formats = [
+      /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, // MM/DD/YYYY or DD/MM/YYYY
+      /^(\d{4})-(\d{1,2})-(\d{1,2})$/, // YYYY-MM-DD
+      /^(\d{1,2})-(\d{1,2})-(\d{4})$/, // MM-DD-YYYY or DD-MM-YYYY
+      /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/, // DD.MM.YYYY or MM.DD.YYYY
+    ];
+    
+    for (const format of formats) {
+      const match = value.match(format);
+      if (match && match[1] && match[2] && match[3]) {
+        // Try both MM/DD/YYYY and DD/MM/YYYY interpretations
+        const date1 = new Date(parseInt(match[3]), parseInt(match[1]) - 1, parseInt(match[2]));
+        const date2 = new Date(parseInt(match[3]), parseInt(match[2]) - 1, parseInt(match[1]));
+        
+        if (!isNaN(date1.getTime()) && date1.getMonth() === parseInt(match[1]) - 1) {
+          return date1;
+        }
+        if (!isNaN(date2.getTime()) && date2.getMonth() === parseInt(match[2]) - 1) {
+          return date2;
+        }
+      }
+    }
+    
+    return null;
+  }
+
+  /**
+   * Validates if a date is within constraints
+   */
+  private isValidDate(date: Date): boolean {
+    if (!date || isNaN(date.getTime())) return false;
+    
+    // Check min/max date constraints
+    if (this._minDate && date < this._minDate) return false;
+    if (this._maxDate && date > this._maxDate) return false;
+    
+    // Check disabled dates
+    if (this.isDateDisabledMemo(date)) return false;
+    
+    // Check custom validation
+    if (this.isInvalidDate(date)) return false;
+    
+    return true;
+  }
+
+  /**
+   * Applies a parsed date to the datepicker
+   */
+  private applyTypedDate(date: Date): void {
+    if (!date || isNaN(date.getTime())) return;
+    
+    // Apply time if showTime is enabled
+    if (this.showTime || this.timeOnly) {
+      const now = new Date();
+      date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+    } else {
+      // Set to start of day
+      date.setHours(0, 0, 0, 0);
+    }
+    
+    // Apply the date based on mode
+    if (this.mode === 'single') {
+      this.selectedDate = date;
+      this.currentDate = new Date(date);
+      this._currentMonth = date.getMonth();
+      this._currentYear = date.getFullYear();
+      this._currentMonthSignal.set(date.getMonth());
+      this._currentYearSignal.set(date.getFullYear());
+      this.emitValue(date);
+      this.generateCalendar();
+      this.action.emit({ type: 'dateSelected', payload: date });
+    } else if (this.mode === 'range') {
+      // For range mode, set as start date
+      this.startDate = date;
+      this.currentDate = new Date(date);
+      this._currentMonth = date.getMonth();
+      this._currentYear = date.getFullYear();
+      this._currentMonthSignal.set(date.getMonth());
+      this._currentYearSignal.set(date.getFullYear());
+      this.generateCalendar();
+      this.action.emit({ type: 'rangeStartSelected', payload: date });
+    } else if (this.mode === 'multiple') {
+      // For multiple mode, toggle the date
+      const index = this.selectedDates.findIndex(d => this.isSameDayMemo(d, date));
+      if (index >= 0) {
+        this.selectedDates.splice(index, 1);
+      } else {
+        this.selectedDates.push(date);
+      }
+      this.generateCalendar();
+      this.action.emit({ type: 'datesSelected', payload: [...this.selectedDates] });
+    }
+    
+    this.scheduleChangeDetection();
+    
+    if (this.shouldAutoClose()) {
+      this.closeCalendar();
+    }
+  }
+
   private generateTimeOptions(): void {
     const { hourOptions, minuteOptions } = generateTimeOptions(this.minuteInterval);
     this.hourOptions = hourOptions;
@@ -2940,6 +3265,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this._currentMonthSignal.set(this._currentMonth);
         this._currentYearSignal.set(this._currentYear);
         this.currentDate = new Date(day);
+        this._invalidateMemoCache();
         this.generateCalendar();
       }
 
@@ -2961,6 +3287,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this._currentMonthSignal.set(this._currentMonth);
         this._currentYearSignal.set(this._currentYear);
         this.currentDate = new Date(day);
+        this._invalidateMemoCache();
         this.generateCalendar();
       }
 
@@ -3026,6 +3353,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this._currentMonthSignal.set(this._currentMonth);
         this._currentYearSignal.set(this._currentYear);
         this.currentDate = new Date(day);
+        this._invalidateMemoCache();
         this.generateCalendar();
       }
 
