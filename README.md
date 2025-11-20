@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.15` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.16` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -44,9 +44,10 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Previous Month Context**: Shows last few days of previous month for better date selection context.
 * **Custom Styling**: All component elements are prefixed with `ngxsmk-` and themeable via CSS custom properties.
 * **Zero Dependencies**: The component is standalone and lightweight.
-* **Signal Forms Support**: First-class support for Angular 21+ Signal Forms with `[field]` input.
+* **Signal Forms Support**: First-class support for Angular 21+ Signal Forms with `[field]` input (experimental feature).
 * **SSR Compatible**: Fully optimized for server-side rendering with Angular Universal.
-* **Zoneless Support**: Works with or without Zone.js for optimal performance.
+* **Zoneless Support**: Works with or without Zone.js for optimal performance. Compatible with Angular 21's default zoneless setup.
+* **Angular 21 Ready**: Full compatibility with Angular 21 new features including Signal Forms, Vitest, and zoneless by default.
 * **Extension Points & Hooks**: Comprehensive customization system with hooks for rendering, validation, keyboard shortcuts, and events.
 * **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
 * **Modern UI/UX**: Polished design with improved spacing, shadows, animations, and accessibility.
@@ -734,6 +735,13 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.9.16** (Stable)
+- 🐛 **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
+- 🎉 **Version Update**: Updated to version 1.9.16
+- ✅ **Stable Release**: Version 1.9.16 is the current stable version
+- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.15
+- ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
 
 ### **v1.9.15** (Stable)
 - 🐛 **Moment Object Binding Fix**: Fixed Moment.js objects not binding correctly with ngModel

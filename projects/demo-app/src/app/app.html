@@ -22,7 +22,7 @@
           </div>
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
-            <span class="logo-version">v1.9.15</span>
+            <span class="logo-version">v1.9.16</span>
           </div>
         </a>
       </div>
@@ -149,7 +149,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v1.9.15)</p>
+        <p class="hero-version">(v1.9.16)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{ t().getStarted }}</a>
@@ -540,6 +540,61 @@
         </div>
       </div>
 
+      <div id="angular-21-features" class="example-section">
+        <h3 class="example-title">{{ t().angular21FeaturesTitle }}</h3>
+        <p>{{ t().angular21FeaturesDescription }}</p>
+        
+        <div class="info-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; margin-bottom: 2rem;">
+          <strong style="color: white;">🎉 Angular 21 Officially Released!</strong>
+          <p style="color: rgba(255,255,255,0.9); margin-top: 0.5rem;">ngxsmk-datepicker is fully compatible with all Angular 21 features. No migration needed!</p>
+        </div>
+
+        <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
+            <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">📝</div>
+            <h4 style="margin: 0 0 0.5rem 0;">Signal Forms</h4>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Full support for Angular 21's experimental Signal Forms API with [field] input binding</p>
+          </div>
+          
+          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
+            <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+            <h4 style="margin: 0 0 0.5rem 0;">Zoneless by Default</h4>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Works perfectly without Zone.js using OnPush + Signals for optimal performance</p>
+          </div>
+          
+          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
+            <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">🧪</div>
+            <h4 style="margin: 0 0 0.5rem 0;">Vitest Compatible</h4>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Fully compatible with Vitest (Angular 21's default test runner) - no changes needed</p>
+          </div>
+          
+          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
+            <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">♿</div>
+            <h4 style="margin: 0 0 0.5rem 0;">Angular Aria Compatible</h4>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Built-in ARIA support works seamlessly alongside Angular Aria components</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(angular21FeaturesCode)">{{ t().copy }}</button>
+          </div>
+          <pre><code [innerHTML]="angular21FeaturesCode | code"></code></pre>
+        </div>
+
+        <div class="info-box">
+          <strong>{{ t().angular21Ready }}</strong>
+          <ul>
+            <li>{{ t().signalFormsFullSupport }}</li>
+            <li>{{ t().zonelessCompatible }}</li>
+            <li>{{ t().vitestCompatible }}</li>
+            <li>{{ t().angularAriaCompatible }}</li>
+            <li>{{ t().noMigrationNeeded }}</li>
+          </ul>
+        </div>
+      </div>
+
       <div id="single-date" class="example-section">
         <h3 class="example-title">{{ t().singleDateSelection }}</h3>
         <p>{{ t().basicSingleDatePicker }}</p>
@@ -628,6 +683,46 @@
         }
       </div>
 
+      <div id="range-previous-month" class="example-section">
+        <h3 class="example-title">Range Mode - Previous Month Selection</h3>
+        <p>This example demonstrates the fix for selecting dates from previous months in range mode. Try clicking on dates from the previous month (shown in gray) - the calendar will navigate correctly and allow you to select ranges across month boundaries.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="range"
+            [theme]="currentTheme"
+            [locale]="selectedLocale()"
+            formControlName="rangePreviousMonth"
+            placeholder="Select date range (try clicking previous month dates)">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(rangePreviousMonthCode)">{{ t().copy }}</button>
+          </div>
+          <pre><code [innerHTML]="rangePreviousMonthCode | code"></code></pre>
+        </div>
+
+        @if (datepickerForm.controls.rangePreviousMonth.value) {
+          <div class="result-box">
+            <strong>{{ t().formValue }}</strong> 
+            @if (datepickerForm.controls.rangePreviousMonth.value.start && datepickerForm.controls.rangePreviousMonth.value.end) {
+              <code>Start: {{ datepickerForm.controls.rangePreviousMonth.value.start | date:'medium' }} | End: {{ datepickerForm.controls.rangePreviousMonth.value.end | date:'medium' }}</code>
+            } @else if (datepickerForm.controls.rangePreviousMonth.value.start) {
+              <code>Start: {{ datepickerForm.controls.rangePreviousMonth.value.start | date:'medium' }} | End: Not selected</code>
+            } @else {
+              <code>{{ JSON.stringify(datepickerForm.controls.rangePreviousMonth.value) }}</code>
+            }
+          </div>
+        } @else {
+          <div class="result-box">
+            <strong>{{ t().formValue }}</strong> <code>{{ '{ start: null, end: null }' }}</code>
+          </div>
+        }
+      </div>
+
       <div id="time-only" class="example-section">
         <h3 class="example-title">{{ t().timeOnlyPicker }}</h3>
         <p>{{ t().displayOnlyTimePicker }}</p>
@@ -659,6 +754,143 @@
               <strong>{{ t().timeOnlyLabel }}</strong> <code>{{ datepickerForm.controls.timeOnly.value | date:'shortTime' }}</code>
             } @else {
               <strong>{{ t().formValue }}</strong> <code>{{ JSON.stringify(datepickerForm.controls.timeOnly.value) }}</code>
+            }
+          </div>
+        }
+      </div>
+
+      <div id="allow-typing" class="example-section">
+        <h3 class="example-title">Editable Input with Typing Support</h3>
+        <p>Enable users to type dates directly into the input field with automatic formatting and validation. Perfect for users who prefer keyboard input over mouse/touch interactions.</p>
+        
+        <div class="example-demo">
+          <div style="margin-bottom: 1rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">With Custom Format (MM/DD/YYYY)</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type dates directly into the input field. The input mask formats your input as you type.</p>
+            <ngxsmk-datepicker
+              mode="single"
+              [allowTyping]="true"
+              [displayFormat]="'MM/DD/YYYY'"
+              [theme]="currentTheme"
+              [locale]="selectedLocale()"
+              [placeholder]="'MM/DD/YYYY'"
+              formControlName="allowTypingDate">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">With Date and Time (MM/DD/YYYY hh:mm A)</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type dates with time. Press Enter to apply or Escape to revert.</p>
+            <ngxsmk-datepicker
+              mode="single"
+              [allowTyping]="true"
+              [displayFormat]="'MM/DD/YYYY hh:mm A'"
+              [showTime]="true"
+              [theme]="currentTheme"
+              [locale]="selectedLocale()"
+              [placeholder]="'MM/DD/YYYY hh:mm AM/PM'"
+              formControlName="allowTypingDateTime">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Without Custom Format (Auto-detect)</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type dates in common formats like MM/DD/YYYY, YYYY-MM-DD, or DD/MM/YYYY. The datepicker will automatically parse your input.</p>
+            <ngxsmk-datepicker
+              mode="single"
+              [allowTyping]="true"
+              [theme]="currentTheme"
+              [locale]="selectedLocale()"
+              [placeholder]="t().selectADate"
+              formControlName="allowTypingAuto">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Range Mode with Typing (DD/MM/YYYY)</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type date ranges directly. Use format like "DD/MM/YYYY - DD/MM/YYYY" or select from calendar. The input mask helps format your input as you type.</p>
+            <ngxsmk-datepicker
+              mode="range"
+              [allowTyping]="true"
+              [displayFormat]="'DD/MM/YYYY'"
+              [theme]="currentTheme"
+              [locale]="selectedLocale()"
+              [placeholder]="'DD/MM/YYYY - DD/MM/YYYY'"
+              formControlName="rangeWithTyping">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Alternative Format (YYYY-MM-DD)</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">ISO format example. Type dates in YYYY-MM-DD format with automatic formatting.</p>
+            <ngxsmk-datepicker
+              mode="single"
+              [allowTyping]="true"
+              [displayFormat]="'YYYY-MM-DD'"
+              [theme]="currentTheme"
+              [locale]="selectedLocale()"
+              [placeholder]="'YYYY-MM-DD'"
+              formControlName="allowTypingISO">
+            </ngxsmk-datepicker>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(allowTypingCode)">{{ t().copy }}</button>
+          </div>
+          <pre><code [innerHTML]="allowTypingCode | code"></code></pre>
+        </div>
+
+        <div class="info-box">
+          <strong>Features:</strong>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li><strong>Input Mask:</strong> Automatically formats input based on <code>displayFormat</code></li>
+            <li><strong>Smart Parsing:</strong> Supports multiple date formats when <code>displayFormat</code> is not set</li>
+            <li><strong>Validation:</strong> Validates against min/max dates, disabled dates, and custom validation functions</li>
+            <li><strong>Keyboard Shortcuts:</strong> Press Enter to apply, Escape to revert to previous value</li>
+            <li><strong>Auto-sync:</strong> Typed dates automatically sync with calendar selection and vice versa</li>
+            <li><strong>Error Handling:</strong> Invalid input reverts to the current display value on blur</li>
+          </ul>
+        </div>
+
+        @if (datepickerForm.controls.allowTypingDate.value || datepickerForm.controls.allowTypingDateTime.value || datepickerForm.controls.allowTypingAuto.value || datepickerForm.controls.allowTypingISO.value || datepickerForm.controls.rangeWithTyping.value) {
+          <div class="result-box">
+            <strong>Form Values:</strong>
+            @if (datepickerForm.controls.allowTypingDate.value && isDate(datepickerForm.controls.allowTypingDate.value)) {
+              <div style="margin-top: 0.5rem;">
+                <strong>MM/DD/YYYY:</strong> <code>{{ datepickerForm.controls.allowTypingDate.value | date:'short' }}</code>
+              </div>
+            }
+            @if (datepickerForm.controls.allowTypingDateTime.value && isDate(datepickerForm.controls.allowTypingDateTime.value)) {
+              <div style="margin-top: 0.5rem;">
+                <strong>With Time:</strong> <code>{{ datepickerForm.controls.allowTypingDateTime.value | date:'medium' }}</code>
+              </div>
+            }
+            @if (datepickerForm.controls.allowTypingAuto.value && isDate(datepickerForm.controls.allowTypingAuto.value)) {
+              <div style="margin-top: 0.5rem;">
+                <strong>Auto-detect:</strong> <code>{{ datepickerForm.controls.allowTypingAuto.value | date:'short' }}</code>
+              </div>
+            }
+            @if (datepickerForm.controls.allowTypingISO.value && isDate(datepickerForm.controls.allowTypingISO.value)) {
+              <div style="margin-top: 0.5rem;">
+                <strong>ISO Format:</strong> <code>{{ datepickerForm.controls.allowTypingISO.value | date:'short' }}</code>
+              </div>
+            }
+            @if (datepickerForm.controls.rangeWithTyping.value) {
+              @if (datepickerForm.controls.rangeWithTyping.value.start || datepickerForm.controls.rangeWithTyping.value.end) {
+                <div style="margin-top: 0.5rem;">
+                  <strong>Range:</strong> 
+                  @if (datepickerForm.controls.rangeWithTyping.value.start && datepickerForm.controls.rangeWithTyping.value.end) {
+                    <code>{{ datepickerForm.controls.rangeWithTyping.value.start | date:'short' }} - {{ datepickerForm.controls.rangeWithTyping.value.end | date:'short' }}</code>
+                  } @else if (datepickerForm.controls.rangeWithTyping.value.start) {
+                    <code>Start: {{ datepickerForm.controls.rangeWithTyping.value.start | date:'short' }} | End: Not selected</code>
+                  } @else {
+                    <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTyping.value) }}</code>
+                  }
+                </div>
+              }
             }
           </div>
         }

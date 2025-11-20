@@ -105,10 +105,13 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
       { id: 'examples', label: t.examples, sub: false, keywords: 'examples demo showcase' },
       { id: 'signal-forms', label: t.signalForms, sub: true, keywords: 'signal forms angular 21 reactive' },
       { id: 'signal-forms-field', label: t.signalFormsField, sub: true, keywords: 'signal forms field input angular 21 FieldTree type compatibility' },
+      { id: 'angular-21-features', label: t.angular21Features, sub: true, keywords: 'angular 21 zoneless vitest aria compatibility' },
       { id: 'single-date', label: t.singleDate, sub: true, keywords: 'single date picker selection' },
       { id: 'customization-a11y', label: t.customizationA11y, sub: true, keywords: 'customization accessibility a11y aria' },
       { id: 'date-range', label: t.dateRange, sub: true, keywords: 'date range selection start end' },
+      { id: 'range-previous-month', label: 'Range - Previous Month Selection', sub: true, keywords: 'range previous month selection cross month boundaries null initial values' },
       { id: 'time-only', label: t.timeOnly, sub: true, keywords: 'time only picker time selection no calendar' },
+      { id: 'allow-typing', label: 'Editable Input / Typing Support', sub: true, keywords: 'allow typing editable input type date keyboard input mask format' },
       { id: 'custom-format', label: t.customFormat, sub: true, keywords: 'custom format display format date format string MM DD YYYY hh mm' },
       { id: 'moment-js-integration', label: t.momentJsIntegration, sub: true, keywords: 'moment js integration custom format fix' },
       { id: 'rtl-support', label: t.rtlSupport, sub: true, keywords: 'rtl right to left arabic hebrew persian urdu mirror' },
@@ -170,6 +173,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     { property: 'showTime', type: 'boolean', default: 'false', description: 'Show time selection' },
     { property: 'timeOnly', type: 'boolean', default: 'false', description: 'Display time picker only (no calendar)' },
     { property: 'displayFormat', type: 'string', default: 'undefined', description: 'Custom date format string (e.g., "MM/DD/YYYY hh:mm A"). Works with date adapters or built-in simple formatter.' },
+    { property: 'allowTyping', type: 'boolean', default: 'false', description: 'Enable typing directly into the input field. When enabled, users can type dates with automatic formatting and validation.' },
     { property: 'rtl', type: 'boolean | null', default: 'null', description: 'Right-to-left layout support (auto-detects from document.dir or locale)' },
     { property: 'locale', type: 'string', default: "'en-US'", description: 'Locale for date formatting and translations (e.g., "en-US", "es-ES", "fr-FR")' },
     { property: 'translations', type: 'PartialDatepickerTranslations', default: 'undefined', description: 'Custom translations object to override default translations' },
@@ -343,7 +347,13 @@ export class MomentIntegrationComponent {
       disabled: true
     }),
     rangeWithTime: new FormControl(),
+    rangePreviousMonth: new FormControl<{ start: Date | null; end: Date | null }>({ start: null, end: null }),
     timeOnly: new FormControl<DatepickerValue>(null),
+    allowTypingDate: new FormControl<DatepickerValue>(null),
+    allowTypingDateTime: new FormControl<DatepickerValue>(null),
+    allowTypingAuto: new FormControl<DatepickerValue>(null),
+    allowTypingISO: new FormControl<DatepickerValue>(null),
+    rangeWithTyping: new FormControl<{ start: Date | null; end: Date | null }>({ start: null, end: null }),
     customFormat: new FormControl<DatepickerValue>(null),
     rtlDate: new FormControl<DatepickerValue>(null),
     multipleDates: new FormControl<Date[] | null>(null),
@@ -525,6 +535,26 @@ export class PlainFormComponent {
   </ngxsmk-datepicker>
 </form>`;
 
+  public rangePreviousMonthCode = `// Initialize with null values
+public date = { start: null, end: null };
+
+// In template
+<form [formGroup]="datepickerForm">
+  <ngxsmk-datepicker
+    mode="range"
+    formControlName="rangePreviousMonth"
+    [theme]="currentTheme"
+    [locale]="selectedLocale()"
+    placeholder="Select date range (try clicking previous month dates)">
+  </ngxsmk-datepicker>
+</form>
+
+<!-- 
+  This demonstrates the fix for selecting dates from previous months
+  in range mode. You can now click on dates from previous months
+  (shown in gray) and the calendar will navigate correctly.
+-->`;
+
   public timeOnlyCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
     mode="single"
@@ -533,6 +563,61 @@ export class PlainFormComponent {
     formControlName="timeOnly">
   </ngxsmk-datepicker>
 </form>`;
+
+  public allowTypingCode = `<form [formGroup]="datepickerForm">
+  <!-- With custom format and input mask -->
+  <ngxsmk-datepicker
+    mode="single"
+    [allowTyping]="true"
+    [displayFormat]="'MM/DD/YYYY'"
+    placeholder="MM/DD/YYYY"
+    formControlName="myDate">
+  </ngxsmk-datepicker>
+
+  <!-- With date and time -->
+  <ngxsmk-datepicker
+    mode="single"
+    [allowTyping]="true"
+    [displayFormat]="'MM/DD/YYYY hh:mm A'"
+    [showTime]="true"
+    placeholder="MM/DD/YYYY hh:mm AM/PM"
+    formControlName="myDateTime">
+  </ngxsmk-datepicker>
+
+  <!-- Without custom format (auto-detect common formats) -->
+  <ngxsmk-datepicker
+    mode="single"
+    [allowTyping]="true"
+    placeholder="Select a date">
+  </ngxsmk-datepicker>
+
+  <!-- Range mode with typing -->
+  <ngxsmk-datepicker
+    mode="range"
+    [allowTyping]="true"
+    [displayFormat]="'DD/MM/YYYY'"
+    placeholder="DD/MM/YYYY - DD/MM/YYYY"
+    formControlName="dateRange">
+  </ngxsmk-datepicker>
+
+  <!-- ISO format example -->
+  <ngxsmk-datepicker
+    mode="single"
+    [allowTyping]="true"
+    [displayFormat]="'YYYY-MM-DD'"
+    placeholder="YYYY-MM-DD"
+    formControlName="isoDate">
+  </ngxsmk-datepicker>
+</form>
+
+<!-- Features: -->
+<!-- - Input mask formats input as you type based on displayFormat -->
+<!-- - Press Enter to apply, Escape to revert -->
+<!-- - Invalid input reverts to display value on blur -->
+<!-- - Validates against min/max dates and disabled dates -->
+<!-- - Automatically syncs with calendar selection -->
+<!-- - Works with single, range, and multiple modes -->
+<!-- - Supports various date formats: MM/DD/YYYY, DD/MM/YYYY, YYYY-MM-DD, etc. -->`;
 
   public customFormatCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
@@ -856,6 +941,43 @@ export class RangeFormComponent {
   [field]="myForm.dateRange"
   mode="range">
 </ngxsmk-datepicker>`;
+
+  public angular21FeaturesCode = `// Angular 21 is officially released! 🎉
+// ngxsmk-datepicker is fully compatible with all Angular 21 features
+
+// ✅ Signal Forms (Experimental)
+import { Component, signal, form, objectSchema } from '@angular/core';
+
+@Component({
+  selector: 'app-date-form',
+  standalone: true,
+  template: \`
+    <form>
+      <ngxsmk-datepicker
+        [field]="myForm.date"
+        mode="single">
+      </ngxsmk-datepicker>
+    </form>
+  \`
+})
+export class DateFormComponent {
+  localObject = signal({ date: new Date() });
+  myForm = form(this.localObject, objectSchema({
+    date: objectSchema<Date>()
+  }));
+}
+
+// ✅ Zoneless by Default
+// Works perfectly without Zone.js
+// Uses OnPush + Signals for optimal performance
+
+// ✅ Vitest Compatible
+// Library works seamlessly in Angular 21 apps using Vitest
+// No changes needed - just use the library as-is
+
+// ✅ Angular Aria Compatible
+// Built-in ARIA support works alongside Angular Aria components
+// All interactive elements have proper accessibility attributes`;
 
   public calendarViewsCode = `
 <!-- Year Picker -->

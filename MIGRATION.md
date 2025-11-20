@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.15 → v1.9.16](#v1915---v1916)
 - [v1.9.14 → v1.9.15](#v1914---v1915)
 - [v1.9.13 → v1.9.14](#v1913---v1914)
 - [v1.9.12 → v1.9.13](#v1912---v1913)
@@ -22,6 +23,42 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.15 → v1.9.16
+
+### Fixed
+
+- **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
+  - Added memo cache invalidation before calendar generation when clicking dates from previous/next months in range mode
+  - Fixed issue where clicking dates from previous months would navigate but memoized functions would use stale month/year values
+  - Now properly invalidates memo cache in single, range, and multiple modes when navigating to different months via date clicks
+  - Users can now select dates from previous months in range mode without issues, allowing proper range selection across month boundaries
+
+### Changed
+
+- **Version Update**: Updated to version 1.9.16
+- **Stable Release**: Version 1.9.16 is the current stable version
+
+### Migration Steps
+
+No migration steps required. This is a patch version with bug fixes only. Simply update your package version:
+
+```bash
+npm install ngxsmk-datepicker@1.9.16
+```
+
+### Breaking Changes
+
+None in v1.9.16.
+
+### Deprecations
+
+None in v1.9.16.
+
+### Notes
+
+- This version maintains full backward compatibility with v1.9.15. All existing code will continue to work without modifications.
+- The fix ensures that range mode date pickers work correctly when users click on dates from previous months, especially when starting with null initial values.
 
 ## v1.9.14 → v1.9.15
 
@@ -614,21 +651,22 @@ If you encounter issues during migration:
 
 | ngxsmk-datepicker | Angular | Node.js |
 |-------------------|---------|---------|
-| 1.9.15+ | 17-21 | 18+ |
-| 1.9.14 | 17-21 | 18+ |
-| 1.9.11 | 17-21 | 18+ |
-| 1.9.10 | 17-21 | 18+ |
-| 1.9.9 | 17-21 | 18+ |
-| 1.9.8 | 17-21 | 18+ |
-| 1.9.7 | 17-21 | 18+ |
-| 1.9.6 | 17-21 | 18+ |
-| 1.9.5 | 17-21 | 18+ |
-| 1.9.4 | 17-21 | 18+ |
-| 1.9.3 | 17-21 | 18+ |
-| 1.9.2 | 17-21 | 18+ |
-| 1.9.1 | 17-21 | 18+ |
-| 1.9.0 | 17-21 | 18+ |
-| 1.8.0 | 17-21 | 18+ |
+| 1.9.16+ | 17-22 | 18+ |
+| 1.9.15 | 17-22 | 18+ |
+| 1.9.14 | 17-22 | 18+ |
+| 1.9.11 | 17-22 | 18+ |
+| 1.9.10 | 17-22 | 18+ |
+| 1.9.9 | 17-22 | 18+ |
+| 1.9.8 | 17-22 | 18+ |
+| 1.9.7 | 17-22 | 18+ |
+| 1.9.6 | 17-22 | 18+ |
+| 1.9.5 | 17-22 | 18+ |
+| 1.9.4 | 17-22 | 18+ |
+| 1.9.3 | 17-22 | 18+ |
+| 1.9.2 | 17-22 | 18+ |
+| 1.9.1 | 17-22 | 18+ |
+| 1.9.0 | 17-22 | 18+ |
+| 1.8.0 | 17-22 | 18+ |
 | 1.7.0 | 17-20 | 18+ |
 
 ## Deprecation Timeline

@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.16] - 2025-01-XX (Stable)
+
+### Fixed
+- **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
+  - Added memo cache invalidation before calendar generation when clicking dates from previous/next months in range mode
+  - Fixed issue where clicking dates from previous months would navigate but memoized functions would use stale month/year values
+  - Now properly invalidates memo cache in single, range, and multiple modes when navigating to different months via date clicks
+  - Users can now select dates from previous months in range mode without issues, allowing proper range selection across month boundaries
+
+### Changed
+- **Version Update**: Updated to version 1.9.16
+- **Stable Release**: Version 1.9.16 is the current stable version
+- **Angular 21 Support**: Updated dependencies and peer dependencies to support Angular 21 (officially released)
+  - Updated devDependencies to Angular 21.0.0
+  - Updated peer dependencies to support Angular 17-22 (`>=17.0.0 <24.0.0`)
+  - Full compatibility with Angular 21 including Signal Forms support
+  - **Signal Forms**: Full support for Angular 21 Signal Forms with `[field]` input binding (experimental feature)
+  - **Zoneless by Default**: Compatible with Angular 21 applications that don't include Zone.js by default
+  - **Vitest Compatible**: Works with Angular 21's new default Vitest test runner (library tests use Karma/Jasmine, but library is compatible with Vitest-based apps)
+  - **Angular Aria Compatible**: Built-in ARIA support works alongside Angular Aria components (uses custom AriaLiveService for screen reader announcements)
+
+### Migration Notes
+- This is a patch version update with bug fixes and Angular 21 support
+- No breaking changes from v1.9.15
+- All fixes are backward compatible
+- Compatible with Angular 17-22 (including officially released Angular 21)
+
 ## [1.9.15] - 2025-01-XX (Stable)
 
 ### Fixed
@@ -16,6 +43,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated `isDateDisabledMemo` getter to properly invalidate cached memoized function when month/year changes
   - Added month/year change detection to ensure disabled date cache is refreshed after navigation
   - Dates in previous/next months are now properly clickable without needing to close and reopen the datepicker
+- **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
+  - Added memo cache invalidation before calendar generation when clicking dates from previous/next months in range mode
+  - Fixed issue where clicking dates from previous months would navigate but memoized functions would use stale month/year values
+  - Now properly invalidates memo cache in single, range, and multiple modes when navigating to different months via date clicks
+  - Users can now select dates from previous months in range mode without issues, allowing proper range selection across month boundaries
 
 ### Changed
 - **Version Update**: Updated to version 1.9.15
@@ -389,7 +421,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Pages deployment automation
 
 ### Changed
-- Updated peer dependencies to support Angular 17-21 (`>=17.0.0 <23.0.0`)
+- Updated peer dependencies to support Angular 17-22 (`>=17.0.0 <24.0.0`)
 - Added `@angular/forms` as peer dependency
 - Made `zone.js` optional peer dependency
 - Enhanced `exports` field in package.json with proper types
