@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.18] - 2025-11-22 (Stable)
+
+### Fixed
+- **Mobile Touch Event Handling**: Improved touch listener attachment when calendar opens on mobile devices
+  - Touch listeners now properly attach when calendar first opens, eliminating the need to navigate months first
+  - Added retry mechanism with multiple attempts to ensure listeners are attached even on slower mobile devices
+  - Improved timing with double `requestAnimationFrame` calls and multiple retry strategies
+  - Enhanced mobile rendering timing to handle DOM delays
+
+### Changed
+- **Version Update**: Updated to version 1.9.18
+- **Stable Release**: Version 1.9.18 is the current stable version
+
+### Migration Notes
+- This is a patch version update
+- No breaking changes from v1.9.17
+- All changes are backward compatible
+- Compatible with Angular 17-22
+- Improved mobile experience with better touch event handling
+
 ## [1.9.17] - 2025-11-21 (Stable)
 
 ### Added

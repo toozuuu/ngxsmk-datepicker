@@ -107,8 +107,8 @@ type SignalFormField = ({
                  (input)="onInputChange($event)"
                  (blur)="onInputBlur($event)"
                  (focus)="onInputFocus($event)">
-          <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event)" [disabled]="disabled" *ngIf="displayValue" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+          <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event); $event.stopPropagation()" (touchstart)="$event.stopPropagation()" (touchend)="$event.stopPropagation()" (pointerdown)="$event.stopPropagation()" (pointerup)="$event.stopPropagation()" [disabled]="disabled" *ngIf="displayValue" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
           </button>
           <button type="button" class="ngxsmk-calendar-button" (click)="toggleCalendar($event); $event.stopPropagation()" [disabled]="disabled" *ngIf="showCalendarButton" [attr.aria-label]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [title]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [ngClass]="classes?.calendarBtn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M96 80H416c26.51 0 48 21.49 48 48V416c0 26.51-21.49 48-48 48H96c-26.51 0-48-21.49-48-48V128c0-26.51 21.49-48 48-48zM160 32v64M352 32v64M464 192H48M200 256h112M200 320h112M200 384h112M152 256h.01M152 320h.01M152 384h.01"/></svg>
@@ -150,9 +150,9 @@ type SignalFormField = ({
                 @if (calendarViewMode === 'month') {
                 <div class="ngxsmk-header" [ngClass]="classes?.header">
                   <div class="ngxsmk-month-year-selects">
-                    <ngxsmk-custom-select class="month-select" [options]="monthOptions"
+                    <ngxsmk-custom-select #monthSelect class="month-select" [options]="monthOptions"
                                       [(value)]="currentMonth" [disabled]="disabled"></ngxsmk-custom-select>
-                      <ngxsmk-custom-select class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled" (valueChange)="onYearSelectChange($event)"></ngxsmk-custom-select>
+                      <ngxsmk-custom-select #yearSelect class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled" (valueChange)="onYearSelectChange($event)"></ngxsmk-custom-select>
                   </div>
                   <div class="ngxsmk-nav-buttons">
                     <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled || isBackArrowDisabled" [attr.aria-label]="_prevMonthAriaLabel" [title]="_prevMonthAriaLabel" [ngClass]="classes?.navPrev">
@@ -209,6 +209,9 @@ type SignalFormField = ({
                           [attr.title]="day ? getDayCellTooltip(day) : null"
                           [attr.data-date]="day ? day.getTime() : null"
                           (click)="onDateClick(day)" 
+                          (touchstart)="onDateCellTouchStart($event, day)"
+                          (touchend)="onDateCellTouchEnd($event, day)"
+                          (touchmove)="onDateCellTouchMove($event)"
                           (keydown.enter)="onDateClick(day)"
                           (keydown.space)="onDateClick(day); $event.preventDefault()"
                           (mouseenter)="onDateHover(day)"
@@ -710,6 +713,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private isDateCellTouching: boolean = false;
   private lastDateCellTouchDate: Date | null = null;
   private dateCellTouchHandled: boolean = false;
+  private dateCellTouchHandledTime: number = 0;
+  private touchHandledTimeout: any = null;
 
   private calendarSwipeStartX: number = 0;
   private calendarSwipeStartY: number = 0;
@@ -765,6 +770,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   @ViewChild('popoverContainer', { static: false }) popoverContainer?: ElementRef<HTMLElement>;
   @ViewChild('dateInput', { static: false }) dateInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('monthSelect', { static: false }) monthSelect?: CustomSelectComponent;
+  @ViewChild('yearSelect', { static: false }) yearSelect?: CustomSelectComponent;
   private focusTrapCleanup: (() => void) | null = null;
 
   private _translations: DatepickerTranslations | null = null;
@@ -834,10 +841,47 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return false;
   }
 
+  private clearTouchHandledFlag(): void {
+    this.dateCellTouchHandled = false;
+    this.dateCellTouchHandledTime = 0;
+    this.isDateCellTouching = false;
+    if (this.touchHandledTimeout) {
+      clearTimeout(this.touchHandledTimeout);
+      this.touchHandledTimeout = null;
+    }
+  }
+
+  private closeMonthYearDropdowns(): void {
+    if (this.monthSelect && this.monthSelect.isOpen) {
+      this.monthSelect.isOpen = false;
+    }
+    if (this.yearSelect && this.yearSelect.isOpen) {
+      this.yearSelect.isOpen = false;
+    }
+  }
+
+  private setTouchHandledFlag(duration: number = 300): void {
+    this.dateCellTouchHandled = true;
+    this.dateCellTouchHandledTime = Date.now();
+    
+    if (this.touchHandledTimeout) {
+      clearTimeout(this.touchHandledTimeout);
+    }
+    
+    this.touchHandledTimeout = setTimeout(() => {
+      this.clearTouchHandledFlag();
+    }, duration);
+  }
+
   private isMobileDevice(): boolean {
     if (this.isBrowser) {
       try {
-        return window.matchMedia('(max-width: 1024px)').matches;
+        const isMobileWidth = window.matchMedia('(max-width: 1024px)').matches;
+        const hasTouchSupport = 'ontouchstart' in window || (navigator as any).maxTouchPoints > 0;
+        const hasPointerEvents = 'onpointerdown' in window;
+        const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        return isMobileWidth || (hasTouchSupport && isMobileWidth) || (hasPointerEvents && isMobileWidth) || isMobileUserAgent;
       } catch {
         return 'ontouchstart' in window || (navigator as any).maxTouchPoints > 0;
       }
@@ -1333,6 +1377,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.isOpeningCalendar = true;
       this.isCalendarOpen = true;
       this.lastToggleTime = now;
+      
+      // Close any open month/year dropdowns when calendar opens (especially important for mobile)
+      this.closeMonthYearDropdowns();
 
       setTimeout(() => {
         this.touchStartTime = 0;
@@ -1355,15 +1402,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
       this.generateCalendar();
       this.updateOpeningState(true);
-
+      
       if (this.isBrowser) {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
+            this.setupPassiveTouchListeners();
             this.scheduleChangeDetection();
             const timeoutDelay = this.isMobileDevice() ? 800 : 300;
             if (this.isOpeningCalendar) {
               setTimeout(() => {
                 this.isOpeningCalendar = false;
+                this.setupPassiveTouchListeners();
                 this.scheduleChangeDetection();
               }, timeoutDelay);
             }
@@ -1391,6 +1440,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this.disabled || this.isInlineMode || event.pointerType === 'mouse') {
       return;
     }
+    
+    const target = event.target as HTMLElement;
+    if (target && target.closest('.ngxsmk-clear-button')) {
+      return;
+    }
+    
     this.isPointerEvent = true;
     this.pointerDownTime = Date.now();
     this.touchStartTime = Date.now();
@@ -1400,6 +1455,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public onPointerUp(event: PointerEvent): void {
     if (this.disabled || this.isInlineMode || !this.isPointerEvent || event.pointerType === 'mouse') {
       this.isPointerEvent = false;
+      return;
+    }
+
+    const target = event.target as HTMLElement;
+    if (target && target.closest('.ngxsmk-clear-button')) {
+      this.isPointerEvent = false;
+      this.pointerDownTime = 0;
+      this.touchStartTime = 0;
+      this.touchStartElement = null;
       return;
     }
 
@@ -1427,6 +1491,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.isOpeningCalendar = true;
       this.isCalendarOpen = true;
       this.lastToggleTime = now;
+      
+      this.closeMonthYearDropdowns();
 
       if (this.openCalendarTimeoutId) {
         clearTimeout(this.openCalendarTimeoutId);
@@ -1436,12 +1502,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
       if (this.isBrowser) {
         requestAnimationFrame(() => {
-          this.scheduleChangeDetection();
+          requestAnimationFrame(() => {
+            this.setupPassiveTouchListeners();
+            this.scheduleChangeDetection();
+          });
         });
 
         const timeoutDelay = this.isMobileDevice() ? 800 : 350;
         this.openCalendarTimeoutId = setTimeout(() => {
           this.isOpeningCalendar = false;
+          this.setupPassiveTouchListeners();
           this.openCalendarTimeoutId = null;
           this.cdr.markForCheck();
         }, timeoutDelay);
@@ -1789,6 +1859,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public toggleCalendar(event?: Event): void {
     if (this.disabled || this.isInlineMode) return;
 
+    // Don't open calendar if click/touch originated from clear button
+    if (event && event.target) {
+      const target = event.target as HTMLElement;
+      const isClearButton = target.closest('.ngxsmk-clear-button');
+      if (isClearButton) {
+        return;
+      }
+    }
+
     const now = Date.now();
     const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
     if (timeSinceToggle < 300) {
@@ -1801,6 +1880,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.isCalendarOpen = !wasOpen;
       this.lastToggleTime = now;
       if (willOpen) {
+        this.closeMonthYearDropdowns();
         if (this.defaultMonthOffset !== 0 && !this._internalValue && !this._startAtDate) {
           const nextMonth = new Date();
           nextMonth.setMonth(nextMonth.getMonth() + this.defaultMonthOffset);
@@ -1815,8 +1895,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.updateOpeningState(willOpen && this.isCalendarOpen);
       
       if (willOpen && this.isCalendarOpen) {
+        this.closeMonthYearDropdowns();
+        
+        if (this.isBrowser) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              this.setupPassiveTouchListeners();
+            });
+          });
+        }
+        
         setTimeout(() => {
           this.setupFocusTrap();
+          if (this.isBrowser) {
+            this.setupPassiveTouchListeners();
+          }
+          this.closeMonthYearDropdowns();
           const monthName = this.currentDate.toLocaleDateString(this.locale, { month: 'long' });
           const year = String(this.currentDate.getFullYear());
           const calendarOpenedMsg = this.getTranslation('calendarOpened' as keyof DatepickerTranslations, undefined, {
@@ -1841,6 +1935,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (event.type === 'click') {
       const target = event.target as HTMLElement;
       if (this.allowTyping && target && target.tagName === 'INPUT' && target.classList.contains('ngxsmk-display-input')) {
+        return;
+      }
+      if (target && target.closest('.ngxsmk-clear-button')) {
         return;
       }
 
@@ -1903,6 +2000,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (willOpen && this.isCalendarOpen) {
       setTimeout(() => {
         this.setupFocusTrap();
+        // Setup touch listeners when calendar opens for mobile support
+        if (this.isBrowser) {
+          this.setupPassiveTouchListeners();
+        }
         const monthName = this.currentDate.toLocaleDateString(this.locale, { month: 'long' });
         const year = String(this.currentDate.getFullYear());
         const calendarOpenedMsg = this.getTranslation('calendarOpened' as keyof DatepickerTranslations, undefined, {
@@ -1977,9 +2078,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return false;
   }
 
-  public clearValue(event?: MouseEvent): void {
-    if (event) event.stopPropagation();
+  public clearValue(event?: MouseEvent | TouchEvent): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
     if (this.disabled) return;
+
+    // Clear touch state to prevent interference
+    this.clearTouchHandledFlag();
 
     this.selectedDate = null;
     this.selectedDates = [];
@@ -2209,37 +2316,77 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.passiveTouchListeners.forEach(cleanup => cleanup());
     this.passiveTouchListeners = [];
 
+    if (!this.isBrowser) return;
+
     const nativeElement = this.elementRef.nativeElement;
     if (!nativeElement) return;
 
-    const dateCells = nativeElement.querySelectorAll('.ngxsmk-day-cell[data-date]');
+    this.cdr.detectChanges();
+    this.cdr.markForCheck();
 
-    dateCells.forEach((cell: HTMLElement) => {
-      const dateTimestamp = cell.getAttribute('data-date');
-      if (!dateTimestamp) return;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const dateCells = nativeElement.querySelectorAll('.ngxsmk-day-cell[data-date]');
 
-      const dateValue = parseInt(dateTimestamp, 10);
-      if (isNaN(dateValue)) return;
+        if (dateCells.length === 0 && this.isCalendarOpen) {
+          let retryCount = 0;
+          const maxRetries = 5;
+          const retry = () => {
+            retryCount++;
+            const dateCellsRetry = nativeElement.querySelectorAll('.ngxsmk-day-cell[data-date]');
+            if (dateCellsRetry.length === 0 && retryCount < maxRetries && this.isCalendarOpen) {
+              setTimeout(retry, 50 * retryCount);
+              return;
+            }
+            if (dateCellsRetry.length > 0) {
+              this.attachTouchListenersToCells(dateCellsRetry);
+            }
+          };
+          setTimeout(retry, 50);
+          return;
+        }
+        
+        if (dateCells.length > 0) {
+          this.attachTouchListenersToCells(dateCells);
+        }
+      });
+    });
+  }
+  
+  private attachTouchListenersToCells(dateCells: NodeListOf<Element>): void {
+    dateCells.forEach((cellEl: Element) => {
+      const cell = cellEl as HTMLElement;
+        const dateTimestamp = cell.getAttribute('data-date');
+        if (!dateTimestamp) return;
 
-      const day = new Date(dateValue);
-      if (!day || isNaN(day.getTime())) return;
+        const dateValue = parseInt(dateTimestamp, 10);
+        if (isNaN(dateValue)) return;
 
-      const touchStartHandler = (event: TouchEvent) => {
-        this.onDateCellTouchStart(event, day);
-      };
-      cell.addEventListener('touchstart', touchStartHandler, { passive: true });
+        const day = new Date(dateValue);
+        if (!day || isNaN(day.getTime())) return;
 
-      const touchEndHandler = (event: TouchEvent) => {
-        this.onDateCellTouchEnd(event, day);
-      };
-      cell.addEventListener('touchend', touchEndHandler, { passive: false });
+        if ((cell as any).__ngxsmk_touch_listeners_attached) {
+          return;
+        }
+        (cell as any).__ngxsmk_touch_listeners_attached = true;
 
-      const touchMoveHandler = (event: TouchEvent) => {
-        this.onDateCellTouchMove(event);
-      };
-      cell.addEventListener('touchmove', touchMoveHandler, { passive: false });
+        const touchStartHandler = (event: TouchEvent) => {
+          this.onDateCellTouchStart(event, day);
+        };
+        cell.addEventListener('touchstart', touchStartHandler, { passive: true });
+
+        const touchEndHandler = (event: TouchEvent) => {
+          this.onDateCellTouchEnd(event, day);
+        };
+        cell.addEventListener('touchend', touchEndHandler, { passive: false });
+
+        const touchMoveHandler = (event: TouchEvent) => {
+          this.onDateCellTouchMove(event);
+        };
+        cell.addEventListener('touchmove', touchMoveHandler, { passive: false });
 
       this.passiveTouchListeners.push(() => {
+        (cell as any).__ngxsmk_touch_listeners_attached = false;
         cell.removeEventListener('touchstart', touchStartHandler);
         cell.removeEventListener('touchend', touchEndHandler);
         cell.removeEventListener('touchmove', touchMoveHandler);
@@ -3138,10 +3285,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public onDateClick(day: Date | null): void {
     if (!day || this.disabled) return;
 
-    if (this.dateCellTouchHandled && this.isDateCellTouching) {
-      this.dateCellTouchHandled = false;
-      this.isDateCellTouching = false;
+    const now = Date.now();
+    const timeSinceTouchHandled = this.dateCellTouchHandledTime > 0 ? now - this.dateCellTouchHandledTime : Infinity;
+    
+    if (this.dateCellTouchHandled && timeSinceTouchHandled < 250 && this.isDateCellTouching) {
+      this.clearTouchHandledFlag();
       return;
+    }
+    
+    if (this.dateCellTouchHandled && (timeSinceTouchHandled >= 250 || !this.isDateCellTouching)) {
+      this.clearTouchHandledFlag();
     }
 
     this.isDateCellTouching = false;
@@ -3168,6 +3321,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.currentDate = new Date(day);
         this._invalidateMemoCache();
         this.generateCalendar();
+        this.scheduleChangeDetection();
+        
+        if (this.isBrowser && this.isCalendarOpen) {
+          this.cdr.markForCheck();
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              setTimeout(() => {
+                this.setupPassiveTouchListeners();
+              }, 50);
+            });
+          });
+        }
       }
 
       const dateWithTime = this.applyTimeIfNeeded(day);
@@ -3190,6 +3355,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.currentDate = new Date(day);
         this._invalidateMemoCache();
         this.generateCalendar();
+        this.scheduleChangeDetection();
+        
+        if (this.isBrowser && this.isCalendarOpen) {
+          this.cdr.markForCheck();
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              setTimeout(() => {
+                this.setupPassiveTouchListeners();
+              }, 50);
+            });
+          });
+        }
       }
 
       const dayTime = getStartOfDay(day).getTime();
@@ -3256,6 +3433,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.currentDate = new Date(day);
         this._invalidateMemoCache();
         this.generateCalendar();
+        this.scheduleChangeDetection();
+        
+        if (this.isBrowser && this.isCalendarOpen) {
+          this.cdr.markForCheck();
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              setTimeout(() => {
+                this.setupPassiveTouchListeners();
+              }, 50);
+            });
+          });
+        }
       }
 
       if (this.recurringPattern) {
@@ -3351,13 +3540,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
 
+    const hasValidTouch = event.touches && event.touches.length > 0;
+    
     event.stopPropagation();
 
-    this.dateCellTouchHandled = false;
+    this.clearTouchHandledFlag();
     this.isDateCellTouching = true;
 
     const touch = event.touches[0];
-    if (touch) {
+    if (touch && hasValidTouch) {
       this.dateCellTouchStartTime = Date.now();
       this.dateCellTouchStartDate = day;
       this.dateCellTouchStartX = touch.clientX;
@@ -3379,6 +3570,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     } else {
       this.isDateCellTouching = false;
+      this.dateCellTouchStartDate = null;
+      this.dateCellTouchStartTime = 0;
     }
   }
 
@@ -3441,8 +3634,31 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
 
-    if (!this.isDateCellTouching || !this.dateCellTouchStartDate) {
+    const hasValidTouch = event.changedTouches && event.changedTouches.length > 0;
+    
+    if (!this.isDateCellTouching || !this.dateCellTouchStartDate || !hasValidTouch) {
+      this.setTouchHandledFlag(200);
+      if (day && !this.isDateDisabled(day)) {
+        this.onDateClick(day);
+      }
       this.isDateCellTouching = false;
+      this.dateCellTouchStartTime = 0;
+      this.dateCellTouchStartDate = null;
+      this.lastDateCellTouchDate = null;
+      return;
+    }
+
+    // If touch state isn't properly initialized, use the day parameter as fallback
+    // This handles cases where touchstart might have been missed or state was reset
+    const finalDay = this.isDateCellTouching && this.dateCellTouchStartDate 
+      ? (this.lastDateCellTouchDate || this.dateCellTouchStartDate)
+      : day;
+
+    if (!finalDay || this.isDateDisabled(finalDay)) {
+      this.isDateCellTouching = false;
+      this.dateCellTouchStartTime = 0;
+      this.dateCellTouchStartDate = null;
+      this.lastDateCellTouchDate = null;
       return;
     }
 
@@ -3475,9 +3691,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
 
-    const finalDay = this.lastDateCellTouchDate || endDay || this.dateCellTouchStartDate;
+    const finalDayFromTouch = this.lastDateCellTouchDate || endDay || this.dateCellTouchStartDate;
 
-    if (!finalDay || this.isDateDisabled(finalDay)) {
+    if (!finalDayFromTouch || this.isDateDisabled(finalDayFromTouch)) {
       this.isDateCellTouching = false;
       this.dateCellTouchStartTime = 0;
       this.dateCellTouchStartDate = null;
@@ -3490,47 +3706,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const deltaY = Math.abs(touch.clientY - this.dateCellTouchStartY);
       const isTap = touchDuration < 500 && deltaX < 20 && deltaY < 20;
 
-      if (isTap) {
-        event.preventDefault();
-        event.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
 
-        this.dateCellTouchHandled = true;
+      this.setTouchHandledFlag(500);
 
-        const dateToSelect = this.dateCellTouchStartDate || finalDay;
+      const dateToSelect = isTap ? (this.dateCellTouchStartDate || finalDayFromTouch) : finalDayFromTouch;
 
-        this.onDateClick(dateToSelect);
+      this.onDateClick(dateToSelect);
 
-        this.isDateCellTouching = false;
-        this.dateCellTouchStartTime = 0;
-        this.dateCellTouchStartDate = null;
-        this.lastDateCellTouchDate = null;
-
-        setTimeout(() => {
-          this.dateCellTouchHandled = false;
-        }, 500);
-      } else {
-        event.preventDefault();
-        event.stopPropagation();
-
-        this.dateCellTouchHandled = true;
-
-        this.onDateClick(finalDay);
-
-        this.isDateCellTouching = false;
-        this.dateCellTouchStartTime = 0;
-        this.dateCellTouchStartDate = null;
-        this.lastDateCellTouchDate = null;
-
-        setTimeout(() => {
-          this.dateCellTouchHandled = false;
-        }, 500);
-      }
-    } else {
       this.isDateCellTouching = false;
       this.dateCellTouchStartTime = 0;
       this.dateCellTouchStartDate = null;
       this.lastDateCellTouchDate = null;
-      return;
+    } else {
+      this.setTouchHandledFlag(300);
+      this.onDateClick(day || this.dateCellTouchStartDate);
+      this.isDateCellTouching = false;
+      this.dateCellTouchStartTime = 0;
+      this.dateCellTouchStartDate = null;
+      this.lastDateCellTouchDate = null;
     }
 
     if (this.mode === 'range') {
@@ -3633,11 +3828,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._currentYear = year;
     this._currentYearSignal.set(year);
     this.currentDate.setFullYear(year);
-    if (this.calendarViewMode === 'year') {
+    const wasInYearView = this.calendarViewMode === 'year';
+    if (wasInYearView) {
       this.calendarViewMode = 'month';
     }
     this.generateYearGrid();
     this.generateCalendar();
+    this.scheduleChangeDetection();
+    
+    // Reattach touch listeners after calendar regeneration for mobile support
+    // Wait for Angular change detection to complete and DOM to be ready
+    if (wasInYearView && this.isBrowser && this.isCalendarOpen) {
+      setTimeout(() => {
+        this.setupPassiveTouchListeners();
+      }, 50);
+    }
   }
 
   public onDecadeClick(decade: number): void {
@@ -3668,6 +3873,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._invalidateMemoCache();
     this.generateYearGrid();
     this.generateCalendar();
+    this.scheduleChangeDetection();
+    
+    if (this.isBrowser && this.isCalendarOpen && this.calendarViewMode === 'month') {
+      setTimeout(() => {
+        this.setupPassiveTouchListeners();
+      }, 50);
+    }
     
     const yearChangedMsg = this.getTranslation('yearChanged' as keyof DatepickerTranslations, undefined, { year: String(this._currentYear) }) || `Year ${this._currentYear}`;
     this.ariaLiveService.announce(yearChangedMsg, 'polite');
@@ -3859,6 +4071,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (delta < 0 && this.isBackArrowDisabled) return;
 
+    this.clearTouchHandledFlag();
+    this.isDateCellTouching = false;
+    this.dateCellTouchStartTime = 0;
+    this.dateCellTouchStartDate = null;
+    this.lastDateCellTouchDate = null;
+
     const newDate = addMonths(this.currentDate, delta);
     this.currentDate = newDate;
     this._currentMonth = newDate.getMonth();
@@ -3867,6 +4085,19 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._currentYearSignal.set(this._currentYear);
     this._invalidateMemoCache();
     this.generateCalendar();
+    this.cdr.markForCheck();
+    this.scheduleChangeDetection();
+    
+    if (this.isBrowser && this.isCalendarOpen) {
+      // Use multiple strategies to ensure DOM is ready
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            this.setupPassiveTouchListeners();
+          }, 50);
+        });
+      });
+    }
     
     const monthName = newDate.toLocaleDateString(this.locale, { month: 'long' });
     const year = newDate.getFullYear();
