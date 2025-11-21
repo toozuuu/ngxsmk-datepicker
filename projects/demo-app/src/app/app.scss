@@ -42,6 +42,11 @@
   background-color: transparent;
   color: var(--text-primary);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.875rem !important;
+  -webkit-text-size-adjust: 100% !important;
+  -moz-text-size-adjust: 100% !important;
+  -ms-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
 }
 
 .docs-container input[type="text"]:focus,
@@ -427,6 +432,10 @@
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 400;
   box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .docs-container.dark-theme .search-input {
@@ -2174,8 +2183,12 @@
     max-width: 140px;
     padding: 0 0.75rem;
     padding-right: 2rem;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     height: 44px;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 }
 
@@ -2207,7 +2220,11 @@
     max-width: 120px;
     padding: 0 0.625rem;
     padding-right: 1.75rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   
   .language-dropdown {
@@ -2285,10 +2302,14 @@
   }
 
   .hero-description {
-    font-size: 1rem;
+    font-size: 0.875rem;
     margin-bottom: 2rem;
     line-height: 1.6;
     padding: 0 0.5rem;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .hero-buttons {
@@ -2302,7 +2323,11 @@
     width: 100%;
     text-align: center;
     padding: 1rem 1.5rem;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .feature-grid {
@@ -2492,8 +2517,12 @@
   .demo-button {
     flex: 1 1 auto;
     min-width: 100px;
-    font-size: 13px;
+    font-size: 0.875rem;
     padding: 10px 14px;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .code-block {
@@ -2509,7 +2538,7 @@
 
   .code-block pre {
     padding: 1rem;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     line-height: 1.5;
     overflow: visible;
     word-break: normal;
@@ -2519,7 +2548,7 @@
   }
 
   .code-block code {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     line-height: 1.5;
     word-break: normal;
     overflow-wrap: normal;
@@ -2630,14 +2659,22 @@
   }
 
   .hero-version {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     margin-bottom: 0.875rem;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .hero-description {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     margin-bottom: 1.75rem;
     padding: 0;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .hero-buttons {
@@ -2685,8 +2722,12 @@
   }
 
   .docs-section p {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     margin-bottom: 1rem;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .api-subsection {
@@ -2708,13 +2749,21 @@
   }
 
   .api-table th {
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     padding: 0.875rem 0.625rem;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .api-table td {
     padding: 0.75rem 0.625rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .api-table th:first-child,
@@ -2750,9 +2799,13 @@
 
   .size-button {
     padding: 0.5rem 0.75rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     min-width: calc(50% - 0.1875rem);
     flex: 1 1 calc(50% - 0.1875rem);
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .size-dimension {
@@ -2843,9 +2896,13 @@
 
   .demo-button {
     padding: 0.75rem 1rem;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     min-width: auto;
     flex: 1 1 auto;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .code-block {
@@ -2858,7 +2915,7 @@
 
   .code-block pre {
     padding: 0.875rem;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     line-height: 1.5;
     overflow: visible;
     word-break: normal;
@@ -2868,7 +2925,7 @@
   }
 
   .code-block code {
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     line-height: 1.5;
     word-break: normal;
     overflow-wrap: normal;

@@ -287,11 +287,37 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
+  onDocumentClick(event: MouseEvent | TouchEvent): void {
     if (this.isBrowser) {
       const target = event.target as Node;
       if (target && !this.elementRef.nativeElement.contains(target)) {
         this.isOpen = false;
+      }
+      
+      // On mobile, also close when calendar modal opens
+      // Check if calendar backdrop or popover container is present (indicates calendar is open on mobile)
+      const calendarBackdrop = document.querySelector('.ngxsmk-backdrop');
+      const popoverOpen = document.querySelector('.ngxsmk-popover-container.ngxsmk-popover-open');
+      if (calendarBackdrop || popoverOpen) {
+        // Small delay to ensure calendar is fully opened before closing dropdowns
+        setTimeout(() => {
+          this.isOpen = false;
+        }, 50);
+      }
+    }
+  }
+  
+  @HostListener('document:touchstart', ['$event'])
+  onDocumentTouchStart(event: TouchEvent): void {
+    // On mobile, close dropdown when calendar opens
+    if (this.isBrowser && this.isOpen) {
+      const calendarBackdrop = document.querySelector('.ngxsmk-backdrop');
+      if (calendarBackdrop) {
+        const target = event.target as Node;
+        // Only close if touch is outside the dropdown
+        if (target && !this.elementRef.nativeElement.contains(target)) {
+          this.isOpen = false;
+        }
       }
     }
   }

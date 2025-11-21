@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.17 → v1.9.18](#v1917---v1918)
 - [v1.9.16 → v1.9.17](#v1916---v1917)
 - [v1.9.15 → v1.9.16](#v1915---v1916)
 - [v1.9.14 → v1.9.15](#v1914---v1915)
@@ -60,6 +61,34 @@ None in v1.9.16.
 
 - This version maintains full backward compatibility with v1.9.15. All existing code will continue to work without modifications.
 - The fix ensures that range mode date pickers work correctly when users click on dates from previous months, especially when starting with null initial values.
+
+## v1.9.17 → v1.9.18
+
+### Fixed
+- **Mobile Touch Event Handling**: Improved touch listener attachment when calendar opens on mobile devices
+  - Touch listeners now properly attach when calendar first opens, eliminating the need to navigate months first
+  - Added retry mechanism with multiple attempts to ensure listeners are attached even on slower mobile devices
+  - Improved timing with double `requestAnimationFrame` calls and multiple retry strategies
+
+### Changed
+- **Version Update**: Updated to version 1.9.18
+- **Stable Release**: Version 1.9.18 is the current stable version
+
+### Installation
+
+```bash
+npm install ngxsmk-datepicker@1.9.18
+```
+
+### Breaking Changes
+None in v1.9.18.
+
+### Deprecations
+None in v1.9.18.
+
+### Migration Steps
+- This version maintains full backward compatibility with v1.9.17. All existing code will continue to work without modifications.
+- No code changes required.
 
 ## v1.9.16 → v1.9.17
 

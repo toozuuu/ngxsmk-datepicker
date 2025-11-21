@@ -228,8 +228,12 @@
 }
 
 .ngxsmk-clear-button svg {
-  width: 16px;
-  height: 16px;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
 }
 
 .ngxsmk-clear-button:hover:not(:disabled) {
@@ -1015,8 +1019,31 @@
   }
 
   .ngxsmk-display-input {
-    font-size: 16px;
+    font-size: 14px !important;
     min-height: 44px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  .ngxsmk-display-input::placeholder {
+    font-size: 14px !important;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  .ngxsmk-display-input:not(:placeholder-shown) {
+    font-size: 14px !important;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .ngxsmk-clear-button {
@@ -1024,9 +1051,17 @@
     margin-right: var(--datepicker-spacing-xs);
   }
 
+  .ngxsmk-calendar-button {
+    display: none !important;
+  }
+
   .ngxsmk-clear-button svg {
-    width: 14px;
-    height: 14px;
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px;
+    min-height: 16px;
+    max-width: 16px;
+    max-height: 16px;
   }
 }
 
@@ -1613,9 +1648,32 @@
   }
 
   .ngxsmk-display-input {
-    font-size: 16px;
+    font-size: 14px !important;
     padding: 10px 12px;
     min-height: 44px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  .ngxsmk-display-input::placeholder {
+    font-size: 14px !important;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  .ngxsmk-display-input:not(:placeholder-shown) {
+    font-size: 14px !important;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .ngxsmk-clear-button {
@@ -1623,9 +1681,17 @@
     margin-right: 8px;
   }
 
+  .ngxsmk-calendar-button {
+    display: none !important;
+  }
+
   .ngxsmk-clear-button svg {
-    width: 13px;
-    height: 13px;
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px;
+    min-height: 16px;
+    max-width: 16px;
+    max-height: 16px;
   }
 
   .ngxsmk-day-cell {
@@ -3035,8 +3101,12 @@
   }
 
   .ngxsmk-clear-button svg {
-    width: 11px;
-    height: 11px;
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px;
+    min-height: 16px;
+    max-width: 16px;
+    max-height: 16px;
   }
 
   .ngxsmk-clear-button-footer,
@@ -3052,8 +3122,12 @@
   }
 
   .ngxsmk-clear-button svg {
-    width: 12px;
-    height: 12px;
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px;
+    min-height: 16px;
+    max-width: 16px;
+    max-height: 16px;
   }
 
   .ngxsmk-multi-calendar-container.ngxsmk-calendar-auto,
@@ -3144,8 +3218,12 @@
   }
 
   .ngxsmk-clear-button svg {
-    width: 10px;
-    height: 10px;
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px;
+    min-height: 16px;
+    max-width: 16px;
+    max-height: 16px;
   }
 }
 
