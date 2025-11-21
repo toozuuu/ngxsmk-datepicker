@@ -416,7 +416,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() showRanges: boolean = true;
   @Input() showTime: boolean = false;
   @Input() timeOnly: boolean = false;
-  @Input() showCalendarButton: boolean = true;
+  @Input() showCalendarButton: boolean = false;
   @Input() minuteInterval: number = 1;
   @Input() holidayProvider: HolidayProvider | null = null;
   @Input() disableHolidays: boolean = false;
