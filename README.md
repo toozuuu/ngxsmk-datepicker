@@ -777,14 +777,14 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.16
 - ✅ **Angular 17-22 Compatible**: Verified compatibility with Angular 17-22 (including Angular 21)
 
-### **v1.9.16** (Stable)
+### **v1.9.16**
 - 🐛 **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
 - 🎉 **Version Update**: Updated to version 1.9.16
 - ✅ **Stable Release**: Version 1.9.16 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.15
 - ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
 
-### **v1.9.15** (Stable)
+### **v1.9.15**
 - 🐛 **Moment Object Binding Fix**: Fixed Moment.js objects not binding correctly with ngModel
 - 🐛 **Date Clicks After Navigation**: Fixed dates becoming unclickable after month navigation
 - 🎉 **Version Update**: Updated to version 1.9.15
@@ -792,14 +792,14 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.14
 - ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
 
-### **v1.9.14** (Stable)
+### **v1.9.14**
 - 🐛 **Date Picker Selection Fix**: Fixed date picker selection issues, especially in range mode
 - 🐛 **Moment.js Timezone Support**: Fixed timezone offset preservation for Moment.js objects
 - 🎉 **Version Update**: Updated to version 1.9.14
 - ✅ **Stable Release**: Version 1.9.14 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.13
 
-### **v1.9.13** (Stable)
+### **v1.9.13**
 - 🐛 **Bug Fixes**: Fixed `valueChange` event emitting null for range mode with ngModel
 - 🐛 **Bug Fixes**: Fixed date selection becoming disabled after month navigation in range mode
 - 🐛 **Bug Fixes**: Fixed Moment.js object handling in range values and arrays
@@ -807,13 +807,13 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - ✅ **Stable Release**: Version 1.9.13 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.12
 
-### **v1.9.12** (Stable)
+### **v1.9.12**
 - 🎉 **Version Update**: Updated to version 1.9.12
 - ✅ **Stable Release**: Version 1.9.12 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.11
 - 📚 **Migration Guide**: See [MIGRATION.md](MIGRATION.md) for detailed migration instructions
 
-### **v1.9.11** (Stable)
+### **v1.9.11**
 - 🐛 **Moment.js Integration**: Fixed critical issue where Moment.js objects with custom date formats would not populate correctly
   - Added `isMomentObject()` helper method to safely detect Moment.js instances
   - Enhanced `_normalizeValue()` method to handle Moment.js objects directly
@@ -824,7 +824,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 🔍 **Moment.js Detection**: More robust detection of Moment.js objects across different versions
 - 🎮 **Demo Application**: Added working Moment.js integration example with interactive controls
 
-### **v1.9.10** (Stable)
+### **v1.9.10**
 - 🐛 **Async Database Value Loading**: Enhanced datepicker to properly handle database values that load asynchronously
   - Added fallback sync mechanism in `ngAfterViewInit` to catch async database loads
   - Added delayed sync checks in `ngOnInit`, `ngOnChanges`, and `ngAfterViewInit`
@@ -839,25 +839,25 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Simplified karma.conf.js to remove deprecated plugins
   - Updated test script to target correct project
 
-### **v1.9.9** (Stable)
+### **v1.9.9**
 - 🐛 **Database Value Population**: Fixed critical issue where datepicker would not populate with values from database when using `[field]` input binding
   - Added `_normalizeValue()` helper method to properly handle all value types
   - Updated field effect and related methods to use `_normalizeValue()` instead of `_normalizeDate()`
   - Fixed issue where string dates from database were not being parsed and displayed correctly
   - Now properly handles Date objects, string dates, range objects, and arrays of dates
 
-### **v1.9.8** (Stable)
+### **v1.9.8**
 - 🐛 **Date Selection Reset Issue**: Fixed critical bug where selected dates would reset to today's date when using `[field]` input binding
   - Fixed `applyCurrentTime` to create a new Date object instead of mutating the original
   - Added `_isUpdatingFromInternal` flag to prevent field effect from resetting the value
   - This ensures selected dates are properly stored in the form field
 
-### **v1.9.7** (Stable)
+### **v1.9.7**
 - 🐛 **Calendar Population**: Fixed critical issue where datepicker calendar would not populate with dates when opened
   - Fixed issue when multiple datepickers were present in the same form
   - Ensured `generateCalendar()` is called when opening the datepicker via click, touch, or programmatic methods
 
-### **v1.9.6** (Stable)
+### **v1.9.6**
 - 🐛 **Multiple Datepicker Management**: Fixed issue where multiple datepickers in the same form would open in the same centered location
 - 🖱️ **Outside Click Detection**: Improved click detection to properly close datepicker when clicking outside
 - 🔄 **Auto-close Other Datepickers**: When opening a datepicker, all other open datepickers in the same form are now automatically closed
@@ -865,14 +865,14 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 📱 **Datepicker Closing on Mobile**: Fixed issue where datepicker would open and immediately disappear on mobile devices
 - 👆 **Select Box Cursor**: Added pointer cursor to all select boxes (month, year, hour, minute, AM/PM) in the datepicker
 
-### **v1.9.5** (Stable)
+### **v1.9.5**
 - 🔧 **Angular 21+ Signal Forms Type Compatibility**: Fixed TypeScript compilation error with Angular 21+ Signal Forms
   - Fixed `Type '() => string' is not assignable to type 'never'` error when using `[field]` input
   - Updated `SignalFormField` type definition to be compatible with Angular 21's `FieldTree<Date, string>` types
   - Maintains backward compatibility with Angular 17-20 where field input is optional
   - Resolves [#33](https://github.com/NGXSMK/ngxsmk-datepicker/issues/33)
 
-### **v1.9.4** (Stable)
+### **v1.9.4**
 - ✨ **Custom Date Format**: New `[displayFormat]` input property to display dates in custom formats
   - Supports format strings like "MM/DD/YYYY hh:mm A"
   - Works with date adapters (date-fns, dayjs, luxon) or built-in simple formatter
@@ -884,7 +884,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Removed unnecessary scrollbars from datepicker wrapper
   - Resolves [#32](https://github.com/NGXSMK/ngxsmk-datepicker/issues/32)
 
-### **v1.9.3** (Stable)
+### **v1.9.3**
 - ✨ **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar
   - Hides calendar grid and shows only time controls (hour, minute, AM/PM)
   - Automatically enables `showTime` when `timeOnly` is true
@@ -905,7 +905,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Fixed calendar views tests, recurring dates utils tests
   - All 353 tests now pass successfully
 
-### **v1.9.2** (Stable)
+### **v1.9.2**
 - 📦 **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings
   - Main bundle: ~127KB (source maps excluded from published package)
   - Enhanced tree-shaking with optimized imports and compiler options
@@ -929,7 +929,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Build warnings from conflicting export conditions resolved
   - Source map removal script made more resilient for build environments
 
-### **v1.9.1** (Stable)
+### **v1.9.1**
 - 🐛 Minor bug fixes and improvements
 
 ### **v1.9.0**
