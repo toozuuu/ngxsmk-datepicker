@@ -430,7 +430,7 @@ export class PlainFormComponent {
 | minuteInterval | number                                             | 1                     | Interval for minute dropdown options.                                                                         |
 | showTime       | boolean                                            | false                 | Enables the hour/minute/AM/PM selection section.                                                              |
 | timeOnly       | boolean                                            | false                 | Display time picker only (no calendar). Automatically enables `showTime`. Perfect for time selection scenarios. |
-| showCalendarButton | boolean                                        | true                  | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. |
+| showCalendarButton | boolean                                        | false                 | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. |
 | value          | DatepickerValue                                    | null                  | Programmatic value setting. Set the datepicker value from code (useful for server-side API data).            |
 | startAt        | DateInput                                          | null                  | The date to initially center the calendar view on.                                                            |
 | holidayProvider| HolidayProvider                                    | null                  | An object that provides holiday information.                                                                  |
@@ -500,13 +500,12 @@ To enable the dark theme, simply bind the theme input:
 Control the visibility of the calendar icon button:
 
 ```html
-<!-- Hide calendar button (users can still click input to open calendar) -->
+<!-- Hide calendar button (default - users can still click input to open calendar) -->
 <ngxsmk-datepicker
-  [showCalendarButton]="false"
   mode="single">
 </ngxsmk-datepicker>
 
-<!-- Show calendar button (default) -->
+<!-- Show calendar button -->
 <ngxsmk-datepicker
   [showCalendarButton]="true"
   mode="single">
@@ -764,10 +763,19 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 ## **📄 Changelog**
 
 ### **v1.9.17** (Stable)
+- 🎉 **Calendar Button Visibility Control**: Added `showCalendarButton` input property to show/hide the calendar icon button
+  - Defaults to `false` for a cleaner, more minimal UI
+  - When set to `true`, displays the calendar icon button next to the input field
+  - When set to `false`, users can still open the calendar by clicking the input field
+  - Perfect for custom UI designs or when using `allowTyping` with custom calendar triggers
+- 🎨 **Calendar Button Styling**: Added `calendarBtn` to `DatepickerClasses` for custom styling of the calendar button
+- 🔧 **Type Compatibility**: Updated `SignalFormField` type to be fully compatible with Angular 21's `FieldTree<Date, string>` types
+  - Resolves TypeScript compilation issues when using `[field]` input with Angular 21 Signal Forms
+  - Maintains full backward compatibility with Angular 17-20
 - 🎉 **Version Update**: Updated to version 1.9.17
 - ✅ **Stable Release**: Version 1.9.17 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.16
-- ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
+- ✅ **Angular 17-22 Compatible**: Verified compatibility with Angular 17-22 (including Angular 21)
 
 ### **v1.9.16** (Stable)
 - 🐛 **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
