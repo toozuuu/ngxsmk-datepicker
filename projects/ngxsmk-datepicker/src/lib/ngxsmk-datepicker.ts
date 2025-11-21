@@ -67,15 +67,14 @@ import { DatepickerTranslations, PartialDatepickerTranslations } from './interfa
 import { FocusTrapService } from './services/focus-trap.service';
 import { AriaLiveService } from './services/aria-live.service';
 
-/**
- * Represents a form field that can be used with Angular signals
- */
-type SignalFormField = {
-  value?: DatepickerValue | (() => DatepickerValue);
-  disabled?: boolean | (() => boolean);
+type SignalFormField = ({
+  value?: DatepickerValue | (() => DatepickerValue) | { (): DatepickerValue };
+  disabled?: boolean | (() => boolean) | { (): boolean };
   setValue?: (value: DatepickerValue) => void;
   updateValue?: (updater: () => DatepickerValue) => void;
-} | null | undefined;
+} & {
+  [key: string]: any;
+}) | null | undefined;
 
 @Component({
   selector: 'ngxsmk-datepicker',
@@ -110,6 +109,9 @@ type SignalFormField = {
                  (focus)="onInputFocus($event)">
           <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event)" [disabled]="disabled" *ngIf="displayValue" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+          </button>
+          <button type="button" class="ngxsmk-calendar-button" (click)="toggleCalendar($event); $event.stopPropagation()" [disabled]="disabled" *ngIf="showCalendarButton" [attr.aria-label]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [title]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [ngClass]="classes?.calendarBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M96 80H416c26.51 0 48 21.49 48 48V416c0 26.51-21.49 48-48 48H96c-26.51 0-48-21.49-48-48V128c0-26.51 21.49-48 48-48zM160 32v64M352 32v64M464 192H48M200 256h112M200 320h112M200 384h112M152 256h.01M152 320h.01M152 384h.01"/></svg>
           </button>
         </div>
       }
@@ -414,6 +416,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() showRanges: boolean = true;
   @Input() showTime: boolean = false;
   @Input() timeOnly: boolean = false;
+  @Input() showCalendarButton: boolean = false;
   @Input() minuteInterval: number = 1;
   @Input() holidayProvider: HolidayProvider | null = null;
   @Input() disableHolidays: boolean = false;
@@ -650,6 +653,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     inputGroup?: string;
     input?: string;
     clearBtn?: string;
+    calendarBtn?: string;
     popover?: string;
     container?: string;
     calendar?: string;
@@ -756,7 +760,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly dateComparator = createDateComparator();
 
-  // Typed input handling
   public typedInputValue: string = '';
   private isTyping: boolean = false;
 
@@ -764,17 +767,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @ViewChild('dateInput', { static: false }) dateInput?: ElementRef<HTMLInputElement>;
   private focusTrapCleanup: (() => void) | null = null;
 
-  // Translation management
   private _translations: DatepickerTranslations | null = null;
   private _translationService: TranslationService | null = null;
 
-  // Change detection batching
   private _changeDetectionScheduled = false;
 
-  /**
-   * Batches change detection to avoid multiple markForCheck calls
-   * Use this when multiple state changes happen in sequence
-   */
   private scheduleChangeDetection(): void {
     if (this._changeDetectionScheduled) {
       return;
@@ -786,7 +783,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     });
   }
 
-  // Signals for reactive dependency tracking
   private _currentMonthSignal = signal<number>(this.currentDate.getMonth());
   private _currentYearSignal = signal<number>(this.currentDate.getFullYear());
   private _holidayProviderSignal = signal<HolidayProvider | null>(null);
@@ -797,14 +793,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     disabledRanges: null
   });
 
-  // Cached memoized functions to avoid creating new instances on each access
   private _cachedIsCurrentMonthMemo: ((day: Date | null) => boolean) | null = null;
   private _cachedIsDateDisabledMemo: ((day: Date | null) => boolean) | null = null;
   private _cachedIsSameDayMemo: ((d1: Date | null, d2: Date | null) => boolean) | null = null;
   private _cachedIsHolidayMemo: ((day: Date | null) => boolean) | null = null;
   private _cachedGetHolidayLabelMemo: ((day: Date | null) => string | null) | null = null;
 
-  // Computed signals for memoized function dependencies
   private _memoDependencies = computed(() => ({
     month: this._currentMonthSignal(),
     year: this._currentYearSignal(),
@@ -812,10 +806,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     disabledState: this._disabledStateSignal()
   }));
 
-  /**
-   * Updates memo dependency signals when inputs change
-   * Called from ngOnChanges and when month/year change
-   */
   private _updateMemoSignals(): void {
     this._currentMonthSignal.set(this._currentMonth);
     this._currentYearSignal.set(this._currentYear);
@@ -862,7 +852,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   get displayValue(): string {
     if (this.hooks?.formatDisplayValue) {
       const value = this.hooks.formatDisplayValue(this._internalValue, this.mode);
-      // Sync typedInputValue when not typing
       if (!this.isTyping && this.allowTyping) {
         this.typedInputValue = value || '';
       }
@@ -871,7 +860,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (this.displayFormat) {
       const value = this.formatWithCustomFormat();
-      // Sync typedInputValue when not typing
       if (!this.isTyping && this.allowTyping) {
         this.typedInputValue = value || '';
       }
@@ -902,7 +890,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         timeResult = this.getTranslation('timesSelected', undefined, { count: this.selectedDates.length });
       }
       
-      // Sync typedInputValue when not typing
       if (!this.isTyping && this.allowTyping) {
         this.typedInputValue = timeResult;
       }
@@ -942,7 +929,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       result = this.getTranslation('datesSelected', undefined, { count: this.selectedDates.length });
     }
     
-    // Sync typedInputValue when not typing
     if (!this.isTyping && this.allowTyping) {
       this.typedInputValue = result;
     }
@@ -1026,10 +1012,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const firstDayOfCurrentMonth = new Date(this.currentYear, this.currentMonth, 1);
     return firstDayOfCurrentMonth <= this._minDate;
   }
-  /**
-   * Invalidates cached memoized functions when dependencies change
-   * Uses computed signal to track dependencies reactively
-   */
   private _invalidateMemoCache(): void {
     this._memoDependencies();
 
@@ -1041,10 +1023,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
 
-  /**
-   * Gets or creates a cached memoized function for checking if a day is in the current month
-   * Uses computed signal to track month/year dependencies reactively
-   */
   get isCurrentMonthMemo(): (day: Date | null) => boolean {
     const deps = this._memoDependencies();
 
@@ -1065,10 +1043,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this._cachedIsCurrentMonthMemo;
   }
 
-  /**
-   * Gets or creates a cached memoized function for checking if a day is disabled
-   * Uses computed signal to track disabled state dependencies reactively
-   */
   get isDateDisabledMemo(): (day: Date | null) => boolean {
     const deps = this._memoDependencies();
     const disabledState = deps.disabledState;
@@ -1108,9 +1082,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this._cachedIsDateDisabledMemo;
   }
 
-  /**
-   * Gets or creates a cached memoized function for comparing dates
-   */
   get isSameDayMemo(): (d1: Date | null, d2: Date | null) => boolean {
     if (this._cachedIsSameDayMemo) {
       return this._cachedIsSameDayMemo;
@@ -1119,10 +1090,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this._cachedIsSameDayMemo;
   }
 
-  /**
-   * Gets or creates a cached memoized function for checking if a day is a holiday
-   * Uses computed signal to track holiday provider dependency reactively
-   */
   get isHolidayMemo(): (day: Date | null) => boolean {
     const deps = this._memoDependencies();
     const holidayProvider = deps.holidayProvider;
@@ -1145,10 +1112,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this._cachedIsHolidayMemo;
   }
 
-  /**
-   * Gets or creates a cached memoized function for getting holiday labels
-   * Uses computed signal to track holiday provider dependency reactively
-   */
   get getHolidayLabelMemo(): (day: Date | null) => string | null {
     const deps = this._memoDependencies();
     const holidayProvider = deps.holidayProvider;
@@ -1876,7 +1839,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (event.type === 'click') {
-      // Don't toggle calendar if clicking on input field and allowTyping is enabled
       const target = event.target as HTMLElement;
       if (this.allowTyping && target && target.tagName === 'INPUT' && target.classList.contains('ngxsmk-display-input')) {
         return;
@@ -2165,7 +2127,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   ngAfterViewInit(): void {
-    // Initialize typedInputValue if allowTyping is enabled and we have a display value
     if (this.allowTyping && this.displayValue) {
       this.typedInputValue = this.displayValue;
     }
@@ -2303,7 +2264,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.initializeTranslations();
         this.generateLocaleData();
         this.generateCalendar();
-        needsChangeDetection = false; // Already handled
+        needsChangeDetection = false;
       } else {
         needsChangeDetection = true;
       }
@@ -2314,7 +2275,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (changes['weekStart'] || changes['yearRange']) {
         this.generateLocaleData();
         this.generateCalendar();
-        needsChangeDetection = false; // Already handled
+        needsChangeDetection = false;
       } else {
         needsChangeDetection = true;
       }
@@ -2679,7 +2640,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         },
         'MM': {
           regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10) - 1 // JavaScript months are 0-indexed
+          extractor: (match) => parseInt(match[1] || '0', 10) - 1
         },
         'M': {
           regex: /(\d{1,2})/,
@@ -2739,7 +2700,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       let remainingFormat = format;
       let remainingString = dateString;
 
-      // Process tokens in order of length (longest first) to avoid conflicts
       const sortedTokens = Object.keys(formatTokens).sort((a, b) => b.length - a.length);
 
       for (const token of sortedTokens) {
@@ -2751,7 +2711,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
           if (match) {
             dateParts[token] = tokenInfo.extractor(match);
-            // Remove the matched part from both strings
             const matchIndex = remainingString.indexOf(match[0]);
             remainingString = remainingString.substring(0, matchIndex) + remainingString.substring(matchIndex + match[0].length);
             remainingFormat = remainingFormat.replace(token, '');
@@ -2759,7 +2718,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         }
       }
 
-      // Create a new Date object with the parsed values
       const now = new Date();
       const year = dateParts['YYYY'] !== undefined ? dateParts['YYYY'] : now.getFullYear();
       const month = dateParts['MM'] !== undefined ? dateParts['MM'] : (dateParts['M'] !== undefined ? dateParts['M'] : now.getMonth());
@@ -2793,38 +2751,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
-  /**
-   * Handles input focus event when allowTyping is enabled
-   */
   onInputFocus(_event: FocusEvent): void {
     if (!this.allowTyping) return;
     this.isTyping = true;
-    // Initialize typedInputValue with current display value if empty
     if (!this.typedInputValue || this.typedInputValue === '') {
       this.typedInputValue = this.displayValue || '';
     }
   }
 
-  /**
-   * Handles input change event when user types
-   */
   onInputChange(event: Event): void {
     if (!this.allowTyping) return;
     const input = event.target as HTMLInputElement;
     const value = input.value;
     
-    // Apply input mask if displayFormat is set
     if (this.displayFormat) {
       this.typedInputValue = this.applyInputMask(value, this.displayFormat);
     } else {
       this.typedInputValue = value;
     }
     
-    // Update the input value with masked value
     if (input.value !== this.typedInputValue) {
       const cursorPosition = input.selectionStart || 0;
       input.value = this.typedInputValue;
-      // Restore cursor position after masking
       setTimeout(() => {
         input.setSelectionRange(cursorPosition, cursorPosition);
       }, 0);
@@ -2833,9 +2781,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.scheduleChangeDetection();
   }
 
-  /**
-   * Handles input blur event - validates and applies the typed date
-   */
   onInputBlur(event: FocusEvent): void {
     if (!this.allowTyping) return;
     this.isTyping = false;
@@ -2843,34 +2788,25 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const value = input.value.trim();
     
     if (!value) {
-      // Clear the value if input is empty
       this.clearValue();
       this.typedInputValue = '';
       this.scheduleChangeDetection();
       return;
     }
     
-    // Parse and validate the typed input
     const parsedDate = this.parseTypedInput(value);
     
     if (parsedDate && this.isValidDate(parsedDate)) {
-      // Apply the parsed date
       this.applyTypedDate(parsedDate);
-      // Update typedInputValue to match the formatted display value
       this.typedInputValue = this.displayValue;
     } else {
-      // Invalid input - revert to display value
       this.typedInputValue = this.displayValue;
       this.scheduleChangeDetection();
     }
   }
 
-  /**
-   * Handles keydown events on the input
-   */
   onInputKeyDown(event: KeyboardEvent): void {
     if (!this.allowTyping) {
-      // If typing is not allowed, use default behavior (toggle calendar)
       if (event.key === 'Enter' || event.key === ' ') {
         this.toggleCalendar(event);
         if (event.key === ' ') {
@@ -2880,7 +2816,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
     
-    // If typing is allowed, handle Enter key to apply the date
     if (event.key === 'Enter') {
       event.preventDefault();
       const input = event.target as HTMLInputElement;
@@ -2896,14 +2831,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (parsedDate !== null && this.isValidDate(parsedDate)) {
         this.applyTypedDate(parsedDate);
         this.typedInputValue = this.displayValue;
-        input.blur(); // Remove focus after applying
+        input.blur();
       } else {
-        // Invalid input - revert
         this.typedInputValue = this.displayValue;
         this.scheduleChangeDetection();
       }
     } else if (event.key === 'Escape') {
-      // Revert to display value on Escape
       this.typedInputValue = this.displayValue;
       const input = event.target as HTMLInputElement;
       input.blur();
@@ -2911,19 +2844,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
-  /**
-   * Applies input mask based on displayFormat
-   */
   private applyInputMask(value: string, format: string): string {
-    // Remove all non-digit and non-separator characters
     const digits = value.replace(/[^\d]/g, '');
     let masked = '';
     let digitIndex = 0;
     let i = 0;
     
-    // Build masked string based on format tokens
     while (i < format.length && digitIndex < digits.length) {
-      // Check for multi-character tokens first (longest first)
       if (format.substring(i, i + 4) === 'YYYY') {
         const yearDigits = digits.substring(digitIndex, digitIndex + 4);
         masked += yearDigits.padEnd(4, '0');
@@ -2939,12 +2866,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         i += 2;
       } else if (format[i] === 'Y' || format[i] === 'M' || format[i] === 'D' || 
                  format[i] === 'H' || format[i] === 'h' || format[i] === 'm' || format[i] === 's') {
-        // Single character token
         masked += digits[digitIndex] || '';
         digitIndex++;
         i++;
       } else {
-        // Preserve separators and other characters
         masked += format[i];
         i++;
       }
@@ -2953,36 +2878,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return masked;
   }
 
-  /**
-   * Parses typed input string into a Date object
-   */
   private parseTypedInput(value: string): Date | null {
     if (!value || !value.trim()) return null;
     
-    // If displayFormat is set, use parseCustomDateString
     if (this.displayFormat) {
       return this.parseCustomDateString(value, this.displayFormat);
     }
     
-    // Otherwise, try to parse as ISO date or use native Date parsing
-    // Try ISO format first
     const isoDate = new Date(value);
     if (!isNaN(isoDate.getTime())) {
       return isoDate;
     }
     
-    // Try common date formats
     const formats = [
-      /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, // MM/DD/YYYY or DD/MM/YYYY
-      /^(\d{4})-(\d{1,2})-(\d{1,2})$/, // YYYY-MM-DD
-      /^(\d{1,2})-(\d{1,2})-(\d{4})$/, // MM-DD-YYYY or DD-MM-YYYY
-      /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/, // DD.MM.YYYY or MM.DD.YYYY
+      /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/,
+      /^(\d{4})-(\d{1,2})-(\d{1,2})$/,
+      /^(\d{1,2})-(\d{1,2})-(\d{4})$/,
+      /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/,
     ];
     
     for (const format of formats) {
       const match = value.match(format);
       if (match && match[1] && match[2] && match[3]) {
-        // Try both MM/DD/YYYY and DD/MM/YYYY interpretations
         const date1 = new Date(parseInt(match[3]), parseInt(match[1]) - 1, parseInt(match[2]));
         const date2 = new Date(parseInt(match[3]), parseInt(match[2]) - 1, parseInt(match[1]));
         
@@ -2998,41 +2915,29 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return null;
   }
 
-  /**
-   * Validates if a date is within constraints
-   */
   private isValidDate(date: Date): boolean {
     if (!date || isNaN(date.getTime())) return false;
     
-    // Check min/max date constraints
     if (this._minDate && date < this._minDate) return false;
     if (this._maxDate && date > this._maxDate) return false;
     
-    // Check disabled dates
     if (this.isDateDisabledMemo(date)) return false;
     
-    // Check custom validation
     if (this.isInvalidDate(date)) return false;
     
     return true;
   }
 
-  /**
-   * Applies a parsed date to the datepicker
-   */
   private applyTypedDate(date: Date): void {
     if (!date || isNaN(date.getTime())) return;
     
-    // Apply time if showTime is enabled
     if (this.showTime || this.timeOnly) {
       const now = new Date();
       date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
     } else {
-      // Set to start of day
       date.setHours(0, 0, 0, 0);
     }
     
-    // Apply the date based on mode
     if (this.mode === 'single') {
       this.selectedDate = date;
       this.currentDate = new Date(date);
@@ -3044,7 +2949,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.generateCalendar();
       this.action.emit({ type: 'dateSelected', payload: date });
     } else if (this.mode === 'range') {
-      // For range mode, set as start date
       this.startDate = date;
       this.currentDate = new Date(date);
       this._currentMonth = date.getMonth();
@@ -3054,7 +2958,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.generateCalendar();
       this.action.emit({ type: 'rangeStartSelected', payload: date });
     } else if (this.mode === 'multiple') {
-      // For multiple mode, toggle the date
       const index = this.selectedDates.findIndex(d => this.isSameDayMemo(d, date));
       if (index >= 0) {
         this.selectedDates.splice(index, 1);
@@ -3107,9 +3010,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (this.shouldAutoClose()) {
       this.closeCalendar();
-      // closeCalendar triggers change detection via isCalendarOpen setter
     } else {
-      // Batch change detection for date selection
       this.scheduleChangeDetection();
     }
   }
@@ -3358,7 +3259,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
 
       if (this.recurringPattern) {
-        // Build config object conditionally to satisfy exactOptionalPropertyTypes
         const configBase: {
           pattern: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'weekdays' | 'weekends';
           startDate: Date;
@@ -3434,9 +3334,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (this.shouldAutoClose()) {
       this.closeCalendar();
-      // closeCalendar triggers change detection via isCalendarOpen setter
     } else {
-      // Batch change detection for date selection
       this.scheduleChangeDetection();
     }
   }
@@ -4084,9 +3982,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
-  /**
-   * Get calendar ARIA label with month and year (public for template use)
-   */
   getCalendarAriaLabel(): string {
     const month = this.currentDate.toLocaleDateString(this.locale, { month: 'long' });
     const year = this.currentDate.getFullYear();
@@ -4108,9 +4003,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return day.getMonth() === targetMonth && day.getFullYear() === targetYear;
   }
 
-  /**
-   * Get translation for a key (public method for template use)
-   */
   getTranslation(key: keyof DatepickerTranslations, fallbackKey?: keyof DatepickerTranslations, params?: Record<string, string | number>): string {
     if (this._translationService) {
       return this._translationService.translate(key, params);

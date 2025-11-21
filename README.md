@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.16` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.17` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -430,6 +430,7 @@ export class PlainFormComponent {
 | minuteInterval | number                                             | 1                     | Interval for minute dropdown options.                                                                         |
 | showTime       | boolean                                            | false                 | Enables the hour/minute/AM/PM selection section.                                                              |
 | timeOnly       | boolean                                            | false                 | Display time picker only (no calendar). Automatically enables `showTime`. Perfect for time selection scenarios. |
+| showCalendarButton | boolean                                        | true                  | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. |
 | value          | DatepickerValue                                    | null                  | Programmatic value setting. Set the datepicker value from code (useful for server-side API data).            |
 | startAt        | DateInput                                          | null                  | The date to initially center the calendar view on.                                                            |
 | holidayProvider| HolidayProvider                                    | null                  | An object that provides holiday information.                                                                  |
@@ -443,7 +444,7 @@ export class PlainFormComponent {
 | nextMonthAriaLabel | string                                        | 'Next month'          | Aria label for next month navigation button.                                                                  |
 | clearAriaLabel | string                                            | 'Clear selection'     | Aria label for clear button.                                                                                 |
 | closeAriaLabel | string                                            | 'Close calendar'      | Aria label for close button.                                                                                 |
-| classes        | { wrapper?, inputGroup?, input?, popover?, container?, calendar?, header?, navPrev?, navNext?, dayCell?, footer?, clearBtn?, closeBtn? } | undefined | Tailwind-friendly class overrides for theming. |
+| classes        | { wrapper?, inputGroup?, input?, popover?, container?, calendar?, header?, navPrev?, navNext?, dayCell?, footer?, clearBtn?, calendarBtn?, closeBtn? } | undefined | Tailwind-friendly class overrides for theming. |
 
 ### **Outputs**
 
@@ -480,6 +481,7 @@ For Tailwind CSS or custom class-based theming, use the `classes` input:
     dayCell: 'hover:bg-indigo-50',
     footer: 'flex justify-end gap-2',
     clearBtn: 'btn btn-ghost',
+    calendarBtn: 'btn btn-icon',
     closeBtn: 'btn btn-primary'
   }">
 </ngxsmk-datepicker>
@@ -491,6 +493,31 @@ To enable the dark theme, simply bind the theme input:
 
 ```html
 <ngxsmk-datepicker [theme]="'dark'"></ngxsmk-datepicker>
+```
+
+### Calendar Button Visibility
+
+Control the visibility of the calendar icon button:
+
+```html
+<!-- Hide calendar button (users can still click input to open calendar) -->
+<ngxsmk-datepicker
+  [showCalendarButton]="false"
+  mode="single">
+</ngxsmk-datepicker>
+
+<!-- Show calendar button (default) -->
+<ngxsmk-datepicker
+  [showCalendarButton]="true"
+  mode="single">
+</ngxsmk-datepicker>
+
+<!-- Useful with allowTyping for custom UI -->
+<ngxsmk-datepicker
+  [allowTyping]="true"
+  [showCalendarButton]="false"
+  mode="single">
+</ngxsmk-datepicker>
 ```
 
 ## **🌍 Localization**
@@ -735,6 +762,12 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.9.17** (Stable)
+- 🎉 **Version Update**: Updated to version 1.9.17
+- ✅ **Stable Release**: Version 1.9.17 is the current stable version
+- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.16
+- ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
 
 ### **v1.9.16** (Stable)
 - 🐛 **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`

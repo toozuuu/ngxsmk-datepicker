@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.16] - 2025-01-XX (Stable)
+## [1.9.17] - 2025-11-21 (Stable)
+
+### Added
+- **Calendar Button Visibility Control**: Added `showCalendarButton` input property to show/hide the calendar icon button
+  - Defaults to `true` for backward compatibility
+  - When set to `false`, users can still open the calendar by clicking the input field
+  - Useful for custom UI designs or when using `allowTyping` with custom calendar triggers
+- **Calendar Button Styling**: Added `calendarBtn` to `DatepickerClasses` for custom styling of the calendar button
+
+### Changed
+- **Version Update**: Updated to version 1.9.17
+- **Stable Release**: Version 1.9.17 is the current stable version
+- **Type Compatibility**: Updated `SignalFormField` type to be fully compatible with Angular 21's `FieldTree<Date, string>` types
+
+### Migration Notes
+- This is a patch version update
+- No breaking changes from v1.9.16
+- All changes are backward compatible
+- Compatible with Angular 17-22
+- The calendar button is visible by default (`showCalendarButton="true"`), existing behavior unchanged
+
+## [1.9.16] - 2025-11-20
 
 ### Fixed
 - **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
@@ -32,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All fixes are backward compatible
 - Compatible with Angular 17-22 (including officially released Angular 21)
 
-## [1.9.15] - 2025-01-XX (Stable)
+## [1.9.15] - 2025-11-20
 
 ### Fixed
 - **Moment Object Binding with ngModel**: Fixed issue where Moment.js objects passed via `[(ngModel)]` were not binding correctly with the datepicker
@@ -59,7 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All fixes are backward compatible
 - Compatible with Angular 17 and up versions
 
-## [1.9.14] - 2025-01-XX (Stable)
+## [1.9.14] - 2025-11-20
 
 ### Fixed
 - **Date Picker Selection Issue**: Fixed issue where date picker was not working properly when selecting dates, especially in range mode
@@ -82,7 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No breaking changes from v1.9.13
 - All fixes are backward compatible
 
-## [1.9.13] - 2025-11-19 (Stable)
+## [1.9.13] - 2025-11-19
 
 ### Fixed
 - **valueChange Event Bug**: Fixed issue where `(valueChange)` event was emitting `null` instead of the date value for range mode when using template-driven forms with `[(ngModel)]`
@@ -108,7 +129,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No breaking changes from v1.9.12
 - All fixes are backward compatible
 
-## [1.9.12] - 2025-11-19 (Stable)
+## [1.9.12] - 2025-11-19
 
 ### Added
 - **SEO Optimization**: Comprehensive search engine optimization improvements
@@ -169,7 +190,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - See [MIGRATION.md](MIGRATION.md) for detailed migration guide
 - See [docs/SEO.md](projects/ngxsmk-datepicker/docs/SEO.md) for SEO best practices
 
-## [1.9.11] - 2025-11-17 (Stable)
+## [1.9.11] - 2025-11-17
 
 ### Fixed
 - **Moment.js Integration with Custom Formats**: Fixed critical issue where Moment.js objects with custom date formats would not populate correctly
@@ -185,7 +206,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Moment.js Detection**: More robust detection of Moment.js objects across different versions
 - **Demo Application**: Added working Moment.js integration example with interactive controls
 
-## [1.9.10] - 2025-11-15 (Stable)
+## [1.9.10] - 2025-11-15
 
 ### Changed
 - **Version Update**: Updated to version 1.9.10
@@ -213,7 +234,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Code Cleanup**: Removed unnecessary comments for cleaner codebase
 - **Test Reliability**: Enhanced test configuration for better reliability across Angular versions
 
-## [1.9.9] - 2025-11-15 (Stable)
+## [1.9.9] - 2025-11-15
 
 ### Changed
 - **Version Update**: Updated to version 1.9.9
@@ -230,7 +251,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Value Normalization**: Improved value normalization to handle all DatepickerValue types consistently
 - **Database Integration**: Enhanced compatibility with database values in various formats (strings, Date objects, etc.)
 
-## [1.9.8] - 2025-11-14 (Stable)
+## [1.9.8] - 2025-11-14
 
 ### Changed
 - **Version Update**: Updated to version 1.9.8
@@ -246,7 +267,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Date Mutation Prevention**: Improved date handling to prevent unintended mutations of date objects
 - **Field Update Stability**: Enhanced field binding stability to prevent value resets during internal updates
 
-## [1.9.7] - 2025-11-14 (Stable)
+## [1.9.7] - 2025-11-14
 
 ### Changed
 - **Version Update**: Updated to version 1.9.7
@@ -259,7 +280,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Improved
 - **Calendar Initialization**: Improved calendar initialization to ensure dates are always generated before the calendar becomes visible
 
-## [1.9.6] - 2025-11-14 (Stable)
+## [1.9.6] - 2025-11-14
 
 ### Changed
 - **Version Update**: Updated to version 1.9.6
@@ -278,7 +299,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Touch Event Handling**: Improved touch event handling to prevent premature closing on mobile devices
 - **Instance Management**: Added static instance registry to track all datepicker instances for better coordination
 
-## [1.9.5] - 2025-11-14 (Stable)
+## [1.9.5] - 2025-11-14
 
 ### Changed
 - **Version Update**: Updated to version 1.9.5
@@ -291,7 +312,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Maintains backward compatibility with Angular 17-20 where field input is optional
   - Resolves [#33](https://github.com/NGXSMK/ngxsmk-datepicker/issues/33)
 
-## [1.9.4] - 2025-11-14 (Stable)
+## [1.9.4] - 2025-11-14
 
 ### Changed
 - **Major Version Release**: Updated to version 1.9.4
@@ -317,7 +338,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Maintains backward compatibility with Angular 17-20 where field input is optional
   - Resolves [#33](https://github.com/NGXSMK/ngxsmk-datepicker/issues/33)
 
-## [1.9.3] - 2025-11-13 (Stable)
+## [1.9.3] - 2025-11-13
 
 ### Changed
 - **Major Version Release**: Updated to version 1.9.3
@@ -410,7 +431,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sidebar scrollbar styling
 - TypeScript warnings
 
-## [1.8.0] - 2025-01-XX
+## [1.8.0] - 2025-11-09
 
 ### Added
 - Signal Forms support with `[field]` input for Angular 21+

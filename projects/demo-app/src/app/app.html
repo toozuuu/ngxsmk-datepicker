@@ -22,7 +22,7 @@
           </div>
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
-            <span class="logo-version">v1.9.16</span>
+            <span class="logo-version">v1.9.17</span>
           </div>
         </a>
       </div>
@@ -149,7 +149,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v1.9.16)</p>
+        <p class="hero-version">(v1.9.17)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{ t().getStarted }}</a>
@@ -771,6 +771,7 @@
               mode="single"
               [allowTyping]="true"
               [displayFormat]="'MM/DD/YYYY'"
+              [showCalendarButton]="true"
               [theme]="currentTheme"
               [locale]="selectedLocale()"
               [placeholder]="'MM/DD/YYYY'"
@@ -786,6 +787,7 @@
               [allowTyping]="true"
               [displayFormat]="'MM/DD/YYYY hh:mm A'"
               [showTime]="true"
+              [showCalendarButton]="true"
               [theme]="currentTheme"
               [locale]="selectedLocale()"
               [placeholder]="'MM/DD/YYYY hh:mm AM/PM'"
@@ -799,6 +801,7 @@
             <ngxsmk-datepicker
               mode="single"
               [allowTyping]="true"
+              [showCalendarButton]="true"
               [theme]="currentTheme"
               [locale]="selectedLocale()"
               [placeholder]="t().selectADate"
@@ -813,6 +816,7 @@
               mode="range"
               [allowTyping]="true"
               [displayFormat]="'DD/MM/YYYY'"
+              [showCalendarButton]="true"
               [theme]="currentTheme"
               [locale]="selectedLocale()"
               [placeholder]="'DD/MM/YYYY - DD/MM/YYYY'"
@@ -827,6 +831,7 @@
               mode="single"
               [allowTyping]="true"
               [displayFormat]="'YYYY-MM-DD'"
+              [showCalendarButton]="true"
               [theme]="currentTheme"
               [locale]="selectedLocale()"
               [placeholder]="'YYYY-MM-DD'"

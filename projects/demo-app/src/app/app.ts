@@ -570,6 +570,7 @@ public date = { start: null, end: null };
     mode="single"
     [allowTyping]="true"
     [displayFormat]="'MM/DD/YYYY'"
+    [showCalendarButton]="true"
     placeholder="MM/DD/YYYY"
     formControlName="myDate">
   </ngxsmk-datepicker>
@@ -580,6 +581,7 @@ public date = { start: null, end: null };
     [allowTyping]="true"
     [displayFormat]="'MM/DD/YYYY hh:mm A'"
     [showTime]="true"
+    [showCalendarButton]="true"
     placeholder="MM/DD/YYYY hh:mm AM/PM"
     formControlName="myDateTime">
   </ngxsmk-datepicker>
@@ -588,6 +590,7 @@ public date = { start: null, end: null };
   <ngxsmk-datepicker
     mode="single"
     [allowTyping]="true"
+    [showCalendarButton]="true"
     placeholder="Select a date">
   </ngxsmk-datepicker>
 
@@ -596,6 +599,7 @@ public date = { start: null, end: null };
     mode="range"
     [allowTyping]="true"
     [displayFormat]="'DD/MM/YYYY'"
+    [showCalendarButton]="true"
     placeholder="DD/MM/YYYY - DD/MM/YYYY"
     formControlName="dateRange">
   </ngxsmk-datepicker>
@@ -605,6 +609,7 @@ public date = { start: null, end: null };
     mode="single"
     [allowTyping]="true"
     [displayFormat]="'YYYY-MM-DD'"
+    [showCalendarButton]="true"
     placeholder="YYYY-MM-DD"
     formControlName="isoDate">
   </ngxsmk-datepicker>

@@ -242,6 +242,60 @@
   outline-offset: 2px;
 }
 
+.ngxsmk-calendar-button {
+  background: none;
+  border: none;
+  padding: var(--datepicker-spacing-sm);
+  margin-right: var(--datepicker-spacing-sm);
+  cursor: pointer;
+  color: var(--datepicker-subtle-text-color);
+  line-height: 1;
+  -webkit-border-radius: var(--datepicker-radius-sm);
+  -moz-border-radius: var(--datepicker-radius-sm);
+  border-radius: var(--datepicker-radius-sm);
+  -webkit-transition: var(--datepicker-transition);
+  -moz-transition: var(--datepicker-transition);
+  -o-transition: var(--datepicker-transition);
+  transition: var(--datepicker-transition);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -ms-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.ngxsmk-calendar-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ngxsmk-calendar-button:hover:not(:disabled) {
+  color: var(--datepicker-primary-color);
+  background: var(--datepicker-hover-background);
+}
+
+.ngxsmk-calendar-button:focus-visible {
+  outline: 2px solid var(--datepicker-primary-color);
+  outline-offset: 2px;
+}
+
+.ngxsmk-calendar-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .ngxsmk-popover-container {
   position: absolute;
   top: calc(100% + 8px);
@@ -2639,6 +2693,12 @@
 
 .ngxsmk-datepicker-wrapper[dir="rtl"] .ngxsmk-clear-button,
 .ngxsmk-datepicker-wrapper.ngxsmk-rtl .ngxsmk-clear-button {
+  margin-right: 0;
+  margin-left: var(--datepicker-spacing-sm);
+}
+
+.ngxsmk-datepicker-wrapper[dir="rtl"] .ngxsmk-calendar-button,
+.ngxsmk-datepicker-wrapper.ngxsmk-rtl .ngxsmk-calendar-button {
   margin-right: 0;
   margin-left: var(--datepicker-spacing-sm);
 }

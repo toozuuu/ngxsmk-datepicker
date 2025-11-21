@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.16 → v1.9.17](#v1916---v1917)
 - [v1.9.15 → v1.9.16](#v1915---v1916)
 - [v1.9.14 → v1.9.15](#v1914---v1915)
 - [v1.9.13 → v1.9.14](#v1913---v1914)
@@ -59,6 +60,34 @@ None in v1.9.16.
 
 - This version maintains full backward compatibility with v1.9.15. All existing code will continue to work without modifications.
 - The fix ensures that range mode date pickers work correctly when users click on dates from previous months, especially when starting with null initial values.
+
+## v1.9.16 → v1.9.17
+
+### Changed
+
+- **Version Update**: Updated to version 1.9.17
+- **Stable Release**: Version 1.9.17 is the current stable version
+
+### Migration Steps
+
+No migration steps required. This is a patch version update. Simply update your package version:
+
+```bash
+npm install ngxsmk-datepicker@1.9.17
+```
+
+### Breaking Changes
+
+None in v1.9.17.
+
+### Deprecations
+
+None in v1.9.17.
+
+### Notes
+
+- This version maintains full backward compatibility with v1.9.16. All existing code will continue to work without modifications.
+- This is a patch version update with no code changes required.
 
 ## v1.9.14 → v1.9.15
 
@@ -651,7 +680,8 @@ If you encounter issues during migration:
 
 | ngxsmk-datepicker | Angular | Node.js |
 |-------------------|---------|---------|
-| 1.9.16+ | 17-22 | 18+ |
+| 1.9.17+ | 17-22 | 18+ |
+| 1.9.16 | 17-22 | 18+ |
 | 1.9.15 | 17-22 | 18+ |
 | 1.9.14 | 17-22 | 18+ |
 | 1.9.11 | 17-22 | 18+ |

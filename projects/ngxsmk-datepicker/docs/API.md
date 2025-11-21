@@ -51,6 +51,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `inline` | `boolean \| 'always' \| 'auto'` | `false` | Stable | Inline display mode | `[inline]="true"` or `inline="auto"` |
 | `showTime` | `boolean` | `false` | Stable | Show time selection | `[showTime]="true"` |
 | `timeOnly` | `boolean` | `false` | Stable | Display time picker only (no calendar). Automatically enables `showTime`. | `[timeOnly]="true"` |
+| `showCalendarButton` | `boolean` | `true` | Stable | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. | `[showCalendarButton]="false"` |
 | `minuteInterval` | `number` | `1` | Stable | Minute selection interval | `[minuteInterval]="15"` |
 | `showRanges` | `boolean` | `true` | Stable | Show predefined ranges (range mode) | `[showRanges]="true"` |
 | `ranges` | `DateRange` | `null` | Stable | Predefined date ranges | `[ranges]="quickRanges"` |
@@ -1446,6 +1447,7 @@ export class BrandedComponent {
     dayCell: 'custom-day-cell hover:bg-blue-100',
     footer: 'custom-footer flex justify-end gap-2',
     clearBtn: 'custom-clear-btn',
+    calendarBtn: 'custom-calendar-btn',
     closeBtn: 'custom-close-btn bg-blue-600 text-white'
   };
 }
@@ -2168,7 +2170,7 @@ type DateInput =
 
 ### DatepickerHooks
 
-**Status**: Stable (v1.9.16+)
+**Status**: Stable (v1.9.17+)
 
 Comprehensive hook interface for customizing datepicker behavior.
 
@@ -2192,7 +2194,7 @@ interface DatepickerHooks {
 
 ### KeyboardShortcutContext
 
-**Status**: Stable (v1.9.16+)
+**Status**: Stable (v1.9.17+)
 
 Context object provided to keyboard shortcut handlers.
 
@@ -2246,6 +2248,7 @@ interface DatepickerClasses {
   dayCell?: string;
   footer?: string;
   clearBtn?: string;
+  calendarBtn?: string;
   closeBtn?: string;
   navPrev?: string;
   navNext?: string;
