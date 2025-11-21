@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.17] - 2025-01-XX (Stable)
+
+### Added
+- **Calendar Button Visibility Control**: Added `showCalendarButton` input property to show/hide the calendar icon button
+  - Defaults to `true` for backward compatibility
+  - When set to `false`, users can still open the calendar by clicking the input field
+  - Useful for custom UI designs or when using `allowTyping` with custom calendar triggers
+- **Calendar Button Styling**: Added `calendarBtn` to `DatepickerClasses` for custom styling of the calendar button
+
+### Changed
+- **Version Update**: Updated to version 1.9.17
+- **Stable Release**: Version 1.9.17 is the current stable version
+- **Type Compatibility**: Updated `SignalFormField` type to be fully compatible with Angular 21's `FieldTree<Date, string>` types
+
+### Migration Notes
+- This is a patch version update
+- No breaking changes from v1.9.16
+- All changes are backward compatible
+- Compatible with Angular 17-22
+- The calendar button is visible by default (`showCalendarButton="true"`), existing behavior unchanged
+
 ## [1.9.16] - 2025-01-XX (Stable)
 
 ### Fixed

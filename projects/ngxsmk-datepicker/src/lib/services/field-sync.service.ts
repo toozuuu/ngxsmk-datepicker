@@ -1,15 +1,14 @@
 import { Injectable, effect, EffectRef, Injector, runInInjectionContext, inject } from '@angular/core';
 import { DatepickerValue } from '../utils/calendar.utils';
 
-/**
- * Represents a form field that can be used with Angular signals
- */
-export type SignalFormField = {
-  value?: DatepickerValue | (() => DatepickerValue);
-  disabled?: boolean | (() => boolean);
+export type SignalFormField = ({
+  value?: DatepickerValue | (() => DatepickerValue) | { (): DatepickerValue };
+  disabled?: boolean | (() => boolean) | { (): boolean };
   setValue?: (value: DatepickerValue) => void;
   updateValue?: (updater: () => DatepickerValue) => void;
-} | null | undefined;
+} & {
+  [key: string]: any;
+}) | null | undefined;
 
 export interface FieldSyncCallbacks {
   onValueChanged: (value: DatepickerValue) => void;
@@ -21,10 +20,6 @@ export interface FieldSyncCallbacks {
   onStateChanged?: () => void;
 }
 
-/**
- * Service for syncing form field values using Angular signals/effects
- * Replaces the previous setInterval-based approach
- */
 @Injectable()
 export class FieldSyncService {
   private _fieldEffectRef: EffectRef | null = null;
@@ -32,9 +27,6 @@ export class FieldSyncService {
   private _isUpdatingFromInternal: boolean = false;
   private readonly injector = inject(Injector);
 
-  /**
-   * Setup field synchronization using Angular effects
-   */
   setupFieldSync(
     field: SignalFormField,
     callbacks: FieldSyncCallbacks
@@ -104,9 +96,6 @@ export class FieldSyncService {
     }
   }
 
-  /**
-   * Manual field value sync (fallback when effects aren't available)
-   */
   syncFieldValue(field: SignalFormField, callbacks: FieldSyncCallbacks): boolean {
     if (!field || typeof field !== 'object') return false;
     
@@ -153,9 +142,6 @@ export class FieldSyncService {
     return false;
   }
 
-  /**
-   * Update field value from internal state
-   */
   updateFieldFromInternal(value: DatepickerValue, field: SignalFormField): void {
     if (!field || typeof field !== 'object') return;
 
@@ -176,16 +162,10 @@ export class FieldSyncService {
     }
   }
 
-  /**
-   * Get last known field value
-   */
   getLastKnownValue(): DatepickerValue | undefined {
     return this._lastKnownFieldValue;
   }
 
-  /**
-   * Cleanup field sync
-   */
   cleanup(): void {
     if (this._fieldEffectRef) {
       this._fieldEffectRef.destroy();
