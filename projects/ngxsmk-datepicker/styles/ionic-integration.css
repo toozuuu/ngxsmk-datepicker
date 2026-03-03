@@ -64,7 +64,6 @@ ion-content .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-con
 
 /* Alternative: Use inline mode in ion-content (recommended) */
 
-
 /* ============================================
    4. SAFE AREA INSETS (iOS)
    ============================================ */
@@ -116,7 +115,6 @@ ion-app.ion-theme-dark ngxsmk-datepicker {
 
 /* Allow Ionic gestures to work when datepicker is in inline mode */
 
-
 /* Prevent touch event conflicts in popover mode */
 .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
   /* Ionic gestures may be blocked - use inline mode instead */
@@ -130,14 +128,12 @@ ion-app.ion-theme-dark ngxsmk-datepicker {
 
 /* When inside ion-modal, let Ionic handle focus */
 
-
 /* ============================================
    8. KEYBOARD BEHAVIOR
    ============================================ */
 
 /* Prevent keyboard from covering datepicker on iOS */
 @supports (-webkit-touch-callout: none) {
-
   /* iOS Safari */
   .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
     /* Adjust position when keyboard is visible */
@@ -150,7 +146,6 @@ ion-app.ion-theme-dark ngxsmk-datepicker {
    ============================================ */
 
 /* Ensure variables cascade into Shadow DOM */
-
 
 /* Global variables for Shadow DOM */
 :root {
@@ -181,7 +176,6 @@ ion-item ngxsmk-datepicker .ngxsmk-input-group {
    ============================================ */
 
 /* On mobile, prefer inline mode in Ionic */
-
 
 /* ============================================
    12. CAPACITOR SPECIFIC

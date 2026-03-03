@@ -6,9 +6,9 @@ describe('LocaleRegistryService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LocaleRegistryService]
+      providers: [LocaleRegistryService],
     });
-    
+
     service = TestBed.inject(LocaleRegistryService);
   });
 
@@ -22,16 +22,29 @@ describe('LocaleRegistryService', () => {
         calendar: 'gregorian',
         firstDayOfWeek: 1,
         dateFormat: 'DD/MM/YYYY',
-        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        monthNames: [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ],
         monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         weekdayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         weekdayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-        isRtl: false
+        isRtl: false,
       };
 
       service.register('test-locale', localeData);
       const retrieved = service.getLocaleData('test-locale');
-      
+
       expect(retrieved).toEqual(localeData);
     });
 
@@ -44,12 +57,12 @@ describe('LocaleRegistryService', () => {
         monthNamesShort: ['Jan'],
         weekdayNames: ['Sunday'],
         weekdayNamesShort: ['Sun'],
-        isRtl: false
+        isRtl: false,
       };
 
       service.register('TEST-LOCALE', localeData);
       const retrieved = service.getLocaleData('test-locale');
-      
+
       expect(retrieved).toBeTruthy();
     });
   });
@@ -199,4 +212,3 @@ describe('LocaleRegistryService', () => {
     });
   });
 });
-

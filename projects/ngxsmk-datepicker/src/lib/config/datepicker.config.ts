@@ -58,7 +58,6 @@ export const DEFAULT_DATEPICKER_CONFIG: DatepickerConfig = {
 export function provideDatepickerConfig(config: DatepickerConfig) {
   return {
     provide: DATEPICKER_CONFIG,
-    useValue: { ...DEFAULT_DATEPICKER_CONFIG, ...config }
+    useValue: { ...DEFAULT_DATEPICKER_CONFIG, ...config },
   };
 }
-

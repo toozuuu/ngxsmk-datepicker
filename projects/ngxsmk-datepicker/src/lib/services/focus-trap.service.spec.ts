@@ -7,7 +7,7 @@ describe('FocusTrapService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [FocusTrapService]
+      providers: [FocusTrapService],
     });
     service = TestBed.inject(FocusTrapService);
   });
@@ -42,4 +42,3 @@ describe('FocusTrapService', () => {
     cleanup();
   });
 });
-

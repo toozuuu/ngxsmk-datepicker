@@ -77,11 +77,7 @@ export interface BenchmarkStats {
  * expect(result.duration).toBeLessThan(100);
  * ```
  */
-export function measureSync(
-  operation: string,
-  fn: () => void,
-  metadata?: Record<string, unknown>,
-): PerformanceResult {
+export function measureSync(operation: string, fn: () => void, metadata?: Record<string, unknown>): PerformanceResult {
   const startTime = performance.now();
   fn();
   const endTime = performance.now();
@@ -114,7 +110,7 @@ export function measureSync(
 export async function measureAsync(
   operation: string,
   fn: () => Promise<void>,
-  metadata?: Record<string, unknown>,
+  metadata?: Record<string, unknown>
 ): Promise<PerformanceResult> {
   const startTime = performance.now();
   await fn();
@@ -147,11 +143,7 @@ export async function measureAsync(
  * expect(stats.p95).toBeLessThan(5);
  * ```
  */
-export function benchmark(
-  operation: string,
-  fn: () => void,
-  config: BenchmarkConfig = {},
-): BenchmarkStats {
+export function benchmark(operation: string, fn: () => void, config: BenchmarkConfig = {}): BenchmarkStats {
   const { iterations = 10, warmupIterations = 2 } = config;
 
   // Warmup phase (not measured)
@@ -182,7 +174,7 @@ export function benchmark(
 export async function benchmarkAsync(
   operation: string,
   fn: () => Promise<void>,
-  config: BenchmarkConfig = {},
+  config: BenchmarkConfig = {}
 ): Promise<BenchmarkStats> {
   const { iterations = 10, warmupIterations = 2 } = config;
 
@@ -206,11 +198,7 @@ export async function benchmarkAsync(
 /**
  * Calculate statistics from measurements
  */
-function calculateStats(
-  operation: string,
-  measurements: number[],
-  iterations: number,
-): BenchmarkStats {
+function calculateStats(operation: string, measurements: number[], iterations: number): BenchmarkStats {
   const sorted = [...measurements].sort((a, b) => a - b);
   const sum = measurements.reduce((acc, val) => acc + val, 0);
   const average = sum / iterations;
@@ -267,7 +255,7 @@ function calculateStats(
 export function assertPerformance(
   result: PerformanceResult | BenchmarkStats,
   maxDuration: number,
-  metric: 'duration' | 'average' | 'median' | 'p95' | 'p99' = 'duration',
+  metric: 'duration' | 'average' | 'median' | 'p95' | 'p99' = 'duration'
 ): void {
   let actualDuration: number;
 
@@ -280,7 +268,7 @@ export function assertPerformance(
   if (actualDuration > maxDuration) {
     throw new Error(
       `Performance assertion failed: ${result.operation} took ${actualDuration.toFixed(2)}ms ` +
-        `(expected < ${maxDuration}ms for ${metric})`,
+        `(expected < ${maxDuration}ms for ${metric})`
     );
   }
 }
@@ -339,7 +327,7 @@ export function formatBenchmarkStats(stats: BenchmarkStats): string {
  */
 export function compareBenchmarks(
   baseline: BenchmarkStats,
-  current: BenchmarkStats,
+  current: BenchmarkStats
 ): {
   improvement: number;
   percentChange: number;
@@ -379,10 +367,7 @@ export function compareBenchmarks(
  * expect(result.duration).toBeLessThan(16); // < 1 frame at 60fps
  * ```
  */
-export function measureRender(
-  operation: string,
-  renderFn: () => void,
-): PerformanceResult {
+export function measureRender(operation: string, renderFn: () => void): PerformanceResult {
   const startTime = performance.now();
 
   renderFn();
@@ -459,11 +444,7 @@ export function mark(name: string): void {
  * @param endMark - End marker name
  * @returns Duration in milliseconds
  */
-export function measure(
-  name: string,
-  startMark: string,
-  endMark: string,
-): number {
+export function measure(name: string, startMark: string, endMark: string): number {
   if ('measure' in performance && 'getEntriesByName' in performance) {
     performance.measure(name, startMark, endMark);
     const entries = performance.getEntriesByName(name);

@@ -35,11 +35,7 @@ export class TranslationRegistryService {
     }
 
     if (normalized.startsWith('zh-')) {
-      if (
-        normalized === 'zh-tw' ||
-        normalized === 'zh-hk' ||
-        normalized === 'zh-mo'
-      ) {
+      if (normalized === 'zh-tw' || normalized === 'zh-hk' || normalized === 'zh-mo') {
         if (this.translations.has('zh-tw')) {
           return this.translations.get('zh-tw')!;
         }
@@ -54,11 +50,7 @@ export class TranslationRegistryService {
     // Try language code only (for all other languages)
     const parts = normalized.split('-');
     const languageCode = parts.length > 0 ? parts[0] : normalized;
-    if (
-      languageCode &&
-      languageCode !== normalized &&
-      this.translations.has(languageCode)
-    ) {
+    if (languageCode && languageCode !== normalized && this.translations.has(languageCode)) {
       return this.translations.get(languageCode)!;
     }
 

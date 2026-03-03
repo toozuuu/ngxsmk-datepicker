@@ -38,14 +38,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
     });
 
     it('should reject invalid timezone strings', () => {
-      const invalid = [
-        'Invalid/Timezone',
-        'Not_A_Zone',
-        'America/Fake',
-        'Europe/Nowhere',
-        '',
-        'random-string',
-      ];
+      const invalid = ['Invalid/Timezone', 'Not_A_Zone', 'America/Fake', 'Europe/Nowhere', '', 'random-string'];
 
       invalid.forEach((tz) => {
         expect(isValidTimezone(tz)).toBe(false);
@@ -74,13 +67,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
     });
 
     it('should validate offset-based timezones', () => {
-      const offsetZones = [
-        'Etc/GMT+0',
-        'Etc/GMT+5',
-        'Etc/GMT-5',
-        'Etc/GMT+12',
-        'Etc/GMT-12',
-      ];
+      const offsetZones = ['Etc/GMT+0', 'Etc/GMT+5', 'Etc/GMT-5', 'Etc/GMT+12', 'Etc/GMT-12'];
 
       offsetZones.forEach((tz) => {
         expect(isValidTimezone(tz)).toBe(true);
@@ -166,12 +153,8 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
       const oldDate = new Date(1900, 0, 1);
       const futureDate = new Date(2100, 11, 31);
 
-      expect(() =>
-        getTimezoneOffset('America/New_York', oldDate),
-      ).not.toThrow();
-      expect(() =>
-        getTimezoneOffset('America/New_York', futureDate),
-      ).not.toThrow();
+      expect(() => getTimezoneOffset('America/New_York', oldDate)).not.toThrow();
+      expect(() => getTimezoneOffset('America/New_York', futureDate)).not.toThrow();
     });
 
     it('should handle leap day', () => {
@@ -225,10 +208,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
     });
 
     it('should parse dates with timezone parameter', () => {
-      const result = parseDateWithTimezone(
-        '2024-06-15T12:00:00',
-        'America/New_York',
-      );
+      const result = parseDateWithTimezone('2024-06-15T12:00:00', 'America/New_York');
       expect(result).toBeInstanceOf(Date);
     });
 
@@ -310,11 +290,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
   describe('convertTimezone - Edge Cases', () => {
     it('should convert between US timezones', () => {
       const date = new Date(2024, 5, 15, 12, 0, 0);
-      const result = convertTimezone(
-        date,
-        'America/New_York',
-        'America/Los_Angeles',
-      );
+      const result = convertTimezone(date, 'America/New_York', 'America/Los_Angeles');
 
       expect(result).toBeInstanceOf(Date);
     });
@@ -335,11 +311,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
 
     it('should handle same source and target timezone', () => {
       const date = new Date(2024, 5, 15, 12, 0, 0);
-      const result = convertTimezone(
-        date,
-        'America/New_York',
-        'America/New_York',
-      );
+      const result = convertTimezone(date, 'America/New_York', 'America/New_York');
 
       expect(result).toBeInstanceOf(Date);
     });
@@ -355,22 +327,14 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
     it('should handle conversion across date boundary', () => {
       // Late night conversion that crosses midnight
       const lateNight = new Date(2024, 5, 15, 23, 0, 0);
-      const result = convertTimezone(
-        lateNight,
-        'America/Los_Angeles',
-        'Asia/Tokyo',
-      );
+      const result = convertTimezone(lateNight, 'America/Los_Angeles', 'Asia/Tokyo');
 
       expect(result).toBeInstanceOf(Date);
     });
 
     it('should handle conversion with opposite hemispheres', () => {
       const date = new Date(2024, 5, 15, 12, 0, 0);
-      const result = convertTimezone(
-        date,
-        'America/New_York',
-        'Australia/Sydney',
-      );
+      const result = convertTimezone(date, 'America/New_York', 'Australia/Sydney');
 
       expect(result).toBeInstanceOf(Date);
     });
@@ -403,11 +367,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
 
     it('should handle year boundary conversion', () => {
       const newYear = new Date(2024, 0, 1, 0, 0, 0);
-      const result = convertTimezone(
-        newYear,
-        'America/Los_Angeles',
-        'Asia/Tokyo',
-      );
+      const result = convertTimezone(newYear, 'America/Los_Angeles', 'Asia/Tokyo');
 
       expect(result).toBeInstanceOf(Date);
     });
@@ -435,12 +395,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
         month: '2-digit',
         day: '2-digit',
       };
-      const result = formatDateWithTimezone(
-        date,
-        'en-US',
-        options,
-        'America/New_York',
-      );
+      const result = formatDateWithTimezone(date, 'en-US', options, 'America/New_York');
 
       expect(result).toBeTruthy();
       expect(typeof result).toBe('string');
@@ -528,12 +483,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
         dateStyle: 'full',
         timeStyle: 'full',
       };
-      const result = formatDateWithTimezone(
-        date,
-        'en-US',
-        options,
-        'America/New_York',
-      );
+      const result = formatDateWithTimezone(date, 'en-US', options, 'America/New_York');
 
       expect(result).toBeTruthy();
     });
@@ -558,12 +508,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
         hour: 'numeric',
         minute: '2-digit',
       };
-      const result = formatDateWithTimezone(
-        date,
-        'en-US',
-        options,
-        'America/New_York',
-      );
+      const result = formatDateWithTimezone(date, 'en-US', options, 'America/New_York');
 
       expect(result).toBeTruthy();
     });
@@ -575,12 +520,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
         hour: 'numeric',
       };
 
-      const timezones = [
-        'UTC',
-        'America/New_York',
-        'Europe/London',
-        'Asia/Tokyo',
-      ];
+      const timezones = ['UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo'];
       timezones.forEach((tz) => {
         const result = formatDateWithTimezone(date, 'en-US', options, tz);
         expect(result).toBeTruthy();
@@ -601,13 +541,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
       const date = new Date(2024, 5, 15, 12, 0, 0);
       let result = date;
 
-      const timezones = [
-        'America/New_York',
-        'Europe/London',
-        'Asia/Tokyo',
-        'Australia/Sydney',
-        'UTC',
-      ];
+      const timezones = ['America/New_York', 'Europe/London', 'Asia/Tokyo', 'Australia/Sydney', 'UTC'];
 
       timezones.forEach((tz, i) => {
         if (i > 0) {
@@ -627,7 +561,7 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
         parsed!,
         'en-US',
         { dateStyle: 'short', timeStyle: 'short' },
-        'America/New_York',
+        'America/New_York'
       );
       expect(formatted).toBeTruthy();
     });

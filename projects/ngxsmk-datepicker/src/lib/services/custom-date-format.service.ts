@@ -139,10 +139,7 @@ export class CustomDateFormatService {
         };
       });
 
-      this.monthNames.set(this.locale, [
-        ...months.map((m) => m.full),
-        ...months.map((m) => m.abbreviated),
-      ]);
+      this.monthNames.set(this.locale, [...months.map((m) => m.full), ...months.map((m) => m.abbreviated)]);
     }
 
     const monthData = this.monthNames.get(this.locale) || [];
@@ -172,10 +169,7 @@ export class CustomDateFormatService {
         };
       });
 
-      this.weekdayNames.set(this.locale, [
-        ...weekdays.map((w) => w.full),
-        ...weekdays.map((w) => w.abbreviated),
-      ]);
+      this.weekdayNames.set(this.locale, [...weekdays.map((w) => w.full), ...weekdays.map((w) => w.abbreviated)]);
     }
 
     const weekdayData = this.weekdayNames.get(this.locale) || [];

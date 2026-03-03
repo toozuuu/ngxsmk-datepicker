@@ -86,9 +86,7 @@ import {
         <div
           class="ngxsmk-year-grid"
           [style.height.px]="yearVirtualResult().totalHeight"
-          [style.transform]="
-            'translateY(' + (yearVirtualResult().offsetY || 0) + 'px)'
-          "
+          [style.transform]="'translateY(' + (yearVirtualResult().offsetY || 0) + 'px)'"
         >
           @for (item of yearVirtualResult().visibleItems; track item.index) {
             <button
@@ -110,9 +108,7 @@ import {
 
     @if (viewMode === 'decade') {
       <div class="ngxsmk-header" [ngClass]="headerClass">
-        <div class="ngxsmk-decade-display">
-          {{ currentDecade }} - {{ currentDecade + 99 }}
-        </div>
+        <div class="ngxsmk-decade-display">{{ currentDecade }} - {{ currentDecade + 99 }}</div>
         <div class="ngxsmk-nav-buttons">
           <button
             type="button"
@@ -163,9 +159,7 @@ import {
         <div
           class="ngxsmk-decade-grid"
           [style.height.px]="decadeVirtualResult().totalHeight"
-          [style.transform]="
-            'translateY(' + (decadeVirtualResult().offsetY || 0) + 'px)'
-          "
+          [style.transform]="'translateY(' + (decadeVirtualResult().offsetY || 0) + 'px)'"
         >
           @for (item of decadeVirtualResult().visibleItems; track item.index) {
             <button
@@ -241,29 +235,21 @@ export class CalendarYearViewComponent implements OnInit {
 
   // Virtual scroll results (computed from signals and scroll position)
   yearVirtualResult = computed(() => {
-    return calculateVirtualScroll<number>(
-      this.largeYearRange,
-      this.yearScrollPositionSignal(),
-      {
-        itemHeight: 40, // Adjust based on CSS button height
-        containerHeight: this.yearContainerHeight,
-        overscan: 5,
-        itemsPerRow: 4, // 4 columns for year grid
-      } as VirtualScrollConfig,
-    );
+    return calculateVirtualScroll<number>(this.largeYearRange, this.yearScrollPositionSignal(), {
+      itemHeight: 40, // Adjust based on CSS button height
+      containerHeight: this.yearContainerHeight,
+      overscan: 5,
+      itemsPerRow: 4, // 4 columns for year grid
+    } as VirtualScrollConfig);
   });
 
   decadeVirtualResult = computed(() => {
-    return calculateVirtualScroll<number>(
-      this.largeDecadeRange,
-      this.decadeScrollPositionSignal(),
-      {
-        itemHeight: 40, // Adjust based on CSS button height
-        containerHeight: this.decadeContainerHeight,
-        overscan: 5,
-        itemsPerRow: 3, // 3 columns for decade grid
-      } as VirtualScrollConfig,
-    );
+    return calculateVirtualScroll<number>(this.largeDecadeRange, this.decadeScrollPositionSignal(), {
+      itemHeight: 40, // Adjust based on CSS button height
+      containerHeight: this.decadeContainerHeight,
+      overscan: 5,
+      itemsPerRow: 3, // 3 columns for decade grid
+    } as VirtualScrollConfig);
   });
 
   ngOnInit(): void {

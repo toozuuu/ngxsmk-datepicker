@@ -47,10 +47,7 @@ import { I18nService } from '../../i18n/i18n.service';
               [placeholder]="i18n.t().examples.placeholders.selectRange"
             ></ngxsmk-datepicker>
             <div class="selection-box" *ngIf="rangeValue">
-              <code
-                >{{ rangeValue.start | date: 'shortDate' }} -
-                {{ rangeValue.end | date: 'shortDate' }}</code
-              >
+              <code>{{ rangeValue.start | date: 'shortDate' }} - {{ rangeValue.end | date: 'shortDate' }}</code>
             </div>
           </div>
 
@@ -202,10 +199,7 @@ import { I18nService } from '../../i18n/i18n.service';
               [placeholder]="i18n.t().examples.placeholders.selectTimeRange"
             ></ngxsmk-datepicker>
             <div class="selection-box" *ngIf="timeRangeValue">
-              <code
-                >{{ timeRangeValue.start | date: 'HH:mm' }} -
-                {{ timeRangeValue.end | date: 'HH:mm' }}</code
-              >
+              <code>{{ timeRangeValue.start | date: 'HH:mm' }} - {{ timeRangeValue.end | date: 'HH:mm' }}</code>
             </div>
           </div>
 
@@ -246,8 +240,7 @@ import { I18nService } from '../../i18n/i18n.service';
             ></ngxsmk-datepicker>
             <div class="selection-box" *ngIf="syncScrollValue">
               <code
-                >{{ syncScrollValue.start | date: 'shortDate' }} -
-                {{ syncScrollValue.end | date: 'shortDate' }}</code
+                >{{ syncScrollValue.start | date: 'shortDate' }} - {{ syncScrollValue.end | date: 'shortDate' }}</code
               >
             </div>
           </div>

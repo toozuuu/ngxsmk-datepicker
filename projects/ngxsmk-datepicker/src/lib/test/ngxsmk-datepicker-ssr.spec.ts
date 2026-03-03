@@ -231,11 +231,7 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
 
     it('should handle multiple dates after hydration', () => {
       component.mode = 'multiple';
-      const dates = [
-        new Date('2025-01-10'),
-        new Date('2025-01-15'),
-        new Date('2025-01-20'),
-      ];
+      const dates = [new Date('2025-01-10'), new Date('2025-01-15'), new Date('2025-01-20')];
       component.value = dates;
       fixture.detectChanges();
 

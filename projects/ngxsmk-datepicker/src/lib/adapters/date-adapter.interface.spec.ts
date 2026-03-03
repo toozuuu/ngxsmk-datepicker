@@ -275,4 +275,3 @@ describe('NativeDateAdapter', () => {
     });
   });
 });
-

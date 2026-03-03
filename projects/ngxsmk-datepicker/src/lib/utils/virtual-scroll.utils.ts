@@ -26,7 +26,7 @@ export interface VirtualScrollResult<T = unknown> {
 export function calculateVirtualScroll<T = unknown>(
   items: T[],
   scrollTop: number,
-  config: VirtualScrollConfig,
+  config: VirtualScrollConfig
 ): VirtualScrollResult<T> {
   const { itemHeight, containerHeight, overscan = 3, itemsPerRow = 1 } = config;
   const totalRows = Math.ceil(items.length / itemsPerRow);
@@ -34,10 +34,7 @@ export function calculateVirtualScroll<T = unknown>(
 
   const startRow = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   const visibleRowCount = Math.ceil(containerHeight / itemHeight);
-  const endRow = Math.min(
-    totalRows - 1,
-    startRow + visibleRowCount + overscan * 2,
-  );
+  const endRow = Math.min(totalRows - 1, startRow + visibleRowCount + overscan * 2);
 
   const startIndex = startRow * itemsPerRow;
   const endIndex = Math.min(items.length - 1, (endRow + 1) * itemsPerRow - 1);
@@ -75,15 +72,12 @@ export function getVirtualScrollRange(
   containerHeight: number,
   itemHeight: number,
   overscan: number = 3,
-  itemsPerRow: number = 1,
+  itemsPerRow: number = 1
 ): { start: number; end: number; offset: number } {
   const totalRows = Math.ceil(totalItems / itemsPerRow);
   const startRow = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   const visibleRowCount = Math.ceil(containerHeight / itemHeight);
-  const endRow = Math.min(
-    totalRows - 1,
-    startRow + visibleRowCount + overscan * 2,
-  );
+  const endRow = Math.min(totalRows - 1, startRow + visibleRowCount + overscan * 2);
 
   const start = startRow * itemsPerRow;
   const end = Math.min(totalItems - 1, (endRow + 1) * itemsPerRow - 1);
@@ -95,10 +89,7 @@ export function getVirtualScrollRange(
 /**
  * Generate a large year range for virtual scrolling
  */
-export function generateLargeYearRange(
-  centerYear: number,
-  range: number = 100,
-): number[] {
+export function generateLargeYearRange(centerYear: number, range: number = 100): number[] {
   const startYear = centerYear - Math.floor(range / 2);
   const years: number[] = [];
   for (let i = 0; i < range; i++) {
@@ -110,10 +101,7 @@ export function generateLargeYearRange(
 /**
  * Generate a large decade range for virtual scrolling
  */
-export function generateLargeDecadeRange(
-  centerDecade: number,
-  range: number = 50,
-): number[] {
+export function generateLargeDecadeRange(centerDecade: number, range: number = 50): number[] {
   const startDecade = centerDecade - Math.floor(range / 2) * 10;
   const decades: number[] = [];
   for (let i = 0; i < range; i++) {
@@ -125,11 +113,7 @@ export function generateLargeDecadeRange(
 /**
  * Find the index of a target value in a sorted array (for scrolling to specific year/decade)
  */
-export function findIndexInSortedArray<T>(
-  items: T[],
-  target: T,
-  compareFn: (a: T, b: T) => number,
-): number {
+export function findIndexInSortedArray<T>(items: T[], target: T, compareFn: (a: T, b: T) => number): number {
   let left = 0;
   let right = items.length - 1;
 

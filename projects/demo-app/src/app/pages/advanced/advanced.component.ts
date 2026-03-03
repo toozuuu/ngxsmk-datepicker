@@ -24,14 +24,15 @@ import { ThemeService } from '@tokiforge/angular';
           <div class="window-title">signal-form.html</div>
         </div>
         <div class="p-lg preview-body-alt">
-          <ngxsmk-datepicker 
+          <ngxsmk-datepicker
             [field]="dateField"
             [inline]="true"
             [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
-            [placeholder]="i18n.t().advanced.placeholders.signalField">
+            [placeholder]="i18n.t().advanced.placeholders.signalField"
+          >
           </ngxsmk-datepicker>
           <div class="tip mt-md">
-            Reactive State: <code class="text-secondary">{{ dateField.value() | date:'medium' }}</code>
+            Reactive State: <code class="text-secondary">{{ dateField.value() | date: 'medium' }}</code>
           </div>
         </div>
       </div>
@@ -54,105 +55,125 @@ import { ThemeService } from '@tokiforge/angular';
       <h2>{{ i18n.t().advanced.holidaysTitle }}</h2>
       <p>{{ i18n.t().advanced.holidaysLead }}</p>
       <div class="card bg-sidebar overflow-visible">
-        <ngxsmk-datepicker 
+        <ngxsmk-datepicker
           [holidayProvider]="holidayProvider"
           [inline]="true"
           [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
-          [placeholder]="i18n.t().advanced.placeholders.holidayHover">
+          [placeholder]="i18n.t().advanced.placeholders.holidayHover"
+        >
         </ngxsmk-datepicker>
       </div>
 
       <h2>{{ i18n.t().advanced.timePickerTitle }}</h2>
       <p>{{ i18n.t().advanced.timePickerLead }}</p>
       <div class="card bg-sidebar overflow-visible">
-        <ngxsmk-datepicker 
-          [showTime]="true" 
+        <ngxsmk-datepicker
+          [showTime]="true"
           [use24Hour]="true"
           [inline]="true"
           [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
-          [placeholder]="i18n.t().advanced.placeholders.pickDateTime">
+          [placeholder]="i18n.t().advanced.placeholders.pickDateTime"
+        >
         </ngxsmk-datepicker>
       </div>
 
       <h2>{{ i18n.t().advanced.disabledDatesTitle }}</h2>
       <p>{{ i18n.t().advanced.disabledDatesLead }}</p>
       <div class="card bg-sidebar overflow-visible">
-        <ngxsmk-datepicker 
+        <ngxsmk-datepicker
           [isInvalidDate]="isWeekend"
           [inline]="true"
           [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
-          placeholder="{{ i18n.t().advanced.weekendsDisabled }}">
+          placeholder="{{ i18n.t().advanced.weekendsDisabled }}"
+        >
         </ngxsmk-datepicker>
       </div>
     </div>
   `,
-  styles: [`
-    :host { display: block; }
-    h1 { margin-bottom: var(--space-xs); }
-    .text-lg { 
-      font-size: var(--font-size-lg); 
-      margin-bottom: var(--space-2xl);
-    }
-    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
-    p { margin-bottom: var(--space-md); }
-
-    .card {
-      padding: var(--space-lg);
-      @media (max-width: 480px) { padding: var(--space-md); }
-    }
-
-    .shortcut-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: var(--space-sm);
-      li {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: var(--font-size-sm);
-        @media (max-width: 480px) { flex-wrap: wrap; }
+  styles: [
+    `
+      :host {
+        display: block;
       }
-    }
+      h1 {
+        margin-bottom: var(--space-xs);
+      }
+      .text-lg {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--space-2xl);
+      }
+      h2 {
+        margin-top: var(--space-3xl);
+        margin-bottom: var(--space-sm);
+      }
+      p {
+        margin-bottom: var(--space-md);
+      }
 
-    kbd {
-      background: var(--color-bg-code);
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      padding: 2px 6px;
-      font-size: 0.8em;
-      font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 2px 0 var(--color-border);
-      color: var(--color-secondary);
-    }
-    
-    .p-lg { padding: var(--space-lg); }
-    
-    .preview-body-alt {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: var(--space-2xl) var(--space-lg);
-      background: radial-gradient(circle at top, rgba(124, 58, 237, 0.05), transparent);
-    }
+      .card {
+        padding: var(--space-lg);
+        @media (max-width: 480px) {
+          padding: var(--space-md);
+        }
+      }
 
-    ngxsmk-datepicker {
-      display: block;
-      width: fit-content !important;
-      margin: 0 auto;
-    }
+      .shortcut-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: var(--space-sm);
+        li {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: var(--font-size-sm);
+          @media (max-width: 480px) {
+            flex-wrap: wrap;
+          }
+        }
+      }
 
-    .tip {
-      font-size: var(--font-size-sm);
-      text-align: center;
-      width: 100%;
-    }
-    
-    .overflow-visible { overflow: visible !important; }
-    
+      kbd {
+        background: var(--color-bg-code);
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.8em;
+        font-family: 'JetBrains Mono', monospace;
+        box-shadow: 0 2px 0 var(--color-border);
+        color: var(--color-secondary);
+      }
 
-  `]
+      .p-lg {
+        padding: var(--space-lg);
+      }
+
+      .preview-body-alt {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: var(--space-2xl) var(--space-lg);
+        background: radial-gradient(circle at top, rgba(124, 58, 237, 0.05), transparent);
+      }
+
+      ngxsmk-datepicker {
+        display: block;
+        width: fit-content !important;
+        margin: 0 auto;
+      }
+
+      .tip {
+        font-size: var(--font-size-sm);
+        text-align: center;
+        width: 100%;
+      }
+
+      .overflow-visible {
+        overflow: visible !important;
+      }
+    `,
+  ],
 })
 export class AdvancedFeaturesComponent {
   i18n = inject(I18nService);
@@ -161,7 +182,7 @@ export class AdvancedFeaturesComponent {
     value: signal<Date | null>(new Date()),
     disabled: signal(false),
     hasError: signal(false),
-    required: signal(false)
+    required: signal(false),
   };
 
   isWeekend = (date: Date): boolean => {
@@ -183,6 +204,6 @@ export class AdvancedFeaturesComponent {
       if (m === 7 && d === 4) return labels.independenceDay;
       if (m === 12 && d === 25) return labels.christmas;
       return null;
-    }
+    },
   };
 }

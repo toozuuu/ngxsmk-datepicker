@@ -1,8 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      NGXSMK Datepicker Test
-    </ion-title>
+    <ion-title> NGXSMK Datepicker Test </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -30,7 +28,8 @@
           mode="single"
           [autoDetectMobile]="true"
           mobileModalStyle="bottom-sheet"
-          placeholder="Select Date (Bottom Sheet)">
+          placeholder="Select Date (Bottom Sheet)"
+        >
         </ngxsmk-datepicker>
       </ion-item>
 
@@ -47,7 +46,8 @@
           mode="single"
           [autoDetectMobile]="true"
           mobileModalStyle="center"
-          placeholder="Select Date (Center)">
+          placeholder="Select Date (Center)"
+        >
         </ngxsmk-datepicker>
       </ion-item>
 
@@ -64,7 +64,8 @@
           mode="range"
           [autoDetectMobile]="true"
           mobileModalStyle="fullscreen"
-          placeholder="Select Range (Fullscreen)">
+          placeholder="Select Range (Fullscreen)"
+        >
         </ngxsmk-datepicker>
       </ion-item>
 
@@ -76,15 +77,11 @@
         </ion-label>
       </ion-item>
       <ion-item lines="none">
-        <ngxsmk-datepicker
-          [(ngModel)]="date4"
-          mode="single"
-          [inline]="true">
-        </ngxsmk-datepicker>
+        <ngxsmk-datepicker [(ngModel)]="date4" mode="single" [inline]="true"> </ngxsmk-datepicker>
       </ion-item>
     </ion-list>
-    
-    <div style="margin-top: 20px;">
+
+    <div style="margin-top: 20px">
       <p><strong>Selected Date 1:</strong> {{ date1 | date }}</p>
       <p><strong>Selected Date 2:</strong> {{ date2 | date }}</p>
       <p><strong>Selected Range:</strong> {{ date3 | json }}</p>

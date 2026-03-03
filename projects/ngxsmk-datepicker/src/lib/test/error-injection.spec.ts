@@ -21,10 +21,7 @@ describe('Error Injection Tests', () => {
       originalRemoveItem = Storage.prototype.removeItem;
 
       TestBed.configureTestingModule({
-        providers: [
-          DatePresetsService,
-          { provide: PLATFORM_ID, useValue: 'browser' }
-        ]
+        providers: [DatePresetsService, { provide: PLATFORM_ID, useValue: 'browser' }],
       });
       service = TestBed.inject(DatePresetsService);
       localStorage.clear();
@@ -54,7 +51,7 @@ describe('Error Injection Tests', () => {
       expect(() => {
         service.savePreset({
           name: 'Test Preset',
-          value: new Date('2024-01-15')
+          value: new Date('2024-01-15'),
         });
       }).not.toThrow();
     });
@@ -65,7 +62,7 @@ describe('Error Injection Tests', () => {
       expect(() => {
         service.savePreset({
           name: 'Test Preset',
-          value: new Date('2024-01-15')
+          value: new Date('2024-01-15'),
         });
       }).not.toThrow();
     });
@@ -74,7 +71,7 @@ describe('Error Injection Tests', () => {
       // First save a preset
       service.savePreset({
         name: 'Test Preset',
-        value: new Date('2024-01-15')
+        value: new Date('2024-01-15'),
       });
 
       Storage.prototype.removeItem = jasmine.createSpy('removeItem').and.throwError('Error');
@@ -94,10 +91,7 @@ describe('Error Injection Tests', () => {
       // Reset service to trigger initialization
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        providers: [
-          DatePresetsService,
-          { provide: PLATFORM_ID, useValue: 'browser' }
-        ]
+        providers: [DatePresetsService, { provide: PLATFORM_ID, useValue: 'browser' }],
       });
 
       const newService = TestBed.inject(DatePresetsService);
@@ -301,7 +295,7 @@ describe('Error Injection Tests', () => {
       // Test with a large but reasonable array
       const largeArray: Date[] = [];
       for (let i = 0; i < 10000; i++) {
-        largeArray.push(new Date(2024, 0, i % 365 + 1));
+        largeArray.push(new Date(2024, 0, (i % 365) + 1));
       }
 
       expect(() => {
@@ -312,4 +306,3 @@ describe('Error Injection Tests', () => {
     });
   });
 });
-

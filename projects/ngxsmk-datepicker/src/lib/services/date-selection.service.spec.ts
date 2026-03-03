@@ -1,5 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { DateSelectionService, DateSelectionState, DateSelectionConfig, DateSelectionCallbacks } from './date-selection.service';
+import {
+  DateSelectionService,
+  DateSelectionState,
+  DateSelectionConfig,
+  DateSelectionCallbacks,
+} from './date-selection.service';
 
 describe('DateSelectionService', () => {
   let service: DateSelectionService;
@@ -9,7 +14,7 @@ describe('DateSelectionService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DateSelectionService]
+      providers: [DateSelectionService],
     });
 
     service = TestBed.inject(DateSelectionService);
@@ -19,7 +24,7 @@ describe('DateSelectionService', () => {
       startDate: null,
       endDate: null,
       selectedDates: [],
-      hoveredDate: null
+      hoveredDate: null,
     };
 
     config = {
@@ -29,7 +34,7 @@ describe('DateSelectionService', () => {
       currentDisplayHour: 12,
       isPm: false,
       currentMinute: 0,
-      minuteInterval: 1
+      minuteInterval: 1,
     };
 
     callbacks = {
@@ -37,7 +42,7 @@ describe('DateSelectionService', () => {
       isCurrentMonth: () => true,
       applyTimeIfNeeded: (date: Date) => date,
       onValueEmitted: jasmine.createSpy('onValueEmitted'),
-      onStateChanged: jasmine.createSpy('onStateChanged')
+      onStateChanged: jasmine.createSpy('onStateChanged'),
     };
   });
 
@@ -126,8 +131,8 @@ describe('DateSelectionService', () => {
         payload: {
           mode: 'single',
           value: null,
-          date: date
-        }
+          date: date,
+        },
       });
     });
   });
@@ -166,7 +171,7 @@ describe('DateSelectionService', () => {
       expect(state.endDate).toEqual(date);
       expect(callbacks.onValueEmitted).toHaveBeenCalledWith({
         start: state.startDate,
-        end: state.endDate
+        end: state.endDate,
       });
     });
 
@@ -268,7 +273,7 @@ describe('DateSelectionService', () => {
       config.recurringPattern = {
         pattern: 'daily',
         startDate: date,
-        interval: 1
+        interval: 1,
       };
 
       service.selectDate(date, state, config, callbacks);
@@ -283,7 +288,7 @@ describe('DateSelectionService', () => {
         pattern: 'daily',
         startDate: date,
         endDate: new Date('2024-01-20'),
-        interval: 1
+        interval: 1,
       };
 
       service.selectDate(date, state, config, callbacks);
@@ -297,7 +302,7 @@ describe('DateSelectionService', () => {
         pattern: 'weekly',
         startDate: date,
         dayOfWeek: 1,
-        interval: 1
+        interval: 1,
       };
 
       service.selectDate(date, state, config, callbacks);
@@ -311,7 +316,7 @@ describe('DateSelectionService', () => {
         pattern: 'monthly',
         startDate: date,
         dayOfMonth: 15,
-        interval: 1
+        interval: 1,
       };
 
       service.selectDate(date, state, config, callbacks);
@@ -335,7 +340,7 @@ describe('DateSelectionService', () => {
       expect(state.endDate).toEqual(end);
       expect(callbacks.onValueEmitted).toHaveBeenCalledWith({
         start: start,
-        end: end
+        end: end,
       });
     });
 
@@ -440,4 +445,3 @@ describe('DateSelectionService', () => {
     });
   });
 });
-

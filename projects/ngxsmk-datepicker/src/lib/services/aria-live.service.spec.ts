@@ -7,10 +7,7 @@ describe('AriaLiveService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        AriaLiveService,
-        { provide: PLATFORM_ID, useValue: 'browser' }
-      ]
+      providers: [AriaLiveService, { provide: PLATFORM_ID, useValue: 'browser' }],
     });
 
     service = TestBed.inject(AriaLiveService);
@@ -19,7 +16,7 @@ describe('AriaLiveService', () => {
   afterEach(() => {
     service.ngOnDestroy();
     // Clean up any remaining regions in the body
-    document.querySelectorAll('.ngxsmk-aria-live-region').forEach(el => el.remove());
+    document.querySelectorAll('.ngxsmk-aria-live-region').forEach((el) => el.remove());
   });
 
   it('should be created', () => {
@@ -29,7 +26,7 @@ describe('AriaLiveService', () => {
   it('should announce a polite message', fakeAsync(() => {
     service.announce('Hello world', 'polite');
     tick(100); // Wait for debounce
-    tick(16);  // Wait for setAnnouncement delay
+    tick(16); // Wait for setAnnouncement delay
 
     const region = document.querySelector('.ngxsmk-aria-live-polite') as HTMLElement;
     expect(region).toBeTruthy();
@@ -40,7 +37,7 @@ describe('AriaLiveService', () => {
   it('should announce an assertive message', fakeAsync(() => {
     service.announce('Alert!', 'assertive');
     tick(100); // Wait for debounce
-    tick(16);  // Wait for setAnnouncement delay
+    tick(16); // Wait for setAnnouncement delay
 
     const region = document.querySelector('.ngxsmk-aria-live-assertive') as HTMLElement;
     expect(region).toBeTruthy();
@@ -58,7 +55,7 @@ describe('AriaLiveService', () => {
     expect(region).toBeFalsy(); // Should not have been created yet
 
     tick(100); // Wait for debounce
-    tick(16);  // Wait for setAnnouncement delay
+    tick(16); // Wait for setAnnouncement delay
     region = document.querySelector('.ngxsmk-aria-live-polite');
     expect(region?.textContent).toBe('Message 3');
   }));
@@ -66,7 +63,7 @@ describe('AriaLiveService', () => {
   it('should clear announcement after delay', fakeAsync(() => {
     service.announce('Temporary message');
     tick(100); // Wait for debounce
-    tick(16);  // Wait for setAnnouncement delay
+    tick(16); // Wait for setAnnouncement delay
 
     const region = document.querySelector('.ngxsmk-aria-live-polite') as HTMLElement;
     expect(region.textContent).toBe('Temporary message');
@@ -81,7 +78,7 @@ describe('AriaLiveService', () => {
     service.announce('Polite 2', 'polite');
 
     tick(100); // Wait for debounce
-    tick(16);  // Wait for setAnnouncement delay
+    tick(16); // Wait for setAnnouncement delay
 
     const politeRegion = document.querySelector('.ngxsmk-aria-live-polite');
     const assertiveRegion = document.querySelector('.ngxsmk-aria-live-assertive');
@@ -103,10 +100,7 @@ describe('AriaLiveService', () => {
     // Reset TestBed to simulate server environment
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      providers: [
-        AriaLiveService,
-        { provide: PLATFORM_ID, useValue: 'server' }
-      ]
+      providers: [AriaLiveService, { provide: PLATFORM_ID, useValue: 'server' }],
     });
     const serverService = TestBed.inject(AriaLiveService);
 

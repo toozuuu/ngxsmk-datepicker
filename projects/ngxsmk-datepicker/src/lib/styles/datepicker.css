@@ -163,9 +163,9 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 
 .ngxsmk-input-group:focus-within {
   border-color: var(--datepicker-primary-color);
-  -webkit-box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1), var(--datepicker-shadow-md);
-  -moz-box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1), var(--datepicker-shadow-md);
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1), var(--datepicker-shadow-md);
+  -webkit-box-shadow: var(--datepicker-shadow-focus), var(--datepicker-shadow-md);
+  -moz-box-shadow: var(--datepicker-shadow-focus), var(--datepicker-shadow-md);
+  box-shadow: var(--datepicker-shadow-focus), var(--datepicker-shadow-md);
   outline: none;
 }
 
@@ -6342,7 +6342,7 @@ ngxsmk-datepicker.ngxsmk-inline {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -6414,7 +6414,7 @@ ngxsmk-datepicker.ngxsmk-inline {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -6486,7 +6486,7 @@ ngxsmk-datepicker.ngxsmk-inline {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -6558,7 +6558,7 @@ ngxsmk-datepicker.ngxsmk-inline {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -6734,7 +6734,7 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -6843,7 +6843,7 @@ ngxsmk-datepicker.md3-theme {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -6915,7 +6915,7 @@ ngxsmk-datepicker.md3-theme {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -6982,7 +6982,7 @@ ngxsmk-datepicker.md3-theme {
 
 .ngxsmk-input-group:focus-within {
   border-color: var(--ngxsmk-color-primary);
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+  box-shadow: var(--datepicker-shadow-focus);
 }
 
 .ngxsmk-input-group.disabled {
@@ -7073,7 +7073,7 @@ ngxsmk-datepicker.md3-theme {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -7145,7 +7145,7 @@ ngxsmk-datepicker.md3-theme {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -7322,7 +7322,7 @@ ngxsmk-datepicker.md3-theme {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -7394,7 +7394,7 @@ ngxsmk-datepicker.md3-theme {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -7545,7 +7545,7 @@ ngxsmk-custom-select[data-open=true] {
 .ngxsmk-select-display:focus-within {
   outline: none;
   border-color: var(--datepicker-primary-color, var(--ngxsmk-color-primary));
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+  box-shadow: var(--datepicker-shadow-focus);
 }
 
 .ngxsmk-select-display:disabled {
@@ -7699,7 +7699,7 @@ ngxsmk-custom-select[data-open=true] {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
@@ -7771,7 +7771,7 @@ ngxsmk-custom-select[data-open=true] {
   --ngxsmk-line-height: 1.5;
   --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   /* Colors */
-  --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
   --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
   --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
   --ngxsmk-color-surface: var(--ion-background-color, #ffffff);

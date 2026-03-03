@@ -8,12 +8,13 @@ import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 import { HolidayProvider, DatepickerValue } from '../utils/calendar.utils';
 import { DatePipe } from '@angular/common';
 
-const form = (AngularCore as unknown as Record<string, unknown>)['form'] as (
+const form = (AngularCore as unknown as Record<string, unknown>)['form'] as (...args: unknown[]) => {
+  (): { dirty: () => boolean };
+  dateField: unknown;
+};
+const objectSchema = (AngularCore as unknown as Record<string, unknown>)['objectSchema'] as (
   ...args: unknown[]
-) => { (): { dirty: () => boolean }; dateField: unknown };
-const objectSchema = (AngularCore as unknown as Record<string, unknown>)[
-  'objectSchema'
-] as (...args: unknown[]) => unknown;
+) => unknown;
 
 class TestHolidayProvider implements HolidayProvider {
   private holidays: { [key: string]: string } = {
@@ -506,14 +507,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       @Component({
         standalone: true,
         imports: [NgxsmkDatepickerComponent],
-        template: `
-          <ngxsmk-datepicker
-            [field]="myForm.dateField"
-            mode="single"
-            [inline]="true"
-          >
-          </ngxsmk-datepicker>
-        `,
+        template: ` <ngxsmk-datepicker [field]="myForm.dateField" mode="single" [inline]="true"> </ngxsmk-datepicker> `,
       })
       class TestSignalFormComponent {
         localObject = signal({ dateField: new Date(2025, 0, 1) });
@@ -521,7 +515,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
           this.localObject,
           objectSchema({
             dateField: (objectSchema as (...args: unknown[]) => unknown)(),
-          }),
+          })
         );
       }
 
@@ -529,9 +523,8 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       testFixture.detectChanges();
 
       const testComponent = testFixture.componentInstance;
-      const datepickerComponent = testFixture.debugElement.query(
-        By.directive(NgxsmkDatepickerComponent),
-      ).componentInstance as NgxsmkDatepickerComponent;
+      const datepickerComponent = testFixture.debugElement.query(By.directive(NgxsmkDatepickerComponent))
+        .componentInstance as NgxsmkDatepickerComponent;
 
       expect(testComponent.myForm().dirty()).toBe(false);
 
@@ -551,14 +544,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       @Component({
         standalone: true,
         imports: [NgxsmkDatepickerComponent],
-        template: `
-          <ngxsmk-datepicker
-            [field]="myForm.dateField"
-            mode="single"
-            [inline]="true"
-          >
-          </ngxsmk-datepicker>
-        `,
+        template: ` <ngxsmk-datepicker [field]="myForm.dateField" mode="single" [inline]="true"> </ngxsmk-datepicker> `,
       })
       class TestSignalFormComponent {
         localObject = signal({ dateField: new Date(2025, 0, 1) });
@@ -566,7 +552,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
           this.localObject,
           objectSchema({
             dateField: (objectSchema as (...args: unknown[]) => unknown)(),
-          }),
+          })
         );
       }
 
@@ -574,17 +560,12 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       testFixture.detectChanges();
 
       const testComponent = testFixture.componentInstance;
-      const datepickerComponent = testFixture.debugElement.query(
-        By.directive(NgxsmkDatepickerComponent),
-      ).componentInstance as NgxsmkDatepickerComponent;
+      const datepickerComponent = testFixture.debugElement.query(By.directive(NgxsmkDatepickerComponent))
+        .componentInstance as NgxsmkDatepickerComponent;
 
       const field = testComponent.myForm.dateField;
-      const hasSetValue =
-        typeof (field as unknown as { setValue: unknown }).setValue ===
-        'function';
-      const hasUpdateValue =
-        typeof (field as unknown as { updateValue: unknown }).updateValue ===
-        'function';
+      const hasSetValue = typeof (field as unknown as { setValue: unknown }).setValue === 'function';
+      const hasUpdateValue = typeof (field as unknown as { updateValue: unknown }).updateValue === 'function';
 
       expect(hasSetValue || hasUpdateValue).toBe(true);
 
@@ -624,10 +605,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
     it('should clear multiple dates selection', () => {
       component.mode = 'multiple';
-      component.selectedDates = [
-        getStartOfDay(new Date(2025, 5, 10)),
-        getStartOfDay(new Date(2025, 5, 15)),
-      ];
+      component.selectedDates = [getStartOfDay(new Date(2025, 5, 10)), getStartOfDay(new Date(2025, 5, 15))];
       fixture.detectChanges();
 
       component.clearValue();
@@ -658,11 +636,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
     it('should disable back arrow when minDate prevents navigation', () => {
       const today = new Date();
-      const firstDayOfMonth = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        1,
-      );
+      const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
       component.minDate = firstDayOfMonth;
       fixture.detectChanges();
 
@@ -725,9 +699,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.inline = true;
       fixture.detectChanges();
 
-      const navButtons = fixture.debugElement.queryAll(
-        By.css('.ngxsmk-nav-button'),
-      );
+      const navButtons = fixture.debugElement.queryAll(By.css('.ngxsmk-nav-button'));
       expect(navButtons.length).toBeGreaterThan(0);
     });
 
@@ -736,17 +708,11 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      const inputGroup = fixture.debugElement.query(
-        By.css('.ngxsmk-input-group'),
-      );
-      expect(inputGroup)
-        .withContext('Input group should be rendered when not in inline mode')
-        .toBeTruthy();
+      const inputGroup = fixture.debugElement.query(By.css('.ngxsmk-input-group'));
+      expect(inputGroup).withContext('Input group should be rendered when not in inline mode').toBeTruthy();
       if (inputGroup) {
         expect(inputGroup.nativeElement.getAttribute('role')).toBe('button');
-        expect(inputGroup.nativeElement.getAttribute('aria-haspopup')).toBe(
-          'dialog',
-        );
+        expect(inputGroup.nativeElement.getAttribute('aria-haspopup')).toBe('dialog');
       } else {
         expect(component.isInlineMode).toBe(false);
       }

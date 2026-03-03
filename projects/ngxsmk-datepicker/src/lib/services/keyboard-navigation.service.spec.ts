@@ -1,5 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { KeyboardNavigationService, KeyboardNavigationState, KeyboardNavigationConfig, KeyboardNavigationCallbacks } from './keyboard-navigation.service';
+import {
+  KeyboardNavigationService,
+  KeyboardNavigationState,
+  KeyboardNavigationConfig,
+  KeyboardNavigationCallbacks,
+} from './keyboard-navigation.service';
 import { DatepickerHooks } from '../interfaces/datepicker-hooks.interface';
 
 describe('KeyboardNavigationService', () => {
@@ -10,7 +15,7 @@ describe('KeyboardNavigationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [KeyboardNavigationService]
+      providers: [KeyboardNavigationService],
     });
 
     service = TestBed.inject(KeyboardNavigationService);
@@ -24,12 +29,12 @@ describe('KeyboardNavigationService', () => {
       focusedDate: new Date('2024-01-15'),
       isCalendarOpen: true,
       mode: 'single',
-      isRtl: false
+      isRtl: false,
     };
 
     config = {
       enableKeyboardShortcuts: true,
-      isInlineMode: false
+      isInlineMode: false,
     };
 
     callbacks = {
@@ -45,7 +50,7 @@ describe('KeyboardNavigationService', () => {
       selectNextWeek: jasmine.createSpy('selectNextWeek'),
       onDateClick: jasmine.createSpy('onDateClick'),
       closeCalendar: jasmine.createSpy('closeCalendar'),
-      onStateChanged: jasmine.createSpy('onStateChanged')
+      onStateChanged: jasmine.createSpy('onStateChanged'),
     };
   });
 
@@ -333,7 +338,7 @@ describe('KeyboardNavigationService', () => {
     it('should handle custom shortcut', () => {
       const customHandler = jasmine.createSpy('customHandler').and.returnValue(true);
       config.customShortcuts = {
-        'Ctrl+s': customHandler  // Key is lowercase in the shortcut key
+        'Ctrl+s': customHandler, // Key is lowercase in the shortcut key
       };
 
       const event = new KeyboardEvent('keydown', { key: 's', ctrlKey: true });
@@ -351,7 +356,7 @@ describe('KeyboardNavigationService', () => {
     it('should not prevent default if custom handler returns false', () => {
       const customHandler = jasmine.createSpy('customHandler').and.returnValue(false);
       config.customShortcuts = {
-        'Ctrl+s': customHandler
+        'Ctrl+s': customHandler,
       };
 
       const event = new KeyboardEvent('keydown', { key: 's', ctrlKey: true });
@@ -367,7 +372,7 @@ describe('KeyboardNavigationService', () => {
     it('should build shortcut key correctly', () => {
       const customHandler = jasmine.createSpy('customHandler').and.returnValue(true);
       config.customShortcuts = {
-        'Ctrl+Shift+a': customHandler  // Key is lowercase
+        'Ctrl+Shift+a': customHandler, // Key is lowercase
       };
 
       const event = new KeyboardEvent('keydown', { key: 'a', ctrlKey: true, shiftKey: true });
@@ -382,7 +387,7 @@ describe('KeyboardNavigationService', () => {
   describe('hooks', () => {
     it('should call handleShortcut hook if provided', () => {
       const hooks: DatepickerHooks = {
-        handleShortcut: jasmine.createSpy('handleShortcut').and.returnValue(true)
+        handleShortcut: jasmine.createSpy('handleShortcut').and.returnValue(true),
       };
       config.hooks = hooks;
 
@@ -400,7 +405,7 @@ describe('KeyboardNavigationService', () => {
 
     it('should not prevent default if hook returns false', () => {
       const hooks: DatepickerHooks = {
-        handleShortcut: jasmine.createSpy('handleShortcut').and.returnValue(false)
+        handleShortcut: jasmine.createSpy('handleShortcut').and.returnValue(false),
       };
       config.hooks = hooks;
 
@@ -414,7 +419,7 @@ describe('KeyboardNavigationService', () => {
 
     it('should fall through to default handlers if hook does not handle', () => {
       const hooks: DatepickerHooks = {
-        handleShortcut: jasmine.createSpy('handleShortcut').and.returnValue(false)
+        handleShortcut: jasmine.createSpy('handleShortcut').and.returnValue(false),
       };
       config.hooks = hooks;
 
@@ -441,24 +446,25 @@ describe('KeyboardNavigationService', () => {
     it('should build correct context for custom shortcuts', () => {
       const customHandler = jasmine.createSpy('customHandler').and.returnValue(true);
       config.customShortcuts = {
-        'Ctrl+s': customHandler  // Key is lowercase
+        'Ctrl+s': customHandler, // Key is lowercase
       };
 
       const event = new KeyboardEvent('keydown', { key: 's', ctrlKey: true });
 
       service.handleKeyboardNavigation(event, state, config, callbacks);
 
-      expect(customHandler).toHaveBeenCalledWith(jasmine.objectContaining({
-        currentDate: state.currentDate,
-        selectedDate: state.selectedDate,
-        startDate: state.startDate,
-        endDate: state.endDate,
-        selectedDates: state.selectedDates,
-        mode: state.mode,
-        focusedDate: state.focusedDate,
-        isCalendarOpen: state.isCalendarOpen
-      }));
+      expect(customHandler).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          currentDate: state.currentDate,
+          selectedDate: state.selectedDate,
+          startDate: state.startDate,
+          endDate: state.endDate,
+          selectedDates: state.selectedDates,
+          mode: state.mode,
+          focusedDate: state.focusedDate,
+          isCalendarOpen: state.isCalendarOpen,
+        })
+      );
     });
   });
 });
-

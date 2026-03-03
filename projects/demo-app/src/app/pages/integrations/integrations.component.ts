@@ -12,26 +12,34 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
   template: `
     <div class="animate-fade-in">
       <h1>{{ i18n.t().nav.integrations }}</h1>
-      <p class="text-lg">Learn how to seamlessly integrate <code>ngxsmk-datepicker</code> with your favorite UI frameworks.</p>
+      <p class="text-lg">
+        Learn how to seamlessly integrate <code>ngxsmk-datepicker</code> with your favorite UI frameworks.
+      </p>
 
       <h2>Angular Material</h2>
-      <p>The library provides built-in support for <code>MatFormField</code>. You can use the datepicker inside a standard Material field with floating labels, hints, and error states.</p>
-      
+      <p>
+        The library provides built-in support for <code>MatFormField</code>. Add the
+        <code>ngxsmkMatFormFieldControl</code> directive to the datepicker so <code>mat-form-field</code> finds it. Use
+        the datepicker inside a standard Material field with floating labels, hints, and error states.
+      </p>
+
       <div class="code-window">
         <div class="window-header">
           <div class="dot red"></div>
           <div class="dot yellow"></div>
           <div class="dot green"></div>
-          <div class="window-title">app.config.ts</div>
+          <div class="window-title">my.component.ts</div>
         </div>
-        <pre><code class="text-main"><span class="token-keyword">import</span> {{ '{' }} <span class="token-class">MAT_FORM_FIELD_CONTROL</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'&#64;angular/material/form-field'</span>;
-<span class="token-keyword">import</span> {{ '{' }} <span class="token-class">NgxsmkDatepickerComponent</span>, <span class="token-function">provideMaterialFormFieldControl</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'ngxsmk-datepicker'</span>;
+        <pre><code class="text-main"><span class="token-keyword">import</span> {{ '{' }} <span class="token-class">NgxsmkDatepickerComponent</span>, <span class="token-class">NgxsmkDatepickerMatFormFieldControlDirective</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'ngxsmk-datepicker'</span>;
+<span class="token-keyword">import</span> {{ '{' }} <span class="token-class">MatFormFieldModule</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'&#64;angular/material/form-field'</span>;
 
 <span class="token-keyword">&#64;Component</span>({{ '{' }}
-  <span class="token-comment">// ...</span>
-  <span class="token-keyword">providers</span>: [
-    <span class="token-function">provideMaterialFormFieldControl</span>(<span class="token-class">MAT_FORM_FIELD_CONTROL</span>) <span class="token-comment">// Enables MatFormField compatibility</span>
-  ]
+  <span class="token-keyword">imports</span>: [
+    <span class="token-class">MatFormFieldModule</span>,
+    <span class="token-class">NgxsmkDatepickerComponent</span>,
+    <span class="token-class">NgxsmkDatepickerMatFormFieldControlDirective</span>,
+    <span class="token-comment">// ...</span>
+  ],
 {{ '}'}})
 <span class="token-keyword">export class</span> <span class="token-class">MyComponent</span> {{ '{' }} {{ '}' }}</code></pre>
       </div>
@@ -45,13 +53,19 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
         </div>
         <pre><code class="text-main">&lt;<span class="token-tag">mat-form-field</span>&gt;
   &lt;<span class="token-tag">mat-label</span>&gt;Select Date&lt;/<span class="token-tag">mat-label</span>&gt;
-  &lt;<span class="token-tag">ngxsmk-datepicker</span> <span class="token-attr">matFormFieldControl</span>&gt;&lt;/<span class="token-tag">ngxsmk-datepicker</span>&gt;
+  &lt;<span class="token-tag">ngxsmk-datepicker</span> <span class="token-attr">ngxsmkMatFormFieldControl</span> <span class="token-attr">formControlName</span>=<span class="token-string">"date"</span>&gt;&lt;/<span class="token-tag">ngxsmk-datepicker</span>&gt;
 &lt;/<span class="token-tag">mat-form-field</span>&gt;</code></pre>
       </div>
 
       <h2>Ionic Framework</h2>
-      <p>For Ionic applications, the datepicker feels right at home. It functions seamlessly inside <code>ion-item</code> and automatically inherits your application's Ionic CSS variables (like <code>--ion-color-primary</code> for the active state). We highly recommend enabling <code>[useNativePicker]="true"</code> to leverage the native OS device wheel pickers on mobile devices for the best user experience.</p>
-      
+      <p>
+        For Ionic applications, the datepicker feels right at home. It functions seamlessly inside
+        <code>ion-item</code> and automatically inherits your application's Ionic CSS variables (like
+        <code>--ion-color-primary</code> for the active state). We highly recommend enabling
+        <code>[useNativePicker]="true"</code> to leverage the native OS device wheel pickers on mobile devices for the
+        best user experience.
+      </p>
+
       <div class="code-window">
         <div class="window-header">
           <div class="dot red"></div>
@@ -69,7 +83,11 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
       </div>
 
       <h2>React, Vue, & Vanilla JS</h2>
-      <p>Since <code>ngxsmk-datepicker</code> is a highly isolated Angular library without heavy dependencies, it can be compiled into <strong>Custom Web Components</strong> using Angular Elements. This allows you to use exactly the same beautiful datepicker in React, Vue, Svelte, or Vanilla JavaScript.</p>
+      <p>
+        Since <code>ngxsmk-datepicker</code> is a highly isolated Angular library without heavy dependencies, it can be
+        compiled into <strong>Custom Web Components</strong> using Angular Elements. This allows you to use exactly the
+        same beautiful datepicker in React, Vue, Svelte, or Vanilla JavaScript.
+      </p>
       <div class="code-window">
         <div class="window-header">
           <div class="dot red"></div>
@@ -101,8 +119,12 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
       </div>
 
       <h2>Tailwind CSS</h2>
-      <p>Using Tailwind? No problem! The <code>ngxsmk-datepicker</code> supports a powerful <code>[classes]</code> input that allows you to easily inject utility classes into specific internal DOM elements. Override paddings, typography, backgrounds, or borders natively.</p>
-      
+      <p>
+        Using Tailwind? No problem! The <code>ngxsmk-datepicker</code> supports a powerful <code>[classes]</code> input
+        that allows you to easily inject utility classes into specific internal DOM elements. Override paddings,
+        typography, backgrounds, or borders natively.
+      </p>
+
       <div class="code-window">
         <div class="window-header">
           <div class="dot red"></div>
@@ -129,21 +151,38 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
       </div>
 
       <div class="tip">
-        <strong>Pro Tip:</strong> Use <code>appendToBody: true</code> when using the datepicker inside Modals or Overlays to avoid stacking context issues.
+        <strong>Pro Tip:</strong> Use <code>appendToBody: true</code> when using the datepicker inside Modals or
+        Overlays to avoid stacking context issues.
       </div>
     </div>
 
     @if (isModalOpen) {
       <div class="modal-backdrop" role="presentation" (click)="closeModal()" (keydown.escape)="closeModal()"></div>
-      <div class="modal modal-dialog modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+      <div
+        class="modal modal-dialog modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        tabindex="-1"
+      >
         <div class="modal-header">
           <h2 id="modal-title" class="modal-title">{{ i18n.t().integrations.modalSectionTitle }}</h2>
-          <button type="button" class="modal-close" (click)="closeModal()" [attr.aria-label]="i18n.t().integrations.closeModal">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <button
+            type="button"
+            class="modal-close"
+            (click)="closeModal()"
+            [attr.aria-label]="i18n.t().integrations.closeModal"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
           </button>
         </div>
         <div class="modal-body">
-          <label class="modal-label" for="modal-datepicker-input">{{ i18n.t().integrations.modalDatePlaceholder }}</label>
+          <label class="modal-label" for="modal-datepicker-input">{{
+            i18n.t().integrations.modalDatePlaceholder
+          }}</label>
           <ngxsmk-datepicker
             id="modal-datepicker-input"
             mode="single"
@@ -156,29 +195,45 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
           }
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn-secondary" (click)="closeModal()">{{ i18n.t().integrations.closeModal }}</button>
+          <button type="button" class="btn-secondary" (click)="closeModal()">
+            {{ i18n.t().integrations.closeModal }}
+          </button>
         </div>
       </div>
     }
   `,
-  styles: [`
-    :host { display: block; }
-    h1 { margin-bottom: var(--space-xs); }
-    .text-lg { 
-      font-size: var(--font-size-lg); 
-      margin-bottom: var(--space-2xl);
-    }
-    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
-    h3 { margin-bottom: var(--space-sm); }
-    p { margin-bottom: var(--space-md); }
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      h1 {
+        margin-bottom: var(--space-xs);
+      }
+      .text-lg {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--space-2xl);
+      }
+      h2 {
+        margin-top: var(--space-3xl);
+        margin-bottom: var(--space-sm);
+      }
+      h3 {
+        margin-bottom: var(--space-sm);
+      }
+      p {
+        margin-bottom: var(--space-md);
+      }
 
-    .card {
-      padding: var(--space-lg);
-      @media (max-width: 480px) { padding: var(--space-md); }
-      margin-bottom: var(--space-md);
-    }
+      .card {
+        padding: var(--space-lg);
+        @media (max-width: 480px) {
+          padding: var(--space-md);
+        }
+        margin-bottom: var(--space-md);
+      }
 
-    .code-window {
+      .code-window {
         background: var(--color-bg-code);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
@@ -187,136 +242,188 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
         box-shadow: var(--shadow-lg);
 
         .window-header {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 0.75rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-bottom: 1px solid var(--color-border);
+          background: rgba(255, 255, 255, 0.03);
+          padding: 0.75rem 1.25rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          border-bottom: 1px solid var(--color-border);
 
-            .dot {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                &.red { background: #ff5f56; }
-                &.yellow { background: #ffbd2e; }
-                &.green { background: #27c93f; }
+          .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            &.red {
+              background: #ff5f56;
             }
-            .window-title {
-                margin-left: 0.5rem;
-                font-size: 0.7rem;
-                font-family: 'JetBrains Mono', monospace;
-                color: var(--color-text-dim);
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
+            &.yellow {
+              background: #ffbd2e;
             }
+            &.green {
+              background: #27c93f;
+            }
+          }
+          .window-title {
+            margin-left: 0.5rem;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--color-text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+          }
         }
 
         pre {
-            margin: 0;
-            padding: var(--space-lg);
-            overflow-x: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.7;
+          margin: 0;
+          padding: var(--space-lg);
+          overflow-x: auto;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.9rem;
+          line-height: 1.7;
 
-            code {
-                background: none;
-                border: none;
-                padding: 0;
-                color: var(--code-text);
-                
-                .token-keyword { color: var(--code-keyword); }
-                .token-string { color: var(--code-string); }
-                .token-comment { color: var(--code-comment); font-style: italic; }
-                .token-function { color: var(--code-function); }
-                .token-class { color: var(--code-class); }
-                .token-operator { color: var(--code-operator); }
-                .token-number { color: var(--code-number); }
-                .token-tag { color: var(--code-tag); }
-                .token-attr { color: var(--code-attr); }
+          code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--code-text);
+
+            .token-keyword {
+              color: var(--code-keyword);
             }
+            .token-string {
+              color: var(--code-string);
+            }
+            .token-comment {
+              color: var(--code-comment);
+              font-style: italic;
+            }
+            .token-function {
+              color: var(--code-function);
+            }
+            .token-class {
+              color: var(--code-class);
+            }
+            .token-operator {
+              color: var(--code-operator);
+            }
+            .token-number {
+              color: var(--code-number);
+            }
+            .token-tag {
+              color: var(--code-tag);
+            }
+            .token-attr {
+              color: var(--code-attr);
+            }
+          }
         }
-    }
-    .tip { margin-top: var(--space-2xl); }
+      }
+      .tip {
+        margin-top: var(--space-2xl);
+      }
 
-    .btn-primary, .btn-secondary {
-      padding: var(--space-sm) var(--space-lg);
-      border-radius: var(--radius-md);
-      font-weight: var(--font-weight-semibold);
-      cursor: pointer;
-      transition: var(--transition-base);
-    }
-    .btn-primary {
-      background: var(--color-primary);
-      color: #fff;
-      border: none;
-    }
-    .btn-primary:hover { opacity: 0.9; }
-    .btn-secondary {
-      background: var(--color-bg-elevated);
-      color: var(--color-text-main);
-      border: 1px solid var(--color-border);
-    }
-    .btn-secondary:hover { border-color: var(--color-primary); color: var(--color-primary); }
+      .btn-primary,
+      .btn-secondary {
+        padding: var(--space-sm) var(--space-lg);
+        border-radius: var(--radius-md);
+        font-weight: var(--font-weight-semibold);
+        cursor: pointer;
+        transition: var(--transition-base);
+      }
+      .btn-primary {
+        background: var(--color-primary);
+        color: #fff;
+        border: none;
+      }
+      .btn-primary:hover {
+        opacity: 0.9;
+      }
+      .btn-secondary {
+        background: var(--color-bg-elevated);
+        color: var(--color-text-main);
+        border: 1px solid var(--color-border);
+      }
+      .btn-secondary:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+      }
 
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 9998;
-      animation: fadeIn 0.2s ease;
-    }
-    .modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: min(90vw, 420px);
-      max-height: 90vh;
-      background: var(--color-bg-card);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      animation: fadeIn 0.2s ease;
-      /* Allow datepicker dropdown (appendToBody) to layer above modal via its own z-index */
-      overflow: visible;
-    }
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: var(--space-lg);
-      border-bottom: 1px solid var(--color-border);
-    }
-    .modal-title { margin: 0; font-size: var(--font-size-xl); }
-    .modal-close {
-      background: none;
-      border: none;
-      color: var(--color-text-muted);
-      cursor: pointer;
-      padding: var(--space-xs);
-      border-radius: var(--radius-sm);
-    }
-    .modal-close:hover { color: var(--color-text-main); }
-    .modal-body {
-      padding: var(--space-lg);
-      overflow-y: auto;
-    }
-    .modal-label { display: block; margin-bottom: var(--space-sm); font-weight: var(--font-weight-medium); }
-    .modal-selected { margin-top: var(--space-md); }
-    .modal-footer {
-      padding: var(--space-lg);
-      border-top: 1px solid var(--color-border);
-      display: flex;
-      justify-content: flex-end;
-      gap: var(--space-md);
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  `]
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 9998;
+        animation: fadeIn 0.2s ease;
+      }
+      .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(90vw, 420px);
+        max-height: 90vh;
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        animation: fadeIn 0.2s ease;
+        /* Allow datepicker dropdown (appendToBody) to layer above modal via its own z-index */
+        overflow: visible;
+      }
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-lg);
+        border-bottom: 1px solid var(--color-border);
+      }
+      .modal-title {
+        margin: 0;
+        font-size: var(--font-size-xl);
+      }
+      .modal-close {
+        background: none;
+        border: none;
+        color: var(--color-text-muted);
+        cursor: pointer;
+        padding: var(--space-xs);
+        border-radius: var(--radius-sm);
+      }
+      .modal-close:hover {
+        color: var(--color-text-main);
+      }
+      .modal-body {
+        padding: var(--space-lg);
+        overflow-y: auto;
+      }
+      .modal-label {
+        display: block;
+        margin-bottom: var(--space-sm);
+        font-weight: var(--font-weight-medium);
+      }
+      .modal-selected {
+        margin-top: var(--space-md);
+      }
+      .modal-footer {
+        padding: var(--space-lg);
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-md);
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    `,
+  ],
 })
 export class IntegrationsComponent {
   i18n = inject(I18nService);

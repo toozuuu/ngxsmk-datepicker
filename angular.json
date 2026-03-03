@@ -224,6 +224,55 @@
         }
       }
     },
+    "material-integration": {
+      "projectType": "application",
+      "root": "examples/material-integration",
+      "sourceRoot": "examples/material-integration/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/material-integration",
+            "browser": "examples/material-integration/src/main.ts",
+            "tsConfig": "examples/material-integration/tsconfig.app.json",
+            "preserveSymlinks": true,
+            "polyfills": [
+              "zone.js"
+            ],
+            "assets": [],
+            "styles": [
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "examples/material-integration/src/styles.scss"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "outputPath": "dist/material-integration",
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "material-integration:build:production"
+            },
+            "development": {
+              "buildTarget": "material-integration:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    },
     "ngxsmk-datepicker-element": {
       "projectType": "application",
       "schematics": {},

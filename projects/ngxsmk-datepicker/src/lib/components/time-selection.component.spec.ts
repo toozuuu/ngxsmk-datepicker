@@ -9,7 +9,7 @@ describe('TimeSelectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TimeSelectionComponent, CustomSelectComponent]
+      imports: [TimeSelectionComponent, CustomSelectComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TimeSelectionComponent);
@@ -34,7 +34,7 @@ describe('TimeSelectionComponent', () => {
   it('should have default ampmOptions', () => {
     expect(component.ampmOptions).toEqual([
       { label: 'AM', value: false },
-      { label: 'PM', value: true }
+      { label: 'PM', value: true },
     ]);
   });
 
@@ -90,7 +90,7 @@ describe('TimeSelectionComponent', () => {
     component.showSeconds = true;
     component.secondOptions = [
       { label: '00', value: 0 },
-      { label: '30', value: 30 }
+      { label: '30', value: 30 },
     ];
     // Force change detection for OnPush component
     const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
@@ -112,7 +112,7 @@ describe('TimeSelectionComponent', () => {
   it('should pass hourOptions to hour select', () => {
     component.hourOptions = [
       { label: '1', value: 1 },
-      { label: '2', value: 2 }
+      { label: '2', value: 2 },
     ];
     fixture.detectChanges();
 
@@ -122,7 +122,7 @@ describe('TimeSelectionComponent', () => {
   it('should pass minuteOptions to minute select', () => {
     component.minuteOptions = [
       { label: '00', value: 0 },
-      { label: '15', value: 15 }
+      { label: '15', value: 15 },
     ];
     fixture.detectChanges();
 
@@ -133,7 +133,7 @@ describe('TimeSelectionComponent', () => {
     component.showSeconds = true;
     component.secondOptions = [
       { label: '00', value: 0 },
-      { label: '30', value: 30 }
+      { label: '30', value: 30 },
     ];
     fixture.detectChanges();
 
@@ -186,7 +186,7 @@ describe('TimeSelectionComponent', () => {
   it('should allow custom ampmOptions', () => {
     component.ampmOptions = [
       { label: 'Morning', value: false },
-      { label: 'Evening', value: true }
+      { label: 'Evening', value: true },
     ];
     fixture.detectChanges();
 
@@ -194,4 +194,3 @@ describe('TimeSelectionComponent', () => {
     expect(component.ampmOptions[0].label).toBe('Morning');
   });
 });
-

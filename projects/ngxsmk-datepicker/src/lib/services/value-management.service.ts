@@ -13,11 +13,13 @@ export class ValueManagementService {
       return false;
     }
     const obj = val as Record<string, unknown>;
-    return typeof obj['format'] === 'function' &&
-           typeof obj['toDate'] === 'function' &&
-           typeof obj['isMoment'] === 'function' &&
-           typeof obj['isMoment']() === 'boolean' &&
-           obj['isMoment']() === true;
+    return (
+      typeof obj['format'] === 'function' &&
+      typeof obj['toDate'] === 'function' &&
+      typeof obj['isMoment'] === 'function' &&
+      typeof obj['isMoment']() === 'boolean' &&
+      obj['isMoment']() === true
+    );
   }
 
   /**
@@ -31,7 +33,7 @@ export class ValueManagementService {
     if (val === null || val === undefined) {
       return null;
     }
-    
+
     if (val instanceof Date) {
       return this.normalizeDate(val) as DatepickerValue;
     } else if (this.isMomentObject(val)) {
@@ -45,11 +47,15 @@ export class ValueManagementService {
       }
       return null;
     } else if (Array.isArray(val)) {
-      return val.map(d => this.normalizeDate(d)).filter((d): d is Date => d !== null) as DatepickerValue;
+      return val.map((d) => this.normalizeDate(d)).filter((d): d is Date => d !== null) as DatepickerValue;
     } else if (typeof val === 'string' && displayFormat && parseCustomDateString) {
       const parsedDate = parseCustomDateString(val, displayFormat);
       return parsedDate as DatepickerValue;
-    } else if (typeof val === 'string' || val instanceof Date || (typeof val === 'object' && val !== null && 'getTime' in val)) {
+    } else if (
+      typeof val === 'string' ||
+      val instanceof Date ||
+      (typeof val === 'object' && val !== null && 'getTime' in val)
+    ) {
       const normalized = this.normalizeDate(val as DateInput);
       return normalized as DatepickerValue;
     } else {
@@ -60,27 +66,33 @@ export class ValueManagementService {
   isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {
     if (val1 === val2) return true;
     if (val1 === null || val2 === null) return val1 === val2;
-    
+
     if (val1 instanceof Date && val2 instanceof Date) {
       return val1.getTime() === val2.getTime();
     }
-    
-    if (typeof val1 === 'object' && val1 !== null && typeof val2 === 'object' && val2 !== null && 
-        'start' in val1 && 'end' in val1 && 'start' in val2 && 'end' in val2) {
+
+    if (
+      typeof val1 === 'object' &&
+      val1 !== null &&
+      typeof val2 === 'object' &&
+      val2 !== null &&
+      'start' in val1 &&
+      'end' in val1 &&
+      'start' in val2 &&
+      'end' in val2
+    ) {
       const range1 = val1 as { start: Date; end: Date };
       const range2 = val2 as { start: Date; end: Date };
-      return range1.start.getTime() === range2.start.getTime() && 
-             range1.end.getTime() === range2.end.getTime();
+      return range1.start.getTime() === range2.start.getTime() && range1.end.getTime() === range2.end.getTime();
     }
-    
+
     if (Array.isArray(val1) && Array.isArray(val2)) {
       if (val1.length !== val2.length) return false;
       const sorted1 = [...val1].sort((a, b) => a.getTime() - b.getTime());
       const sorted2 = [...val2].sort((a, b) => a.getTime() - b.getTime());
       return sorted1.every((d, i) => d.getTime() === sorted2[i]!.getTime());
     }
-    
+
     return false;
   }
 }
-

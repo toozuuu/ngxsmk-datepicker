@@ -7,16 +7,9 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 
-
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    HomePageRoutingModule,
-    NgxsmkDatepickerComponent
-  ],
+  imports: [CommonModule, FormsModule, IonicModule, HomePageRoutingModule, NgxsmkDatepickerComponent],
   declarations: [HomePage],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class HomePageModule { }
+export class HomePageModule {}

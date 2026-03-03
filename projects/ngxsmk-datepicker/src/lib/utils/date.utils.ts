@@ -69,11 +69,7 @@ export function getEndOfYear(d: Date): Date {
 
 export function isSameDay(d1: Date | null, d2: Date | null): boolean {
   if (!d1 || !d2) return false;
-  return (
-    d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate()
-  );
+  return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
 }
 
 export function normalizeDate(date: DateInput | null): Date | null {
@@ -84,13 +80,10 @@ export function normalizeDate(date: DateInput | null): Date | null {
       : new Date(
           (date as { toDate?: () => Date }).toDate
             ? (date as { toDate: () => Date }).toDate()
-            : (date as Date | string | number),
+            : (date as Date | string | number)
         );
   if (isNaN(d.getTime())) return null;
   return d;
 }
 
-export type DateInput =
-  | Date
-  | string
-  | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };
+export type DateInput = Date | string | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };

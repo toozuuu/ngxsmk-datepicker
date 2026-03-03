@@ -1,14 +1,14 @@
 /**
  * date-fns Adapter Implementation
- * 
+ *
  * To use this adapter, install date-fns:
  * npm install date-fns
- * 
+ *
  * Then provide it in your app config:
  * ```typescript
  * import { provideDatepickerConfig } from 'ngxsmk-datepicker';
  * import { DateFnsAdapter } from 'ngxsmk-datepicker/adapters/date-fns-adapter';
- * 
+ *
  * provideDatepickerConfig({
  *   dateAdapter: new DateFnsAdapter()
  * })
@@ -32,7 +32,7 @@ export class DateFnsAdapter implements DateAdapter {
 
   parse(value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null {
     if (!value) return null;
-    
+
     try {
       if (value instanceof Date) {
         if (!this.dateFns.isValid(value)) {
@@ -41,7 +41,7 @@ export class DateFnsAdapter implements DateAdapter {
         }
         return new Date(value.getTime());
       }
-      
+
       if (typeof value === 'string') {
         const parsed = this.dateFns.parseISO(value) || this.dateFns.parse(value, 'yyyy-MM-dd', new Date());
         if (!this.dateFns.isValid(parsed)) {
@@ -54,13 +54,13 @@ export class DateFnsAdapter implements DateAdapter {
       onError?.(error instanceof Error ? error : new Error(String(error)));
       return null;
     }
-    
+
     return null;
   }
 
   format(date: Date, formatStr: string = 'MMM dd, yyyy', locale?: string): string {
     if (!date || !this.dateFns.isValid(date)) return '';
-    
+
     try {
       const localeObj = locale && locale.length > 0 ? this.getDateFnsLocale(locale) : undefined;
       return this.dateFns.format(date, formatStr, { locale: localeObj });
@@ -111,4 +111,3 @@ export class DateFnsAdapter implements DateAdapter {
     }
   }
 }
-

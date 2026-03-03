@@ -48,9 +48,7 @@ describe('NgxsmkDatepickerComponent - Date Adapters', () => {
 
       // String dates need to be parsed, and selectedDate may be null if not in single mode or parsing fails
       // We check that the value was processed without errors
-      expect(
-        () => (component.value = dateString as unknown as Date),
-      ).not.toThrow();
+      expect(() => (component.value = dateString as unknown as Date)).not.toThrow();
     });
   });
 });

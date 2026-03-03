@@ -9,9 +9,7 @@ describe('CustomSelectComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CustomSelectComponent],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'browser' }
-      ]
+      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CustomSelectComponent);
@@ -32,7 +30,7 @@ describe('CustomSelectComponent', () => {
   it('should display selected option label', () => {
     component.options = [
       { label: 'Option 1', value: 1 },
-      { label: 'Option 2', value: 2 }
+      { label: 'Option 2', value: 2 },
     ];
     component.value = 1;
     fixture.detectChanges();
@@ -42,9 +40,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should display empty string when no option is selected', () => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     component.value = null;
     fixture.detectChanges();
 
@@ -53,9 +49,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should toggle dropdown on click', () => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
 
     const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
@@ -67,9 +61,7 @@ describe('CustomSelectComponent', () => {
 
   it('should not toggle dropdown when disabled', () => {
     component.disabled = true;
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
 
     const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
@@ -80,9 +72,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should toggle dropdown on Enter key', () => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
 
     const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
@@ -94,9 +84,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should toggle dropdown on Space key and prevent default', () => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
 
     const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
@@ -113,7 +101,7 @@ describe('CustomSelectComponent', () => {
     spyOn(component.valueChange, 'emit');
     component.options = [
       { label: 'Option 1', value: 1 },
-      { label: 'Option 2', value: 2 }
+      { label: 'Option 2', value: 2 },
     ];
     component.isOpen = true;
     fixture.detectChanges();
@@ -128,9 +116,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should close dropdown when clicking outside', () => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     component.isOpen = true;
     fixture.detectChanges();
 
@@ -145,9 +131,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should not close dropdown when clicking inside', () => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     component.isOpen = true;
     fixture.detectChanges();
 
@@ -158,7 +142,7 @@ describe('CustomSelectComponent', () => {
     // Create a mock event where the target is inside the component (the panel)
     const mockEvent = {
       target: panel,
-      type: 'click'
+      type: 'click',
     } as MouseEvent;
 
     // Call the document click handler directly with our mocked event
@@ -172,7 +156,7 @@ describe('CustomSelectComponent', () => {
   it('should mark selected option with selected class', () => {
     component.options = [
       { label: 'Option 1', value: 1 },
-      { label: 'Option 2', value: 2 }
+      { label: 'Option 2', value: 2 },
     ];
     component.value = 2;
     component.isOpen = true;
@@ -194,7 +178,7 @@ describe('CustomSelectComponent', () => {
   it('should set aria-selected on options', () => {
     component.options = [
       { label: 'Option 1', value: 1 },
-      { label: 'Option 2', value: 2 }
+      { label: 'Option 2', value: 2 },
     ];
     component.value = 1;
     component.isOpen = true;
@@ -206,9 +190,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should update panel position when opened', fakeAsync(() => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
 
     component.toggleDropdown();
@@ -219,9 +201,7 @@ describe('CustomSelectComponent', () => {
   }));
 
   it('should handle touchstart events on mobile', () => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     component.isOpen = true;
     fixture.detectChanges();
 
@@ -242,9 +222,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should not close on touchstart when touching inside', () => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     component.isOpen = true;
     fixture.detectChanges();
 
@@ -262,9 +240,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should close dropdown when calendar popover opens', fakeAsync(() => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     component.isOpen = true;
     fixture.detectChanges();
 
@@ -285,7 +261,7 @@ describe('CustomSelectComponent', () => {
     spyOn(component.valueChange, 'emit');
     component.options = [
       { label: 'Option 1', value: 1 },
-      { label: 'Option 2', value: 2 }
+      { label: 'Option 2', value: 2 },
     ];
     component.isOpen = true;
     fixture.detectChanges();
@@ -303,7 +279,7 @@ describe('CustomSelectComponent', () => {
     spyOn(component.valueChange, 'emit');
     component.options = [
       { label: 'Option 1', value: 1 },
-      { label: 'Option 2', value: 2 }
+      { label: 'Option 2', value: 2 },
     ];
     component.isOpen = true;
     fixture.detectChanges();
@@ -320,9 +296,7 @@ describe('CustomSelectComponent', () => {
   });
 
   it('should stop propagation when selecting option', () => {
-    component.options = [
-      { label: 'Option 1', value: 1 }
-    ];
+    component.options = [{ label: 'Option 1', value: 1 }];
     component.isOpen = true;
     fixture.detectChanges();
 
@@ -341,9 +315,7 @@ describe('CustomSelectComponent', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
         imports: [CustomSelectComponent],
-        providers: [
-          { provide: PLATFORM_ID, useValue: 'server' }
-        ]
+        providers: [{ provide: PLATFORM_ID, useValue: 'server' }],
       });
     });
 
@@ -369,9 +341,7 @@ describe('CustomSelectComponent', () => {
 
     it('should update panel position on resize', () => {
       if (typeof ResizeObserver !== 'undefined') {
-        component.options = [
-          { label: 'Option 1', value: 1 }
-        ];
+        component.options = [{ label: 'Option 1', value: 1 }];
         component.isOpen = true;
         component.ngAfterViewInit();
         fixture.detectChanges();
@@ -410,4 +380,3 @@ describe('CustomSelectComponent', () => {
     });
   });
 });
-

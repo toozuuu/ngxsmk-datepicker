@@ -3,12 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { DatePipe } from '@angular/common';
-import {
-  measureSync,
-  measureRender,
-  benchmark,
-  formatBenchmarkStats,
-} from '../utils/performance-testing.utils';
+import { measureSync, measureRender, benchmark, formatBenchmarkStats } from '../utils/performance-testing.utils';
 
 /**
  * Performance Tests
@@ -47,9 +42,7 @@ xdescribe('Performance Tests', () => {
         component.generateCalendar();
       });
 
-      console.log(
-        `Multi-month generation (3): ${result.duration.toFixed(2)}ms`,
-      );
+      console.log(`Multi-month generation (3): ${result.duration.toFixed(2)}ms`);
       expect(result.duration).toBeLessThan(100); // 3 months in < 100ms
     });
 
@@ -60,7 +53,7 @@ xdescribe('Performance Tests', () => {
           (component as { numberOfMonths?: number }).numberOfMonths = 1;
           component.generateCalendar();
         },
-        { iterations: 20, warmupIterations: 3 },
+        { iterations: 20, warmupIterations: 3 }
       );
 
       console.log(formatBenchmarkStats(stats));
@@ -117,7 +110,7 @@ xdescribe('Performance Tests', () => {
         () => {
           fixture.detectChanges();
         },
-        { iterations: 10, warmupIterations: 2 },
+        { iterations: 10, warmupIterations: 2 }
       );
 
       console.log(formatBenchmarkStats(stats));
@@ -168,7 +161,7 @@ xdescribe('Performance Tests', () => {
           component.nextMonth();
           fixture.detectChanges();
         },
-        { iterations: 15 },
+        { iterations: 15 }
       );
 
       console.log(formatBenchmarkStats(stats));
@@ -220,7 +213,7 @@ xdescribe('Performance Tests', () => {
           component.onDateClick(testDate);
           fixture.detectChanges();
         },
-        { iterations: 20 },
+        { iterations: 20 }
       );
 
       console.log(formatBenchmarkStats(stats));
@@ -276,7 +269,7 @@ xdescribe('Performance Tests', () => {
           component.calendarViewMode = 'month';
           fixture.detectChanges();
         },
-        { iterations: 10 },
+        { iterations: 10 }
       );
 
       console.log(formatBenchmarkStats(stats));
@@ -308,7 +301,7 @@ xdescribe('Performance Tests', () => {
           component.onTimeChange({ hour: 10, minute: 15, second: 0 });
           fixture.detectChanges();
         },
-        { iterations: 15 },
+        { iterations: 15 }
       );
 
       console.log(formatBenchmarkStats(stats));
@@ -346,7 +339,7 @@ xdescribe('Performance Tests', () => {
           component.writeValue('2024-06-15');
           fixture.detectChanges();
         },
-        { iterations: 20 },
+        { iterations: 20 }
       );
 
       console.log(formatBenchmarkStats(stats));
@@ -387,7 +380,7 @@ xdescribe('Performance Tests', () => {
         () => {
           component.generateCalendar();
         },
-        { iterations: 10 },
+        { iterations: 10 }
       );
 
       // Simulate implementation (should be same or better)
@@ -396,14 +389,12 @@ xdescribe('Performance Tests', () => {
         () => {
           component.generateCalendar();
         },
-        { iterations: 10 },
+        { iterations: 10 }
       );
 
       // Allow up to 20% regression for test variance
       const allowedRegression = baseline.average * 0.2;
-      expect(current.average).toBeLessThanOrEqual(
-        baseline.average + allowedRegression,
-      );
+      expect(current.average).toBeLessThanOrEqual(baseline.average + allowedRegression);
 
       console.log(`Baseline: ${baseline.average.toFixed(2)}ms`);
       console.log(`Current:  ${current.average.toFixed(2)}ms`);

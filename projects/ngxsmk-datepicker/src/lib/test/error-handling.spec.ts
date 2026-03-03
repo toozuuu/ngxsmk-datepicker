@@ -209,33 +209,21 @@ xdescribe('NgxsmkDatepicker - Error Handling & Boundary Conditions', () => {
     });
 
     it('should handle invalid dates in disabledDates', () => {
-      component.disabledDates.set([
-        new Date('invalid'),
-        new Date(NaN),
-        'not-a-date' as any,
-      ]);
+      component.disabledDates.set([new Date('invalid'), new Date(NaN), 'not-a-date' as any]);
       fixture.detectChanges();
 
       expect(() => fixture.detectChanges()).not.toThrow();
     });
 
     it('should handle mixed valid and invalid dates', () => {
-      component.disabledDates.set([
-        new Date(2024, 5, 10),
-        null as any,
-        new Date('invalid'),
-        new Date(2024, 5, 15),
-      ]);
+      component.disabledDates.set([new Date(2024, 5, 10), null as any, new Date('invalid'), new Date(2024, 5, 15)]);
       fixture.detectChanges();
 
       expect(() => fixture.detectChanges()).not.toThrow();
     });
 
     it('should handle very large disabledDates array', () => {
-      const largArray = Array.from(
-        { length: 1000 },
-        (_, i) => new Date(2024, 5, (i % 30) + 1),
-      );
+      const largArray = Array.from({ length: 1000 }, (_, i) => new Date(2024, 5, (i % 30) + 1));
       component.disabledDates.set(largArray);
       fixture.detectChanges();
 
@@ -457,10 +445,7 @@ xdescribe('NgxsmkDatepicker - Error Handling & Boundary Conditions', () => {
 
   describe('Edge Case User Interactions', () => {
     it('should handle rapid consecutive date selections', () => {
-      const dates = Array.from(
-        { length: 100 },
-        (_, i) => new Date(2024, 5, (i % 30) + 1),
-      );
+      const dates = Array.from({ length: 100 }, (_, i) => new Date(2024, 5, (i % 30) + 1));
 
       dates.forEach((date) => {
         component.selectedDate.set(date);
@@ -471,11 +456,7 @@ xdescribe('NgxsmkDatepicker - Error Handling & Boundary Conditions', () => {
     });
 
     it('should handle toggling between selection modes rapidly', () => {
-      const modes: Array<'single' | 'multiple' | 'range'> = [
-        'single',
-        'multiple',
-        'range',
-      ];
+      const modes: Array<'single' | 'multiple' | 'range'> = ['single', 'multiple', 'range'];
 
       for (let i = 0; i < 50; i++) {
         component.selectionMode.set(modes[i % 3]);
@@ -496,10 +477,7 @@ xdescribe('NgxsmkDatepicker - Error Handling & Boundary Conditions', () => {
 
     it('should handle very long date arrays in multiple mode', () => {
       component.selectionMode.set('multiple');
-      const manyDates = Array.from(
-        { length: 1000 },
-        (_, i) => new Date(2024, 0, (i % 31) + 1),
-      );
+      const manyDates = Array.from({ length: 1000 }, (_, i) => new Date(2024, 0, (i % 31) + 1));
       component.selectedDates.set(manyDates);
       fixture.detectChanges();
 

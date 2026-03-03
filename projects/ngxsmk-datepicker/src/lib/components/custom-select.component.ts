@@ -1,4 +1,17 @@
-import { Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, PLATFORM_ID, ViewChild, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  inject,
+  Input,
+  Output,
+  PLATFORM_ID,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  ViewEncapsulation,
+} from '@angular/core';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 
 @Component({
@@ -7,23 +20,46 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
   imports: [],
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.data-open]': 'isOpen'
+    '[attr.data-open]': 'isOpen',
   },
   template: `
-    <div class="ngxsmk-select-container" [class.is-open]="isOpen" (click)="toggleDropdown()" (keydown.enter)="toggleDropdown()" (keydown.space)="toggleDropdown(); $event.preventDefault()" tabindex="0" role="button" [attr.aria-expanded]="isOpen" #container>
+    <div
+      class="ngxsmk-select-container"
+      [class.is-open]="isOpen"
+      (click)="toggleDropdown()"
+      (keydown.enter)="toggleDropdown()"
+      (keydown.space)="toggleDropdown(); $event.preventDefault()"
+      tabindex="0"
+      role="button"
+      [attr.aria-expanded]="isOpen"
+      #container
+    >
       <button type="button" class="ngxsmk-select-display" [disabled]="disabled" #button>
         <span>{{ displayValue }}</span>
         <svg class="ngxsmk-arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                d="M112 184l144 144 144-144"/>
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="48"
+            d="M112 184l144 144 144-144"
+          />
         </svg>
       </button>
       @if (isOpen) {
-        <div class="ngxsmk-options-panel" 
-             #panel>
+        <div class="ngxsmk-options-panel" #panel>
           <ul>
             @for (option of options; track option.value) {
-              <li [class.selected]="option.value === value" (click)="selectOption(option); $event.stopPropagation()" (keydown.enter)="selectOption(option); $event.stopPropagation()" (keydown.space)="selectOption(option); $event.stopPropagation(); $event.preventDefault()" [attr.tabindex]="0" role="option" [attr.aria-selected]="option.value === value">
+              <li
+                [class.selected]="option.value === value"
+                (click)="selectOption(option); $event.stopPropagation()"
+                (keydown.enter)="selectOption(option); $event.stopPropagation()"
+                (keydown.space)="selectOption(option); $event.stopPropagation(); $event.preventDefault()"
+                [attr.tabindex]="0"
+                role="option"
+                [attr.aria-selected]="option.value === value"
+              >
                 {{ option.label }}
               </li>
             }
@@ -31,7 +67,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
         </div>
       }
     </div>
-  `
+  `,
 })
 export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   @Input() options: { label: string; value: unknown }[] = [];
@@ -105,7 +141,6 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
       }
 
       // Logic removed: forcing closure when calendar is open prevented dropdown from opening
-
     }
   }
 
@@ -155,5 +190,3 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
     this.isOpen = false;
   }
 }
-
-

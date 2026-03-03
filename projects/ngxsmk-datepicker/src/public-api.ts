@@ -6,8 +6,7 @@
  *
  * @example
  * ```typescript
- * import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
- * import { getStartOfDay, normalizeDate } from 'ngxsmk-datepicker/utils';
+ * import { NgxsmkDatepickerComponent, getStartOfDay, normalizeDate } from 'ngxsmk-datepicker';
  * ```
  */
 
@@ -42,11 +41,7 @@ export {
   generateDecadeGrid,
 } from './lib/utils/calendar.utils';
 
-export type {
-  HolidayProvider,
-  DateRange,
-  DatepickerValue,
-} from './lib/utils/calendar.utils';
+export type { HolidayProvider, DateRange, DatepickerValue } from './lib/utils/calendar.utils';
 
 export {
   exportToJson,
@@ -86,16 +81,10 @@ export {
   type AnimationConfig,
 } from './lib/config/datepicker.config';
 
-export {
-  type DateAdapter,
-  NativeDateAdapter,
-} from './lib/adapters/date-adapter.interface';
+export { type DateAdapter, NativeDateAdapter } from './lib/adapters/date-adapter.interface';
 
 export { LocaleRegistryService } from './lib/services/locale-registry.service';
-export type {
-  LocaleData,
-  CalendarSystem,
-} from './lib/services/locale-registry.service';
+export type { LocaleData, CalendarSystem } from './lib/services/locale-registry.service';
 
 export { TranslationRegistryService } from './lib/services/translation-registry.service';
 export { DefaultTranslationService } from './lib/services/translation.service';
@@ -115,9 +104,7 @@ export { FocusTrapService } from './lib/services/focus-trap.service';
 export { HapticFeedbackService } from './lib/services/haptic-feedback.service';
 
 export { FieldSyncService } from './lib/services/field-sync.service';
-export type {
-  SignalFormField,
-  SignalFormFieldConfig,
-} from './lib/services/field-sync.service';
+export type { SignalFormField, SignalFormFieldConfig } from './lib/services/field-sync.service';
 
 export { provideMaterialFormFieldControl } from './lib/material-form-field.helper';
+export { NgxsmkDatepickerMatFormFieldControlDirective } from './lib/material-form-field.directive';

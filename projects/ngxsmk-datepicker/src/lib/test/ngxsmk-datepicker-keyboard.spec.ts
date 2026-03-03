@@ -186,11 +186,7 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
 
       expect(component.focusedDate).toBeTruthy();
       if (component.focusedDate) {
-        const lastDay = new Date(
-          component.currentYear,
-          component.currentMonth + 1,
-          0,
-        ).getDate();
+        const lastDay = new Date(component.currentYear, component.currentMonth + 1, 0).getDate();
         expect(component.focusedDate.getDate()).toBe(lastDay);
       }
     });
@@ -227,9 +223,7 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       if (component.selectedDate) {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
-        expect(
-          component.isSameDay(component.selectedDate, getStartOfDay(yesterday)),
-        ).toBe(true);
+        expect(component.isSameDay(component.selectedDate, getStartOfDay(yesterday))).toBe(true);
       }
       expect(component.valueChange.emit).toHaveBeenCalled();
     });
@@ -247,9 +241,7 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       if (component.selectedDate) {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        expect(
-          component.isSameDay(component.selectedDate, getStartOfDay(tomorrow)),
-        ).toBe(true);
+        expect(component.isSameDay(component.selectedDate, getStartOfDay(tomorrow))).toBe(true);
       }
       expect(component.valueChange.emit).toHaveBeenCalled();
     });
@@ -267,9 +259,7 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       if (component.selectedDate) {
         const nextWeek = new Date();
         nextWeek.setDate(nextWeek.getDate() + 7);
-        expect(
-          component.isSameDay(component.selectedDate, getStartOfDay(nextWeek)),
-        ).toBe(true);
+        expect(component.isSameDay(component.selectedDate, getStartOfDay(nextWeek))).toBe(true);
       }
       expect(component.valueChange.emit).toHaveBeenCalled();
     });

@@ -14,9 +14,7 @@ describe('Cross-Browser Compatibility', () => {
 
   beforeEach(async () => {
     // Store original ResizeObserver before any tests modify it
-    originalResizeObserver = (window as unknown as Record<string, unknown>)[
-      'ResizeObserver'
-    ];
+    originalResizeObserver = (window as unknown as Record<string, unknown>)['ResizeObserver'];
 
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent],
@@ -30,18 +28,16 @@ describe('Cross-Browser Compatibility', () => {
 
   afterEach(() => {
     // Always restore original ResizeObserver after each test
-    (window as unknown as Record<string, unknown>)['ResizeObserver'] =
-      originalResizeObserver;
+    (window as unknown as Record<string, unknown>)['ResizeObserver'] = originalResizeObserver;
   });
 
   describe('ResizeObserver Support', () => {
     it('should handle ResizeObserver availability', () => {
       // Test with ResizeObserver available
-      (window as unknown as Record<string, unknown>)['ResizeObserver'] =
-        class MockResizeObserver {
-          observe() {}
-          disconnect() {}
-        };
+      (window as unknown as Record<string, unknown>)['ResizeObserver'] = class MockResizeObserver {
+        observe() {}
+        disconnect() {}
+      };
 
       component.ngOnInit();
       fixture.detectChanges();
@@ -63,9 +59,7 @@ describe('Cross-Browser Compatibility', () => {
 
       // Instead of setting a throwing mock globally, we just verify
       // the component handles ResizeObserver absence/errors
-      const originalRO = (window as unknown as Record<string, unknown>)[
-        'ResizeObserver'
-      ];
+      const originalRO = (window as unknown as Record<string, unknown>)['ResizeObserver'];
 
       try {
         // Temporarily remove ResizeObserver to test graceful handling
@@ -73,16 +67,13 @@ describe('Cross-Browser Compatibility', () => {
 
         // Component should handle this gracefully
         expect(() => {
-          const newComponent = TestBed.createComponent(
-            NgxsmkDatepickerComponent,
-          );
+          const newComponent = TestBed.createComponent(NgxsmkDatepickerComponent);
           newComponent.componentInstance.ngOnInit();
           newComponent.detectChanges();
         }).not.toThrow();
       } finally {
         // Always restore
-        (window as unknown as Record<string, unknown>)['ResizeObserver'] =
-          originalRO;
+        (window as unknown as Record<string, unknown>)['ResizeObserver'] = originalRO;
       }
     });
   });
@@ -148,9 +139,7 @@ describe('Cross-Browser Compatibility', () => {
       const originalSetItem = localStorage.setItem;
 
       // Mock localStorage to throw quota exceeded error
-      localStorage.setItem = jasmine
-        .createSpy('setItem')
-        .and.throwError('QuotaExceededError');
+      localStorage.setItem = jasmine.createSpy('setItem').and.throwError('QuotaExceededError');
 
       expect(() => {
         localStorage.setItem('test', 'value');
@@ -161,9 +150,7 @@ describe('Cross-Browser Compatibility', () => {
     });
 
     it('should handle localStorage disabled', () => {
-      const originalLocalStorage = (
-        window as unknown as Record<string, unknown>
-      )['localStorage'];
+      const originalLocalStorage = (window as unknown as Record<string, unknown>)['localStorage'];
 
       // Mock localStorage as null
       try {
@@ -193,12 +180,7 @@ describe('Cross-Browser Compatibility', () => {
 
   describe('Date API Compatibility', () => {
     it('should handle Date.parse differences across browsers', () => {
-      const testDates = [
-        '2024-01-15',
-        '01/15/2024',
-        'January 15, 2024',
-        '2024-01-15T10:30:00Z',
-      ];
+      const testDates = ['2024-01-15', '01/15/2024', 'January 15, 2024', '2024-01-15T10:30:00Z'];
 
       testDates.forEach((dateString) => {
         const parsed = Date.parse(dateString);
@@ -302,8 +284,7 @@ describe('Cross-Browser Compatibility', () => {
 
   describe('IntersectionObserver Support', () => {
     it('should handle IntersectionObserver availability', () => {
-      const hasIntersectionObserver =
-        typeof IntersectionObserver !== 'undefined';
+      const hasIntersectionObserver = typeof IntersectionObserver !== 'undefined';
 
       if (hasIntersectionObserver) {
         const observer = new IntersectionObserver(() => {});

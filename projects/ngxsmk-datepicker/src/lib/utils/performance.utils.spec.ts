@@ -1,4 +1,11 @@
-import { memoize, debounce, throttle, createDateComparator, createFilteredArray, clearAllCaches } from './performance.utils';
+import {
+  memoize,
+  debounce,
+  throttle,
+  createDateComparator,
+  createFilteredArray,
+  clearAllCaches,
+} from './performance.utils';
 
 describe('Performance Utils', () => {
   describe('memoize', () => {
@@ -146,4 +153,3 @@ describe('Performance Utils', () => {
     });
   });
 });
-

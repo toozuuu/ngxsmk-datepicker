@@ -15,9 +15,7 @@ describe('DOM Manipulation Tests', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [CustomSelectComponent],
-        providers: [
-          { provide: PLATFORM_ID, useValue: 'browser' }
-        ]
+        providers: [{ provide: PLATFORM_ID, useValue: 'browser' }],
       }).compileComponents();
 
       fixture = TestBed.createComponent(CustomSelectComponent);
@@ -61,9 +59,7 @@ describe('DOM Manipulation Tests', () => {
 
     it('should handle ResizeObserver callback', () => {
       if (typeof ResizeObserver !== 'undefined') {
-        component.options = [
-          { label: 'Option 1', value: 1 }
-        ];
+        component.options = [{ label: 'Option 1', value: 1 }];
         component.isOpen = true;
         component.ngAfterViewInit();
         fixture.detectChanges();
@@ -183,10 +179,7 @@ describe('DOM Manipulation Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        providers: [
-          ThemeBuilderService,
-          { provide: PLATFORM_ID, useValue: 'browser' }
-        ]
+        providers: [ThemeBuilderService, { provide: PLATFORM_ID, useValue: 'browser' }],
       });
       service = TestBed.inject(ThemeBuilderService);
     });
@@ -197,7 +190,7 @@ describe('DOM Manipulation Tests', () => {
 
     it('should create and append style element', () => {
       const theme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       service.applyTheme(theme);
@@ -209,7 +202,7 @@ describe('DOM Manipulation Tests', () => {
 
     it('should remove style element on cleanup', () => {
       const theme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       service.applyTheme(theme);
@@ -224,7 +217,7 @@ describe('DOM Manipulation Tests', () => {
       document.body.appendChild(element);
 
       const theme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       service.applyTheme(theme, element);
@@ -239,7 +232,7 @@ describe('DOM Manipulation Tests', () => {
       document.body.appendChild(element);
 
       const theme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       service.applyTheme(theme, element);
@@ -257,7 +250,7 @@ describe('DOM Manipulation Tests', () => {
       document.body.appendChild(element2);
 
       const theme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       service.applyTheme(theme, element1);
@@ -294,7 +287,7 @@ describe('DOM Manipulation Tests', () => {
 
       const touchEvent = new TouchEvent('touchstart', {
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       });
 
       element.dispatchEvent(touchEvent);
@@ -314,7 +307,7 @@ describe('DOM Manipulation Tests', () => {
 
       const keyEvent = new KeyboardEvent('keydown', {
         key: 'Enter',
-        bubbles: true
+        bubbles: true,
       });
 
       element.dispatchEvent(keyEvent);
@@ -430,4 +423,3 @@ describe('DOM Manipulation Tests', () => {
     });
   });
 });
-

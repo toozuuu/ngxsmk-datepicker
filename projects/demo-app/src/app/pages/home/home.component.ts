@@ -27,14 +27,7 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="hero-actions">
             <button class="btn btn-primary btn-lg" routerLink="/installation">
               {{ i18n.t().home.ctaBuild }}
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-              >
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M5 12h14m-7-7l7 7-7 7"></path>
               </svg>
             </button>
@@ -46,29 +39,15 @@ import { I18nService } from '../../i18n/i18n.service';
 
         <div class="hero-preview card">
           <div class="preview-header">
-            <div class="dots flex gap-xs">
-              <span></span><span></span><span></span>
-            </div>
+            <div class="dots flex gap-xs"><span></span><span></span><span></span></div>
             <div class="preview-controls flex gap-sm">
-              <button
-                class="mode-btn"
-                [class.active]="demoMode === 'single'"
-                (click)="setDemoMode('single')"
-              >
+              <button class="mode-btn" [class.active]="demoMode === 'single'" (click)="setDemoMode('single')">
                 {{ i18n.t().home.demoMode.single }}
               </button>
-              <button
-                class="mode-btn"
-                [class.active]="demoMode === 'range'"
-                (click)="setDemoMode('range')"
-              >
+              <button class="mode-btn" [class.active]="demoMode === 'range'" (click)="setDemoMode('range')">
                 {{ i18n.t().home.demoMode.range }}
               </button>
-              <button
-                class="mode-btn"
-                [class.active]="demoMode === 'multiple'"
-                (click)="setDemoMode('multiple')"
-              >
+              <button class="mode-btn" [class.active]="demoMode === 'multiple'" (click)="setDemoMode('multiple')">
                 {{ i18n.t().home.demoMode.multiple }}
               </button>
             </div>
@@ -127,15 +106,15 @@ import { I18nService } from '../../i18n/i18n.service';
             <h2>{{ i18n.t().common.readyToTransform }}</h2>
             <p>{{ i18n.t().common.installToday }}</p>
           </div>
-            <div class="code-window mt-0 mb-0">
-              <div class="window-header">
-                <div class="dot red"></div>
-                <div class="dot yellow"></div>
-                <div class="dot green"></div>
-                <div class="window-title">terminal</div>
-              </div>
-              <pre><code><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span></code></pre>
+          <div class="code-window mt-0 mb-0">
+            <div class="window-header">
+              <div class="dot red"></div>
+              <div class="dot yellow"></div>
+              <div class="dot green"></div>
+              <div class="window-title">terminal</div>
             </div>
+            <pre><code><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.2.1</span></code></pre>
+          </div>
         </div>
       </section>
     </div>
@@ -207,11 +186,7 @@ import { I18nService } from '../../i18n/i18n.service';
           padding: 4px 10px;
           font-size: 0.75rem;
         }
-        background: linear-gradient(
-          to right,
-          rgba(124, 58, 237, 0.1),
-          rgba(6, 182, 212, 0.1)
-        );
+        background: linear-gradient(to right, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.1));
         border: 1px solid rgba(124, 58, 237, 0.2);
         border-radius: 100px;
         font-size: 0.85rem;
@@ -251,7 +226,9 @@ import { I18nService } from '../../i18n/i18n.service';
       .hero-preview {
         padding: 0;
         overflow: hidden;
-        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        box-shadow:
+          0 30px 60px -12px rgba(0, 0, 0, 0.45),
+          0 0 0 1px rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: #0f172a;
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -276,7 +253,9 @@ import { I18nService } from '../../i18n/i18n.service';
         gap: 1rem;
         overflow-x: auto;
         scrollbar-width: none;
-        &::-webkit-scrollbar { display: none; }
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
 
       .dots {
@@ -287,9 +266,15 @@ import { I18nService } from '../../i18n/i18n.service';
           width: 10px;
           height: 10px;
           border-radius: 50%;
-          &:nth-child(1) { background: #ff5f56; }
-          &:nth-child(2) { background: #ffbd2e; }
-          &:nth-child(3) { background: #27c93f; }
+          &:nth-child(1) {
+            background: #ff5f56;
+          }
+          &:nth-child(2) {
+            background: #ffbd2e;
+          }
+          &:nth-child(3) {
+            background: #27c93f;
+          }
         }
       }
 
@@ -328,18 +313,18 @@ import { I18nService } from '../../i18n/i18n.service';
             background: transparent !important;
             padding: 0 !important;
           }
-          
+
           .ngxsmk-header {
             margin-bottom: 1.5rem !important;
           }
 
-          .ngxsmk-nav-button, .ngxsmk-select-display {
+          .ngxsmk-nav-button,
+          .ngxsmk-select-display {
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
             background: rgba(255, 255, 255, 0.03) !important;
           }
         }
       }
-
 
       .features-grid {
         display: grid;
@@ -373,12 +358,7 @@ import { I18nService } from '../../i18n/i18n.service';
           left: 0;
           right: 0;
           height: 3px;
-          background: linear-gradient(
-            to right,
-            transparent,
-            var(--color-primary-light),
-            transparent
-          );
+          background: linear-gradient(to right, transparent, var(--color-primary-light), transparent);
           opacity: 0.15;
           transition: 0.4s;
         }
@@ -420,11 +400,7 @@ import { I18nService } from '../../i18n/i18n.service';
           width: 64px;
           height: 64px;
         }
-        background: linear-gradient(
-          135deg,
-          var(--color-primary),
-          var(--color-primary-dark)
-        );
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
         border-radius: 16px;
         @media (min-width: 768px) {
           border-radius: 20px;
@@ -454,11 +430,7 @@ import { I18nService } from '../../i18n/i18n.service';
         @media (min-width: 768px) {
           padding: 5rem 4rem;
         }
-        background: linear-gradient(
-          135deg,
-          rgba(124, 58, 237, 0.08) 0%,
-          rgba(6, 182, 212, 0.08) 100%
-        );
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
         border: 1px solid var(--color-border-light);
         border-radius: var(--radius-xl);
 
@@ -530,7 +502,9 @@ import { I18nService } from '../../i18n/i18n.service';
           background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
           border-color: rgba(255, 255, 255, 0.2);
           color: #fff;
-          box-shadow: 0 8px 16px rgba(124, 58, 237, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+          box-shadow:
+            0 8px 16px rgba(124, 58, 237, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
         }
       }
 
@@ -546,7 +520,7 @@ import { I18nService } from '../../i18n/i18n.service';
         }
       }
 
-    .code-window {
+      .code-window {
         background: var(--color-bg-code);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
@@ -555,63 +529,94 @@ import { I18nService } from '../../i18n/i18n.service';
         box-shadow: var(--shadow-lg);
         width: 100%;
 
-        &.mt-md { margin-top: var(--space-md); }
-        &.mt-0 { margin-top: 0; }
-        &.mb-0 { margin-bottom: 0; }
+        &.mt-md {
+          margin-top: var(--space-md);
+        }
+        &.mt-0 {
+          margin-top: 0;
+        }
+        &.mb-0 {
+          margin-bottom: 0;
+        }
 
         .window-header {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 0.75rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-bottom: 1px solid var(--color-border);
+          background: rgba(255, 255, 255, 0.03);
+          padding: 0.75rem 1.25rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          border-bottom: 1px solid var(--color-border);
 
-            .dot {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                &.red { background: #ff5f56; }
-                &.yellow { background: #ffbd2e; }
-                &.green { background: #27c93f; }
+          .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            &.red {
+              background: #ff5f56;
             }
-            .window-title {
-                margin-left: 0.5rem;
-                font-size: 0.7rem;
-                font-family: 'JetBrains Mono', monospace;
-                color: var(--color-text-dim);
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
+            &.yellow {
+              background: #ffbd2e;
             }
+            &.green {
+              background: #27c93f;
+            }
+          }
+          .window-title {
+            margin-left: 0.5rem;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--color-text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+          }
         }
 
         pre {
-            margin: 0;
-            padding: var(--space-lg);
-            overflow-x: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.7;
-            text-align: left;
+          margin: 0;
+          padding: var(--space-lg);
+          overflow-x: auto;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.9rem;
+          line-height: 1.7;
+          text-align: left;
 
-            code {
-                background: none;
-                border: none;
-                padding: 0;
-                color: var(--code-text);
-                
-                .token-keyword { color: var(--code-keyword); }
-                .token-string { color: var(--code-string); }
-                .token-comment { color: var(--code-comment); font-style: italic; }
-                .token-function { color: var(--code-function); }
-                .token-class { color: var(--code-class); }
-                .token-operator { color: var(--code-operator); }
-                .token-number { color: var(--code-number); }
-                .token-tag { color: var(--code-tag); }
-                .token-attr { color: var(--code-attr); }
+          code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--code-text);
+
+            .token-keyword {
+              color: var(--code-keyword);
             }
+            .token-string {
+              color: var(--code-string);
+            }
+            .token-comment {
+              color: var(--code-comment);
+              font-style: italic;
+            }
+            .token-function {
+              color: var(--code-function);
+            }
+            .token-class {
+              color: var(--code-class);
+            }
+            .token-operator {
+              color: var(--code-operator);
+            }
+            .token-number {
+              color: var(--code-number);
+            }
+            .token-tag {
+              color: var(--code-tag);
+            }
+            .token-attr {
+              color: var(--code-attr);
+            }
+          }
         }
-    }
+      }
 
       .btn-lg {
         padding: 1rem 1.5rem;
@@ -621,11 +626,7 @@ import { I18nService } from '../../i18n/i18n.service';
         }
       }
       .gradient-text {
-        background: linear-gradient(
-          135deg,
-          var(--color-text-main) 20%,
-          var(--color-secondary) 100%
-        );
+        background: linear-gradient(135deg, var(--color-text-main) 20%, var(--color-secondary) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
@@ -656,10 +657,7 @@ export class HomeComponent {
     if (mode === 'single') {
       this.demoValue = new Date();
     } else if (mode === 'range') {
-      this.demoValue = [
-        new Date(),
-        new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      ];
+      this.demoValue = [new Date(), new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)];
     } else {
       this.demoValue = [new Date()];
     }

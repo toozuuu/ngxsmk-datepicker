@@ -1,13 +1,6 @@
 import { getStartOfDay, getEndOfDay } from './date.utils';
 
-export type RecurringPattern = 
-  | 'daily'
-  | 'weekly'
-  | 'monthly'
-  | 'yearly'
-  | 'weekdays'
-  | 'weekends'
-  | 'custom';
+export type RecurringPattern = 'daily' | 'weekly' | 'monthly' | 'yearly' | 'weekdays' | 'weekends' | 'custom';
 
 export interface RecurringDateConfig {
   pattern: RecurringPattern;
@@ -25,11 +18,11 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
   const interval = config.interval || 1;
   const startDate = getStartOfDay(config.startDate);
   const endDate = config.endDate ? getEndOfDay(config.endDate) : null;
-  
+
   const currentDate = new Date(startDate);
   let count = 0;
   const maxOccurrences = config.occurrences || (endDate ? 365 : 10);
-  
+
   switch (config.pattern) {
     case 'daily': {
       while (count < maxOccurrences) {
@@ -40,7 +33,7 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
       }
       break;
     }
-      
+
     case 'weekly': {
       if (config.dayOfWeek === undefined) {
         const targetDay = startDate.getDay();
@@ -51,12 +44,12 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
           if (daysUntilTarget === 0 && count === 0) {
             dates.push(new Date(currentDate));
             count++;
-            currentDate.setDate(currentDate.getDate() + (7 * interval));
+            currentDate.setDate(currentDate.getDate() + 7 * interval);
           } else {
             currentDate.setDate(currentDate.getDate() + daysUntilTarget);
             dates.push(new Date(currentDate));
             count++;
-            currentDate.setDate(currentDate.getDate() + (7 * interval));
+            currentDate.setDate(currentDate.getDate() + 7 * interval);
           }
         }
       } else {
@@ -67,18 +60,18 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
           if (daysUntilTarget === 0 && count === 0) {
             dates.push(new Date(currentDate));
             count++;
-            currentDate.setDate(currentDate.getDate() + (7 * interval));
+            currentDate.setDate(currentDate.getDate() + 7 * interval);
           } else {
             currentDate.setDate(currentDate.getDate() + daysUntilTarget);
             dates.push(new Date(currentDate));
             count++;
-            currentDate.setDate(currentDate.getDate() + (7 * interval));
+            currentDate.setDate(currentDate.getDate() + 7 * interval);
           }
         }
       }
       break;
     }
-      
+
     case 'monthly': {
       const targetDay = config.dayOfMonth || startDate.getDate();
       while (count < maxOccurrences) {
@@ -92,7 +85,7 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
       }
       break;
     }
-      
+
     case 'yearly': {
       const monthDay = config.monthAndDay || { month: startDate.getMonth(), day: startDate.getDate() };
       while (count < maxOccurrences) {
@@ -105,7 +98,7 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
       }
       break;
     }
-      
+
     case 'weekdays':
       while (count < maxOccurrences) {
         if (endDate && currentDate > endDate) break;
@@ -117,7 +110,7 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
         currentDate.setDate(currentDate.getDate() + 1);
       }
       break;
-      
+
     case 'weekends':
       while (count < maxOccurrences) {
         if (endDate && currentDate > endDate) break;
@@ -129,17 +122,16 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
         currentDate.setDate(currentDate.getDate() + 1);
       }
       break;
-      
+
     default:
       break;
   }
-  
+
   return dates;
 }
 
 export function matchesRecurringPattern(date: Date, config: RecurringDateConfig): boolean {
   const generatedDates = generateRecurringDates(config);
   const dateTime = getStartOfDay(date).getTime();
-  return generatedDates.some(d => getStartOfDay(d).getTime() === dateTime);
+  return generatedDates.some((d) => getStartOfDay(d).getTime() === dateTime);
 }
-

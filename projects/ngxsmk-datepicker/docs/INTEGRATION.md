@@ -1,16 +1,39 @@
 # Integration Guides
 
-**Last updated:** February 25, 2026 · **Current stable:** v2.2.0
+**Last updated:** March 3, 2026 · **Current stable:** v2.2.1
 
 This document provides integration examples for using ngxsmk-datepicker with popular frameworks and libraries.
 
 ## Table of Contents
 
+- [Theming](#theming)
+- [Accessibility](#accessibility)
+- [Input sanitization and CSP](#input-sanitization-and-csp)
 - [Angular Material](#angular-material)
 - [Ionic](#ionic)
 - [Tailwind CSS](#tailwind-css)
 - [React, Vue, & Vanilla JS (Web Components)](#react-vue--vanilla-js-web-components)
 - [Modals and overlays](#modals-and-overlays)
+
+## Theming
+
+Two different mechanisms apply:
+
+- **Component input `[theme]`**: Accepts only `'light'` or `'dark'`. Use it to switch the built-in light/dark color set (e.g. `[theme]="'dark'"` or `[theme]="isDark() ? 'dark' : 'light'"`).
+- **ThemeBuilderService.applyTheme(themeObject, element?)**: Accepts a theme **object** (colors, spacing, borderRadius, shadows, etc.) and applies it as CSS variables to the given element (or globally if no element). Use it for custom brand colors and full design tokens. See [THEME-TOKENS.md](THEME-TOKENS.md).
+  - When `element` is a **wrapper** (not the `ngxsmk-datepicker` host), the theme is applied to the wrapper and all descendant `ngxsmk-datepicker` elements so library defaults are overridden.
+  - Use `theme.shadows.focus` to customize the input focus ring (e.g. `'0 0 0 3px color-mix(in srgb, var(--datepicker-primary-color) 15%, transparent)'`). Internal `--ngxsmk-color-*` variables are bridged from your theme colors automatically.
+
+Do not pass a theme object to the `[theme]` input; use `ThemeBuilderService` for that.
+
+## Accessibility
+
+The datepicker is built with **accessibility in mind**: keyboard navigation (arrows, Enter, Escape, T/Y/N/W, etc.), ARIA roles and labels on interactive elements, and live regions for screen reader announcements. For keyboard shortcuts and ARIA options see [API.md – Keyboard Support](API.md#keyboard-support) and the ARIA-related inputs in the API reference.
+
+## Input sanitization and CSP
+
+- **Input sanitization**: The library sanitizes user-provided date/time strings (e.g. from the input field) before use: it strips HTML delimiters, script handlers, and dangerous protocols. Template bindings do not use `innerHTML` for user content, so Angular's `DomSanitizer` is not required for normal usage.
+- **CSP**: If your app enforces a Content-Security-Policy, ensure it allows the same directives required by Angular (e.g. `script-src` for your app and Angular, `style-src` for component styles). The datepicker does not use `eval`, inline scripts, or nonce-based scripts; it uses standard Angular templates and styles. No extra CSP directives are required specifically for ngxsmk-datepicker.
 
 ## Angular Material
 
@@ -21,6 +44,25 @@ npm install @angular/material @angular/cdk ngxsmk-datepicker
 ```
 
 ### Basic Integration (Standalone Components)
+
+**Default and recommended:** Use the **`ngxsmkMatFormFieldControl`** directive on the datepicker so `mat-form-field` finds it via `@ContentChild(MatFormFieldControl)`. No provider or `main.ts` setup required. Works with Vite and all bundlers. If you see "mat-form-field must contain a MatFormFieldControl", add the directive to the datepicker host (see Issue #187).
+
+```typescript
+import { NgxsmkDatepickerComponent, NgxsmkDatepickerMatFormFieldControlDirective } from 'ngxsmk-datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+@Component({
+  imports: [MatFormFieldModule, NgxsmkDatepickerComponent, NgxsmkDatepickerMatFormFieldControlDirective, ...],
+  template: `
+    <mat-form-field appearance="outline">
+      <mat-label>Select Date</mat-label>
+      <ngxsmk-datepicker ngxsmkMatFormFieldControl [value]="dateControl.value" (valueChange)="dateControl.setValue($event)" ... />
+    </mat-form-field>
+  `
+})
+```
+
+**Alternative (legacy / when directive is not used):** In `main.ts` before bootstrap, call `NgxsmkDatepickerComponent.withMaterialSupport(MatFormFieldControl)` (and optionally set `globalThis.__NGXSMK_MAT_FORM_FIELD_CONTROL__ = MatFormFieldControl`). Then use the datepicker inside `mat-form-field` without the directive. Prefer the directive above.
 
 ```typescript
 import { Component } from '@angular/core';
@@ -68,13 +110,15 @@ export class DatepickerComponent {
 }
 ```
 
+**If you see "mat-form-field must contain a MatFormFieldControl":** Add the **`ngxsmkMatFormFieldControl`** directive to the datepicker (Option A above). Do not use `MAT_FORM_FIELD` or pass the wrong token; the directive is the supported path.
+
 ### Integration with Non-Standalone Components (NgModules)
 
 For non-standalone components, you need to provide the Material form field control token using the `provideMaterialFormFieldControl` helper:
 
 ```typescript
 import { NgModule } from '@angular/core';
-import { MAT_FORM_FIELD_CONTROL } from '@angular/material/form-field';
+import { MatFormFieldControl } from '@angular/material/form-field';
 import { NgxsmkDatepickerComponent, provideMaterialFormFieldControl } from 'ngxsmk-datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -87,7 +131,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     ReactiveFormsModule
   ],
-  providers: [provideMaterialFormFieldControl(MAT_FORM_FIELD_CONTROL)]
+  providers: [provideMaterialFormFieldControl(MatFormFieldControl)]
 })
 export class MyModule { }
 ```
@@ -161,9 +205,8 @@ export class MaterialFormComponent {
 ### With Material Datepicker Styling
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, inject, ElementRef } from '@angular/core';
 import { NgxsmkDatepickerComponent, ThemeBuilderService } from 'ngxsmk-datepicker';
-import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-material-datepicker',
@@ -174,7 +217,7 @@ import { inject } from '@angular/core';
       <ngxsmk-datepicker
         [value]="selectedDate"
         (valueChange)="selectedDate = $event"
-        [theme]="materialTheme"
+        theme="light"
         [classes]="materialClasses">
       </ngxsmk-datepicker>
     </div>
@@ -203,6 +246,7 @@ import { inject } from '@angular/core';
 })
 export class MaterialDatepickerComponent {
   private themeBuilder = inject(ThemeBuilderService);
+  private hostEl = inject(ElementRef).nativeElement;
   selectedDate: Date | null = null;
   
   materialTheme = {
@@ -214,11 +258,12 @@ export class MaterialDatepickerComponent {
       border: '#e0e0e0',
       hover: '#f5f5f5'
     },
-    borderRadius: {
-      md: '4px',
-      lg: '8px'
-    }
+    borderRadius: { md: '4px', lg: '8px' }
   };
+  
+  ngOnInit() {
+    this.themeBuilder.applyTheme(this.materialTheme, this.hostEl);
+  }
   
   materialClasses = {
     wrapper: 'material-datepicker',

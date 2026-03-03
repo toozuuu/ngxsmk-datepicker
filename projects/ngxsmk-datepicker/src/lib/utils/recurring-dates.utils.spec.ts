@@ -9,7 +9,7 @@ describe('Recurring Dates Utils', () => {
         pattern: 'daily',
         startDate: startDate,
         interval: 1,
-        occurrences: 5
+        occurrences: 5,
       });
 
       expect(dates.length).toBe(5);
@@ -23,11 +23,11 @@ describe('Recurring Dates Utils', () => {
         startDate: startDate,
         dayOfWeek: 1,
         interval: 1,
-        occurrences: 4
+        occurrences: 4,
       });
 
       expect(dates.length).toBe(4);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         expect(date.getDay()).toBe(1);
       });
     });
@@ -39,11 +39,11 @@ describe('Recurring Dates Utils', () => {
         startDate: startDate,
         dayOfMonth: 15,
         interval: 1,
-        occurrences: 6
+        occurrences: 6,
       });
 
       expect(dates.length).toBe(6);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         expect(date.getDate()).toBe(15);
       });
     });
@@ -55,11 +55,11 @@ describe('Recurring Dates Utils', () => {
         startDate: startDate,
         monthAndDay: { month: 5, day: 15 },
         interval: 1,
-        occurrences: 3
+        occurrences: 3,
       });
 
       expect(dates.length).toBe(3);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         expect(date.getMonth()).toBe(5);
         expect(date.getDate()).toBe(15);
       });
@@ -71,11 +71,11 @@ describe('Recurring Dates Utils', () => {
         pattern: 'weekdays',
         startDate: startDate,
         interval: 1,
-        occurrences: 10
+        occurrences: 10,
       });
 
       expect(dates.length).toBeGreaterThan(0);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         const dayOfWeek = date.getDay();
         expect(dayOfWeek).toBeGreaterThanOrEqual(1);
         expect(dayOfWeek).toBeLessThanOrEqual(5);
@@ -88,11 +88,11 @@ describe('Recurring Dates Utils', () => {
         pattern: 'weekends',
         startDate: startDate,
         interval: 1,
-        occurrences: 10
+        occurrences: 10,
       });
 
       expect(dates.length).toBeGreaterThan(0);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         const dayOfWeek = date.getDay();
         expect(dayOfWeek === 0 || dayOfWeek === 6).toBe(true);
       });
@@ -105,11 +105,11 @@ describe('Recurring Dates Utils', () => {
         pattern: 'daily',
         startDate: startDate,
         endDate: endDate,
-        interval: 1
+        interval: 1,
       });
 
       expect(dates.length).toBeLessThanOrEqual(10);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         expect(date.getTime()).toBeLessThanOrEqual(endDate.getTime());
       });
     });
@@ -120,7 +120,7 @@ describe('Recurring Dates Utils', () => {
         pattern: 'daily',
         startDate: startDate,
         interval: 2,
-        occurrences: 5
+        occurrences: 5,
       });
 
       expect(dates.length).toBe(5);
@@ -136,7 +136,7 @@ describe('Recurring Dates Utils', () => {
         pattern: 'weekly',
         startDate: startDate,
         dayOfWeek: 1,
-        interval: 1
+        interval: 1,
       };
 
       const matches = matchesRecurringPattern(testDate, config);
@@ -150,7 +150,7 @@ describe('Recurring Dates Utils', () => {
         pattern: 'weekly',
         startDate: startDate,
         dayOfWeek: 1,
-        interval: 1
+        interval: 1,
       };
 
       const matches = matchesRecurringPattern(testDate, config);
@@ -158,4 +158,3 @@ describe('Recurring Dates Utils', () => {
     });
   });
 });
-

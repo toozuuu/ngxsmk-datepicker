@@ -7,16 +7,13 @@ describe('ThemeBuilderService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        ThemeBuilderService,
-        { provide: PLATFORM_ID, useValue: 'browser' }
-      ]
+      providers: [ThemeBuilderService, { provide: PLATFORM_ID, useValue: 'browser' }],
     });
     service = TestBed.inject(ThemeBuilderService);
-    
+
     // Clean up any existing styles
-    document.querySelectorAll('[data-datepicker-theme]').forEach(el => el.remove());
-    document.querySelectorAll('[data-datepicker-theme-scoped]').forEach(el => el.remove());
+    document.querySelectorAll('[data-datepicker-theme]').forEach((el) => el.remove());
+    document.querySelectorAll('[data-datepicker-theme-scoped]').forEach((el) => el.remove());
   });
 
   afterEach(() => {
@@ -32,8 +29,8 @@ describe('ThemeBuilderService', () => {
       const theme: DatepickerTheme = {
         colors: {
           primary: '#6d28d9',
-          background: '#ffffff'
-        }
+          background: '#ffffff',
+        },
       };
 
       const result = service.generateTheme(theme);
@@ -50,8 +47,8 @@ describe('ThemeBuilderService', () => {
           textSecondary: '#9ca3af',
           subtleText: '#6b7280',
           borderColor: '#e5e7eb',
-          hoverBackground: '#f9fafb'
-        }
+          hoverBackground: '#f9fafb',
+        },
       };
 
       const result = service.generateTheme(theme);
@@ -68,8 +65,8 @@ describe('ThemeBuilderService', () => {
         spacing: {
           xs: '4px',
           sm: '8px',
-          md: '16px'
-        }
+          md: '16px',
+        },
       };
 
       const result = service.generateTheme(theme);
@@ -83,8 +80,8 @@ describe('ThemeBuilderService', () => {
         typography: {
           fontFamily: 'Arial, sans-serif',
           fontSize: '14px',
-          fontWeight: '500'
-        }
+          fontWeight: '500',
+        },
       };
 
       const result = service.generateTheme(theme);
@@ -101,8 +98,8 @@ describe('ThemeBuilderService', () => {
           fontSizeXs: '12px',
           fontSizeSm: '13px',
           fontSizeLg: '16px',
-          fontSizeXl: '18px'
-        }
+          fontSizeXl: '18px',
+        },
       };
 
       const result = service.generateTheme(theme);
@@ -118,8 +115,8 @@ describe('ThemeBuilderService', () => {
         borderRadius: {
           sm: '4px',
           md: '8px',
-          lg: '12px'
-        }
+          lg: '12px',
+        },
       };
 
       const result = service.generateTheme(theme);
@@ -133,8 +130,8 @@ describe('ThemeBuilderService', () => {
         shadows: {
           sm: '0 1px 2px rgba(0,0,0,0.05)',
           md: '0 4px 6px rgba(0,0,0,0.1)',
-          lg: '0 10px 15px rgba(0,0,0,0.1)'
-        }
+          lg: '0 10px 15px rgba(0,0,0,0.1)',
+        },
       };
 
       const result = service.generateTheme(theme);
@@ -147,8 +144,8 @@ describe('ThemeBuilderService', () => {
       const theme: DatepickerTheme = {
         colors: {
           primary: '#6d28d9',
-          background: undefined
-        }
+          background: undefined,
+        },
       };
 
       const result = service.generateTheme(theme);
@@ -168,7 +165,7 @@ describe('ThemeBuilderService', () => {
         spacing: { md: '16px' },
         typography: { fontSize: '14px' },
         borderRadius: { md: '8px' },
-        shadows: { md: '0 4px 6px rgba(0,0,0,0.1)' }
+        shadows: { md: '0 4px 6px rgba(0,0,0,0.1)' },
       };
 
       const result = service.generateTheme(theme);
@@ -185,8 +182,8 @@ describe('ThemeBuilderService', () => {
       const theme: DatepickerTheme = {
         colors: {
           primary: '#6d28d9',
-          background: '#ffffff'
-        }
+          background: '#ffffff',
+        },
       };
 
       const result = service.generateStyleObject(theme);
@@ -200,7 +197,7 @@ describe('ThemeBuilderService', () => {
         spacing: { md: '16px' },
         typography: { fontSize: '14px' },
         borderRadius: { md: '8px' },
-        shadows: { md: '0 4px 6px rgba(0,0,0,0.1)' }
+        shadows: { md: '0 4px 6px rgba(0,0,0,0.1)' },
       };
 
       const result = service.generateStyleObject(theme);
@@ -215,11 +212,11 @@ describe('ThemeBuilderService', () => {
   describe('applyTheme - global', () => {
     it('should apply theme globally in browser', () => {
       const theme: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       service.applyTheme(theme);
-      
+
       const styleElement = document.querySelector('[data-datepicker-theme]');
       expect(styleElement).toBeTruthy();
       expect(styleElement?.textContent).toContain('--datepicker-primary-color: #6d28d9;');
@@ -228,19 +225,16 @@ describe('ThemeBuilderService', () => {
     it('should not apply theme on server', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        providers: [
-          ThemeBuilderService,
-          { provide: PLATFORM_ID, useValue: 'server' }
-        ]
+        providers: [ThemeBuilderService, { provide: PLATFORM_ID, useValue: 'server' }],
       });
-      
+
       const serverService = TestBed.inject(ThemeBuilderService);
       const theme: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       serverService.applyTheme(theme);
-      
+
       // Should not create style element on server
       const styleElement = document.querySelector('[data-datepicker-theme]');
       expect(styleElement).toBeFalsy();
@@ -248,12 +242,12 @@ describe('ThemeBuilderService', () => {
 
     it('should update existing global theme', () => {
       const theme1: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
       service.applyTheme(theme1);
 
       const theme2: DatepickerTheme = {
-        colors: { primary: '#10b981' }
+        colors: { primary: '#10b981' },
       };
       service.applyTheme(theme2);
 
@@ -269,16 +263,41 @@ describe('ThemeBuilderService', () => {
       document.body.appendChild(element);
 
       const theme: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       service.applyTheme(theme, element);
 
-      expect(element.hasAttribute('data-theme-applied')).toBe(true);
+      expect(element.dataset['themeApplied']).toBe('true');
       const scopedStyle = document.querySelector('[data-datepicker-theme-scoped]');
       expect(scopedStyle).toBeTruthy();
 
-      document.body.removeChild(element);
+      element.remove();
+    });
+
+    it('should recursively apply theme to nested datepicker elements', (done) => {
+      const container = document.createElement('div');
+      const innerDatepicker = document.createElement('ngxsmk-datepicker');
+      container.appendChild(innerDatepicker);
+      document.body.appendChild(container);
+
+      const theme: DatepickerTheme = {
+        colors: { primary: '#6d28d9' },
+      };
+
+      service.applyTheme(theme, container);
+
+      // Styles are applied in requestAnimationFrame
+      requestAnimationFrame(() => {
+        try {
+          expect(innerDatepicker.style.getPropertyValue('--datepicker-primary-color')).toBe('#6d28d9');
+          container.remove();
+          done();
+        } catch (e: any) {
+          container.remove();
+          done.fail(e);
+        }
+      });
     });
 
     it('should replace existing scoped theme', () => {
@@ -286,51 +305,48 @@ describe('ThemeBuilderService', () => {
       document.body.appendChild(element);
 
       const theme1: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
       service.applyTheme(theme1, element);
 
       const theme2: DatepickerTheme = {
-        colors: { primary: '#10b981' }
+        colors: { primary: '#10b981' },
       };
       service.applyTheme(theme2, element);
 
       const scopedStyles = document.querySelectorAll('[data-datepicker-theme-scoped]');
       expect(scopedStyles.length).toBe(1);
 
-      document.body.removeChild(element);
+      element.remove();
     });
 
     it('should not apply scoped theme on server', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        providers: [
-          ThemeBuilderService,
-          { provide: PLATFORM_ID, useValue: 'server' }
-        ]
+        providers: [ThemeBuilderService, { provide: PLATFORM_ID, useValue: 'server' }],
       });
-      
+
       const serverService = TestBed.inject(ThemeBuilderService);
       const element = document.createElement('div');
       const theme: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       serverService.applyTheme(theme, element);
-      
-      expect(element.hasAttribute('data-theme-applied')).toBe(false);
+
+      expect(element.dataset['themeApplied']).toBeUndefined();
     });
   });
 
   describe('removeTheme', () => {
     it('should remove global theme', () => {
       const theme: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
       service.applyTheme(theme);
-      
+
       service.removeTheme();
-      
+
       const styleElement = document.querySelector('[data-datepicker-theme]');
       expect(styleElement).toBeFalsy();
     });
@@ -340,31 +356,28 @@ describe('ThemeBuilderService', () => {
       document.body.appendChild(element);
 
       const theme: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
       service.applyTheme(theme, element);
-      
+
       service.removeTheme(element);
-      
-      expect(element.hasAttribute('data-theme-applied')).toBe(false);
+
+      expect(element.dataset['themeApplied']).toBeUndefined();
       const scopedStyle = document.querySelector('[data-datepicker-theme-scoped]');
       expect(scopedStyle).toBeFalsy();
 
-      document.body.removeChild(element);
+      element.remove();
     });
 
     it('should not remove theme on server', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        providers: [
-          ThemeBuilderService,
-          { provide: PLATFORM_ID, useValue: 'server' }
-        ]
+        providers: [ThemeBuilderService, { provide: PLATFORM_ID, useValue: 'server' }],
       });
-      
+
       const serverService = TestBed.inject(ThemeBuilderService);
       const element = document.createElement('div');
-      
+
       // Should not throw
       expect(() => serverService.removeTheme(element)).not.toThrow();
       expect(() => serverService.removeTheme()).not.toThrow();
@@ -375,12 +388,9 @@ describe('ThemeBuilderService', () => {
     it('should return empty object on server', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        providers: [
-          ThemeBuilderService,
-          { provide: PLATFORM_ID, useValue: 'server' }
-        ]
+        providers: [ThemeBuilderService, { provide: PLATFORM_ID, useValue: 'server' }],
       });
-      
+
       const serverService = TestBed.inject(ThemeBuilderService);
       const result = serverService.getCurrentTheme();
       expect(result).toEqual({});
@@ -392,11 +402,11 @@ describe('ThemeBuilderService', () => {
       element.style.setProperty('--datepicker-spacing-md', '16px');
 
       const result = service.getCurrentTheme();
-      
+
       // Note: getComputedStyle might not reflect inline styles in test environment
       // This test verifies the method doesn't throw
       expect(result).toBeDefined();
-      
+
       element.style.removeProperty('--datepicker-primary-color');
       element.style.removeProperty('--datepicker-spacing-md');
     });
@@ -410,34 +420,33 @@ describe('ThemeBuilderService', () => {
   describe('cleanupAllThemes', () => {
     it('should remove all themes', () => {
       const theme: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
       service.applyTheme(theme);
-      
+
       const element = document.createElement('div');
       document.body.appendChild(element);
       service.applyTheme(theme, element);
-      
+
       service.cleanupAllThemes();
-      
+
       expect(document.querySelector('[data-datepicker-theme]')).toBeFalsy();
       expect(document.querySelector('[data-datepicker-theme-scoped]')).toBeFalsy();
-      
-      document.body.removeChild(element);
+
+      element.remove();
     });
   });
 
   describe('ngOnDestroy', () => {
     it('should cleanup themes on destroy', () => {
       const theme: DatepickerTheme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
       service.applyTheme(theme);
-      
+
       service.ngOnDestroy();
-      
+
       expect(document.querySelector('[data-datepicker-theme]')).toBeFalsy();
     });
   });
 });
-

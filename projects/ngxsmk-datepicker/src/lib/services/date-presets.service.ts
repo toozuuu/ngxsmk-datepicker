@@ -19,7 +19,7 @@ export interface DatePreset {
  * Service for managing date presets with localStorage persistence
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DatePresetsService {
   private readonly platformId = inject(PLATFORM_ID);
@@ -91,7 +91,7 @@ export class DatePresetsService {
    * Get presets by category
    */
   getPresetsByCategory(category: string): DatePreset[] {
-    return Array.from(this.presets.values()).filter(p => p.category === category);
+    return Array.from(this.presets.values()).filter((p) => p.category === category);
   }
 
   /**
@@ -99,7 +99,7 @@ export class DatePresetsService {
    */
   getCategories(): string[] {
     const categories = new Set<string>();
-    this.presets.forEach(preset => {
+    this.presets.forEach((preset) => {
       if (preset.category) {
         categories.add(preset.category);
       }
@@ -170,7 +170,7 @@ export class DatePresetsService {
       let imported = 0;
       let errors = 0;
 
-      presetsArray.forEach(preset => {
+      presetsArray.forEach((preset) => {
         try {
           // Validate preset structure
           if (!preset.id || !preset.name || preset.value === undefined) {
@@ -218,7 +218,7 @@ export class DatePresetsService {
       const stored = localStorage.getItem(this.storageKey);
       if (stored) {
         const presetsArray = JSON.parse(stored) as DatePreset[];
-        presetsArray.forEach(preset => {
+        presetsArray.forEach((preset) => {
           // Convert date strings to Date objects
           const processedPreset: DatePreset = {
             ...preset,
@@ -261,11 +261,11 @@ export class DatePresetsService {
     }
 
     if (Array.isArray(value)) {
-      return value.map(date => new Date(date.getTime()));
+      return value.map((date) => new Date(date.getTime()));
     }
 
     if (typeof value === 'object' && value !== null && 'start' in value && 'end' in value) {
-      const range = value as { start: Date | null, end: Date | null };
+      const range = value as { start: Date | null; end: Date | null };
       return {
         start: range.start ? new Date(range.start.getTime()) : null,
         end: range.end ? new Date(range.end.getTime()) : null,
@@ -285,7 +285,7 @@ export class DatePresetsService {
     }
 
     if (Array.isArray(value)) {
-      return value.map(item => {
+      return value.map((item) => {
         if (typeof item === 'string') {
           return new Date(item);
         }
@@ -295,12 +295,18 @@ export class DatePresetsService {
 
     if (typeof value === 'object' && value !== null && 'start' in value && 'end' in value) {
       const rangeValue = value as { start: unknown; end: unknown };
-      const start = typeof rangeValue.start === 'string'
-        ? new Date(rangeValue.start)
-        : (rangeValue.start instanceof Date ? rangeValue.start : null);
-      const end = typeof rangeValue.end === 'string'
-        ? new Date(rangeValue.end)
-        : (rangeValue.end instanceof Date ? rangeValue.end : null);
+      const start =
+        typeof rangeValue.start === 'string'
+          ? new Date(rangeValue.start)
+          : rangeValue.start instanceof Date
+            ? rangeValue.start
+            : null;
+      const end =
+        typeof rangeValue.end === 'string'
+          ? new Date(rangeValue.end)
+          : rangeValue.end instanceof Date
+            ? rangeValue.end
+            : null;
 
       if (start && end) {
         return { start, end };
@@ -310,4 +316,3 @@ export class DatePresetsService {
     return null;
   }
 }
-

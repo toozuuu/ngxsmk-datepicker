@@ -124,9 +124,7 @@ export const DEFAULT_VISUAL_CONFIG: Required<VisualRegressionConfig> = {
 /**
  * Generate a filename for a screenshot based on scenario details
  */
-export function generateScreenshotFilename(
-  scenario: VisualTestScenario,
-): string {
+export function generateScreenshotFilename(scenario: VisualTestScenario): string {
   const { name, theme, viewport } = scenario;
   const deviceType = viewport.isMobile ? 'mobile' : 'desktop';
   const resolution = `${viewport.width}x${viewport.height}`;
@@ -163,10 +161,7 @@ export function applyTheme(theme: ThemeMode): void {
 /**
  * Wait for element to be stable (no more layout shifts)
  */
-export async function waitForElementStable(
-  element: HTMLElement,
-  timeout: number = 5000,
-): Promise<void> {
+export async function waitForElementStable(element: HTMLElement, timeout: number = 5000): Promise<void> {
   const startTime = Date.now();
   let lastRect = element.getBoundingClientRect();
   let stableCount = 0;
@@ -220,9 +215,7 @@ export async function waitForImages(element: HTMLElement): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
       img.addEventListener('load', () => resolve());
-      img.addEventListener('error', () =>
-        reject(new Error(`Failed to load image: ${img.src}`)),
-      );
+      img.addEventListener('error', () => reject(new Error(`Failed to load image: ${img.src}`)));
     });
   });
 
@@ -239,9 +232,7 @@ export async function waitForAnimations(element: HTMLElement): Promise<void> {
     return Promise.resolve();
   }
 
-  await Promise.all(
-    animations.map((animation) => animation.finished.catch(() => {})),
-  );
+  await Promise.all(animations.map((animation) => animation.finished.catch(() => {})));
 }
 
 /**
@@ -249,7 +240,7 @@ export async function waitForAnimations(element: HTMLElement): Promise<void> {
  */
 export async function prepareElementForScreenshot(
   element: HTMLElement,
-  config: VisualRegressionConfig = {},
+  config: VisualRegressionConfig = {}
 ): Promise<void> {
   const timeout = config.timeout || DEFAULT_VISUAL_CONFIG.timeout;
 
@@ -273,7 +264,7 @@ export async function prepareElementForScreenshot(
 export function compareImageData(
   data1: Uint8ClampedArray,
   data2: Uint8ClampedArray,
-  threshold: number = 0.01,
+  threshold: number = 0.01
 ): ScreenshotComparisonResult {
   if (data1.length !== data2.length) {
     return {
@@ -299,10 +290,7 @@ export function compareImageData(
 
     // Calculate color difference using Euclidean distance
     const colorDiff = Math.sqrt(
-      Math.pow(r1 - r2, 2) +
-        Math.pow(g1 - g2, 2) +
-        Math.pow(b1 - b2, 2) +
-        Math.pow(a1 - a2, 2),
+      Math.pow(r1 - r2, 2) + Math.pow(g1 - g2, 2) + Math.pow(b1 - b2, 2) + Math.pow(a1 - a2, 2)
     );
 
     // Threshold for considering pixels different (0-441 for RGBA)
@@ -330,7 +318,7 @@ export function createDiffImage(
   data1: Uint8ClampedArray,
   data2: Uint8ClampedArray,
   width: number,
-  height: number,
+  height: number
 ): ImageData {
   const diffData = new Uint8ClampedArray(data1.length);
 
@@ -346,10 +334,7 @@ export function createDiffImage(
     const a2 = data2[i + 3];
 
     const colorDiff = Math.sqrt(
-      Math.pow(r1 - r2, 2) +
-        Math.pow(g1 - g2, 2) +
-        Math.pow(b1 - b2, 2) +
-        Math.pow(a1 - a2, 2),
+      Math.pow(r1 - r2, 2) + Math.pow(g1 - g2, 2) + Math.pow(b1 - b2, 2) + Math.pow(a1 - a2, 2)
     );
 
     if (colorDiff > 10) {
@@ -374,9 +359,7 @@ export function createDiffImage(
 /**
  * Capture screenshot of an element as ImageData
  */
-export async function captureElementScreenshot(
-  element: HTMLElement,
-): Promise<ImageData> {
+export async function captureElementScreenshot(element: HTMLElement): Promise<ImageData> {
   const rect = element.getBoundingClientRect();
   const canvas = document.createElement('canvas');
   canvas.width = rect.width;
@@ -413,9 +396,7 @@ export async function captureElementScreenshot(
 /**
  * Generate visual test scenarios for comprehensive coverage
  */
-export function generateVisualTestScenarios(
-  componentSelector: string,
-): VisualTestScenario[] {
+export function generateVisualTestScenarios(componentSelector: string): VisualTestScenario[] {
   const themes: ThemeMode[] = ['light', 'dark'];
   const viewportTypes = [VIEWPORTS.mobile, VIEWPORTS.desktop];
   const scenarios: VisualTestScenario[] = [];
@@ -470,7 +451,7 @@ export function formatVisualRegressionResults(
   results: Array<{
     scenario: VisualTestScenario;
     result: ScreenshotComparisonResult;
-  }>,
+  }>
 ): string {
   const passed = results.filter((r) => r.result.matches).length;
   const failed = results.length - passed;

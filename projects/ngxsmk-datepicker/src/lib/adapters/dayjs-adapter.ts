@@ -1,14 +1,14 @@
 /**
  * Day.js Adapter Implementation
- * 
+ *
  * To use this adapter, install dayjs:
  * npm install dayjs
- * 
+ *
  * Then provide it in your app config:
  * ```typescript
  * import { provideDatepickerConfig } from 'ngxsmk-datepicker';
  * import { DayjsAdapter } from 'ngxsmk-datepicker/adapters/dayjs-adapter';
- * 
+ *
  * provideDatepickerConfig({
  *   dateAdapter: new DayjsAdapter()
  * })
@@ -32,7 +32,7 @@ export class DayjsAdapter implements DateAdapter {
 
   parse(value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null {
     if (!value) return null;
-    
+
     try {
       if (value instanceof Date) {
         const dayjsDate = this.dayjs(value);
@@ -42,7 +42,7 @@ export class DayjsAdapter implements DateAdapter {
         }
         return new Date(value.getTime());
       }
-      
+
       const parsed = this.dayjs(value);
       if (!parsed.isValid()) {
         onError?.(new Error(`Invalid date value: ${String(value)}`));
@@ -57,11 +57,11 @@ export class DayjsAdapter implements DateAdapter {
 
   format(date: Date, formatStr: string = 'MMM DD, YYYY', locale?: string): string {
     if (!date) return '';
-    
+
     try {
       const dayjsDate = this.dayjs(date);
       if (!dayjsDate.isValid()) return '';
-      
+
       if (locale && locale.length > 0) {
         try {
           const parts = locale.split('-');
@@ -76,7 +76,7 @@ export class DayjsAdapter implements DateAdapter {
           return dayjsDate.format(formatStr);
         }
       }
-      
+
       return dayjsDate.format(formatStr);
     } catch {
       return '';
@@ -108,4 +108,3 @@ export class DayjsAdapter implements DateAdapter {
     return this.dayjs(date1).isSame(this.dayjs(date2), 'day');
   }
 }
-

@@ -4,9 +4,7 @@ import { TranslationRegistryService } from './translation-registry.service';
 import { DatepickerTranslations } from '../interfaces/datepicker-translations.interface';
 
 // Helper to create minimal translation object
-function createMinimalTranslations(
-  overrides: Partial<DatepickerTranslations> = {},
-): DatepickerTranslations {
+function createMinimalTranslations(overrides: Partial<DatepickerTranslations> = {}): DatepickerTranslations {
   const defaults: DatepickerTranslations = {
     selectDate: 'Select Date',
     selectTime: 'Select Time',

@@ -20,9 +20,11 @@ import { I18nService } from '../../i18n/i18n.service';
             <div class="box plugin">{{ i18n.t().architecture.boxes.strategies }}</div>
             <div class="box plugin">{{ i18n.t().architecture.boxes.locales }}</div>
           </div>
-          
+
           <div class="connector flex items-center justify-center">
-            <svg viewBox="0 0 40 20" width="40"><path d="M0 10 L40 10 M35 5 L40 10 L35 15" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+            <svg viewBox="0 0 40 20" width="40">
+              <path d="M0 10 L40 10 M35 5 L40 10 L35 15" stroke="currentColor" fill="none" stroke-width="2" />
+            </svg>
           </div>
 
           <div class="column">
@@ -33,7 +35,9 @@ import { I18nService } from '../../i18n/i18n.service';
           </div>
 
           <div class="connector flex items-center justify-center">
-            <svg viewBox="0 0 40 20" width="40"><path d="M0 10 L40 10 M35 5 L40 10 L35 15" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+            <svg viewBox="0 0 40 20" width="40">
+              <path d="M0 10 L40 10 M35 5 L40 10 L35 15" stroke="currentColor" fill="none" stroke-width="2" />
+            </svg>
           </div>
 
           <div class="column core-col">
@@ -51,7 +55,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
       <h2>{{ i18n.t().architecture.adaptersTitle }}</h2>
       <p>{{ i18n.t().architecture.adaptersLead }}</p>
-      
+
       <div class="code-window">
         <div class="window-header">
           <div class="dot red"></div>
@@ -74,7 +78,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
       <h2>{{ i18n.t().architecture.hooksTitle }}</h2>
       <p>{{ i18n.t().architecture.hooksLead }}</p>
-      
+
       <div class="table-container">
         <table>
           <thead>
@@ -109,7 +113,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
       <h2>{{ i18n.t().architecture.strategiesTitle }}</h2>
       <p>{{ i18n.t().architecture.strategiesLead }}</p>
-      
+
       <div class="code-window">
         <div class="window-header">
           <div class="dot red"></div>
@@ -129,7 +133,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
       <h2>{{ i18n.t().architecture.stateTitle }}</h2>
       <p>{{ i18n.t().architecture.stateLead }}</p>
-      
+
       <div class="grid-2">
         <div class="info-card">
           <h4>View State</h4>
@@ -143,7 +147,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
       <h2>{{ i18n.t().architecture.middlewareTitle }}</h2>
       <p>{{ i18n.t().architecture.middlewareLead }}</p>
-      
+
       <div class="table-container">
         <table>
           <thead>
@@ -172,135 +176,204 @@ import { I18nService } from '../../i18n/i18n.service';
           </tbody>
           <tfoot>
             <tr>
-               <td colspan="3" class="text-center py-md text-dim italic">{{ i18n.t().architecture.table.moreHooks }}</td>
+              <td colspan="3" class="text-center py-md text-dim italic">{{ i18n.t().architecture.table.moreHooks }}</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
       <div class="tip">
-        <strong>Pro Tip:</strong> Use <code>provideDatepickerConfig()</code> at the root level to set global architectural defaults for your entire organization.
+        <strong>Pro Tip:</strong> Use <code>provideDatepickerConfig()</code> at the root level to set global
+        architectural defaults for your entire organization.
       </div>
     </div>
   `,
-  styles: [`
-    :host { display: block; }
-    h1 { margin-bottom: var(--space-xs); }
-    .text-lg { 
-      font-size: var(--font-size-lg); 
-      margin-bottom: var(--space-2xl);
-    }
-    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
-    p { margin-bottom: var(--space-md); }
-
-    .arch-diagram {
-      background: var(--color-bg-sidebar);
-      padding: var(--space-xl) var(--space-md);
-      overflow-x: auto;
-      margin: var(--space-xl) -1rem;
-      border-radius: 0;
-      @media (min-width: 768px) {
-        padding: 3rem 2rem;
-        margin: 2.5rem 0;
-        border-radius: var(--radius-lg);
+  styles: [
+    `
+      :host {
+        display: block;
       }
-      -webkit-overflow-scrolling: touch;
-    }
-    .diagram-grid {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr auto 1fr;
-      gap: 1rem;
-      min-width: 700px;
-    }
-    .column {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .layer-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      font-weight: 800;
-      color: var(--color-text-dim);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.5rem;
-      text-align: center;
-    }
-    .box {
-      padding: 1rem;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-align: center;
-      border: 1px solid var(--color-border);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      
-      &.plugin { background: rgba(6, 182, 212, 0.05); color: var(--color-secondary); }
-      &.hook { background: rgba(139, 92, 246, 0.05); color: var(--color-primary-light); }
-      &.internal { background: rgba(255,255,255,0.03); color: var(--color-text-dim); }
-
-      &:hover {
-        transform: scale(1.02);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        border-color: currentColor;
+      h1 {
+        margin-bottom: var(--space-xs);
       }
-    }
-    .connector {
-      color: var(--color-border-light);
-      opacity: 0.5;
-    }
-    .core-col {
-      justify-content: center;
-    }
-    .core-node {
-      height: 100px;
-      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
-      margin-bottom: 0.75rem;
+      .text-lg {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--space-2xl);
+      }
+      h2 {
+        margin-top: var(--space-3xl);
+        margin-bottom: var(--space-sm);
+      }
+      p {
+        margin-bottom: var(--space-md);
+      }
 
-      .core-inner {
+      .arch-diagram {
+        background: var(--color-bg-sidebar);
+        padding: var(--space-xl) var(--space-md);
+        overflow-x: auto;
+        margin: var(--space-xl) -1rem;
+        border-radius: 0;
+        @media (min-width: 768px) {
+          padding: 3rem 2rem;
+          margin: 2.5rem 0;
+          border-radius: var(--radius-lg);
+        }
+        -webkit-overflow-scrolling: touch;
+      }
+      .diagram-grid {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto 1fr;
+        gap: 1rem;
+        min-width: 700px;
+      }
+      .column {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .layer-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: var(--color-text-dim);
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
         text-align: center;
-        .core-text { display: block; font-size: 1.25rem; font-weight: 900; letter-spacing: -0.02em; }
-        .core-subtext { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; opacity: 0.8; }
       }
-    }
+      .box {
+        padding: 1rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-align: center;
+        border: 1px solid var(--color-border);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    .grid-2 { 
-        display: grid; 
-        grid-template-columns: 1fr 1fr; 
-        gap: var(--space-md); 
-        margin: var(--space-xl) 0; 
-        @media (max-width: 768px) { grid-template-columns: 1fr; }
-    }
-    .info-card { 
-      background: rgba(255,255,255,0.02); 
-      padding: var(--space-lg); 
-      border: 1px solid var(--color-border); 
-      border-radius: var(--radius-md);
-      transition: transform 0.2s ease;
-      &:hover { transform: translateY(-2px); background: rgba(255,255,255,0.04); }
-      h4 { margin-top: 0; color: var(--color-secondary); font-size: 1rem; }
-      p { font-size: 0.85rem; margin: 0.5rem 0 0; color: var(--color-text-dim); }
-    }
-    .table-container {
-      margin: var(--space-xl) 0;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      table { width: 100%; border-collapse: collapse; min-width: 500px; @media (min-width: 768px) { min-width: 0; } }
-      th, td { padding: 1rem; border-bottom: 1px solid var(--color-border); text-align: left; }
-      th { background: rgba(255,255,255,0.03); color: var(--color-text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-      td { font-size: 0.9rem; color: var(--color-text-muted); }
-      tr:last-child td { border-bottom: none; }
-    }
-    .tip { margin-top: var(--space-2xl); }
-  `]
+        &.plugin {
+          background: rgba(6, 182, 212, 0.05);
+          color: var(--color-secondary);
+        }
+        &.hook {
+          background: rgba(139, 92, 246, 0.05);
+          color: var(--color-primary-light);
+        }
+        &.internal {
+          background: rgba(255, 255, 255, 0.03);
+          color: var(--color-text-dim);
+        }
+
+        &:hover {
+          transform: scale(1.02);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+          border-color: currentColor;
+        }
+      }
+      .connector {
+        color: var(--color-border-light);
+        opacity: 0.5;
+      }
+      .core-col {
+        justify-content: center;
+      }
+      .core-node {
+        height: 100px;
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
+        margin-bottom: 0.75rem;
+
+        .core-inner {
+          text-align: center;
+          .core-text {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+          }
+          .core-subtext {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            opacity: 0.8;
+          }
+        }
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-md);
+        margin: var(--space-xl) 0;
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+      }
+      .info-card {
+        background: rgba(255, 255, 255, 0.02);
+        padding: var(--space-lg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        transition: transform 0.2s ease;
+        &:hover {
+          transform: translateY(-2px);
+          background: rgba(255, 255, 255, 0.04);
+        }
+        h4 {
+          margin-top: 0;
+          color: var(--color-secondary);
+          font-size: 1rem;
+        }
+        p {
+          font-size: 0.85rem;
+          margin: 0.5rem 0 0;
+          color: var(--color-text-dim);
+        }
+      }
+      .table-container {
+        margin: var(--space-xl) 0;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          min-width: 500px;
+          @media (min-width: 768px) {
+            min-width: 0;
+          }
+        }
+        th,
+        td {
+          padding: 1rem;
+          border-bottom: 1px solid var(--color-border);
+          text-align: left;
+        }
+        th {
+          background: rgba(255, 255, 255, 0.03);
+          color: var(--color-text-dim);
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+        td {
+          font-size: 0.9rem;
+          color: var(--color-text-muted);
+        }
+        tr:last-child td {
+          border-bottom: none;
+        }
+      }
+      .tip {
+        margin-top: var(--space-2xl);
+      }
+    `,
+  ],
 })
 export class ArchitectureComponent {
   i18n = inject(I18nService);

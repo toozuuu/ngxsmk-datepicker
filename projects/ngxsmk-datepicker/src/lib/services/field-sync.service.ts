@@ -1,4 +1,13 @@
-import { Injectable, effect, EffectRef, Injector, runInInjectionContext, inject, Signal, isDevMode } from '@angular/core';
+import {
+  Injectable,
+  effect,
+  EffectRef,
+  Injector,
+  runInInjectionContext,
+  inject,
+  Signal,
+  isDevMode,
+} from '@angular/core';
 import { DatepickerValue } from '../utils/calendar.utils';
 
 interface AngularCoreModule {
@@ -25,8 +34,7 @@ function safeIsSignal(value: unknown): value is Signal<unknown> {
     if (ngCore?.isSignal && typeof ngCore.isSignal === 'function') {
       return ngCore.isSignal(value);
     }
-  } catch {
-  }
+  } catch {}
 
   if (typeof value === 'function') {
     const fn = value as () => unknown;
@@ -48,7 +56,12 @@ export interface ValidationError {
 }
 
 export type SignalFormFieldConfig = {
-  value?: DatepickerValue | string | (() => DatepickerValue | string) | { (): DatepickerValue | string } | Signal<DatepickerValue | string>;
+  value?:
+    | DatepickerValue
+    | string
+    | (() => DatepickerValue | string)
+    | { (): DatepickerValue | string }
+    | Signal<DatepickerValue | string>;
   disabled?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
   required?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
   errors?: ValidationError[] | (() => ValidationError[]) | { (): ValidationError[] } | Signal<ValidationError[]>;
@@ -225,7 +238,7 @@ export class FieldSyncService {
 
     try {
       const errors = this.readFieldErrors(field);
-      const hasRequiredError = errors.some(error => error.kind === 'required');
+      const hasRequiredError = errors.some((error) => error.kind === 'required');
       if (hasRequiredError) {
         return true;
       }
@@ -303,8 +316,13 @@ export class FieldSyncService {
     if (typeof field === 'function') {
       const fieldFn = field as unknown as Record<string, unknown>;
 
-      const hasFieldProps = 'value' in fieldFn || 'disabled' in fieldFn || 'required' in fieldFn ||
-        'setValue' in fieldFn || 'markAsDirty' in fieldFn || 'errors' in fieldFn;
+      const hasFieldProps =
+        'value' in fieldFn ||
+        'disabled' in fieldFn ||
+        'required' in fieldFn ||
+        'setValue' in fieldFn ||
+        'markAsDirty' in fieldFn ||
+        'errors' in fieldFn;
 
       if (hasFieldProps) {
         return fieldFn as SignalFormFieldConfig;
@@ -316,8 +334,7 @@ export class FieldSyncService {
           if (result && typeof result === 'object') {
             return result as SignalFormFieldConfig;
           }
-        } catch {
-        }
+        } catch {}
       }
 
       // Generic fallback for getters
@@ -334,10 +351,7 @@ export class FieldSyncService {
     return null;
   }
 
-  setupFieldSync(
-    fieldInput: SignalFormField,
-    callbacks: FieldSyncCallbacks
-  ): EffectRef | null {
+  setupFieldSync(fieldInput: SignalFormField, callbacks: FieldSyncCallbacks): EffectRef | null {
     this.cleanup();
 
     if (!fieldInput) {
@@ -345,91 +359,97 @@ export class FieldSyncService {
     }
 
     try {
-      const effectRef = runInInjectionContext(this.injector, () => effect(() => {
-        if (this._isUpdatingFromInternal) {
-          return;
-        }
+      const effectRef = runInInjectionContext(this.injector, () =>
+        effect(() => {
+          if (this._isUpdatingFromInternal) {
+            return;
+          }
 
-        const field = this.resolveField(fieldInput);
+          const field = this.resolveField(fieldInput);
 
-        if (!field) {
-          return;
-        }
+          if (!field) {
+            return;
+          }
 
-        let fieldValue: DatepickerValue | null = null;
+          let fieldValue: DatepickerValue | null = null;
 
-        try {
-          const fieldValueRef = field.value;
+          try {
+            const fieldValueRef = field.value;
 
-          if (fieldValueRef === undefined || fieldValueRef === null) {
-            fieldValue = null;
-          } else if (typeof fieldValueRef === 'function') {
-            try {
-              const funcResult = fieldValueRef();
-              if (safeIsSignal(funcResult)) {
-                const signalResult = funcResult() as DatepickerValue;
-                fieldValue = (signalResult !== undefined && signalResult !== null) ? signalResult : null;
-              } else if (safeIsSignal(fieldValueRef)) {
-                const signalResult = fieldValueRef() as DatepickerValue;
-                fieldValue = (signalResult !== undefined && signalResult !== null) ? signalResult : null;
-              } else {
-                fieldValue = (funcResult !== undefined && funcResult !== null) ? funcResult as DatepickerValue : null;
-              }
-            } catch {
-              if (safeIsSignal(fieldValueRef)) {
-                try {
+            if (fieldValueRef === undefined || fieldValueRef === null) {
+              fieldValue = null;
+            } else if (typeof fieldValueRef === 'function') {
+              try {
+                const funcResult = fieldValueRef();
+                if (safeIsSignal(funcResult)) {
+                  const signalResult = funcResult() as DatepickerValue;
+                  fieldValue = signalResult !== undefined && signalResult !== null ? signalResult : null;
+                } else if (safeIsSignal(fieldValueRef)) {
                   const signalResult = fieldValueRef() as DatepickerValue;
-                  fieldValue = (signalResult !== undefined && signalResult !== null) ? signalResult : null;
-                } catch {
+                  fieldValue = signalResult !== undefined && signalResult !== null ? signalResult : null;
+                } else {
+                  fieldValue = funcResult !== undefined && funcResult !== null ? (funcResult as DatepickerValue) : null;
+                }
+              } catch {
+                if (safeIsSignal(fieldValueRef)) {
+                  try {
+                    const signalResult = fieldValueRef() as DatepickerValue;
+                    fieldValue = signalResult !== undefined && signalResult !== null ? signalResult : null;
+                  } catch {
+                    fieldValue = null;
+                  }
+                } else {
                   fieldValue = null;
                 }
-              } else {
-                fieldValue = null;
               }
+            } else if (safeIsSignal(fieldValueRef)) {
+              const signalResult = fieldValueRef();
+              fieldValue =
+                signalResult !== undefined && signalResult !== null ? (signalResult as DatepickerValue) : null;
+            } else if (fieldValueRef instanceof Date) {
+              fieldValue = fieldValueRef as DatepickerValue;
+            } else if (typeof fieldValueRef === 'object') {
+              fieldValue = fieldValueRef as DatepickerValue;
+            } else {
+              fieldValue = this.readFieldValue(field);
             }
-          } else if (safeIsSignal(fieldValueRef)) {
-            const signalResult = fieldValueRef();
-            fieldValue = (signalResult !== undefined && signalResult !== null) ? signalResult as DatepickerValue : null;
-          } else if (fieldValueRef instanceof Date) {
-            fieldValue = fieldValueRef as DatepickerValue;
-          } else if (typeof fieldValueRef === 'object') {
-            fieldValue = fieldValueRef as DatepickerValue;
-          } else {
+          } catch {
             fieldValue = this.readFieldValue(field);
           }
-        } catch {
-          fieldValue = this.readFieldValue(field);
-        }
 
-        const normalizedValue = callbacks.normalizeValue(fieldValue);
+          const normalizedValue = callbacks.normalizeValue(fieldValue);
 
-        const isInitialLoad = this._lastKnownFieldValue === undefined;
+          const isInitialLoad = this._lastKnownFieldValue === undefined;
 
-        const valuesAreEqual = this._lastKnownFieldValue !== undefined &&
-          callbacks.isValueEqual(normalizedValue, this._lastKnownFieldValue as DatepickerValue);
+          const valuesAreEqual =
+            this._lastKnownFieldValue !== undefined &&
+            callbacks.isValueEqual(normalizedValue, this._lastKnownFieldValue as DatepickerValue);
 
-        const valueChanged = !isInitialLoad && !valuesAreEqual;
-        const isValueTransition = (this._lastKnownFieldValue === null || this._lastKnownFieldValue === undefined) &&
-          fieldValue !== null && fieldValue !== undefined;
+          const valueChanged = !isInitialLoad && !valuesAreEqual;
+          const isValueTransition =
+            (this._lastKnownFieldValue === null || this._lastKnownFieldValue === undefined) &&
+            fieldValue !== null &&
+            fieldValue !== undefined;
 
-        if ((isInitialLoad || valueChanged || isValueTransition) && !valuesAreEqual) {
-          this._lastKnownFieldValue = normalizedValue;
-          callbacks.onValueChanged(normalizedValue);
-          callbacks.onCalendarGenerated?.();
-          callbacks.onStateChanged?.();
-        } else if (!valuesAreEqual && this._lastKnownFieldValue !== normalizedValue) {
-          this._lastKnownFieldValue = normalizedValue;
-        }
+          if ((isInitialLoad || valueChanged || isValueTransition) && !valuesAreEqual) {
+            this._lastKnownFieldValue = normalizedValue;
+            callbacks.onValueChanged(normalizedValue);
+            callbacks.onCalendarGenerated?.();
+            callbacks.onStateChanged?.();
+          } else if (!valuesAreEqual && this._lastKnownFieldValue !== normalizedValue) {
+            this._lastKnownFieldValue = normalizedValue;
+          }
 
-        const disabled = this.readDisabledState(field);
-        callbacks.onDisabledChanged(disabled);
+          const disabled = this.readDisabledState(field);
+          callbacks.onDisabledChanged(disabled);
 
-        const required = this.readRequiredState(field);
-        callbacks.onRequiredChanged?.(required);
+          const required = this.readRequiredState(field);
+          callbacks.onRequiredChanged?.(required);
 
-        const hasError = this.hasValidationErrors(field);
-        callbacks.onErrorStateChanged?.(hasError);
-      }));
+          const hasError = this.hasValidationErrors(field);
+          callbacks.onErrorStateChanged?.(hasError);
+        })
+      );
 
       this._fieldEffectRef = effectRef;
 
@@ -442,7 +462,10 @@ export class FieldSyncService {
     }
   }
 
-  syncFieldValue(fieldInput: SignalFormField | Signal<SignalFormField> | (() => unknown) | unknown, callbacks: FieldSyncCallbacks): boolean {
+  syncFieldValue(
+    fieldInput: SignalFormField | Signal<SignalFormField> | (() => unknown) | unknown,
+    callbacks: FieldSyncCallbacks
+  ): boolean {
     const field = this.resolveField(fieldInput);
     if (!field) return false;
 
@@ -451,8 +474,10 @@ export class FieldSyncService {
 
     const hasValueChanged = !callbacks.isValueEqual(normalizedValue, this._lastKnownFieldValue as DatepickerValue);
     const isInitialLoad = this._lastKnownFieldValue === undefined;
-    const isValueTransition = (this._lastKnownFieldValue === null || this._lastKnownFieldValue === undefined) &&
-      fieldValue !== null && fieldValue !== undefined;
+    const isValueTransition =
+      (this._lastKnownFieldValue === null || this._lastKnownFieldValue === undefined) &&
+      fieldValue !== null &&
+      fieldValue !== undefined;
 
     if (isInitialLoad || hasValueChanged || isValueTransition) {
       this._lastKnownFieldValue = normalizedValue;
@@ -511,8 +536,7 @@ export class FieldSyncService {
             this._isUpdatingFromInternal = false;
           });
           return;
-        } catch {
-        }
+        } catch {}
       }
 
       if (typeof field.updateValue === 'function') {
@@ -525,8 +549,7 @@ export class FieldSyncService {
             this._isUpdatingFromInternal = false;
           });
           return;
-        } catch {
-        }
+        } catch {}
       }
 
       try {
@@ -548,8 +571,7 @@ export class FieldSyncService {
                 return;
               }
             }
-          } catch {
-          }
+          } catch {}
         }
 
         if (safeIsSignal(val)) {
@@ -565,11 +587,9 @@ export class FieldSyncService {
             return;
           }
         }
-      } catch {
-      }
+      } catch {}
 
       this._isUpdatingFromInternal = false;
-
     } catch (error) {
       if (isDevMode()) {
         console.warn('[ngxsmk-datepicker] Field sync error:', error);
@@ -606,4 +626,3 @@ export class FieldSyncService {
     this._isUpdatingFromInternal = false;
   }
 }
-

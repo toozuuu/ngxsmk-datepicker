@@ -11,10 +11,7 @@ describe('HapticFeedbackService', () => {
     originalVibrate = navigator.vibrate;
 
     TestBed.configureTestingModule({
-      providers: [
-        HapticFeedbackService,
-        { provide: PLATFORM_ID, useValue: 'browser' }
-      ]
+      providers: [HapticFeedbackService, { provide: PLATFORM_ID, useValue: 'browser' }],
     });
 
     service = TestBed.inject(HapticFeedbackService);
@@ -143,10 +140,7 @@ describe('HapticFeedbackService', () => {
     it('should not access navigator on server', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        providers: [
-          HapticFeedbackService,
-          { provide: PLATFORM_ID, useValue: 'server' }
-        ]
+        providers: [HapticFeedbackService, { provide: PLATFORM_ID, useValue: 'server' }],
       });
 
       const serverService = TestBed.inject(HapticFeedbackService);
@@ -160,4 +154,3 @@ describe('HapticFeedbackService', () => {
     });
   });
 });
-

@@ -7,9 +7,9 @@ describe('ValueManagementService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ValueManagementService]
+      providers: [ValueManagementService],
     });
-    
+
     service = TestBed.inject(ValueManagementService);
   });
 
@@ -35,9 +35,9 @@ describe('ValueManagementService', () => {
       const momentLike = {
         format: () => '2024-01-15',
         toDate: () => new Date('2024-01-15'),
-        isMoment: () => true
+        isMoment: () => true,
       };
-      
+
       expect(service.isMomentObject(momentLike)).toBe(true);
     });
 
@@ -57,9 +57,9 @@ describe('ValueManagementService', () => {
       const notMoment = {
         format: () => '2024-01-15',
         toDate: () => new Date('2024-01-15'),
-        isMoment: () => false
+        isMoment: () => false,
       };
-      
+
       expect(service.isMomentObject(notMoment)).toBe(false);
     });
   });
@@ -83,9 +83,9 @@ describe('ValueManagementService', () => {
       const momentLike = {
         format: () => '2024-01-15',
         toDate: () => new Date('2024-01-15'),
-        isMoment: () => true
+        isMoment: () => true,
       };
-      
+
       const result = service.normalizeValue(momentLike);
       expect(result).toBeInstanceOf(Date);
     });
@@ -93,9 +93,9 @@ describe('ValueManagementService', () => {
     it('should normalize date range', () => {
       const range = {
         start: new Date('2024-01-15'),
-        end: new Date('2024-01-20')
+        end: new Date('2024-01-20'),
       };
-      
+
       const result = service.normalizeValue(range);
       expect(typeof result).toBe('object');
       if (typeof result === 'object' && result !== null && 'start' in result && 'end' in result) {
@@ -107,31 +107,24 @@ describe('ValueManagementService', () => {
     it('should return null for invalid range', () => {
       const invalidRange = {
         start: null,
-        end: new Date('2024-01-20')
+        end: new Date('2024-01-20'),
       };
-      
+
       const result = service.normalizeValue(invalidRange);
       expect(result).toBeNull();
     });
 
     it('should normalize date array', () => {
-      const dates = [
-        new Date('2024-01-15'),
-        new Date('2024-02-20')
-      ];
-      
+      const dates = [new Date('2024-01-15'), new Date('2024-02-20')];
+
       const result = service.normalizeValue(dates);
       expect(Array.isArray(result)).toBe(true);
       expect((result as Date[]).length).toBe(2);
     });
 
     it('should filter out invalid dates from array', () => {
-      const dates = [
-        new Date('2024-01-15'),
-        null,
-        new Date('2024-02-20')
-      ];
-      
+      const dates = [new Date('2024-01-15'), null, new Date('2024-02-20')];
+
       const result = service.normalizeValue(dates);
       expect(Array.isArray(result)).toBe(true);
       expect((result as Date[]).length).toBe(2);
@@ -144,7 +137,7 @@ describe('ValueManagementService', () => {
         }
         return null;
       };
-      
+
       const result = service.normalizeValue('2024-01-15', 'YYYY-MM-DD', parseCustom);
       expect(result).toBeInstanceOf(Date);
     });
@@ -180,7 +173,7 @@ describe('ValueManagementService', () => {
       const date1 = new Date('2024-01-15T10:00:00Z');
       const date2 = new Date('2024-01-15T10:00:00Z');
       const date3 = new Date('2024-01-16T10:00:00Z');
-      
+
       expect(service.isValueEqual(date1, date2)).toBe(true);
       expect(service.isValueEqual(date1, date3)).toBe(false);
     });
@@ -188,39 +181,30 @@ describe('ValueManagementService', () => {
     it('should compare date ranges', () => {
       const range1: DatepickerValue = {
         start: new Date('2024-01-15'),
-        end: new Date('2024-01-20')
+        end: new Date('2024-01-20'),
       };
       const range2: DatepickerValue = {
         start: new Date('2024-01-15'),
-        end: new Date('2024-01-20')
+        end: new Date('2024-01-20'),
       };
       const range3: DatepickerValue = {
         start: new Date('2024-01-15'),
-        end: new Date('2024-01-21')
+        end: new Date('2024-01-21'),
       };
-      
+
       expect(service.isValueEqual(range1, range2)).toBe(true);
       expect(service.isValueEqual(range1, range3)).toBe(false);
     });
 
     it('should compare date arrays', () => {
-      const dates1: DatepickerValue = [
-        new Date('2024-01-15'),
-        new Date('2024-02-20')
-      ];
-      const dates2: DatepickerValue = [
-        new Date('2024-01-15'),
-        new Date('2024-02-20')
-      ];
-      const dates3: DatepickerValue = [
-        new Date('2024-01-15'),
-        new Date('2024-02-21')
-      ];
+      const dates1: DatepickerValue = [new Date('2024-01-15'), new Date('2024-02-20')];
+      const dates2: DatepickerValue = [new Date('2024-01-15'), new Date('2024-02-20')];
+      const dates3: DatepickerValue = [new Date('2024-01-15'), new Date('2024-02-21')];
       const dates4: DatepickerValue = [
         new Date('2024-02-20'),
-        new Date('2024-01-15') // Different order
+        new Date('2024-01-15'), // Different order
       ];
-      
+
       expect(service.isValueEqual(dates1, dates2)).toBe(true);
       expect(service.isValueEqual(dates1, dates3)).toBe(false);
       expect(service.isValueEqual(dates1, dates4)).toBe(true); // Order shouldn't matter
@@ -228,11 +212,8 @@ describe('ValueManagementService', () => {
 
     it('should return false for arrays of different lengths', () => {
       const dates1: DatepickerValue = [new Date('2024-01-15')];
-      const dates2: DatepickerValue = [
-        new Date('2024-01-15'),
-        new Date('2024-02-20')
-      ];
-      
+      const dates2: DatepickerValue = [new Date('2024-01-15'), new Date('2024-02-20')];
+
       expect(service.isValueEqual(dates1, dates2)).toBe(false);
     });
 
@@ -240,11 +221,10 @@ describe('ValueManagementService', () => {
       const date = new Date('2024-01-15');
       const range: DatepickerValue = {
         start: new Date('2024-01-15'),
-        end: new Date('2024-01-20')
+        end: new Date('2024-01-20'),
       };
-      
+
       expect(service.isValueEqual(date, range)).toBe(false);
     });
   });
 });
-

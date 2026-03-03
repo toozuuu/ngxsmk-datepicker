@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy,
-  TemplateRef,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
 
@@ -34,9 +27,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
             [class.today]="isSameDay(day, today)"
             [class.holiday]="isHoliday(day)"
             [class.selected]="mode === 'single' && isSameDay(day, selectedDate)"
-            [class.multiple-selected]="
-              mode === 'multiple' && isMultipleSelected(day)
-            "
+            [class.multiple-selected]="mode === 'multiple' && isMultipleSelected(day)"
             [class.start-date]="isRangeType() && isSameDay(day, startDate)"
             [class.end-date]="isRangeType() && isSameDay(day, endDate)"
             [class.in-range]="isRangeType() && isInRange(day)"
@@ -44,11 +35,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
             [class.focused]="day && focusedDate && isSameDay(day, focusedDate)"
             [attr.tabindex]="day && !isDateDisabled(day) ? 0 : -1"
             [attr.role]="day ? 'gridcell' : null"
-            [attr.aria-selected]="
-              day && mode === 'single' && isSameDay(day, selectedDate)
-                ? 'true'
-                : null
-            "
+            [attr.aria-selected]="day && mode === 'single' && isSameDay(day, selectedDate) ? 'true' : null"
             [attr.aria-label]="day ? getAriaLabel(day) : null"
             [ngClass]="getDayCellCustomClasses(day)"
             [attr.title]="day ? getDayCellTooltip(day) : null"
@@ -75,9 +62,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       selected:
                         (mode === 'single' && isSameDay(day, selectedDate)) ||
                         (mode === 'multiple' && isMultipleSelected(day)) ||
-                        (isRangeType() &&
-                          (isSameDay(day, startDate) ||
-                            isSameDay(day, endDate))),
+                        (isRangeType() && (isSameDay(day, startDate) || isSameDay(day, endDate))),
                       disabled: isDateDisabled(day),
                       today: isSameDay(day, today),
                       holiday: isHoliday(day),
@@ -97,9 +82,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       selected:
                         (mode === 'single' && isSameDay(day, selectedDate)) ||
                         (mode === 'multiple' && isMultipleSelected(day)) ||
-                        (isRangeType() &&
-                          (isSameDay(day, startDate) ||
-                            isSameDay(day, endDate))),
+                        (isRangeType() && (isSameDay(day, startDate) || isSameDay(day, endDate))),
                       disabled: isDateDisabled(day),
                       today: isSameDay(day, today),
                       holiday: isHoliday(day),
@@ -138,15 +121,7 @@ export class CalendarMonthViewComponent {
   @Input() classes?: DatepickerClasses | undefined;
   @Input() dateTemplate: TemplateRef<unknown> | null = null;
   @Input() dayTemplate: TemplateRef<unknown> | null = null;
-  @Input() mode:
-    | 'single'
-    | 'range'
-    | 'multiple'
-    | 'week'
-    | 'month'
-    | 'quarter'
-    | 'year'
-    | 'timeRange' = 'single';
+  @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' = 'single';
   @Input() selectedDate: Date | null = null;
   @Input() startDate: Date | null = null;
   @Input() endDate: Date | null = null;
@@ -158,20 +133,17 @@ export class CalendarMonthViewComponent {
 
   // Function inputs for logic checks
   @Input() isDateDisabled: (date: Date | null) => boolean = () => false;
-  @Input() isSameDay: (date1: Date | null, date2: Date | null) => boolean =
-    () => false;
+  @Input() isSameDay: (date1: Date | null, date2: Date | null) => boolean = () => false;
   @Input() isHoliday: (date: Date | null) => boolean = () => false;
   @Input() isMultipleSelected: (date: Date | null) => boolean = () => false;
   @Input() isInRange: (date: Date | null) => boolean = () => false;
   @Input() isPreviewInRange: (date: Date | null) => boolean = () => false;
   @Input() getAriaLabel: (date: Date | null) => string = () => '';
   @Input() getDayCellCustomClasses: (
-    date: Date | null,
-  ) => string | string[] | Set<string> | { [klass: string]: unknown } =
-    () => ({});
+    date: Date | null
+  ) => string | string[] | Set<string> | { [klass: string]: unknown } = () => ({});
   @Input() getDayCellTooltip: (date: Date | null) => string | null = () => '';
-  @Input() formatDayNumber: (date: Date | null) => string | null = (d) =>
-    d ? d.getDate().toString() : '';
+  @Input() formatDayNumber: (date: Date | null) => string | null = (d) => (d ? d.getDate().toString() : '');
 
   @Output() dateClick = new EventEmitter<Date>();
   @Output() dateMouseDown = new EventEmitter<Date>();
@@ -201,11 +173,7 @@ export class CalendarMonthViewComponent {
   }
 
   isCurrentMonth(date: Date | null): boolean {
-    return (
-      !!date &&
-      date.getMonth() === this.currentMonth &&
-      date.getFullYear() === this.currentYear
-    );
+    return !!date && date.getMonth() === this.currentMonth && date.getFullYear() === this.currentYear;
   }
 
   onDateClick(day: Date | null) {

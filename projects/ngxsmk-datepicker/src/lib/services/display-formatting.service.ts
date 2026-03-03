@@ -16,10 +16,7 @@ export class DisplayFormattingService {
   /**
    * Format a datepicker value for display
    */
-  formatValue(
-    value: DatepickerValue,
-    options: FormattingOptions
-  ): string {
+  formatValue(value: DatepickerValue, options: FormattingOptions): string {
     if (!value) {
       return '';
     }
@@ -54,7 +51,7 @@ export class DisplayFormattingService {
     const formatOptions: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     };
 
     if (options.showTime) {
@@ -62,39 +59,38 @@ export class DisplayFormattingService {
       formatOptions.minute = '2-digit';
     }
 
-    return formatDateWithTimezone(
-      date,
-      options.locale,
-      formatOptions,
-      options.timezone
-    );
+    return formatDateWithTimezone(date, options.locale, formatOptions, options.timezone);
   }
 
   /**
    * Format a date range
    */
   private formatDateRange(start: Date | null, end: Date | null, options: FormattingOptions): string {
-    const startFormatted = start ? formatDateWithTimezone(
-      start,
-      options.locale,
-      {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      },
-      options.timezone
-    ) : '--';
+    const startFormatted = start
+      ? formatDateWithTimezone(
+          start,
+          options.locale,
+          {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          },
+          options.timezone
+        )
+      : '--';
 
-    const endFormatted = end ? formatDateWithTimezone(
-      end,
-      options.locale,
-      {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      },
-      options.timezone
-    ) : '--';
+    const endFormatted = end
+      ? formatDateWithTimezone(
+          end,
+          options.locale,
+          {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          },
+          options.timezone
+        )
+      : '--';
 
     return `${startFormatted} - ${endFormatted}`;
   }
@@ -141,7 +137,7 @@ export class DisplayFormattingService {
       {
         hour: 'numeric',
         minute: '2-digit',
-        second: options.showTime ? '2-digit' : undefined
+        second: options.showTime ? '2-digit' : undefined,
       },
       options.timezone
     );
@@ -200,4 +196,3 @@ export class DisplayFormattingService {
       .replace(/s/g, String(seconds));
   }
 }
-

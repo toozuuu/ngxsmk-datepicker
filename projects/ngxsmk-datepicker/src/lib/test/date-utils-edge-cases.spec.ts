@@ -320,9 +320,7 @@ describe('Date Utils - Edge Cases & Coverage', () => {
       const date = new Date(2024, 5, 15);
       expect(isSameDay(null as unknown as Date, date)).toBe(false);
       expect(isSameDay(date, null as unknown as Date)).toBe(false);
-      expect(isSameDay(null as unknown as Date, null as unknown as Date)).toBe(
-        false,
-      );
+      expect(isSameDay(null as unknown as Date, null as unknown as Date)).toBe(false);
     });
 
     it('should handle undefined dates', () => {
@@ -363,12 +361,7 @@ describe('Date Utils - Edge Cases & Coverage', () => {
     });
 
     it('should handle various date string formats', () => {
-      const formats = [
-        '2024-06-15',
-        '2024/06/15',
-        'June 15, 2024',
-        '15 Jun 2024',
-      ];
+      const formats = ['2024-06-15', '2024/06/15', 'June 15, 2024', '15 Jun 2024'];
 
       formats.forEach((format) => {
         const result = normalizeDate(format);

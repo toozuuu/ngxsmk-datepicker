@@ -11,31 +11,31 @@ export type CalendarSystem = 'gregorian' | 'islamic' | 'buddhist' | 'japanese' |
 export interface LocaleData {
   /** Calendar system used by this locale */
   calendar: CalendarSystem;
-  
+
   /** First day of the week (0 = Sunday, 1 = Monday, etc.) */
   firstDayOfWeek: number;
-  
+
   /** Default date format string (e.g., 'MM/DD/YYYY', 'DD/MM/YYYY') */
   dateFormat: string;
-  
+
   /** Full month names (12 elements) */
   monthNames: string[];
-  
+
   /** Short month names (12 elements) */
   monthNamesShort: string[];
-  
+
   /** Full weekday names (7 elements, starting with Sunday) */
   weekdayNames: string[];
-  
+
   /** Short weekday names (7 elements, starting with Sunday) */
   weekdayNamesShort: string[];
-  
+
   /** Whether this locale uses RTL (right-to-left) text direction */
   isRtl: boolean;
-  
+
   /** Fallback locale if this one is not fully supported */
   fallbackLocale?: string;
-  
+
   /** Locale-specific date format options */
   dateFormatOptions?: {
     year?: 'numeric' | '2-digit';
@@ -55,88 +55,88 @@ export interface LocaleData {
 export class LocaleRegistryService {
   private localeData: Map<string, LocaleData> = new Map();
   private readonly defaultLocale = 'en-US';
-  
+
   constructor() {
     this.registerDefaultLocales();
   }
-  
+
   /**
    * Register locale data for a specific locale
    */
   register(locale: string, data: LocaleData): void {
     this.localeData.set(locale.toLowerCase(), data);
   }
-  
+
   /**
    * Get locale data for a specific locale, with fallback support
    */
   getLocaleData(locale: string): LocaleData {
     const normalizedLocale = locale.toLowerCase();
-    
+
     // Try exact match first
     if (this.localeData.has(normalizedLocale)) {
       return this.localeData.get(normalizedLocale)!;
     }
-    
+
     // Try language code only (e.g., 'en' from 'en-US')
     const parts = normalizedLocale.split('-');
     const languageCode = parts.length > 0 ? parts[0] : normalizedLocale;
     if (languageCode && this.localeData.has(languageCode)) {
       return this.localeData.get(languageCode)!;
     }
-    
+
     // Try fallback chain
     const fallbackLocale = this.getFallbackLocale(normalizedLocale);
     if (fallbackLocale && this.localeData.has(fallbackLocale)) {
       return this.localeData.get(fallbackLocale)!;
     }
-    
+
     // Return default locale as last resort
     return this.localeData.get(this.defaultLocale) || this.getDefaultLocaleData();
   }
-  
+
   /**
    * Get fallback locale for an unsupported locale
    */
   getFallbackLocale(unsupportedLocale: string): string | null {
     const normalized = unsupportedLocale.toLowerCase();
-    
+
     // Check if locale has explicit fallback
     const localeData = this.localeData.get(normalized);
     if (localeData?.fallbackLocale) {
       return localeData.fallbackLocale;
     }
-    
+
     // Try language code only
     const parts = normalized.split('-');
     const languageCode = parts.length > 0 ? parts[0] : normalized;
     if (languageCode && this.localeData.has(languageCode)) {
       return languageCode;
     }
-    
+
     // Common fallback patterns
     const fallbackMap: Record<string, string> = {
-      'en': 'en-US',
-      'ar': 'ar-SA',
-      'zh': 'zh-CN',
-      'fr': 'fr-FR',
-      'de': 'de-DE',
-      'es': 'es-ES',
-      'it': 'it-IT',
-      'ja': 'ja-JP',
-      'ko': 'ko-KR',
-      'pt': 'pt-BR',
-      'ru': 'ru-RU',
+      en: 'en-US',
+      ar: 'ar-SA',
+      zh: 'zh-CN',
+      fr: 'fr-FR',
+      de: 'de-DE',
+      es: 'es-ES',
+      it: 'it-IT',
+      ja: 'ja-JP',
+      ko: 'ko-KR',
+      pt: 'pt-BR',
+      ru: 'ru-RU',
     };
-    
+
     if (languageCode && fallbackMap[languageCode]) {
       return fallbackMap[languageCode];
     }
-    
+
     // Return default locale
     return this.defaultLocale;
   }
-  
+
   /**
    * Check if a locale is RTL
    */
@@ -144,7 +144,7 @@ export class LocaleRegistryService {
     const localeData = this.getLocaleData(locale);
     return localeData.isRtl;
   }
-  
+
   /**
    * Get calendar system for a locale
    */
@@ -152,7 +152,7 @@ export class LocaleRegistryService {
     const localeData = this.getLocaleData(locale);
     return localeData.calendar;
   }
-  
+
   /**
    * Register default locale data for common locales
    */
@@ -162,7 +162,20 @@ export class LocaleRegistryService {
       calendar: 'gregorian',
       firstDayOfWeek: 0,
       dateFormat: 'MM/DD/YYYY',
-      monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      monthNames: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ],
       monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       weekdayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       weekdayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -173,16 +186,29 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
-      }
+        hour12: true,
+      },
     });
-    
+
     // English (UK)
     this.register('en-GB', {
       calendar: 'gregorian',
       firstDayOfWeek: 1,
       dateFormat: 'DD/MM/YYYY',
-      monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      monthNames: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ],
       monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       weekdayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       weekdayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -194,17 +220,43 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
-      }
+        hour12: true,
+      },
     });
-    
+
     // Arabic (Saudi Arabia) - RTL
     this.register('ar-SA', {
       calendar: 'islamic',
       firstDayOfWeek: 6, // Saturday
       dateFormat: 'DD/MM/YYYY',
-      monthNames: ['محرم', 'صفر', 'ربيع الأول', 'ربيع الثاني', 'جمادى الأولى', 'جمادى الثانية', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذو القعدة', 'ذو الحجة'],
-      monthNamesShort: ['محرم', 'صفر', 'ربيع 1', 'ربيع 2', 'جمادى 1', 'جمادى 2', 'رجب', 'شعبان', 'رمضان', 'شوال', 'قعدة', 'حجة'],
+      monthNames: [
+        'محرم',
+        'صفر',
+        'ربيع الأول',
+        'ربيع الثاني',
+        'جمادى الأولى',
+        'جمادى الثانية',
+        'رجب',
+        'شعبان',
+        'رمضان',
+        'شوال',
+        'ذو القعدة',
+        'ذو الحجة',
+      ],
+      monthNamesShort: [
+        'محرم',
+        'صفر',
+        'ربيع 1',
+        'ربيع 2',
+        'جمادى 1',
+        'جمادى 2',
+        'رجب',
+        'شعبان',
+        'رمضان',
+        'شوال',
+        'قعدة',
+        'حجة',
+      ],
       weekdayNames: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
       weekdayNamesShort: ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
       isRtl: true,
@@ -214,16 +266,29 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
-      }
+        hour12: true,
+      },
     });
-    
+
     // Hebrew (Israel) - RTL
     this.register('he-IL', {
       calendar: 'hebrew',
       firstDayOfWeek: 0,
       dateFormat: 'DD/MM/YYYY',
-      monthNames: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
+      monthNames: [
+        'ינואר',
+        'פברואר',
+        'מרץ',
+        'אפריל',
+        'מאי',
+        'יוני',
+        'יולי',
+        'אוגוסט',
+        'ספטמבר',
+        'אוקטובר',
+        'נובמבר',
+        'דצמבר',
+      ],
       monthNamesShort: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'],
       weekdayNames: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
       weekdayNamesShort: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
@@ -234,17 +299,43 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
-      }
+        hour12: true,
+      },
     });
-    
+
     // Persian/Farsi (Iran) - RTL
     this.register('fa-IR', {
       calendar: 'persian',
       firstDayOfWeek: 6, // Saturday
       dateFormat: 'YYYY/MM/DD',
-      monthNames: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
-      monthNamesShort: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
+      monthNames: [
+        'فروردین',
+        'اردیبهشت',
+        'خرداد',
+        'تیر',
+        'مرداد',
+        'شهریور',
+        'مهر',
+        'آبان',
+        'آذر',
+        'دی',
+        'بهمن',
+        'اسفند',
+      ],
+      monthNamesShort: [
+        'فروردین',
+        'اردیبهشت',
+        'خرداد',
+        'تیر',
+        'مرداد',
+        'شهریور',
+        'مهر',
+        'آبان',
+        'آذر',
+        'دی',
+        'بهمن',
+        'اسفند',
+      ],
       weekdayNames: ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'],
       weekdayNamesShort: ['ی', 'د', 'س', 'چ', 'پ', 'ج', 'ش'],
       isRtl: true,
@@ -254,17 +345,43 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
-      }
+        hour12: true,
+      },
     });
-    
+
     // Urdu (Pakistan) - RTL
     this.register('ur-PK', {
       calendar: 'gregorian',
       firstDayOfWeek: 0,
       dateFormat: 'DD/MM/YYYY',
-      monthNames: ['جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون', 'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر'],
-      monthNamesShort: ['جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون', 'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر'],
+      monthNames: [
+        'جنوری',
+        'فروری',
+        'مارچ',
+        'اپریل',
+        'مئی',
+        'جون',
+        'جولائی',
+        'اگست',
+        'ستمبر',
+        'اکتوبر',
+        'نومبر',
+        'دسمبر',
+      ],
+      monthNamesShort: [
+        'جنوری',
+        'فروری',
+        'مارچ',
+        'اپریل',
+        'مئی',
+        'جون',
+        'جولائی',
+        'اگست',
+        'ستمبر',
+        'اکتوبر',
+        'نومبر',
+        'دسمبر',
+      ],
       weekdayNames: ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'],
       weekdayNamesShort: ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'],
       isRtl: true,
@@ -275,10 +392,10 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
-      }
+        hour12: true,
+      },
     });
-    
+
     // Chinese (Simplified)
     this.register('zh-CN', {
       calendar: 'gregorian',
@@ -295,10 +412,10 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false
-      }
+        hour12: false,
+      },
     });
-    
+
     // Japanese
     this.register('ja-JP', {
       calendar: 'japanese',
@@ -315,17 +432,43 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false
-      }
+        hour12: false,
+      },
     });
-    
+
     // French
     this.register('fr-FR', {
       calendar: 'gregorian',
       firstDayOfWeek: 1,
       dateFormat: 'DD/MM/YYYY',
-      monthNames: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-      monthNamesShort: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
+      monthNames: [
+        'janvier',
+        'février',
+        'mars',
+        'avril',
+        'mai',
+        'juin',
+        'juillet',
+        'août',
+        'septembre',
+        'octobre',
+        'novembre',
+        'décembre',
+      ],
+      monthNamesShort: [
+        'janv.',
+        'févr.',
+        'mars',
+        'avr.',
+        'mai',
+        'juin',
+        'juil.',
+        'août',
+        'sept.',
+        'oct.',
+        'nov.',
+        'déc.',
+      ],
       weekdayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
       weekdayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
       isRtl: false,
@@ -335,16 +478,29 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false
-      }
+        hour12: false,
+      },
     });
-    
+
     // German
     this.register('de-DE', {
       calendar: 'gregorian',
       firstDayOfWeek: 1,
       dateFormat: 'DD.MM.YYYY',
-      monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+      monthNames: [
+        'Januar',
+        'Februar',
+        'März',
+        'April',
+        'Mai',
+        'Juni',
+        'Juli',
+        'August',
+        'September',
+        'Oktober',
+        'November',
+        'Dezember',
+      ],
       monthNamesShort: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
       weekdayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
       weekdayNamesShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
@@ -355,16 +511,29 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false
-      }
+        hour12: false,
+      },
     });
-    
+
     // Spanish
     this.register('es-ES', {
       calendar: 'gregorian',
       firstDayOfWeek: 1,
       dateFormat: 'DD/MM/YYYY',
-      monthNames: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+      monthNames: [
+        'enero',
+        'febrero',
+        'marzo',
+        'abril',
+        'mayo',
+        'junio',
+        'julio',
+        'agosto',
+        'septiembre',
+        'octubre',
+        'noviembre',
+        'diciembre',
+      ],
       monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
       weekdayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
       weekdayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
@@ -375,10 +544,10 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
-      }
+        hour12: true,
+      },
     });
-    
+
     // Register language-only codes as fallbacks
     this.register('en', this.getLocaleData('en-US'));
     this.register('ar', this.getLocaleData('ar-SA'));
@@ -391,7 +560,7 @@ export class LocaleRegistryService {
     this.register('de', this.getLocaleData('de-DE'));
     this.register('es', this.getLocaleData('es-ES'));
   }
-  
+
   /**
    * Get default locale data (English US)
    */
@@ -400,7 +569,20 @@ export class LocaleRegistryService {
       calendar: 'gregorian',
       firstDayOfWeek: 0,
       dateFormat: 'MM/DD/YYYY',
-      monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      monthNames: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ],
       monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       weekdayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       weekdayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -411,9 +593,8 @@ export class LocaleRegistryService {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
-      }
+        hour12: true,
+      },
     };
   }
 }
-

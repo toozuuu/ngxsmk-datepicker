@@ -24,15 +24,15 @@
 
 ---
 
-**Last updated:** February 25, 2026 · **Current stable:** v2.2.0
+**Last updated:** March 3, 2026 · **Current stable:** v2.2.1
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.2.0` is live! This release brings a **TypeScript Strictness Overhaul** (eliminating `any` types and ensuring `exactOptionalPropertyTypes` compatibility), fixes **appendToBody** popover positioning, datepicker-in-modal first-open behavior, and popover width matching the input; it also reduces loading time and cleans up CSS. No breaking changes.
+> **Stable Release**: `v2.2.1` is live! This release brings a **TypeScript Strictness Overhaul** (eliminating `any` types and ensuring `exactOptionalPropertyTypes` compatibility), fixes **appendToBody** popover positioning, datepicker-in-modal first-open behavior, and popover width matching the input; it also reduces loading time and cleans up CSS. No breaking changes.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.0 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.1 or later.
 
 ---
 
@@ -139,7 +139,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.2.0
+npm install ngxsmk-datepicker@2.2.1
 ```
 
 ### Alternative installation
@@ -148,12 +148,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.2.0` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.0` |
-| **Bun** | `bun add ngxsmk-datepicker@2.2.0` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.2.0` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.2.1` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.1` |
+| **Bun** | `bun add ngxsmk-datepicker@2.2.1` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.2.1` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.2.0/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.0/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.2.1/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.1/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -229,7 +229,7 @@ For detailed Signal Forms integration including dirty state tracking, see the [S
 
 #### **1. Import the Component**
 
-In your component file (e.g., app.component.ts), import the component (or the module—see troubleshooting below).
+All public exports (component, utilities, types, services) come from the main package entry: `'ngxsmk-datepicker'` (there is no separate `/utils` subpath). In your component file (e.g., app.component.ts), import the component (or the module—see troubleshooting below).
 
     import { Component } from '@angular/core';
     import { NgxsmkDatepickerComponent, DateRange, HolidayProvider } from 'ngxsmk-datepicker';
@@ -345,7 +345,7 @@ export class MaterialFormComponent {
 
 ```typescript
 import { NgModule } from "@angular/core";
-import { MAT_FORM_FIELD_CONTROL } from "@angular/material/form-field";
+import { MatFormFieldControl } from "@angular/material/form-field";
 import { NgxsmkDatepickerComponent, provideMaterialFormFieldControl } from "ngxsmk-datepicker";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -353,7 +353,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [NgxsmkDatepickerComponent, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
-  providers: [provideMaterialFormFieldControl(MAT_FORM_FIELD_CONTROL)],
+  providers: [provideMaterialFormFieldControl(MatFormFieldControl)],
 })
 export class MyModule {}
 ```
@@ -619,7 +619,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.2.0 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.2.1 now features **full localization synchronization** for:
 
 - �� English (`en`)
 - �� German (`de`)
@@ -693,7 +693,7 @@ const myHooks: DatepickerHooks = {
 <ngxsmk-datepicker [hooks]="myHooks" [customShortcuts]="shortcuts" mode="single"> </ngxsmk-datepicker>
 ```
 
-All date cells are keyboard accessible with proper ARIA attributes for screen readers.
+All date cells are keyboard accessible with proper ARIA attributes for screen readers. The component is built with **accessibility in mind**: keyboard navigation, ARIA roles and labels, and live regions for announcements. For details see [API.md – Keyboard Support](projects/ngxsmk-datepicker/docs/API.md#keyboard-support) and the ARIA-related inputs (e.g. `closeAriaLabel`, `clearAriaLabel`) in the API reference.
 
 See [Extension Points Guide](./projects/ngxsmk-datepicker/docs/extension-points.md) for detailed customization options.
 
@@ -875,417 +875,9 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
+**Recent:** v2.2.1 — TypeScript strictness overhaul, appendToBody/popover fixes, loading and CSS cleanup. Versions 2.0.10 and 2.0.11 are unpublished; use v2.2.1 or later.
 
-### **v2.2.0** (Current Stable)
-
-- 🎉 **Version Update**: Updated to version 2.2.0.
-- ✨ **Key Updates**: Optimized loading times, refined mobile header layout, and improved dropdown accessibility.
-- ✅ **Stable Release**: Full synchronization of header components with `ViewEncapsulation.None`.
-
-### **v1.9.24**
-
-- 🎉 **Version Update**: Updated to version 1.9.24
-- ✅ **Stable Release**: Version 1.9.24 is the current stable version
-
-### **v1.9.23**
-
-- 🐛 **Fixed**: CSS Variables Theming (Issue #84) - CSS variables theming now works when variables are defined in global `:root` selector
-  - Enhanced CSS selector from `:root` to `:root, :root > body` for higher specificity
-  - Added `!important` flags to inline styles to ensure they override existing styles
-  - ThemeBuilderService now properly overrides global stylesheet variables
-  - Updated documentation to explain the fix and provide guidance
-  - Resolves issue where theme variables defined in global stylesheets were not being applied
-
-### **v1.9.22**
-
-- 🎉 **Version Update**: Updated to version 1.9.22
-- 🐛 **Fixed**: Form control value initialization issue - datepicker now correctly displays month from form control values
-  - Fixed calendar month display when using Reactive Forms with initial values
-  - Added proper signal updates and change detection in `writeValue()` method
-- 🐛 **Fixed**: Locale week start detection for en-GB and other European locales
-  - Added fallback logic for locales where `Intl.Locale.weekInfo` is not available
-  - Now correctly returns Monday (1) for en-GB and other European locales
-
-### **v1.9.21**
-
-- 🎉 **Version Update**: Updated to version 1.9.21
-- 📱 **Mobile-Specific Features**: Comprehensive mobile optimization
-  - Native date picker integration with automatic mobile detection
-  - Bottom sheet modal with swipe-to-dismiss gestures
-  - Enhanced touch gestures (double-tap, swipe navigation)
-  - Haptic feedback support for better mobile UX
-  - Mobile-optimized animations and keyboard handling
-- 🎯 **Advanced Selection Modes**: Extended selection capabilities
-  - Week selection mode for selecting entire weeks
-  - Month selection mode for selecting full months
-  - Quarter selection mode for quarterly selections
-  - Year selection mode for annual date ranges
-- ⏱️ **Enhanced Time Selection**: Improved time picker
-  - Seconds selection with configurable intervals
-  - Better time picker UX and controls
-- 🏗️ **Code Refactoring**: Improved architecture
-  - New services: CalendarGenerationService, DisplayFormattingService, DateValidationService
-  - Better code organization and maintainability
-  - Reduced component complexity
-- ♿ **Accessibility Enhancements**: Better screen reader support
-  - Improved ARIA live regions
-  - Enhanced focus management
-  - Better keyboard navigation
-- ⚡ **Performance Optimizations**: Infrastructure improvements
-  - Lazy loading calendar months with intelligent caching
-  - Virtual scrolling infrastructure
-  - Preloading adjacent months
-- 🧪 **Test Coverage**: Comprehensive test suite
-  - 414 tests passing
-  - New service tests
-  - Updated component and utility tests
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.20
-
-### **v1.9.20**
-
-- 🎉 **Version Update**: Updated to version 1.9.20
-- 🐛 **Bug Fix (Issue #71)**: Fixed `TypeError: window.matchMedia is not a function` error in test environments (jsdom/Vitest)
-  - Added error handling for `window.matchMedia` in `applyAnimationConfig()` method
-  - Component now gracefully handles missing `matchMedia` API in test environments
-  - Prevents test failures when running with Vitest and jsdom
-- ✅ **Test Coverage**: Added comprehensive test coverage for `matchMedia` compatibility scenarios
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.19
-
-### **v1.9.19**
-
-- 🎉 **Version Update**: Updated to version 1.9.19
-- 🎨 **Responsive Layout Redesign**: Complete redesign of demo project layout for all screen sizes (320px to desktop)
-- 📱 **Mobile Optimization**: Enhanced mobile experience with improved navbar, sidebar, hero section, and feature grid
-- 🧹 **Code Cleanup**: Removed unnecessary comments for cleaner codebase
-- 🔧 **Meta Tag Update**: Replaced deprecated `apple-mobile-web-app-capable` with `mobile-web-app-capable`
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.18
-
-### **v1.9.18**
-
-- 🐛 **Mobile Touch Event Handling**: Fixed touch listener attachment when calendar opens on mobile devices
-  - Touch listeners now properly attach when calendar first opens, eliminating the need to navigate months first
-  - Added retry mechanism with multiple attempts to ensure listeners are attached even on slower mobile devices
-  - Improved timing with double `requestAnimationFrame` calls and multiple retry strategies
-- 🎉 **Version Update**: Updated to version 1.9.18
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.17
-
-### **v1.9.17**
-
-- 🎉 **Calendar Button Visibility Control**: Added `showCalendarButton` input property to show/hide the calendar icon button
-  - Defaults to `false` for a cleaner, more minimal UI
-  - When set to `true`, displays the calendar icon button next to the input field
-  - When set to `false`, users can still open the calendar by clicking the input field
-  - Perfect for custom UI designs or when using `allowTyping` with custom calendar triggers
-- 🎨 **Calendar Button Styling**: Added `calendarBtn` to `DatepickerClasses` for custom styling of the calendar button
-- 🔧 **Type Compatibility**: Updated `SignalFormField` type to be fully compatible with Angular 21's `FieldTree<Date, string>` types
-  - Resolves TypeScript compilation issues when using `[field]` input with Angular 21 Signal Forms
-  - Maintains full backward compatibility with Angular 17-20
-- 🎉 **Version Update**: Updated to version 1.9.17
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.16
-- ✅ **Angular 17-22 Compatible**: Verified compatibility with Angular 17-22 (including Angular 21)
-
-### **v1.9.16**
-
-- 🐛 **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
-- 🎉 **Version Update**: Updated to version 1.9.16
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.15
-- ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
-
-### **v1.9.15**
-
-- 🐛 **Moment Object Binding Fix**: Fixed Moment.js objects not binding correctly with ngModel
-- 🐛 **Date Clicks After Navigation**: Fixed dates becoming unclickable after month navigation
-- 🎉 **Version Update**: Updated to version 1.9.15
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.14
-- ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
-
-### **v1.9.14**
-
-- 🐛 **Date Picker Selection Fix**: Fixed date picker selection issues, especially in range mode
-- 🐛 **Moment.js Timezone Support**: Fixed timezone offset preservation for Moment.js objects
-- 🎉 **Version Update**: Updated to version 1.9.14
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.13
-
-### **v1.9.13**
-
-- 🐛 **Bug Fixes**: Fixed `valueChange` event emitting null for range mode with ngModel
-- 🐛 **Bug Fixes**: Fixed date selection becoming disabled after month navigation in range mode
-- 🐛 **Bug Fixes**: Fixed Moment.js object handling in range values and arrays
-- 🎉 **Version Update**: Updated to version 1.9.13
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.12
-
-### **v1.9.12**
-
-- 🎉 **Version Update**: Updated to version 1.9.12
-- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.11
-- 📚 **Migration Guide**: See [MIGRATION.md](MIGRATION.md) for detailed migration instructions
-
-### **v1.9.11**
-
-- 🐛 **Moment.js Integration**: Fixed critical issue where Moment.js objects with custom date formats would not populate correctly
-  - Added `isMomentObject()` helper method to safely detect Moment.js instances
-  - Enhanced `_normalizeValue()` method to handle Moment.js objects directly
-  - Improved `parseCustomDateString()` method for TypeScript compatibility
-  - Added comprehensive support for format tokens: YYYY, YY, MM, M, DD, D, hh, h, HH, H, mm, m, ss, s, a, A
-  - Maintains full backward compatibility with Date objects, strings, and all other supported formats
-- 🎨 **Custom Format Parser**: Enhanced format token parsing with better TypeScript compatibility
-- 🔍 **Moment.js Detection**: More robust detection of Moment.js objects across different versions
-- 🎮 **Demo Application**: Added working Moment.js integration example with interactive controls
-
-### **v1.9.10**
-
-- 🐛 **Async Database Value Loading**: Enhanced datepicker to properly handle database values that load asynchronously
-  - Added fallback sync mechanism in `ngAfterViewInit` to catch async database loads
-  - Added delayed sync checks in `ngOnInit`, `ngOnChanges`, and `ngAfterViewInit`
-  - Added sync on calendar open, focus events, and touch events
-  - Extended interval sync duration to 30 seconds with 100ms check intervals
-- 🔧 **TypeScript Compilation Error**: Fixed `EffectRef` type error when using Angular 17+ `effect()` API
-  - Changed `_fieldEffectDestroy: (() => void) | null` to `_fieldEffectRef: EffectRef | null`
-  - Updated effect cleanup to use `effectRef.destroy()` instead of function call
-  - Added proper `EffectRef` import from `@angular/core`
-- 🧪 **Test Configuration**: Fixed test configuration for Angular 17+ compatibility
-  - Updated karma configuration to work with `@angular/build:karma` builder
-  - Simplified karma.conf.js to remove deprecated plugins
-  - Updated test script to target correct project
-
-### **v1.9.9**
-
-- 🐛 **Database Value Population**: Fixed critical issue where datepicker would not populate with values from database when using `[field]` input binding
-  - Added `_normalizeValue()` helper method to properly handle all value types
-  - Updated field effect and related methods to use `_normalizeValue()` instead of `_normalizeDate()`
-  - Fixed issue where string dates from database were not being parsed and displayed correctly
-  - Now properly handles Date objects, string dates, range objects, and arrays of dates
-
-### **v1.9.8**
-
-- 🐛 **Date Selection Reset Issue**: Fixed critical bug where selected dates would reset to today's date when using `[field]` input binding
-  - Fixed `applyCurrentTime` to create a new Date object instead of mutating the original
-  - Added `_isUpdatingFromInternal` flag to prevent field effect from resetting the value
-  - This ensures selected dates are properly stored in the form field
-
-### **v1.9.7**
-
-- 🐛 **Calendar Population**: Fixed critical issue where datepicker calendar would not populate with dates when opened
-  - Fixed issue when multiple datepickers were present in the same form
-  - Ensured `generateCalendar()` is called when opening the datepicker via click, touch, or programmatic methods
-
-### **v1.9.6**
-
-- 🐛 **Multiple Datepicker Management**: Fixed issue where multiple datepickers in the same form would open in the same centered location
-- 🖱️ **Outside Click Detection**: Improved click detection to properly close datepicker when clicking outside
-- 🔄 **Auto-close Other Datepickers**: When opening a datepicker, all other open datepickers in the same form are now automatically closed
-- 📱 **Mobile Datepicker Opening**: Fixed issue where datepicker modal would not open on mobile screens
-- 📱 **Datepicker Closing on Mobile**: Fixed issue where datepicker would open and immediately disappear on mobile devices
-- 👆 **Select Box Cursor**: Added pointer cursor to all select boxes (month, year, hour, minute, AM/PM) in the datepicker
-
-### **v1.9.5**
-
-- 🔧 **Angular 21+ Signal Forms Type Compatibility**: Fixed TypeScript compilation error with Angular 21+ Signal Forms
-  - Fixed `Type '() => string' is not assignable to type 'never'` error when using `[field]` input
-  - Updated `SignalFormField` type definition to be compatible with Angular 21's `FieldTree<Date, string>` types
-  - Maintains backward compatibility with Angular 17-20 where field input is optional
-  - Resolves [#33](https://github.com/NGXSMK/ngxsmk-datepicker/issues/33)
-
-### **v1.9.4**
-
-- ✨ **Custom Date Format**: New `[displayFormat]` input property to display dates in custom formats
-  - Supports format strings like "MM/DD/YYYY hh:mm A"
-  - Works with date adapters (date-fns, dayjs, luxon) or built-in simple formatter
-  - Supports common format tokens: YYYY, MM, DD, hh, mm, A, etc.
-  - Resolves [#31](https://github.com/NGXSMK/ngxsmk-datepicker/issues/31)
-- 🐛 **Time Selection Dropdowns**: Fixed visibility issues with time selection dropdowns
-  - Dropdowns now properly display and are not clipped by parent containers
-  - Improved z-index handling for time selection dropdowns
-  - Removed unnecessary scrollbars from datepicker wrapper
-  - Resolves [#32](https://github.com/NGXSMK/ngxsmk-datepicker/issues/32)
-
-### **v1.9.3**
-
-- ✨ **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar
-  - Hides calendar grid and shows only time controls (hour, minute, AM/PM)
-  - Automatically enables `showTime` when `timeOnly` is true
-  - Perfect for time selection scenarios where date is not needed
-  - Value is still a Date object using today's date with selected time
-  - Placeholder automatically changes to "Select Time" in time-only mode
-  - Resolves [#29](https://github.com/NGXSMK/ngxsmk-datepicker/issues/29)
-- 🎨 **Modern Demo App UI**: Complete redesign of the demo application
-  - Modern navbar with glassmorphism effects, search functionality, and improved theme toggle
-  - Redesigned sidebar with gradient backgrounds, smooth animations, and visual indicators
-  - Enhanced icon sizes and better visual hierarchy
-  - Improved responsive design with better mobile experience
-  - Automatic system theme detection (dark/light mode preference)
-  - Gradient accents, shadows, and modern design patterns throughout
-- 🧪 **Test Suite**: Fixed 25+ failing tests across multiple test files
-  - Fixed date utils tests, calendar utils tests, timezone utils tests, edge cases tests
-  - Fixed adapters tests, performance utils tests, RTL tests, touch gestures tests
-  - Fixed calendar views tests, recurring dates utils tests
-  - All 353 tests now pass successfully
-
-### **v1.9.2**
-
-- 📦 **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings
-  - Main bundle: ~127KB (source maps excluded from published package)
-  - Enhanced tree-shaking with optimized imports and compiler options
-  - Added `importsNotUsedAsValues: "remove"` for smaller output
-  - Disabled `preserveConstEnums` for better inlining
-- 🔧 **Build Process**:
-  - Source maps automatically removed from production builds (saves ~127KB)
-  - Improved build scripts with better error handling
-  - Enhanced bundle analysis that excludes source maps
-- 📦 **Package Configuration**:
-  - Fixed package.json exports to eliminate build warnings
-  - Optimized `files` array to exclude unnecessary files
-  - Updated exports field for better module resolution
-- 🧪 **Test Configuration**:
-  - Added Zone.js polyfills to library test configuration
-  - Updated test commands to explicitly target library project
-  - Improved test reliability across Angular versions
-- 🐛 **Bug Fixes**:
-  - Test suite configuration - added missing Zone.js polyfills for library tests
-  - Bundle analysis now correctly excludes source maps from size calculations
-  - Build warnings from conflicting export conditions resolved
-  - Source map removal script made more resilient for build environments
-
-### **v1.9.1**
-
-- 🐛 Minor bug fixes and improvements
-
-### **v1.9.0**
-
-- ✨ **Extension Points & Hooks**: system for customization
-- ⌨️ **Enhanced Keyboard Shortcuts**: Y, N, W keys with custom shortcut support
-- 🎨 **Modern UI/UX**: Improved animations and responsiveness
-- 📚 **API Documentation**: TypeDoc integration
-- 🤖 **Semantic Release**: Automated versioning and publishing
-- 🚀 **Animation Performance**: Optimizations with GPU acceleration
-- 🔍 **Global Search**: Functionality in documentation
-- 📱 **Mobile Playground**: For responsive testing
-
-### **v1.7.0**
-
-- 🎯 **Signal Forms Support**: Full Angular 21 signal forms integration with writable signals
-- 🎨 **Tailwind Theming**: Added `classes` input for Tailwind CSS and custom class-based theming
-- 🌍 **Localization Improvements**: Added `weekStart` input to override locale-based week start day
-- 📅 **Year Range Configuration**: Added `yearRange` input to customize year dropdown range
-- ♿ **Accessibility Enhancements**: Added customizable aria labels for all interactive elements
-- 🏷️ **Custom Labels**: Added `clearLabel` and `closeLabel` inputs for button customization
-- 🧪 **Comprehensive Test Suite**: Added 56 tests covering all features and edge cases
-- 🐛 **Bug Fixes**: Fixed programmatic value setting and Angular 21 compatibility tests
-- 🧹 **Code Cleanup**: Removed unnecessary files, folders, and comments from codebase
-- 📝 **Test Improvements**: Enhanced test coverage with comprehensive feature tests
-- 🔧 **Test Fixes**: Fixed disabled date tests and integration test issues
-- 🎯 **Code Quality**: Improved code maintainability by removing redundant comments
-
-### **v1.6.0**
-
-- 🎯 **Programmatic Value Setting**: Added `value` input property to set datepicker value programmatically, perfect for server-side API data integration
-- 🎨 **Enhanced Demo App**: Completely redesigned demo application with TokiForge-inspired modern UI and API documentation style
-- 🚀 **GitHub Pages Deployment**: Added automated GitHub Pages deployment with GitHub Actions workflow
-- 📚 **Improved Documentation**: Enhanced demo app with comprehensive examples, code snippets, and interactive documentation
-- 🔧 **Build Optimizations**: Updated CSS budget limits and improved build configuration
-- 🎨 **Modern UI Design**: Beautiful gradient themes, glass-morphism effects, and improved visual hierarchy
-- 📱 **Better UX**: Enhanced navigation, code copying functionality, and responsive design
-- 🛠️ **Developer Experience**: Improved build scripts and deployment automation
-
-### **v1.5.0**
-
-- 🚀 **Angular 21 Support**: Full compatibility with Angular 21 RC versions
-- ⚡ **Zone-less Support**: Works without zone.js for improved performance
-- 🧪 **Comprehensive Tests**: Added extensive test suite covering all features
-- 🔧 **Angular 17-21 Compatibility**: Supports Angular versions 17, 18, 19, 20, and 21
-- 📦 **Dependency Updates**: Updated to Angular 21 RC and latest build tools
-- 🧹 **Code Cleanup**: Removed unnecessary documentation files and comments
-- 📝 **Improved Keywords**: Added version-specific keywords for better discoverability
-- 🎯 **Peer Dependencies**: Updated to support Angular 17-21 range
-
-### **v1.4.16**
-
-- 📚 **Documentation**: Comprehensive README updates with latest features and improvements
-- 🎯 **Version Management**: Updated version references across all package files
-- 📖 **User Experience**: Enhanced documentation with better examples and API references
-- 🔧 **Maintenance**: Improved project structure and documentation consistency
-- 📦 **Package Updates**: Synchronized version numbers across all package.json files
-- 🎨 **Documentation**: Added detailed bug fixes and performance metrics
-- 🚀 **Developer Experience**: Better setup instructions and contribution guidelines
-
-### **v1.4.15**
-
-- 🐛 **Bug Fixes**: Fixed 10 critical bugs including change detection issues and date comparison errors
-- ⚡ **Performance**: Enhanced OnPush change detection with proper triggers
-- 🎯 **Memory Management**: Added cache size limits to prevent memory leaks
-- 🔧 **Type Safety**: Improved TypeScript types and null safety
-- 📱 **Mobile Optimization**: Enhanced mobile responsive design with touch-friendly interactions
-- 🎨 **UI Improvements**: Better visual feedback and accessibility
-- 🚀 **Build Optimization**: Improved build configuration and tree-shaking
-- 🧹 **Code Quality**: Enhanced code maintainability and performance
-
-### **v1.4.13**
-
-- 🚫 **Disabled Dates**: New `disabledDates` input property to disable specific dates
-- 🎯 **Date String Support**: Supports both string dates (MM/DD/YYYY) and Date objects
-- 💡 **Holiday Tooltips**: Hover over holiday dates to see holiday names as tooltips
-- 🎨 **Enhanced UX**: Better visual feedback for disabled dates
-- 📦 **Improved API**: More flexible date disabling options
-
-### **v1.4.12**
-
-- ⚡ **Instant Navigation**: Removed all animations for lightning-fast arrow navigation
-- 🚫 **Smart Back Arrow**: Automatically disables back arrow when minDate is set
-- 🎯 **Better UX**: Prevents navigation to invalid date ranges
-- 🗓️ **Previous Month Days**: Now shows last few days of previous month for better context
-- 🎨 **Enhanced Styling**: Improved visual hierarchy with better day cell sizing
-- 🖱️ **Interactive Previous Days**: Previous month days are now selectable and interactive
-- 🧹 **Code Optimization**: Cleaner, more maintainable codebase
-- 📦 **Smaller Bundle**: Reduced CSS and JavaScript footprint
-
-### **v1.4.11**
-
-- 🎨 **UI Improvements**: Enhanced day cell sizing and visual hierarchy
-- 🖱️ **Better Interactions**: Improved click and hover states for previous month days
-
-### **v1.4.10**
-
-- 🗓️ **Previous Month Display**: Added last few days of previous month for better context
-- 🎯 **Smart Selection**: Previous month days are now selectable and interactive
-
-### **v1.4.9**
-
-- 🚫 **Range Fix**: Fixed range highlighting on empty/previous month days
-- 🎨 **Styling Updates**: Improved visual consistency across all day types
-
-### **v1.4.8**
-
-- ⚡ **Performance**: Optimized calendar generation and rendering
-- 🧹 **Code Cleanup**: Removed unused animation code and improved maintainability
-
-### **v1.4.6**
-
-- 🔧 **Fixed Import Paths**: Corrected package exports for proper module resolution
-- 📦 **Better Package Structure**: Improved npm package configuration
-
-### **v1.4.5**
-
-- 🐛 Bug fixes and stability improvements
-- 🔧 Enhanced error handling
-- 📱 Improved mobile responsiveness
-- 🎨 Minor UI/UX improvements
-
-### **v1.4.0**
-
-- ✅ Performance optimizations (30% smaller bundle)
-- ✅ OnPush change detection strategy
-- ✅ Memoized date comparisons
-- ✅ Tree-shakable architecture
-- ✅ Enhanced TypeScript support
-- ✅ Improved accessibility
-- ✅ Better mobile responsiveness
-
-### **Previous Versions**
-
-- v1.3.5: Initial release with core features
-- v1.3.4: Bug fixes and improvements
-- v1.3.3: Holiday provider integration
+For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 
 ## **🎨 Theming with TokiForge**
 
@@ -1293,11 +885,6 @@ Looking for a powerful theming solution for your Angular application? Check out 
 
 ### Why TokiForge?
 
-- ✅ **Framework-agnostic** — Works with Angular, React, Vue, Svelte, and vanilla JS
-- ✅ **Runtime theme switching** — Change themes dynamically without rebuilds
-- ✅ **Type-safe** — Full TypeScript support for design tokens
-- ✅ **Lightweight** — <3 KB gzipped runtime footprint
-- ✅ **CSS custom properties** — Zero JS overhead in static mode
 - ✅ **SSR compatible** — Works seamlessly with Angular Universal
 
 Perfect for managing design tokens, creating theme systems, and implementing dark mode in your Angular applications!

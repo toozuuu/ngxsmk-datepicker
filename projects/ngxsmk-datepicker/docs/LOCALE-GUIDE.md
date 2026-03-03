@@ -1,6 +1,6 @@
 # Locale Packs & i18n Contributor Guide
 
-**Last updated:** February 25, 2026 · **Current stable:** v2.2.0
+**Last updated:** March 3, 2026 · **Current stable:** v2.2.1
 
 Guide for adding locale support and contributing translations to ngxsmk-datepicker.
 
@@ -14,8 +14,8 @@ The component uses the `locale` input property to determine:
 - Month names
 - Weekday names
 - Week start day
-- Date formatting
-- Number formatting
+- Date formatting (locale-aware when using Intl; override with `[displayFormat]` for custom patterns)
+- Number formatting (locale-aware via `formatLocaleNumber` and translation registry)
 
 ```typescript
 <ngxsmk-datepicker [locale]="'en-US'"></ngxsmk-datepicker>

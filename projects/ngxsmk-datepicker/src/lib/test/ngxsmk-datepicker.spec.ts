@@ -179,12 +179,8 @@ describe('NgxsmkDatepickerComponent', () => {
     component.currentMonth = 0; // January
     fixture.detectChanges();
 
-    const headerDebugEl = fixture.debugElement.query(
-      By.directive(CalendarHeaderStubComponent),
-    );
-    expect(headerDebugEl)
-      .withContext('CalendarHeaderStubComponent not found')
-      .toBeTruthy();
+    const headerDebugEl = fixture.debugElement.query(By.directive(CalendarHeaderStubComponent));
+    expect(headerDebugEl).withContext('CalendarHeaderStubComponent not found').toBeTruthy();
 
     // Simulate next month event
     headerDebugEl.componentInstance.nextMonth.emit();
@@ -198,18 +194,10 @@ describe('NgxsmkDatepickerComponent', () => {
     component.mode = 'single';
     fixture.detectChanges();
 
-    const monthViewDebugEl = fixture.debugElement.query(
-      By.directive(CalendarMonthViewStubComponent),
-    );
-    expect(monthViewDebugEl)
-      .withContext('CalendarMonthViewStubComponent not found')
-      .toBeTruthy();
+    const monthViewDebugEl = fixture.debugElement.query(By.directive(CalendarMonthViewStubComponent));
+    expect(monthViewDebugEl).withContext('CalendarMonthViewStubComponent not found').toBeTruthy();
 
-    const testDate = new Date(
-      component.currentYear,
-      component.currentMonth,
-      15,
-    );
+    const testDate = new Date(component.currentYear, component.currentMonth, 15);
 
     // Simulate date click event
     monthViewDebugEl.componentInstance.dateClick.emit(testDate);
@@ -221,9 +209,7 @@ describe('NgxsmkDatepickerComponent', () => {
 
   it('should identify disabled dates via isDateDisabled method', () => {
     const today = new Date();
-    const minDate = getStartOfDay(
-      new Date(today.getFullYear(), today.getMonth(), 15),
-    );
+    const minDate = getStartOfDay(new Date(today.getFullYear(), today.getMonth(), 15));
     component.minDate = minDate;
 
     const disabledDate = new Date(today.getFullYear(), today.getMonth(), 10);

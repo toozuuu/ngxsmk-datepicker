@@ -11,12 +11,7 @@ export class DatepickerParsingService {
   /**
    * Formats a date or range for display in the input field
    */
-  formatDisplayValue(
-    value: DatepickerValue,
-    mode: string,
-    format?: string,
-    locale?: string,
-  ): string {
+  formatDisplayValue(value: DatepickerValue, mode: string, format?: string, locale?: string): string {
     if (!value) return '';
 
     if (mode === 'single' && value instanceof Date) {
@@ -24,9 +19,7 @@ export class DatepickerParsingService {
     }
 
     if (mode === 'range' && typeof value === 'object' && 'start' in value) {
-      const start = value.start
-        ? this.formatDate(value.start, format, locale)
-        : '';
+      const start = value.start ? this.formatDate(value.start, format, locale) : '';
       const end = value.end ? this.formatDate(value.end, format, locale) : '';
       return start || end ? `${start} - ${end}` : '';
     }
@@ -51,18 +44,12 @@ export class DatepickerParsingService {
     return isNaN(timestamp) ? null : new Date(timestamp);
   }
 
-  parseDateString(
-    dateString: string,
-    adapter?: DateAdapter | null,
-  ): Date | null {
+  parseDateString(dateString: string, adapter?: DateAdapter | null): Date | null {
     if (adapter && typeof adapter.parse === 'function') {
       // Use adapter with error callback for better error handling
       const onError = (error: Error) => {
         if (isDevMode()) {
-          console.warn(
-            `[ngxsmk-datepicker] Date parsing failed: ${error.message}`,
-            dateString,
-          );
+          console.warn(`[ngxsmk-datepicker] Date parsing failed: ${error.message}`, dateString);
         }
       };
 
@@ -79,9 +66,7 @@ export class DatepickerParsingService {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) {
         if (isDevMode()) {
-          console.warn(
-            `[ngxsmk-datepicker] Invalid date string: "${dateString}"`,
-          );
+          console.warn(`[ngxsmk-datepicker] Invalid date string: "${dateString}"`);
         }
         return null;
       }
@@ -116,27 +101,13 @@ export class DatepickerParsingService {
     for (const format of formats) {
       const match = value.match(format);
       if (match && match[1] && match[2] && match[3]) {
-        const date1 = new Date(
-          parseInt(match[3]),
-          parseInt(match[1]) - 1,
-          parseInt(match[2]),
-        );
-        const date2 = new Date(
-          parseInt(match[3]),
-          parseInt(match[2]) - 1,
-          parseInt(match[1]),
-        );
+        const date1 = new Date(parseInt(match[3]), parseInt(match[1]) - 1, parseInt(match[2]));
+        const date2 = new Date(parseInt(match[3]), parseInt(match[2]) - 1, parseInt(match[1]));
 
-        if (
-          !isNaN(date1.getTime()) &&
-          date1.getMonth() === parseInt(match[1]) - 1
-        ) {
+        if (!isNaN(date1.getTime()) && date1.getMonth() === parseInt(match[1]) - 1) {
           return date1;
         }
-        if (
-          !isNaN(date2.getTime()) &&
-          date2.getMonth() === parseInt(match[2]) - 1
-        ) {
+        if (!isNaN(date2.getTime()) && date2.getMonth() === parseInt(match[2]) - 1) {
           return date2;
         }
       }
@@ -213,8 +184,7 @@ export class DatepickerParsingService {
         },
         a: {
           regex: /(am|pm)/i,
-          extractor: (match) =>
-            (match[1] || '').toLowerCase() === 'pm' ? 1 : 0,
+          extractor: (match) => ((match[1] || '').toLowerCase() === 'pm' ? 1 : 0),
         },
         A: {
           regex: /(AM|PM)/,
@@ -226,9 +196,7 @@ export class DatepickerParsingService {
       let remainingFormat = format;
       let remainingString = dateString;
 
-      const sortedTokens = Object.keys(formatTokens).sort(
-        (a, b) => b.length - a.length,
-      );
+      const sortedTokens = Object.keys(formatTokens).sort((a, b) => b.length - a.length);
 
       for (const token of sortedTokens) {
         if (remainingFormat.includes(token)) {
@@ -241,16 +209,14 @@ export class DatepickerParsingService {
             dateParts[token] = tokenInfo.extractor(match);
             const matchIndex = remainingString.indexOf(match[0]);
             remainingString =
-              remainingString.substring(0, matchIndex) +
-              remainingString.substring(matchIndex + match[0].length);
+              remainingString.substring(0, matchIndex) + remainingString.substring(matchIndex + match[0].length);
             remainingFormat = remainingFormat.replace(token, '');
           }
         }
       }
 
       const now = new Date();
-      const year =
-        dateParts['YYYY'] !== undefined ? dateParts['YYYY'] : now.getFullYear();
+      const year = dateParts['YYYY'] !== undefined ? dateParts['YYYY'] : now.getFullYear();
       const month =
         dateParts['MM'] !== undefined
           ? dateParts['MM']
@@ -258,11 +224,7 @@ export class DatepickerParsingService {
             ? dateParts['M']
             : now.getMonth();
       const day =
-        dateParts['DD'] !== undefined
-          ? dateParts['DD']
-          : dateParts['D'] !== undefined
-            ? dateParts['D']
-            : now.getDate();
+        dateParts['DD'] !== undefined ? dateParts['DD'] : dateParts['D'] !== undefined ? dateParts['D'] : now.getDate();
 
       let hours = 0;
       let minutes = 0;
@@ -270,42 +232,15 @@ export class DatepickerParsingService {
 
       if (dateParts['hh'] !== undefined || dateParts['h'] !== undefined) {
         const hour12 =
-          dateParts['hh'] !== undefined
-            ? dateParts['hh']
-            : dateParts['h'] !== undefined
-              ? dateParts['h']
-              : 0;
-        const isPm =
-          dateParts['a'] !== undefined
-            ? dateParts['a']
-            : dateParts['A'] !== undefined
-              ? dateParts['A']
-              : 0;
+          dateParts['hh'] !== undefined ? dateParts['hh'] : dateParts['h'] !== undefined ? dateParts['h'] : 0;
+        const isPm = dateParts['a'] !== undefined ? dateParts['a'] : dateParts['A'] !== undefined ? dateParts['A'] : 0;
         hours = (hour12 % 12) + (isPm ? 12 : 0);
-      } else if (
-        dateParts['HH'] !== undefined ||
-        dateParts['H'] !== undefined
-      ) {
-        hours =
-          dateParts['HH'] !== undefined
-            ? dateParts['HH']
-            : dateParts['H'] !== undefined
-              ? dateParts['H']
-              : 0;
+      } else if (dateParts['HH'] !== undefined || dateParts['H'] !== undefined) {
+        hours = dateParts['HH'] !== undefined ? dateParts['HH'] : dateParts['H'] !== undefined ? dateParts['H'] : 0;
       }
 
-      minutes =
-        dateParts['mm'] !== undefined
-          ? dateParts['mm']
-          : dateParts['m'] !== undefined
-            ? dateParts['m']
-            : 0;
-      seconds =
-        dateParts['ss'] !== undefined
-          ? dateParts['ss']
-          : dateParts['s'] !== undefined
-            ? dateParts['s']
-            : 0;
+      minutes = dateParts['mm'] !== undefined ? dateParts['mm'] : dateParts['m'] !== undefined ? dateParts['m'] : 0;
+      seconds = dateParts['ss'] !== undefined ? dateParts['ss'] : dateParts['s'] !== undefined ? dateParts['s'] : 0;
 
       const date = new Date(year, month, day, hours, minutes, seconds);
 
@@ -319,12 +254,7 @@ export class DatepickerParsingService {
     }
   }
 
-  formatValueForNativeInput(
-    value: DatepickerValue,
-    mode: string,
-    showTime: boolean,
-    timeOnly: boolean,
-  ): string {
+  formatValueForNativeInput(value: DatepickerValue, mode: string, showTime: boolean, timeOnly: boolean): string {
     if (!value) {
       return '';
     }
@@ -340,11 +270,7 @@ export class DatepickerParsingService {
     return '';
   }
 
-  formatDateForNativeInput(
-    date: Date,
-    showTime: boolean,
-    timeOnly: boolean,
-  ): string {
+  formatDateForNativeInput(date: Date, showTime: boolean, timeOnly: boolean): string {
     if (!date || isNaN(date.getTime())) {
       return '';
     }
@@ -388,8 +314,7 @@ export class DatepickerParsingService {
   formatDateWithPattern(date: Date, format: string): string {
     if (!date || isNaN(date.getTime())) return '';
 
-    const pad = (n: number, len: number = 2) =>
-      n.toString().padStart(len, '0');
+    const pad = (n: number, len: number = 2) => n.toString().padStart(len, '0');
 
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -421,14 +346,7 @@ export class DatepickerParsingService {
 
   private formatDate(date: Date, format?: string, locale?: string): string {
     try {
-      return (
-        this.datePipe.transform(
-          date,
-          format || 'mediumDate',
-          undefined,
-          locale,
-        ) || ''
-      );
+      return this.datePipe.transform(date, format || 'mediumDate', undefined, locale) || '';
     } catch {
       return date.toDateString();
     }

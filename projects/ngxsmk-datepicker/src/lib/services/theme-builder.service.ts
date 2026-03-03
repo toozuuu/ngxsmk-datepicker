@@ -5,7 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
  * Theme builder service for generating CSS-in-JS styles and managing themes
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ThemeBuilderService implements OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
@@ -68,6 +68,14 @@ export class ThemeBuilderService implements OnDestroy {
           cssVars.push(`--datepicker-${cssKey}: ${value};`);
         }
       });
+      // Bridge internal --ngxsmk-color-* from public --datepicker-* (Issue #222)
+      if (theme.colors.primary) cssVars.push(`--ngxsmk-color-primary: ${theme.colors.primary};`);
+      if (theme.colors.background) cssVars.push(`--ngxsmk-color-surface: ${theme.colors.background};`);
+      if (theme.colors.border ?? theme.colors['borderColor']) cssVars.push(`--ngxsmk-color-border: ${theme.colors.border ?? theme.colors['borderColor']};`);
+      if (theme.colors.hover ?? theme.colors['hoverBackground']) cssVars.push(`--ngxsmk-color-surface-hover: ${theme.colors.hover ?? theme.colors['hoverBackground']};`);
+      if (theme.colors.text) cssVars.push(`--ngxsmk-color-text-main: ${theme.colors.text};`);
+      if (theme.colors.textSecondary ?? theme.colors['subtleText']) cssVars.push(`--ngxsmk-color-text-muted: ${theme.colors.textSecondary ?? theme.colors['subtleText']};`);
+      if (theme.colors['rangeBackground']) cssVars.push(`--ngxsmk-color-range-bg: ${theme.colors['rangeBackground']};`);
     }
 
     if (theme.spacing) {
@@ -98,7 +106,8 @@ export class ThemeBuilderService implements OnDestroy {
     if (theme.shadows) {
       Object.entries(theme.shadows).forEach(([key, value]) => {
         if (value !== undefined) {
-          cssVars.push(`--datepicker-shadow-${key}: ${value};`);
+          const varName = key === 'focus' ? 'shadow-focus' : `shadow-${key}`;
+          cssVars.push(`--datepicker-${varName}: ${value};`);
         }
       });
     }
@@ -121,7 +130,7 @@ export class ThemeBuilderService implements OnDestroy {
 
     if (targetElement) {
       // Apply theme to specific element only using a scoped style element
-      targetElement.dataset['themeApplied'] = '';
+      targetElement.dataset['themeApplied'] = 'true';
 
       // Remove existing scoped style if any
       const existingStyle = this.scopedStyleElements.get(targetElement);
@@ -140,19 +149,35 @@ export class ThemeBuilderService implements OnDestroy {
         targetElement.id = elementId;
       }
 
-      // Optimized CSS generation - avoid duplication
-      const css = `#${elementId}, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop {\n${themeCss}\n}`;
+      // When target is a wrapper, also apply to descendant ngxsmk-datepicker so library defaults are overridden (Issue #222)
+      const selector =
+        targetElement.tagName === 'NGXSMK-DATEPICKER'
+          ? `#${elementId}, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop`
+          : `#${elementId}, #${elementId} ngxsmk-datepicker, #${elementId} .ngxsmk-popover-container, #${elementId} .ngxsmk-backdrop, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop`;
+      const css = `${selector} {\n${themeCss}\n}`;
       scopedStyle.textContent = css;
       document.head.appendChild(scopedStyle);
       this.scopedStyleElements.set(targetElement, scopedStyle);
 
       // Apply inline styles for immediate effect using batch updates
       requestAnimationFrame(() => {
+        // Apply to the target element itself
         Object.entries(styles).forEach(([property, value]) => {
           targetElement.style.setProperty(property, value, 'important');
         });
 
-        const portalledElements = document.querySelectorAll('ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop');
+        // Apply to nested ngxsmk-datepicker elements when target is a wrapper
+        const nestedDatepickers = targetElement.querySelectorAll('ngxsmk-datepicker');
+        nestedDatepickers.forEach((el: Element) => {
+          const htmlElement = el as HTMLElement;
+          Object.entries(styles).forEach(([property, value]) => {
+            htmlElement.style.setProperty(property, value, 'important');
+          });
+        });
+
+        const portalledElements = document.querySelectorAll(
+          'ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop'
+        );
         portalledElements.forEach((element: Element) => {
           const htmlElement = element as HTMLElement;
           Object.entries(styles).forEach(([property, value]) => {
@@ -189,7 +214,9 @@ export class ThemeBuilderService implements OnDestroy {
       return;
     }
 
-    const datepickerElements = document.querySelectorAll('ngxsmk-datepicker, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop');
+    const datepickerElements = document.querySelectorAll(
+      'ngxsmk-datepicker, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop'
+    );
     const styles = this.generateStyleObject(theme);
 
     // Batch DOM operations for better performance
@@ -218,6 +245,13 @@ export class ThemeBuilderService implements OnDestroy {
           styles[`--datepicker-${cssKey}`] = value;
         }
       });
+      if (theme.colors.primary) styles['--ngxsmk-color-primary'] = theme.colors.primary;
+      if (theme.colors.background) styles['--ngxsmk-color-surface'] = theme.colors.background;
+      if (theme.colors.border ?? theme.colors['borderColor']) styles['--ngxsmk-color-border'] = String(theme.colors.border ?? theme.colors['borderColor']);
+      if (theme.colors.hover ?? theme.colors['hoverBackground']) styles['--ngxsmk-color-surface-hover'] = String(theme.colors.hover ?? theme.colors['hoverBackground']);
+      if (theme.colors.text) styles['--ngxsmk-color-text-main'] = theme.colors.text;
+      if (theme.colors.textSecondary ?? theme.colors['subtleText']) styles['--ngxsmk-color-text-muted'] = String(theme.colors.textSecondary ?? theme.colors['subtleText']);
+      if (theme.colors['rangeBackground']) styles['--ngxsmk-color-range-bg'] = theme.colors['rangeBackground'];
     }
 
     if (theme.spacing) {
@@ -248,7 +282,8 @@ export class ThemeBuilderService implements OnDestroy {
     if (theme.shadows) {
       Object.entries(theme.shadows).forEach(([key, value]) => {
         if (value !== undefined) {
-          styles[`--datepicker-shadow-${key}`] = value;
+          const varName = key === 'focus' ? 'shadow-focus' : `shadow-${key}`;
+          styles[`--datepicker-${varName}`] = value;
         }
       });
     }
@@ -283,17 +318,30 @@ export class ThemeBuilderService implements OnDestroy {
 
       // Remove all datepicker CSS variables from this element
       const allStyles = Array.from(targetElement.style);
-      allStyles.forEach(prop => {
+      allStyles.forEach((prop) => {
         if (prop.startsWith('--datepicker-')) {
           targetElement.style.removeProperty(prop);
         }
       });
+      // Clear from nested ngxsmk-datepicker elements
+      const nestedDatepickers = targetElement.querySelectorAll('ngxsmk-datepicker');
+      nestedDatepickers.forEach((el: Element) => {
+        const htmlEl = el as HTMLElement;
+        const nestedStyles = Array.from(htmlEl.style);
+        nestedStyles.forEach((prop) => {
+          if (prop.startsWith('--datepicker-')) {
+            htmlEl.style.removeProperty(prop);
+          }
+        });
+      });
       // Also clear from any open body-portalled popovers
-      const portalledElements = document.querySelectorAll('ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop');
+      const portalledElements = document.querySelectorAll(
+        'ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop'
+      );
       portalledElements.forEach((element: Element) => {
         const htmlElement = element as HTMLElement;
         const portalledStyles = Array.from(htmlElement.style);
-        portalledStyles.forEach(prop => {
+        portalledStyles.forEach((prop) => {
           if (prop.startsWith('--datepicker-')) {
             htmlElement.style.removeProperty(prop);
           }
@@ -308,7 +356,9 @@ export class ThemeBuilderService implements OnDestroy {
       }
 
       // Clear inline styles from all datepicker elements and body-portalled popovers
-      const datepickerElements = document.querySelectorAll('ngxsmk-datepicker, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop');
+      const datepickerElements = document.querySelectorAll(
+        'ngxsmk-datepicker, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop'
+      );
       datepickerElements.forEach((element: Element) => {
         const htmlElement = element as HTMLElement;
         // Remove theme attribute
@@ -316,7 +366,7 @@ export class ThemeBuilderService implements OnDestroy {
 
         // Remove all datepicker CSS variables
         const allStyles = Array.from(htmlElement.style);
-        allStyles.forEach(prop => {
+        allStyles.forEach((prop) => {
           if (prop.startsWith('--datepicker-')) {
             htmlElement.style.removeProperty(prop);
           }
@@ -344,13 +394,13 @@ export class ThemeBuilderService implements OnDestroy {
       spacing: {},
       typography: {},
       borderRadius: {},
-      shadows: {}
+      shadows: {},
     };
 
     // Extract CSS variables
-    const allStyles = Array.from(computedStyle).filter(prop => prop.startsWith('--datepicker-'));
+    const allStyles = Array.from(computedStyle).filter((prop) => prop.startsWith('--datepicker-'));
 
-    allStyles.forEach(prop => {
+    allStyles.forEach((prop) => {
       const value = computedStyle.getPropertyValue(prop).trim();
       const key = prop.replace('--datepicker-', '');
 
@@ -369,6 +419,9 @@ export class ThemeBuilderService implements OnDestroy {
       } else if (key.startsWith('shadow-')) {
         if (!theme.shadows) theme.shadows = {};
         theme.shadows[key.replace('shadow-', '')] = value;
+      } else if (key === 'focus-shadow') {
+        if (!theme.shadows) theme.shadows = {};
+        theme.shadows['focus'] = value;
       }
     });
 
@@ -386,7 +439,7 @@ export class ThemeBuilderService implements OnDestroy {
     }
 
     // Remove all scoped themes
-    this.scopedStyleElements.forEach(styleElement => {
+    this.scopedStyleElements.forEach((styleElement) => {
       styleElement.remove();
     });
     this.scopedStyleElements.clear();
@@ -441,7 +494,8 @@ export interface DatepickerTheme {
     sm?: string;
     md?: string;
     lg?: string;
+    /** Focus ring (e.g. input focus). Use a color-mix or rgba for 15% opacity. Example: 0 0 0 3px color-mix(in srgb, var(--datepicker-primary-color) 15%, transparent) */
+    focus?: string;
     [key: string]: string | undefined;
   };
 }
-

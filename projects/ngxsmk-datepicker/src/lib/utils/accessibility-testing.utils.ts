@@ -60,12 +60,11 @@ type AxeCore = {
       runOnly?: AccessibilityScanConfig['runOnly'];
       rules?: AccessibilityScanConfig['rules'];
     },
-    callback: (error: Error | null, results: AccessibilityCheckResult) => void,
+    callback: (error: Error | null, results: AccessibilityCheckResult) => void
   ) => void;
 };
 
-const getAxe = (): AxeCore | undefined =>
-  (window as unknown as { axe?: AxeCore }).axe;
+const getAxe = (): AxeCore | undefined => (window as unknown as { axe?: AxeCore }).axe;
 
 /**
  * Check if axe-core is available (imported from global)
@@ -86,13 +85,11 @@ function isAxeAvailable(): boolean {
  * expect(results.violations.length).toBe(0);
  * ```
  */
-export async function runAccessibilityScan(
-  config?: AccessibilityScanConfig,
-): Promise<AccessibilityCheckResult | null> {
+export async function runAccessibilityScan(config?: AccessibilityScanConfig): Promise<AccessibilityCheckResult | null> {
   if (!isAxeAvailable()) {
     console.warn(
       'axe-core is not available. Accessibility testing skipped. ' +
-        'Install axe-core to enable automated accessibility checks.',
+        'Install axe-core to enable automated accessibility checks.'
     );
     return null;
   }
@@ -113,7 +110,7 @@ export async function runAccessibilityScan(
         } else {
           resolve(results);
         }
-      },
+      }
     );
   });
 }
@@ -132,23 +129,14 @@ export async function runAccessibilityScan(
  * }
  * ```
  */
-export function assertNoA11yViolations(
-  results: AccessibilityCheckResult,
-  severityLevel: string = 'critical',
-): void {
+export function assertNoA11yViolations(results: AccessibilityCheckResult, severityLevel: string = 'critical'): void {
   const severityLevels = ['critical', 'serious', 'moderate', 'minor'];
   const severityIndex = severityLevels.indexOf(severityLevel);
-  const filteredViolations = results.violations.filter(
-    (v) => severityLevels.indexOf(v.impact) <= severityIndex,
-  );
+  const filteredViolations = results.violations.filter((v) => severityLevels.indexOf(v.impact) <= severityIndex);
 
   if (filteredViolations.length > 0) {
     const message = filteredViolations
-      .map(
-        (v) =>
-          `${v.id} (${v.impact}): ${v.message}\n` +
-          v.nodes.map((n) => `  - ${n.html}`).join('\n'),
-      )
+      .map((v) => `${v.id} (${v.impact}): ${v.message}\n` + v.nodes.map((n) => `  - ${n.html}`).join('\n'))
       .join('\n\n');
 
     throw new Error(`Accessibility violations found:\n${message}`);
@@ -161,17 +149,12 @@ export function assertNoA11yViolations(
  * @param results Accessibility check results
  * @returns Formatted string with violation details
  */
-export function formatA11yViolations(
-  results: AccessibilityCheckResult,
-): string {
+export function formatA11yViolations(results: AccessibilityCheckResult): string {
   if (results.violations.length === 0) {
     return 'No accessibility violations found.';
   }
 
-  const lines: string[] = [
-    `Found ${results.violations.length} accessibility violation(s):`,
-    '',
-  ];
+  const lines: string[] = [`Found ${results.violations.length} accessibility violation(s):`, ''];
 
   results.violations.forEach((violation) => {
     lines.push(`[${violation.impact.toUpperCase()}] ${violation.id}`);
@@ -203,10 +186,7 @@ export function formatA11yViolations(
  * expect(attrs.role).toBeTruthy();
  * ```
  */
-export function checkAriaAttributes(
-  element: HTMLElement,
-  requiredAttributes: string[],
-): Record<string, string | null> {
+export function checkAriaAttributes(element: HTMLElement, requiredAttributes: string[]): Record<string, string | null> {
   const results: Record<string, string | null> = {};
   requiredAttributes.forEach((attr) => {
     results[attr] = element.getAttribute(attr);
@@ -246,9 +226,7 @@ export function getInteractiveElements(container: HTMLElement): HTMLElement[] {
     '[role="menuitem"]',
   ];
 
-  return Array.from(
-    container.querySelectorAll(selectors.join(',')),
-  ) as HTMLElement[];
+  return Array.from(container.querySelectorAll(selectors.join(','))) as HTMLElement[];
 }
 
 /**

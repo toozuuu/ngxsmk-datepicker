@@ -1,8 +1,8 @@
 /**
  * Utilities entry point
- * 
+ *
  * Import utilities separately for better tree-shaking:
- * 
+ *
  * @example
  * ```typescript
  * import { getStartOfDay, normalizeDate } from 'ngxsmk-datepicker/utils';
@@ -72,4 +72,3 @@ export {
   type RecurringPattern,
   type RecurringDateConfig,
 } from './lib/utils/recurring-dates.utils';
-
