@@ -34,8 +34,8 @@
     "semantic-release": "semantic-release",
     "docs": "typedoc --options typedoc.json && node scripts/enhance-api-docs.js",
     "docs:serve": "npm run docs && npx http-server docs/api -p 8080 -o",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "storybook": "ng run demo-app:storybook",
+    "build-storybook": "ng run demo-app:build-storybook",
     "e2e": "playwright test --config=e2e/playwright.config.ts",
     "e2e:headed": "playwright test --config=e2e/playwright.config.ts --headed"
   },

@@ -136,6 +136,26 @@
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "demo-app:build",
+            "tsConfig": "tsconfig.storybook.json",
+            "port": 6006,
+            "compodoc": false
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "outputDir": "dist/storybook",
+            "browserTarget": "demo-app:build",
+            "tsConfig": "tsconfig.storybook.json",
+            "compodoc": false
+          }
+        },
         "test": {
           "builder": "@angular/build:karma",
           "options": {

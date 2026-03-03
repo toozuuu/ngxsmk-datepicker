@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/storybook"
+  },
+  "include": [
+    ".storybook/**/*.ts",
+    "projects/**/*.stories.@(ts|tsx)",
+    "projects/demo-app/src/**/*.ts",
+    "projects/ngxsmk-datepicker/src/**/*.ts"
+  ],
+  "exclude": [
+    "projects/ngxsmk-datepicker/src/lib/adapters/date-fns-adapter.ts",
+    "projects/ngxsmk-datepicker/src/lib/adapters/dayjs-adapter.ts",
+    "projects/ngxsmk-datepicker/src/lib/adapters/luxon-adapter.ts",
+    "projects/ngxsmk-datepicker/src/adapters.ts"
+  ]
+}
