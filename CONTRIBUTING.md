@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to ngxsmk-datepicker! This document provides guidelines and instructions for contributing.
 
-**Last updated:** March 3, 2026 · **Current stable:** v2.2.1
+**Last updated:** March 3, 2026 · **Current stable:** v2.2.2
 
 ## Code of Conduct
 

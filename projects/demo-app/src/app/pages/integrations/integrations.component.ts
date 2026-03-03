@@ -30,7 +30,8 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
           <div class="dot green"></div>
           <div class="window-title">my.component.ts</div>
         </div>
-        <pre><code class="text-main"><span class="token-keyword">import</span> {{ '{' }} <span class="token-class">NgxsmkDatepickerComponent</span>, <span class="token-class">NgxsmkDatepickerMatFormFieldControlDirective</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'ngxsmk-datepicker'</span>;
+        <pre><code class="text-main"><span class="token-keyword">import</span> {{ '{' }} <span class="token-class">NgxsmkDatepickerComponent</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'ngxsmk-datepicker'</span>;
+<span class="token-keyword">import</span> {{ '{' }} <span class="token-class">NgxsmkDatepickerMatFormFieldControlDirective</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'./ngxsmk-mat-form-field.directive'</span>;
 <span class="token-keyword">import</span> {{ '{' }} <span class="token-class">MatFormFieldModule</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'&#64;angular/material/form-field'</span>;
 
 <span class="token-keyword">&#64;Component</span>({{ '{' }}

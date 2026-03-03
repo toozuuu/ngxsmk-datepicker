@@ -24,15 +24,15 @@
 
 ---
 
-**Last updated:** March 3, 2026 · **Current stable:** v2.2.1
+**Last updated:** March 3, 2026 · **Current stable:** v2.2.2
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.2.1` is live! This release brings a **TypeScript Strictness Overhaul** (eliminating `any` types and ensuring `exactOptionalPropertyTypes` compatibility), fixes **appendToBody** popover positioning, datepicker-in-modal first-open behavior, and popover width matching the input; it also reduces loading time and cleans up CSS. No breaking changes.
+> **Stable Release**: `v2.2.2` is live! This release brings a **TypeScript Strictness Overhaul** (eliminating `any` types and ensuring `exactOptionalPropertyTypes` compatibility), fixes **appendToBody** popover positioning, datepicker-in-modal first-open behavior, and popover width matching the input; it also reduces loading time and cleans up CSS. No breaking changes.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.1 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.2 or later.
 
 ---
 
@@ -139,7 +139,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.2.1
+npm install ngxsmk-datepicker@2.2.2
 ```
 
 ### Alternative installation
@@ -148,12 +148,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.2.1` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.1` |
-| **Bun** | `bun add ngxsmk-datepicker@2.2.1` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.2.1` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.2.2` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.2` |
+| **Bun** | `bun add ngxsmk-datepicker@2.2.2` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.2.2` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.2.1/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.1/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.2.2/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.2/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -341,22 +341,7 @@ export class MaterialFormComponent {
 }
 ```
 
-**Non-Standalone Components (NgModules):**
-
-```typescript
-import { NgModule } from "@angular/core";
-import { MatFormFieldControl } from "@angular/material/form-field";
-import { NgxsmkDatepickerComponent, provideMaterialFormFieldControl } from "ngxsmk-datepicker";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { ReactiveFormsModule } from "@angular/forms";
-
-@NgModule({
-  imports: [NgxsmkDatepickerComponent, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
-  providers: [provideMaterialFormFieldControl(MatFormFieldControl)],
-})
-export class MyModule {}
-```
+**Non-Standalone (NgModules):** Add the directive file from [INTEGRATION.md § Angular Material](projects/ngxsmk-datepicker/docs/INTEGRATION.md#angular-material), then add it to your module `imports` (with `NgxsmkDatepickerComponent`, `MatFormFieldModule`, etc.) and use `ngxsmkMatFormFieldControl` on the datepicker in templates.
 
 **With Date Range:**
 
@@ -619,7 +604,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.2.1 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.2.2 now features **full localization synchronization** for:
 
 - �� English (`en`)
 - �� German (`de`)
@@ -875,7 +860,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-**Recent:** v2.2.1 — TypeScript strictness overhaul, appendToBody/popover fixes, loading and CSS cleanup. Versions 2.0.10 and 2.0.11 are unpublished; use v2.2.1 or later.
+**Recent:** v2.2.2 — TypeScript strictness overhaul, appendToBody/popover fixes, loading and CSS cleanup. Versions 2.0.10 and 2.0.11 are unpublished; use v2.2.2 or later.
 
 For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 

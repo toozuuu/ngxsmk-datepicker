@@ -24,15 +24,15 @@
 
 ---
 
-**Last updated:** March 3, 2026 · **Current stable:** v2.2.1
+**Last updated:** March 3, 2026 · **Current stable:** v2.2.2
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.2.1` is live! This release brings a **TypeScript Strictness Overhaul** (eliminating `any` types and ensuring `exactOptionalPropertyTypes` compatibility), fixes **appendToBody** popover positioning, datepicker-in-modal first-open, and popover width matching the input; reduces loading time; and cleans up CSS. No breaking changes.
+> **Stable Release**: `v2.2.2` is live! This release brings a **TypeScript Strictness Overhaul** (eliminating `any` types and ensuring `exactOptionalPropertyTypes` compatibility), fixes **appendToBody** popover positioning, datepicker-in-modal first-open, and popover width matching the input; reduces loading time; and cleans up CSS. No breaking changes.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.1 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.2 or later.
 
 ---
 
@@ -330,22 +330,7 @@ export class MaterialFormComponent {
 }
 ```
 
-**Non-Standalone Components (NgModules):**
-
-```typescript
-import { NgModule } from "@angular/core";
-import { MatFormFieldControl } from "@angular/material/form-field";
-import { NgxsmkDatepickerComponent, provideMaterialFormFieldControl } from "ngxsmk-datepicker";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { ReactiveFormsModule } from "@angular/forms";
-
-@NgModule({
-  imports: [NgxsmkDatepickerComponent, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
-  providers: [provideMaterialFormFieldControl(MatFormFieldControl)],
-})
-export class MyModule {}
-```
+**Non-Standalone (NgModules):** Add the directive file from [INTEGRATION.md § Angular Material](docs/INTEGRATION.md#angular-material), then add it to your module `imports` (with `NgxsmkDatepickerComponent`, `MatFormFieldModule`, etc.) and use `ngxsmkMatFormFieldControl` on the datepicker in templates.
 
 **With Date Range:**
 
@@ -605,7 +590,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.2.1 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.2.2 now features **full localization synchronization** for:
 
 - 🇺🇸 English (`en`)
 - 🇩🇪 German (`de`)
@@ -698,7 +683,7 @@ This library has been optimized for maximum performance:
 
 ## **🐛 Bug Fixes & Improvements**
 
-### **Critical Updates in v2.2.1:**
+### **Critical Updates in v2.2.2:**
 
 - ✅ **Validation messages**: User-facing i18n strings for invalid date, min/max; `validationError` output and on-screen error display
 - ✅ **Calendar loading state**: Visual spinner + text and screen-reader announcement while calendar opens/generates
@@ -861,16 +846,16 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-### **v2.2.1** (Current Stable)
+### **v2.2.2** (Current Stable)
 
-- 🎉 **Version Update**: Updated to version 2.2.1.
+- 🎉 **Version Update**: Updated to version 2.2.2.
 - ✨ **Key Updates**: Optimized loading times, refined mobile header layout, and improved dropdown accessibility.
 - ✅ **Stable Release**: Full synchronization of header components with `ViewEncapsulation.None`.
 
 ### **v1.9.24**
 
 - 🎉 **Version Update**: Updated to version 1.9.24
-- ✅ **Stable Release**: Version 1.9.24 is the current stable version
+- ✅ **Stable Release**: Version 2.2.2 is the current stable version
 
 ### **v1.9.23**
 

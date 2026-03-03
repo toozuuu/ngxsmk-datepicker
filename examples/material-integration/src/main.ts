@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { NgxsmkDatepickerComponent, NgxsmkDatepickerMatFormFieldControlDirective } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerMatFormFieldControlDirective } from './app/ngxsmk-mat-form-field.directive';
 import { JsonPipe } from '@angular/common';
 
 @Component({
