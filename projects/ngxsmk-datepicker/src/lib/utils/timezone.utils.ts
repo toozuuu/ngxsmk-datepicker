@@ -10,7 +10,7 @@ export function formatDateWithTimezone(
   date: Date,
   locale: string,
   options: Intl.DateTimeFormatOptions,
-  timezone?: string,
+  timezone?: string
 ): string {
   if (timezone) {
     const formatter = new Intl.DateTimeFormat(locale, {
@@ -28,10 +28,7 @@ export function formatDateWithTimezone(
  * @param timezone Optional timezone for parsing (IANA timezone name)
  * @returns Date object (always in UTC internally)
  */
-export function parseDateWithTimezone(
-  dateString: string,
-  timezone?: string,
-): Date | null {
+export function parseDateWithTimezone(dateString: string, timezone?: string): Date | null {
   if (!dateString) return null;
 
   if (timezone) {
@@ -59,11 +56,7 @@ export function parseDateWithTimezone(
  * @param _toTimezone Target timezone (IANA name) - currently unused in simplified implementation
  * @returns New Date object (still UTC internally, but represents the time in target timezone)
  */
-export function convertTimezone(
-  date: Date,
-  fromTimezone: string,
-  _toTimezone: string,
-): Date {
+export function convertTimezone(date: Date, fromTimezone: string, _toTimezone: string): Date {
   const fromFormatter = new Intl.DateTimeFormat('en-US', {
     timeZone: fromTimezone,
     year: 'numeric',
@@ -77,8 +70,7 @@ export function convertTimezone(
 
   const parts = fromFormatter.formatToParts(date);
   const year = parseInt(parts.find((p) => p.type === 'year')?.value || '0');
-  const month =
-    parseInt(parts.find((p) => p.type === 'month')?.value || '0') - 1;
+  const month = parseInt(parts.find((p) => p.type === 'month')?.value || '0') - 1;
   const day = parseInt(parts.find((p) => p.type === 'day')?.value || '0');
   const hour = parseInt(parts.find((p) => p.type === 'hour')?.value || '0');
   const minute = parseInt(parts.find((p) => p.type === 'minute')?.value || '0');
@@ -96,10 +88,7 @@ export function convertTimezone(
  * @param date Optional date to check offset for (defaults to now)
  * @returns Offset in minutes from UTC
  */
-export function getTimezoneOffset(
-  timezone: string,
-  date: Date = new Date(),
-): number {
+export function getTimezoneOffset(timezone: string, date: Date = new Date()): number {
   try {
     const formatter = new Intl.DateTimeFormat('en-US', {
       timeZone: timezone,
@@ -112,10 +101,7 @@ export function getTimezoneOffset(
     if (offsetPart) {
       const offsetStr = offsetPart.value.replace('GMT', '').trim();
       const sign = offsetStr[0] === '-' ? -1 : 1;
-      const [hours = 0, minutes = 0] = offsetStr
-        .slice(1)
-        .split(':')
-        .map(Number);
+      const [hours = 0, minutes = 0] = offsetStr.slice(1).split(':').map(Number);
       return sign * (hours * 60 + minutes);
     }
   } catch {}

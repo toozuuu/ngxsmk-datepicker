@@ -14,14 +14,12 @@ import { RouterLink } from '@angular/router';
       </p>
       <ul>
         <li>
-          <a routerLink="/month-navigation">Month navigation</a> – Range mode:
-          view should stay on end month after selecting a range spanning two
-          months (e.g. Jan 31 → Feb 3).
+          <a routerLink="/month-navigation">Month navigation</a> – Range mode: view should stay on end month after
+          selecting a range spanning two months (e.g. Jan 31 → Feb 3).
         </li>
         <li>
-          <a routerLink="/range-reselection">Range reselection</a> – Range
-          mode: clicking start clears end; clicking end makes it new start;
-          clicking inside range sets new start and clears end.
+          <a routerLink="/range-reselection">Range reselection</a> – Range mode: clicking start clears end; clicking end
+          makes it new start; clicking inside range sets new start and clears end.
         </li>
       </ul>
     </div>

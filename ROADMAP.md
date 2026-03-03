@@ -2,7 +2,7 @@
 
 This roadmap outlines the planned features, improvements, and enhancements for ngxsmk-datepicker. We welcome community input and contributions!
 
-**Last updated:** February 25, 2026 · **Current stable:** v2.2.0
+**Last updated:** March 3, 2026 · **Current stable:** v2.2.1
 
 ## 🎯 Current Focus (Q1 2026 - Q2 2026)
 
@@ -72,7 +72,7 @@ This roadmap outlines the planned features, improvements, and enhancements for n
 - [x] **Export/Import Functionality** ✅ (Implemented)
   - Export selected dates to various formats (JSON, CSV, ICS) - Available via `exportToJson`, `exportToCsv`, `exportToIcs`
   - Import dates from external sources - Available via `importFromJson`, `importFromCsv`, `importFromIcs`
-  - *Available in utils exports: `import { exportToJson, importFromJson } from 'ngxsmk-datepicker/utils'`*
+  - *Available via: `import { exportToJson, importFromJson } from 'ngxsmk-datepicker'`*
 
 - [x] **Advanced Styling** ✅ (Implemented in v1.9.12)
   - CSS-in-JS support - Available via `ThemeBuilderService.generateStyleObject()`

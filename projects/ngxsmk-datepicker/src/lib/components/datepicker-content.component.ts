@@ -1,4 +1,14 @@
-import { Component, Input, Output, EventEmitter, TemplateRef, ChangeDetectionStrategy, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  TemplateRef,
+  ChangeDetectionStrategy,
+  ViewEncapsulation,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { NgClass, DatePipe } from '@angular/common';
 import { CalendarHeaderComponent } from './calendar-header.component';
 import { CalendarMonthViewComponent } from './calendar-month-view.component';
@@ -44,16 +54,8 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
         [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode"
         [class.ngxsmk-time-only-popover]="timeOnly"
         [class.ngxsmk-has-time-selection]="showTime || timeOnly"
-        [class.ngxsmk-bottom-sheet]="
-          isMobile &&
-          mobileModalStyle === 'bottom-sheet' &&
-          !isInlineMode
-        "
-        [class.ngxsmk-fullscreen]="
-          isMobile &&
-          mobileModalStyle === 'fullscreen' &&
-          !isInlineMode
-        "
+        [class.ngxsmk-bottom-sheet]="isMobile && mobileModalStyle === 'bottom-sheet' && !isInlineMode"
+        [class.ngxsmk-fullscreen]="isMobile && mobileModalStyle === 'fullscreen' && !isInlineMode"
         [class.ngxsmk-align-left]="align === 'left'"
         [class.ngxsmk-align-right]="align === 'right'"
         [class.ngxsmk-align-center]="align === 'center'"
@@ -66,29 +68,14 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
         (touchend)="touchEndContainer.emit($event)"
         (mousedown)="$event.stopPropagation()"
       >
-        <div
-          class="ngxsmk-datepicker-container"
-          [ngClass]="classes?.container"
-        >
+        <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
           @if (isCalendarOpening) {
-            <div
-              class="ngxsmk-calendar-loading"
-              role="status"
-              aria-live="polite"
-              [attr.aria-label]="loadingMessage"
-            >
+            <div class="ngxsmk-calendar-loading" role="status" aria-live="polite" [attr.aria-label]="loadingMessage">
               <div class="ngxsmk-calendar-loading-spinner"></div>
-              <span class="ngxsmk-calendar-loading-text">{{
-                loadingMessage
-              }}</span>
+              <span class="ngxsmk-calendar-loading-text">{{ loadingMessage }}</span>
             </div>
           }
-          @if (
-            showRanges &&
-            rangesArray.length > 0 &&
-            mode === 'range' &&
-            !timeOnly
-          ) {
+          @if (showRanges && rangesArray.length > 0 && mode === 'range' && !timeOnly) {
             <ngxsmk-datepicker-presets
               [ranges]="rangesArray"
               [disabled]="disabled"
@@ -101,15 +88,9 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
             class="ngxsmk-calendar-container"
             [class.ngxsmk-time-only-mode]="timeOnly"
             [class.ngxsmk-has-multi-calendar]="calendarCount > 1"
-            [class.ngxsmk-calendar-layout-horizontal]="
-              calendarCount > 1 && calendarLayout === 'horizontal'
-            "
-            [class.ngxsmk-calendar-layout-vertical]="
-              calendarCount > 1 && calendarLayout === 'vertical'
-            "
-            [class.ngxsmk-calendar-layout-auto]="
-              calendarCount > 1 && calendarLayout === 'auto'
-            "
+            [class.ngxsmk-calendar-layout-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
+            [class.ngxsmk-calendar-layout-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
+            [class.ngxsmk-calendar-layout-auto]="calendarCount > 1 && calendarLayout === 'auto'"
             [ngClass]="classes?.calendar"
           >
             @if (!timeOnly) {
@@ -135,36 +116,17 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
                 <div
                   class="ngxsmk-multi-calendar-container"
                   [class.ngxsmk-multi-calendar]="calendarCount > 1"
-                  [class.ngxsmk-calendar-horizontal]="
-                    calendarCount > 1 && calendarLayout === 'horizontal'
-                  "
-                  [class.ngxsmk-calendar-vertical]="
-                    calendarCount > 1 && calendarLayout === 'vertical'
-                  "
-                  [class.ngxsmk-calendar-auto]="
-                    calendarCount > 1 && calendarLayout === 'auto'
-                  "
-                  [class.ngxsmk-sync-scroll-enabled]="
-                    syncScrollEnabled && calendarCount > 1
-                  "
+                  [class.ngxsmk-calendar-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
+                  [class.ngxsmk-calendar-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
+                  [class.ngxsmk-calendar-auto]="calendarCount > 1 && calendarLayout === 'auto'"
+                  [class.ngxsmk-sync-scroll-enabled]="syncScrollEnabled && calendarCount > 1"
                 >
-                  @for (
-                    calendarMonth of calendarMonths;
-                    track calendarMonth.month + '-' + calendarMonth.year
-                  ) {
-                    <div
-                      class="ngxsmk-calendar-month"
-                      [class.ngxsmk-calendar-month-multi]="
-                        calendarCount > 1
-                      "
-                    >
+                  @for (calendarMonth of calendarMonths; track calendarMonth.month + '-' + calendarMonth.year) {
+                    <div class="ngxsmk-calendar-month" [class.ngxsmk-calendar-month-multi]="calendarCount > 1">
                       @if (calendarCount > 1) {
                         <div class="ngxsmk-calendar-month-header">
                           <span class="ngxsmk-calendar-month-title">{{
-                            getMonthYearLabel(
-                              calendarMonth.month,
-                              calendarMonth.year
-                            )
+                            getMonthYearLabel(calendarMonth.month, calendarMonth.year)
                           }}</span>
                         </div>
                       }
@@ -180,12 +142,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
                         [today]="today"
                         [currentMonth]="calendarMonth.month"
                         [currentYear]="calendarMonth.year"
-                        [ariaLabel]="
-                          getCalendarAriaLabelForMonth(
-                            calendarMonth.month,
-                            calendarMonth.year
-                          )
-                        "
+                        [ariaLabel]="getCalendarAriaLabelForMonth(calendarMonth.month, calendarMonth.year)"
                         [dateTemplate]="dateTemplate"
                         [isDateDisabled]="boundIsDateDisabled"
                         [isSameDay]="boundIsSameDay"
@@ -263,8 +220,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
                         -
                       </button>
                       <span class="ngxsmk-timeline-range"
-                        >{{ timelineStartDate | date: 'shortDate' }} -
-                        {{ timelineEndDate | date: 'shortDate' }}</span
+                        >{{ timelineStartDate | date: 'shortDate' }} - {{ timelineEndDate | date: 'shortDate' }}</span
                       >
                       <button
                         type="button"
@@ -278,10 +234,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
                   </div>
                   <div class="ngxsmk-timeline-container" #timelineContainer>
                     <div class="ngxsmk-timeline-track">
-                      @for (
-                        month of timelineMonths;
-                        track month.getTime()
-                      ) {
+                      @for (month of timelineMonths; track month.getTime()) {
                         <div
                           class="ngxsmk-timeline-month"
                           [class.selected]="isTimelineMonthSelected(month)"
@@ -305,11 +258,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
                 </div>
               }
 
-              @if (
-                calendarViewMode === 'time-slider' &&
-                mode === 'range' &&
-                showTime
-              ) {
+              @if (calendarViewMode === 'time-slider' && mode === 'range' && showTime) {
                 <div class="ngxsmk-time-slider-view">
                   <div class="ngxsmk-time-slider-header">
                     <div class="ngxsmk-time-slider-label">
@@ -382,9 +331,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
               } @else {
                 <div class="ngxsmk-time-range-container">
                   <div class="ngxsmk-time-range-start">
-                    <span class="ngxsmk-time-range-label">{{
-                      translations?.from ?? ''
-                    }}</span>
+                    <span class="ngxsmk-time-range-label">{{ translations?.from ?? '' }}</span>
                     <ngxsmk-time-selection
                       [hourOptions]="hourOptions"
                       [minuteOptions]="minuteOptions"
@@ -407,9 +354,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
                     </ngxsmk-time-selection>
                   </div>
                   <div class="ngxsmk-time-range-end">
-                    <span class="ngxsmk-time-range-label">{{
-                      translations?.to ?? ''
-                    }}</span>
+                    <span class="ngxsmk-time-range-label">{{ translations?.to ?? '' }}</span>
                     <ngxsmk-time-selection
                       [hourOptions]="hourOptions"
                       [minuteOptions]="minuteOptions"
@@ -548,7 +493,9 @@ export class NgxsmkDatepickerContentComponent {
   @Input() boundIsInRange!: (date: Date | null) => boolean;
   @Input() boundIsPreviewInRange!: (date: Date | null) => boolean;
   @Input() boundGetAriaLabel!: (date: Date | null) => string;
-  @Input() boundGetDayCellCustomClasses!: (date: Date | null) => string | string[] | Set<string> | { [klass: string]: unknown };
+  @Input() boundGetDayCellCustomClasses!: (
+    date: Date | null
+  ) => string | string[] | Set<string> | { [klass: string]: unknown };
   @Input() boundGetDayCellTooltip!: (date: Date | null) => string | null;
   @Input() boundFormatDayNumber!: (date: Date | null) => string;
   @Input() getMonthYearLabel!: (month: number, year: number) => string;

@@ -27,7 +27,7 @@ export class PopoverPositioningService {
   positionRelativeToInput(
     popover: HTMLElement | null,
     inputGroup: HTMLElement | null,
-    options: PopoverPositioningOptions,
+    options: PopoverPositioningOptions
   ): void {
     if (!popover || !inputGroup || options.isInlineMode) {
       return;
@@ -68,11 +68,7 @@ export class PopoverPositioningService {
     }
   }
 
-  private applyPosition(
-    popover: HTMLElement,
-    inputGroup: HTMLElement,
-    options: PopoverPositioningOptions,
-  ): void {
+  private applyPosition(popover: HTMLElement, inputGroup: HTMLElement, options: PopoverPositioningOptions): void {
     const narrowViewport = options.narrowViewport ?? 500;
     const minHeight = options.minHeight ?? 400;
     const minWidth = options.minWidth ?? 360;
@@ -130,10 +126,7 @@ export class PopoverPositioningService {
     this.clearPositionStyles(popover, false);
   }
 
-  private setPopoverWidth(
-    widthPx: number,
-    popover: HTMLElement,
-  ): void {
+  private setPopoverWidth(widthPx: number, popover: HTMLElement): void {
     const w = `${widthPx}px`;
     // Avoid !important wrapper to allow consumer CSS overrides
     popover.style.setProperty('min-width', w);
@@ -142,24 +135,16 @@ export class PopoverPositioningService {
     popover.style.removeProperty('max-width');
   }
 
-  private createStyleSetter(
-    popover: HTMLElement,
-    useViewportCoords: boolean,
-  ): (key: string, value: string) => void {
+  private createStyleSetter(popover: HTMLElement, useViewportCoords: boolean): (key: string, value: string) => void {
     if (useViewportCoords) {
-      return (key: string, value: string) =>
-        popover.style.setProperty(key, value, 'important');
+      return (key: string, value: string) => popover.style.setProperty(key, value, 'important');
     }
     return (key: string, value: string) => {
       (popover.style as unknown as Record<string, string>)[key] = value;
     };
   }
 
-  private setPlacement(
-    setStyle: (key: string, value: string) => void,
-    top: number,
-    left: number,
-  ): void {
+  private setPlacement(setStyle: (key: string, value: string) => void, top: number, left: number): void {
     setStyle('position', 'absolute');
     setStyle('top', `${top}px`);
     setStyle('left', `${left}px`);

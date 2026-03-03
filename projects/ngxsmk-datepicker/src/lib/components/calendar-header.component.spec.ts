@@ -9,7 +9,7 @@ describe('CalendarHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CalendarHeaderComponent, CustomSelectComponent]
+      imports: [CalendarHeaderComponent, CustomSelectComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CalendarHeaderComponent);
@@ -17,11 +17,11 @@ describe('CalendarHeaderComponent', () => {
     // Provide default options so the component renders properly
     component.monthOptions = [
       { label: 'January', value: 0 },
-      { label: 'February', value: 1 }
+      { label: 'February', value: 1 },
     ];
     component.yearOptions = [
       { label: '2024', value: 2024 },
-      { label: '2025', value: 2025 }
+      { label: '2025', value: 2025 },
     ];
     fixture.detectChanges();
   });
@@ -181,7 +181,7 @@ describe('CalendarHeaderComponent', () => {
   it('should pass monthOptions to month select', () => {
     component.monthOptions = [
       { label: 'January', value: 0 },
-      { label: 'February', value: 1 }
+      { label: 'February', value: 1 },
     ];
     fixture.detectChanges();
 
@@ -192,7 +192,7 @@ describe('CalendarHeaderComponent', () => {
   it('should pass yearOptions to year select', () => {
     component.yearOptions = [
       { label: '2024', value: 2024 },
-      { label: '2025', value: 2025 }
+      { label: '2025', value: 2025 },
     ];
     fixture.detectChanges();
 
@@ -221,4 +221,3 @@ describe('CalendarHeaderComponent', () => {
     expect(component.disabled).toBe(true);
   });
 });
-

@@ -164,13 +164,13 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 .ngxsmk-input-group:focus-within {
   border-color: var(--datepicker-primary-color);
   -webkit-box-shadow:
-    0 0 0 3px rgba(109, 40, 217, 0.1),
+    var(--datepicker-shadow-focus),
     var(--datepicker-shadow-md);
   -moz-box-shadow:
-    0 0 0 3px rgba(109, 40, 217, 0.1),
+    var(--datepicker-shadow-focus),
     var(--datepicker-shadow-md);
   box-shadow:
-    0 0 0 3px rgba(109, 40, 217, 0.1),
+    var(--datepicker-shadow-focus),
     var(--datepicker-shadow-md);
   outline: none;
 }

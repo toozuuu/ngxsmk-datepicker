@@ -21,11 +21,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
         </ol>
       </div>
       <div class="datepicker-wrap">
-        <ngxsmk-datepicker
-          [(ngModel)]="range"
-          mode="range"
-          [inline]="true"
-        ></ngxsmk-datepicker>
+        <ngxsmk-datepicker [(ngModel)]="range" mode="range" [inline]="true"></ngxsmk-datepicker>
       </div>
     </div>
   `,

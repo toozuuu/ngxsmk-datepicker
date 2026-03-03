@@ -147,9 +147,7 @@ describe('NgxsmkDatepickerComponent - Calendar Views', () => {
       component.timelineZoomIn();
       fixture.detectChanges();
 
-      expect(component.timelineMonths.length).toBeGreaterThan(
-        initialMonthsCount,
-      );
+      expect(component.timelineMonths.length).toBeGreaterThan(initialMonthsCount);
     });
 
     it('should zoom out timeline', () => {

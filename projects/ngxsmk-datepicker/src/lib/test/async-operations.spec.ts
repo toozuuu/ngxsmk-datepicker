@@ -14,11 +14,7 @@ describe('Async Operations Tests', () => {
     it('should handle setTimeout in theme application', fakeAsync(() => {
       TestBed.configureTestingModule({
         imports: [NgxsmkDatepickerComponent, ReactiveFormsModule],
-        providers: [
-          ThemeBuilderService,
-          DatePipe,
-          { provide: PLATFORM_ID, useValue: 'browser' },
-        ],
+        providers: [ThemeBuilderService, DatePipe, { provide: PLATFORM_ID, useValue: 'browser' }],
       });
 
       const service = TestBed.inject(ThemeBuilderService);
@@ -156,22 +152,14 @@ describe('Async Operations Tests', () => {
     });
 
     it('should handle Promise.all', async () => {
-      const promises = [
-        Promise.resolve(1),
-        Promise.resolve(2),
-        Promise.resolve(3),
-      ];
+      const promises = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)];
 
       const results = await Promise.all(promises);
       expect(results).toEqual([1, 2, 3]);
     });
 
     it('should handle Promise.all with rejection', async () => {
-      const promises = [
-        Promise.resolve(1),
-        Promise.reject(new Error('Error')),
-        Promise.resolve(3),
-      ];
+      const promises = [Promise.resolve(1), Promise.reject(new Error('Error')), Promise.resolve(3)];
 
       let errorCaught = false;
       try {
@@ -185,12 +173,8 @@ describe('Async Operations Tests', () => {
     });
 
     it('should handle Promise.race', async () => {
-      const fast = new Promise((resolve) =>
-        setTimeout(() => resolve('fast'), 10),
-      );
-      const slow = new Promise((resolve) =>
-        setTimeout(() => resolve('slow'), 100),
-      );
+      const fast = new Promise((resolve) => setTimeout(() => resolve('fast'), 10));
+      const slow = new Promise((resolve) => setTimeout(() => resolve('slow'), 100));
 
       const result = await Promise.race([fast, slow]);
       expect(result).toBe('fast');

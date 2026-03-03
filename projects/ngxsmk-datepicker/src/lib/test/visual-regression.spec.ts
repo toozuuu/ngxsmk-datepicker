@@ -190,11 +190,7 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
     });
 
     it('should capture calendar with disabled dates', async () => {
-      component.disabledDates = [
-        new Date(2024, 5, 10),
-        new Date(2024, 5, 15),
-        new Date(2024, 5, 20),
-      ];
+      component.disabledDates = [new Date(2024, 5, 10), new Date(2024, 5, 15), new Date(2024, 5, 20)];
       fixture.detectChanges();
 
       await prepareElementForScreenshot(nativeElement);
@@ -215,20 +211,15 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
       fixture.detectChanges();
 
       await prepareElementForScreenshot(nativeElement);
-      expect(
-        (component as unknown as { numberOfMonths: number }).numberOfMonths,
-      ).toBe(2);
+      expect((component as unknown as { numberOfMonths: number }).numberOfMonths).toBe(2);
     });
 
     it('should capture calendar with week numbers', async () => {
-      (component as unknown as { showWeekNumbers: boolean }).showWeekNumbers =
-        true;
+      (component as unknown as { showWeekNumbers: boolean }).showWeekNumbers = true;
       fixture.detectChanges();
 
       await prepareElementForScreenshot(nativeElement);
-      expect(
-        (component as unknown as { showWeekNumbers: boolean }).showWeekNumbers,
-      ).toBe(true);
+      expect((component as unknown as { showWeekNumbers: boolean }).showWeekNumbers).toBe(true);
     });
   });
 
@@ -286,9 +277,7 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
     });
 
     it('should capture focused state', async () => {
-      const focusable = nativeElement.querySelector(
-        '[tabindex]',
-      ) as HTMLElement;
+      const focusable = nativeElement.querySelector('[tabindex]') as HTMLElement;
       if (focusable) {
         focusable.focus();
         fixture.detectChanges();
@@ -343,9 +332,7 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
       };
 
       const filename = generateScreenshotFilename(scenario);
-      expect(filename).toMatch(
-        /^test-calendar-view-light-mobile-\d+x\d+\.png$/,
-      );
+      expect(filename).toMatch(/^test-calendar-view-light-mobile-\d+x\d+\.png$/);
     });
   });
 
@@ -405,9 +392,7 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
       expect(themes).toContain('dark');
 
       // Check viewport coverage
-      const viewportTypes = scenarios.map((s) =>
-        s.viewport.isMobile ? 'mobile' : 'desktop',
-      );
+      const viewportTypes = scenarios.map((s) => (s.viewport.isMobile ? 'mobile' : 'desktop'));
       expect(viewportTypes.filter((v) => v === 'mobile').length).toBe(2);
       expect(viewportTypes.filter((v) => v === 'desktop').length).toBe(2);
     });
@@ -479,9 +464,7 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
 
   describe('Edge Cases and Error Handling', () => {
     it('should handle missing elements gracefully', async () => {
-      const nonExistent = document.querySelector(
-        '.non-existent',
-      ) as HTMLElement;
+      const nonExistent = document.querySelector('.non-existent') as HTMLElement;
 
       if (!nonExistent) {
         expect(nonExistent).toBeFalsy();

@@ -9,16 +9,9 @@ export interface DateRange {
   [key: string]: [DateInput, DateInput];
 }
 
-export type DatepickerValue =
-  | Date
-  | { start: Date | null; end: Date | null }
-  | Date[]
-  | null;
+export type DatepickerValue = Date | { start: Date | null; end: Date | null } | Date[] | null;
 
-export function generateMonthOptions(
-  locale: string,
-  year: number,
-): { label: string; value: number }[] {
+export function generateMonthOptions(locale: string, year: number): { label: string; value: number }[] {
   return Array.from({ length: 12 }).map((_, i) => ({
     label: new Date(year, i, 1).toLocaleDateString(locale, { month: 'long' }),
     value: i,
@@ -34,11 +27,7 @@ export function generateMonthOptions(
  * @param options - Optional Intl.NumberFormatOptions for customization
  * @returns Formatted number string
  */
-export function formatLocaleNumber(
-  value: number,
-  locale: string,
-  options?: Intl.NumberFormatOptions,
-): string {
+export function formatLocaleNumber(value: number, locale: string, options?: Intl.NumberFormatOptions): string {
   try {
     const formatter = new Intl.NumberFormat(locale, {
       useGrouping: true,
@@ -52,10 +41,7 @@ export function formatLocaleNumber(
   }
 }
 
-export function generateYearOptions(
-  currentYear: number,
-  range: number = 10,
-): { label: string; value: number }[] {
+export function generateYearOptions(currentYear: number, range: number = 10): { label: string; value: number }[] {
   const startYear = currentYear - range;
   const endYear = currentYear + range;
   const options: { label: string; value: number }[] = [];
@@ -73,7 +59,7 @@ export function generateTimeOptions(
   minuteInterval: number = 1,
   secondInterval: number = 1,
   includeSeconds: boolean = false,
-  use24Hour: boolean = false,
+  use24Hour: boolean = false
 ): {
   hourOptions: { label: string; value: number }[];
   minuteOptions: { label: string; value: number }[];
@@ -81,13 +67,13 @@ export function generateTimeOptions(
 } {
   const hourOptions = use24Hour
     ? Array.from({ length: 24 }).map((_, i) => ({
-      label: i.toString().padStart(2, '0'),
-      value: i,
-    }))
+        label: i.toString().padStart(2, '0'),
+        value: i,
+      }))
     : Array.from({ length: 12 }).map((_, i) => ({
-      label: (i + 1).toString().padStart(2, '0'),
-      value: i + 1,
-    }));
+        label: (i + 1).toString().padStart(2, '0'),
+        value: i + 1,
+      }));
 
   const minuteOptions: { label: string; value: number }[] = [];
   for (let i = 0; i < 60; i += minuteInterval) {
@@ -117,10 +103,7 @@ export function generateTimeOptions(
   return result;
 }
 
-export function generateWeekDays(
-  locale: string,
-  firstDayOfWeek: number = 0,
-): string[] {
+export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): string[] {
   const day = new Date(2024, 0, 7 + firstDayOfWeek);
   return Array.from({ length: 7 }).map(() => {
     const weekDay = new Date(day).toLocaleDateString(locale, {
@@ -144,7 +127,7 @@ export function generateWeekDays(
  */
 interface IntlExtended {
   Locale: {
-    new(locale: string): {
+    new (locale: string): {
       weekInfo?: {
         firstDay: number;
       };
@@ -155,15 +138,9 @@ interface IntlExtended {
 export function getFirstDayOfWeek(locale: string): number {
   try {
     const intlExt = Intl as unknown as IntlExtended;
-    if (
-      typeof intlExt !== 'undefined' &&
-      typeof intlExt.Locale !== 'undefined'
-    ) {
+    if (typeof intlExt !== 'undefined' && typeof intlExt.Locale !== 'undefined') {
       const localeObj = new intlExt.Locale(locale);
-      if (
-        'weekInfo' in localeObj &&
-        localeObj.weekInfo?.firstDay !== undefined
-      ) {
+      if ('weekInfo' in localeObj && localeObj.weekInfo?.firstDay !== undefined) {
         return localeObj.weekInfo.firstDay % 7;
       }
     }
@@ -194,11 +171,7 @@ export function getFirstDayOfWeek(locale: string): number {
   } catch {
     // If locale parsing fails, default based on locale string
     const localeLower = locale.toLowerCase();
-    if (
-      localeLower.startsWith('en-gb') ||
-      localeLower.startsWith('en-au') ||
-      localeLower.startsWith('en-nz')
-    ) {
+    if (localeLower.startsWith('en-gb') || localeLower.startsWith('en-au') || localeLower.startsWith('en-nz')) {
       return 1; // Monday
     }
     return 0; // Sunday (default for en-US and others)
@@ -222,9 +195,7 @@ export function update12HourState(fullHour: number): {
   };
 }
 
-export function processDateRanges(
-  ranges: DateRange | null,
-): { [key: string]: [Date, Date] } | null {
+export function processDateRanges(ranges: DateRange | null): { [key: string]: [Date, Date] } | null {
   if (!ranges) return null;
 
   return Object.entries(ranges).reduce(
@@ -234,7 +205,7 @@ export function processDateRanges(
       if (start && end) acc[key] = [start, end];
       return acc;
     },
-    {} as { [key: string]: [Date, Date] },
+    {} as { [key: string]: [Date, Date] }
   );
 }
 
@@ -258,10 +229,7 @@ export function generateDecadeGrid(currentDecade: number): number[] {
 /**
  * Generate a large year range for virtual scrolling (100 years centered on current)
  */
-export function generateLargeYearRange(
-  centerYear: number,
-  range: number = 100,
-): number[] {
+export function generateLargeYearRange(centerYear: number, range: number = 100): number[] {
   const startYear = centerYear - Math.floor(range / 2);
   const years: number[] = [];
   for (let i = 0; i < range; i++) {
@@ -273,10 +241,7 @@ export function generateLargeYearRange(
 /**
  * Generate a large decade range for virtual scrolling (50 decades centered on current)
  */
-export function generateLargeDecadeRange(
-  centerDecade: number,
-  range: number = 50,
-): number[] {
+export function generateLargeDecadeRange(centerDecade: number, range: number = 50): number[] {
   const startDecade = centerDecade - Math.floor(range / 2) * 10;
   const decades: number[] = [];
   for (let i = 0; i < range; i++) {

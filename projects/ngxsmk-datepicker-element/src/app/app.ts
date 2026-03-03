@@ -4,7 +4,7 @@ import { Component, signal } from '@angular/core';
   selector: 'app-root',
   imports: [],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('ngxsmk-datepicker-element');

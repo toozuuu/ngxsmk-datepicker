@@ -20,7 +20,8 @@ const meta: Meta<NgxsmkDatepickerComponent> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A modern, powerful, and fully customizable date and date-range picker component for Angular 17+ applications.',
+        component:
+          'A modern, powerful, and fully customizable date and date-range picker component for Angular 17+ applications.',
       },
     },
   },

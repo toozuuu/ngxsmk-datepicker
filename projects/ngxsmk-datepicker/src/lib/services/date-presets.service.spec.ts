@@ -10,10 +10,7 @@ describe('DatePresetsService', () => {
   beforeEach(() => {
     platformId = 'browser';
     TestBed.configureTestingModule({
-      providers: [
-        DatePresetsService,
-        { provide: PLATFORM_ID, useValue: platformId }
-      ]
+      providers: [DatePresetsService, { provide: PLATFORM_ID, useValue: platformId }],
     });
 
     // Clear localStorage before each test
@@ -34,7 +31,7 @@ describe('DatePresetsService', () => {
       const preset: Omit<DatePreset, 'id' | 'createdAt' | 'updatedAt'> = {
         name: 'Test Preset',
         value: new Date('2024-01-15'),
-        category: 'test'
+        category: 'test',
       };
 
       const saved = service.savePreset(preset);
@@ -50,7 +47,7 @@ describe('DatePresetsService', () => {
     it('should persist presets to localStorage', () => {
       const preset = {
         name: 'Test Preset',
-        value: new Date('2024-01-15')
+        value: new Date('2024-01-15'),
       };
 
       service.savePreset(preset);
@@ -67,7 +64,7 @@ describe('DatePresetsService', () => {
     it('should update an existing preset', () => {
       const preset = service.savePreset({
         name: 'Original Name',
-        value: new Date('2024-01-15')
+        value: new Date('2024-01-15'),
       });
 
       // Wait a bit to ensure updatedAt is different
@@ -75,7 +72,7 @@ describe('DatePresetsService', () => {
 
       const updated = service.updatePreset(preset.id, {
         name: 'Updated Name',
-        value: new Date('2024-02-20')
+        value: new Date('2024-02-20'),
       });
 
       expect(updated).toBeTruthy();
@@ -95,7 +92,7 @@ describe('DatePresetsService', () => {
     it('should retrieve a preset by ID', () => {
       const saved = service.savePreset({
         name: 'Test Preset',
-        value: new Date('2024-01-15')
+        value: new Date('2024-01-15'),
       });
 
       const retrieved = service.getPreset(saved.id);
@@ -132,7 +129,7 @@ describe('DatePresetsService', () => {
 
       const workPresets = service.getPresetsByCategory('work');
       expect(workPresets.length).toBe(2);
-      expect(workPresets.every(p => p.category === 'work')).toBe(true);
+      expect(workPresets.every((p) => p.category === 'work')).toBe(true);
     });
 
     it('should return empty array for non-existent category', () => {
@@ -163,7 +160,7 @@ describe('DatePresetsService', () => {
     it('should delete a preset by ID', () => {
       const preset = service.savePreset({
         name: 'Test Preset',
-        value: new Date('2024-01-15')
+        value: new Date('2024-01-15'),
       });
 
       const deleted = service.deletePreset(preset.id);
@@ -193,7 +190,7 @@ describe('DatePresetsService', () => {
       const date = new Date('2024-01-15');
       const preset = service.savePreset({
         name: 'Test Preset',
-        value: date
+        value: date,
       });
 
       const applied = service.applyPreset(preset.id);
@@ -205,7 +202,7 @@ describe('DatePresetsService', () => {
       const dates = [new Date('2024-01-15'), new Date('2024-02-20')];
       const preset = service.savePreset({
         name: 'Test Preset',
-        value: dates
+        value: dates,
       });
 
       const applied = service.applyPreset(preset.id);
@@ -219,11 +216,11 @@ describe('DatePresetsService', () => {
     it('should return cloned value for date range', () => {
       const range: DatepickerValue = {
         start: new Date('2024-01-15'),
-        end: new Date('2024-02-20')
+        end: new Date('2024-02-20'),
       };
       const preset = service.savePreset({
         name: 'Test Preset',
-        value: range
+        value: range,
       });
 
       const applied = service.applyPreset(preset.id);
@@ -242,7 +239,7 @@ describe('DatePresetsService', () => {
     it('should handle null value', () => {
       const preset = service.savePreset({
         name: 'Test Preset',
-        value: null
+        value: null,
       });
 
       const applied = service.applyPreset(preset.id);
@@ -254,7 +251,7 @@ describe('DatePresetsService', () => {
     it('should return true for existing preset', () => {
       const preset = service.savePreset({
         name: 'Test Preset',
-        value: new Date('2024-01-15')
+        value: new Date('2024-01-15'),
       });
 
       expect(service.hasPreset(preset.id)).toBe(true);
@@ -326,7 +323,7 @@ describe('DatePresetsService', () => {
       const invalidPresets = JSON.stringify([
         { name: 'Valid Preset', value: new Date('2024-01-15') },
         { name: 'Invalid Preset' }, // Missing value
-        { value: new Date('2024-02-20') } // Missing name
+        { value: new Date('2024-02-20') }, // Missing name
       ]);
 
       const result = service.importPresets(invalidPresets);
@@ -340,8 +337,8 @@ describe('DatePresetsService', () => {
           name: 'Test Preset',
           value: '2024-01-15T00:00:00.000Z',
           createdAt: '2024-01-01T00:00:00.000Z',
-          updatedAt: '2024-01-01T00:00:00.000Z'
-        }
+          updatedAt: '2024-01-01T00:00:00.000Z',
+        },
       ]);
 
       const result = service.importPresets(jsonString);
@@ -359,7 +356,7 @@ describe('DatePresetsService', () => {
         name: 'Test Preset',
         value: '2024-01-15T00:00:00.000Z',
         createdAt: '2024-01-01T00:00:00.000Z',
-        updatedAt: '2024-01-01T00:00:00.000Z'
+        updatedAt: '2024-01-01T00:00:00.000Z',
       };
 
       localStorage.setItem('ngxsmk-datepicker-presets', JSON.stringify([preset]));
@@ -367,10 +364,7 @@ describe('DatePresetsService', () => {
       // Reset and create new service instance through TestBed
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        providers: [
-          DatePresetsService,
-          { provide: PLATFORM_ID, useValue: 'browser' }
-        ]
+        providers: [DatePresetsService, { provide: PLATFORM_ID, useValue: 'browser' }],
       });
 
       const newService = TestBed.inject(DatePresetsService);
@@ -385,7 +379,7 @@ describe('DatePresetsService', () => {
 
       const preset = {
         name: 'Test Preset',
-        value: new Date('2024-01-15')
+        value: new Date('2024-01-15'),
       };
 
       // Should not throw
@@ -400,10 +394,7 @@ describe('DatePresetsService', () => {
       // Reset and create new service instance through TestBed
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        providers: [
-          DatePresetsService,
-          { provide: PLATFORM_ID, useValue: 'browser' }
-        ]
+        providers: [DatePresetsService, { provide: PLATFORM_ID, useValue: 'browser' }],
       });
 
       const newService = TestBed.inject(DatePresetsService);
@@ -417,10 +408,7 @@ describe('DatePresetsService', () => {
     it('should not access localStorage on server', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        providers: [
-          DatePresetsService,
-          { provide: PLATFORM_ID, useValue: 'server' }
-        ]
+        providers: [DatePresetsService, { provide: PLATFORM_ID, useValue: 'server' }],
       });
 
       const serverService = TestBed.inject(DatePresetsService);
@@ -435,4 +423,3 @@ describe('DatePresetsService', () => {
     });
   });
 });
-

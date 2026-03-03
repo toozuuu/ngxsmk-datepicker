@@ -13,7 +13,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
       <h2>{{ i18n.t().installation.npmTitle }}</h2>
       <p>{{ i18n.t().installation.npmLead }}</p>
-      
+
       <div class="code-window">
         <div class="window-header">
           <div class="dot red"></div>
@@ -21,7 +21,7 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="dot green"></div>
           <div class="window-title">bash</div>
         </div>
-        <pre><code class="text-main"><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span></code></pre>
+        <pre><code class="text-main"><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.2.1</span></code></pre>
       </div>
 
       <div class="tip">
@@ -37,12 +37,18 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="dot green"></div>
           <div class="window-title">bash</div>
         </div>
-        <pre><code class="text-main"><span class="token-function">yarn add</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span>
-<span class="token-function">pnpm add</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span>
-<span class="token-function">bun add</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span></code></pre>
+        <pre><code class="text-main"><span class="token-function">yarn add</span> ngxsmk-datepicker@<span class="token-number">2.2.1</span>
+<span class="token-function">pnpm add</span> ngxsmk-datepicker@<span class="token-number">2.2.1</span>
+<span class="token-function">bun add</span> ngxsmk-datepicker@<span class="token-number">2.2.1</span></code></pre>
       </div>
       <p>
-        <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/docs/INSTALLATION.md" target="_blank" rel="noopener noreferrer" class="link">{{ i18n.t().installation.moreLink }}</a>
+        <a
+          href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/docs/INSTALLATION.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="link"
+          >{{ i18n.t().installation.moreLink }}</a
+        >
       </p>
 
       <h2>{{ i18n.t().installation.importTitle }}</h2>
@@ -72,20 +78,35 @@ import { I18nService } from '../../i18n/i18n.service';
       <p>{{ i18n.t().installation.zonelessLead }}</p>
     </div>
   `,
-  styles: [`
-    :host { display: block; }
-    h1 { margin-bottom: var(--space-xs); }
-    .text-lg { 
-      font-size: var(--font-size-lg); 
-      margin-bottom: var(--space-2xl);
-    }
-    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
-    p { margin-bottom: var(--space-md); }
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      h1 {
+        margin-bottom: var(--space-xs);
+      }
+      .text-lg {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--space-2xl);
+      }
+      h2 {
+        margin-top: var(--space-3xl);
+        margin-bottom: var(--space-sm);
+      }
+      p {
+        margin-bottom: var(--space-md);
+      }
 
-
-    .tip { margin-top: var(--space-lg); }
-    p a.link { display: inline-block; margin-top: var(--space-xs); }
-  `]
+      .tip {
+        margin-top: var(--space-lg);
+      }
+      p a.link {
+        display: inline-block;
+        margin-top: var(--space-xs);
+      }
+    `,
+  ],
 })
 export class InstallationComponent {
   i18n = inject(I18nService);

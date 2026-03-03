@@ -2,7 +2,7 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** February 25, 2026 · **Current stable:** v2.2.0
+**Last updated:** March 3, 2026 · **Current stable:** v2.2.1
 
 ## Table of Contents
 
@@ -248,7 +248,7 @@ npm install ngxsmk-datepicker@2.0.8
 ### Changes
 
 - **Version Update**: Updated to version 2.0.7
-- **Stable Release**: Version 2.2.0 is the current stable version
+- **Stable Release**: Version 2.2.1 is the current stable version
 - No breaking changes.
 
 ### Migration Steps
@@ -458,7 +458,7 @@ import { CustomDateFormatService } from "ngxsmk-datepicker";
 customFormat.format(date, "YYYY-MM-DD HH:mm:ss", "en-US");
 
 // Locale-aware number formatting
-import { formatLocaleNumber } from "ngxsmk-datepicker/utils";
+import { formatLocaleNumber } from "ngxsmk-datepicker";
 
 formatLocaleNumber(42, "de-DE"); // "42"
 ```

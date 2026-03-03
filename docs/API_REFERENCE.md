@@ -2,8 +2,8 @@
 
 Complete API reference for ngxsmk-datepicker with JSDoc examples for improved IDE IntelliSense.
 
-**Version**: 2.2.0+  
-**Last Updated**: February 25, 2026
+**Version**: 2.2.1+  
+**Last Updated**: March 3, 2026
 
 ---
 
@@ -979,7 +979,7 @@ public clearValue(event?: Event): void;
  * Returns null for invalid inputs.
  *
  * @example
- * import { normalizeDate } from 'ngxsmk-datepicker/utils';
+ * import { normalizeDate } from 'ngxsmk-datepicker';
  *
  * // From Date object
  * const date1 = normalizeDate(new Date());
@@ -1011,7 +1011,7 @@ export function normalizeDate(input: DateInput): Date | null;
  * Formats a date with specific timezone and locale settings.
  *
  * @example
- * import { formatDateWithTimezone } from 'ngxsmk-datepicker/utils';
+ * import { formatDateWithTimezone } from 'ngxsmk-datepicker';
  *
  * const date = new Date(2024, 5, 15, 14, 30);
  *

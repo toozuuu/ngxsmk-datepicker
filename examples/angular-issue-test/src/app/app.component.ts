@@ -14,6 +14,12 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
     </nav>
     <router-outlet></router-outlet>
   `,
-  styles: [`.active { font-weight: bold; }`],
+  styles: [
+    `
+      .active {
+        font-weight: bold;
+      }
+    `,
+  ],
 })
 export class AppComponent {}

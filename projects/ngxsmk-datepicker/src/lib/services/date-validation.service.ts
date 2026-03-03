@@ -41,10 +41,8 @@ export class DateValidationService {
 
     // Check disabled dates
     if (constraints.disabledDates && constraints.disabledDates.length > 0) {
-      const isDisabled = constraints.disabledDates.some(disabledDate => {
-        const disabled = disabledDate instanceof Date
-          ? disabledDate
-          : new Date(disabledDate);
+      const isDisabled = constraints.disabledDates.some((disabledDate) => {
+        const disabled = disabledDate instanceof Date ? disabledDate : new Date(disabledDate);
         return this.isSameDay(dayStart, disabled);
       });
 
@@ -55,7 +53,7 @@ export class DateValidationService {
 
     // Check disabled ranges
     if (constraints.disabledRanges && constraints.disabledRanges.length > 0) {
-      const isInDisabledRange = constraints.disabledRanges.some(range => {
+      const isInDisabledRange = constraints.disabledRanges.some((range) => {
         const start = range.start instanceof Date ? range.start : new Date(range.start);
         const end = range.end instanceof Date ? range.end : new Date(range.end);
         const rangeStart = getStartOfDay(start);
@@ -141,12 +139,6 @@ export class DateValidationService {
    * Helper to check if two dates are the same day
    */
   private isSameDay(d1: Date, d2: Date): boolean {
-    return (
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()
-    );
+    return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
   }
-
 }
-

@@ -57,7 +57,7 @@ export class KeyboardNavigationService {
       selectedDates: state.selectedDates,
       mode: state.mode,
       focusedDate: state.focusedDate,
-      isCalendarOpen: state.isCalendarOpen
+      isCalendarOpen: state.isCalendarOpen,
     };
 
     if (config.customShortcuts) {
@@ -168,4 +168,3 @@ export class KeyboardNavigationService {
     return parts.length > 1 ? parts.join('+') : event.key;
   }
 }
-

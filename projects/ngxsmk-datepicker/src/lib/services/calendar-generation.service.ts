@@ -62,7 +62,7 @@ export class CalendarGenerationService {
       months.push({
         month: calMonth,
         year: calYear,
-        days: days
+        days: days,
       });
     }
 
@@ -80,7 +80,7 @@ export class CalendarGenerationService {
   ): void {
     const monthsToPreload = [
       { year: currentMonth === 0 ? currentYear - 1 : currentYear, month: currentMonth === 0 ? 11 : currentMonth - 1 },
-      { year: currentMonth === 11 ? currentYear + 1 : currentYear, month: currentMonth === 11 ? 0 : currentMonth + 1 }
+      { year: currentMonth === 11 ? currentYear + 1 : currentYear, month: currentMonth === 11 ? 0 : currentMonth + 1 },
     ];
 
     for (const { year, month } of monthsToPreload) {
@@ -190,4 +190,3 @@ export class CalendarGenerationService {
     return days;
   }
 }
-

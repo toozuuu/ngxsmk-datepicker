@@ -7,7 +7,7 @@ describe('DisplayFormattingService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DisplayFormattingService]
+      providers: [DisplayFormattingService],
     });
     service = TestBed.inject(DisplayFormattingService);
   });
@@ -22,9 +22,9 @@ describe('DisplayFormattingService', () => {
         locale: 'en-US',
         mode: 'single',
         timeOnly: false,
-        showTime: false
+        showTime: false,
       });
-      
+
       expect(result).toBe('');
     });
 
@@ -34,9 +34,9 @@ describe('DisplayFormattingService', () => {
         locale: 'en-US',
         mode: 'single',
         timeOnly: false,
-        showTime: false
+        showTime: false,
       });
-      
+
       expect(result).toBeTruthy();
       expect(result).toContain('June');
       expect(result).toContain('15');
@@ -46,34 +46,30 @@ describe('DisplayFormattingService', () => {
     it('should format date range', () => {
       const range: DatepickerValue = {
         start: new Date(2025, 5, 10),
-        end: new Date(2025, 5, 20)
+        end: new Date(2025, 5, 20),
       };
-      
+
       const result = service.formatValue(range, {
         locale: 'en-US',
         mode: 'range',
         timeOnly: false,
-        showTime: false
+        showTime: false,
       });
-      
+
       expect(result).toBeTruthy();
       expect(result).toContain('-');
     });
 
     it('should format multiple dates', () => {
-      const dates: DatepickerValue = [
-        new Date(2025, 5, 10),
-        new Date(2025, 5, 15),
-        new Date(2025, 5, 20)
-      ];
-      
+      const dates: DatepickerValue = [new Date(2025, 5, 10), new Date(2025, 5, 15), new Date(2025, 5, 20)];
+
       const result = service.formatValue(dates, {
         locale: 'en-US',
         mode: 'multiple',
         timeOnly: false,
-        showTime: false
+        showTime: false,
       });
-      
+
       expect(result).toBeTruthy();
       expect(result).toContain('3 dates selected');
     });
@@ -84,9 +80,9 @@ describe('DisplayFormattingService', () => {
         locale: 'en-US',
         mode: 'single',
         timeOnly: true,
-        showTime: true
+        showTime: true,
       });
-      
+
       expect(result).toBeTruthy();
       expect(result).toMatch(/\d{1,2}:\d{2}/);
     });
@@ -98,9 +94,9 @@ describe('DisplayFormattingService', () => {
         mode: 'single',
         timeOnly: false,
         showTime: false,
-        displayFormat: 'yyyy-MM-dd HH:mm:ss'
+        displayFormat: 'yyyy-MM-dd HH:mm:ss',
       });
-      
+
       expect(result).toBe('2025-06-15 14:30:45');
     });
 
@@ -110,9 +106,9 @@ describe('DisplayFormattingService', () => {
         locale: 'en-US',
         mode: 'single',
         timeOnly: false,
-        showTime: true
+        showTime: true,
       });
-      
+
       expect(result).toBeTruthy();
       expect(result).toMatch(/\d{1,2}:\d{2}/);
     });
@@ -123,9 +119,9 @@ describe('DisplayFormattingService', () => {
         locale: 'en-US',
         mode: 'week',
         timeOnly: false,
-        showTime: false
+        showTime: false,
       });
-      
+
       expect(result).toBeTruthy();
     });
 
@@ -135,9 +131,9 @@ describe('DisplayFormattingService', () => {
         locale: 'en-US',
         mode: 'month',
         timeOnly: false,
-        showTime: false
+        showTime: false,
       });
-      
+
       expect(result).toBeTruthy();
     });
 
@@ -147,9 +143,9 @@ describe('DisplayFormattingService', () => {
         locale: 'en-US',
         mode: 'quarter',
         timeOnly: false,
-        showTime: false
+        showTime: false,
       });
-      
+
       expect(result).toBeTruthy();
     });
 
@@ -159,11 +155,10 @@ describe('DisplayFormattingService', () => {
         locale: 'en-US',
         mode: 'year',
         timeOnly: false,
-        showTime: false
+        showTime: false,
       });
-      
+
       expect(result).toBeTruthy();
     });
   });
 });
-

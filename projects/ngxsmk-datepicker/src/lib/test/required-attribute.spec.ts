@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { SignalFormField } from '../services/field-sync.service';
@@ -31,9 +26,7 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
     tick(100);
     fixture.detectChanges();
 
-    const inputDebug = fixture.debugElement.query(
-      By.css('.ngxsmk-display-input'),
-    );
+    const inputDebug = fixture.debugElement.query(By.css('.ngxsmk-display-input'));
     expect(inputDebug).withContext('Input element not found').toBeTruthy();
 
     if (inputDebug) {
@@ -55,9 +48,7 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
     fixture.detectChanges();
 
     expect(component.required).toBe(true);
-    const inputDebug = fixture.debugElement.query(
-      By.css('.ngxsmk-display-input'),
-    );
+    const inputDebug = fixture.debugElement.query(By.css('.ngxsmk-display-input'));
     if (inputDebug) {
       const input = inputDebug.nativeElement as HTMLInputElement;
       expect(input.required).toBe(true);
@@ -77,9 +68,7 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
     fixture.detectChanges();
 
     expect(component.required).toBe(true);
-    const inputDebug = fixture.debugElement.query(
-      By.css('.ngxsmk-display-input'),
-    );
+    const inputDebug = fixture.debugElement.query(By.css('.ngxsmk-display-input'));
     if (inputDebug) {
       const input = inputDebug.nativeElement as HTMLInputElement;
       expect(input.required).toBe(true);
@@ -100,9 +89,7 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
     fixture.detectChanges();
 
     expect(component.required).toBe(true);
-    const inputDebug = fixture.debugElement.query(
-      By.css('.ngxsmk-display-input'),
-    );
+    const inputDebug = fixture.debugElement.query(By.css('.ngxsmk-display-input'));
     if (inputDebug) {
       const input = inputDebug.nativeElement as HTMLInputElement;
       expect(input.required).toBe(true);

@@ -1,6 +1,6 @@
 /**
  * Date Adapter Interface
- * 
+ *
  * Allows consumers to swap formatting/parsing logic with external date libraries
  * like date-fns, dayjs, or Luxon.
  */
@@ -74,7 +74,7 @@ export interface DateAdapter {
 export class NativeDateAdapter implements DateAdapter {
   parse(value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null {
     if (!value) return null;
-    
+
     try {
       if (value instanceof Date) {
         if (isNaN(value.getTime())) {
@@ -83,7 +83,7 @@ export class NativeDateAdapter implements DateAdapter {
         }
         return new Date(value.getTime());
       }
-      
+
       if (typeof value === 'string') {
         const parsed = new Date(value);
         if (isNaN(parsed.getTime())) {
@@ -92,7 +92,7 @@ export class NativeDateAdapter implements DateAdapter {
         }
         return parsed;
       }
-      
+
       if (typeof value === 'number') {
         const parsed = new Date(value);
         if (isNaN(parsed.getTime())) {
@@ -105,19 +105,19 @@ export class NativeDateAdapter implements DateAdapter {
       onError?.(error instanceof Error ? error : new Error(String(error)));
       return null;
     }
-    
+
     return null;
   }
 
   format(date: Date, _format?: string, locale?: string): string {
     if (!date || isNaN(date.getTime())) return '';
-    
+
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'short',
-      day: '2-digit'
+      day: '2-digit',
     };
-    
+
     return new Intl.DateTimeFormat(locale || 'en-US', options).format(date);
   }
 
@@ -158,4 +158,3 @@ export class NativeDateAdapter implements DateAdapter {
     );
   }
 }
-

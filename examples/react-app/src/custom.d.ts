@@ -1,5 +1,5 @@
 declare namespace JSX {
-    interface IntrinsicElements {
-        'ngxsmk-datepicker': any;
-    }
+  interface IntrinsicElements {
+    'ngxsmk-datepicker': any;
+  }
 }

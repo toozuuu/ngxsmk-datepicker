@@ -19,8 +19,7 @@ describe('window.matchMedia Compatibility (Issue #71)', () => {
 
   afterEach(() => {
     if (originalMatchMedia !== undefined) {
-      (window as unknown as Record<string, unknown>)['matchMedia'] =
-        originalMatchMedia;
+      (window as unknown as Record<string, unknown>)['matchMedia'] = originalMatchMedia;
     } else {
       delete (window as unknown as Record<string, unknown>)['matchMedia'];
     }
@@ -55,8 +54,7 @@ describe('window.matchMedia Compatibility (Issue #71)', () => {
   });
 
   it('should initialize without errors when window.matchMedia returns null', () => {
-    (window as unknown as Record<string, unknown>)['matchMedia'] = (() =>
-      null) as unknown as typeof window.matchMedia;
+    (window as unknown as Record<string, unknown>)['matchMedia'] = (() => null) as unknown as typeof window.matchMedia;
 
     expect(() => {
       const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -82,9 +80,7 @@ describe('window.matchMedia Compatibility (Issue #71)', () => {
 
   it('should apply animation config correctly when matchMedia is available', () => {
     if (!window.matchMedia) {
-      (window as unknown as Record<string, unknown>)['matchMedia'] = ((
-        query: string,
-      ) =>
+      (window as unknown as Record<string, unknown>)['matchMedia'] = ((query: string) =>
         ({
           matches: false,
           media: query,
@@ -109,9 +105,7 @@ describe('window.matchMedia Compatibility (Issue #71)', () => {
   });
 
   it('should handle prefers-reduced-motion preference when matchMedia is available', () => {
-    (window as unknown as Record<string, unknown>)['matchMedia'] = ((
-      query: string,
-    ) =>
+    (window as unknown as Record<string, unknown>)['matchMedia'] = ((query: string) =>
       ({
         matches: query === '(prefers-reduced-motion: reduce)',
         media: query,
@@ -146,8 +140,7 @@ describe('window.matchMedia Compatibility (Issue #71)', () => {
   });
 
   it('should handle matchMedia returning null gracefully', () => {
-    (window as unknown as Record<string, unknown>)['matchMedia'] = (() =>
-      null) as unknown as typeof window.matchMedia;
+    (window as unknown as Record<string, unknown>)['matchMedia'] = (() => null) as unknown as typeof window.matchMedia;
 
     const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
     const testComponent = testFixture.componentInstance;

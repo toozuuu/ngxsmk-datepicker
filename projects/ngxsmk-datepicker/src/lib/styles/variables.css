@@ -15,6 +15,17 @@ ngxsmk-datepicker,
   --datepicker-subtle-text-color: var(--ion-text-color-step-400, #6b7280);
   --datepicker-border-color: var(--ion-item-border-color, var(--ion-border-color, #e5e7eb));
   --datepicker-hover-background: #f3f4f6;
+  --datepicker-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--datepicker-primary-color) 15%, transparent);
+
+  /* Bridge internal --ngxsmk-* from public --datepicker-* */
+  --ngxsmk-color-primary: var(--datepicker-primary-color);
+  --ngxsmk-color-on-primary: var(--datepicker-primary-contrast);
+  --ngxsmk-color-range-bg: var(--datepicker-range-background);
+  --ngxsmk-color-surface: var(--datepicker-background);
+  --ngxsmk-color-surface-hover: var(--datepicker-hover-background);
+  --ngxsmk-color-text-main: var(--datepicker-text-color);
+  --ngxsmk-color-text-muted: var(--datepicker-subtle-text-color);
+  --ngxsmk-color-border: var(--datepicker-border-color);
 
   /* Shadows */
   --datepicker-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -29,7 +40,9 @@ ngxsmk-datepicker,
   --datepicker-font-size-lg: 16px;
   --datepicker-font-size-xl: 18px;
   --datepicker-line-height: 1.5;
-  --datepicker-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --datepicker-font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
 
   /* Spacing */
   --datepicker-spacing-xs: 4px;
@@ -50,7 +63,8 @@ ngxsmk-datepicker,
   --datepicker-transition-duration: 150ms;
   --datepicker-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
   --datepicker-transition-property: all;
-  --datepicker-transition: var(--datepicker-transition-property) var(--datepicker-transition-duration) var(--datepicker-transition-easing);
+  --datepicker-transition: var(--datepicker-transition-property) var(--datepicker-transition-duration)
+    var(--datepicker-transition-easing);
 
   /* Z-index */
   --datepicker-z-index-base: 2147483647;
@@ -108,7 +122,6 @@ ngxsmk-datepicker.md3-theme {
   --datepicker-font-family: 'Roboto', sans-serif;
   --datepicker-shadow-md: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px rgba(0, 0, 0, 0.3);
 }
-
 
 /* High Contrast Mode */
 @media (prefers-contrast: high) {

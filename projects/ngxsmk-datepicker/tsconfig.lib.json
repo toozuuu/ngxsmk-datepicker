@@ -12,6 +12,8 @@
     "noUnusedParameters": true,
     "exactOptionalPropertyTypes": true
   },
+  "include": ["src/public-api.ts", "src/lib/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/material"],
   "angularCompilerOptions": {
     "compilationMode": "partial",
     "enableI18nLegacyMessageIdFormat": false,

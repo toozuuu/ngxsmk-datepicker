@@ -23,22 +23,14 @@ const getFirstDayOfMonth = (year: number, month: number): number => {
   return new Date(year, month, 1).getDay();
 };
 
-const getWeeksInMonth = (
-  year: number,
-  month: number,
-  weekStart: number,
-): number => {
+const getWeeksInMonth = (year: number, month: number, weekStart: number): number => {
   const firstDay = getFirstDayOfMonth(year, month);
   const offset = (firstDay - weekStart + 7) % 7;
   const days = getDaysInMonth(year, month);
   return Math.ceil((offset + days) / 7);
 };
 
-const generateCalendar = (
-  year: number,
-  month: number,
-  weekStart: number,
-): CalendarDay[][] => {
+const generateCalendar = (year: number, month: number, weekStart: number): CalendarDay[][] => {
   const weeks = getWeeksInMonth(year, month, weekStart);
   const daysInMonth = getDaysInMonth(year, month);
   const firstDay = getFirstDayOfMonth(year, month);
@@ -84,7 +76,7 @@ const generateCalendar = (
 const getMonthName = (
   month: number,
   locale: string = 'en-US',
-  format: 'long' | 'short' | 'narrow' = 'long',
+  format: 'long' | 'short' | 'narrow' = 'long'
 ): string => {
   const date = new Date(2024, month, 1);
   try {
@@ -97,7 +89,7 @@ const getMonthName = (
 const getDayName = (
   dayIndex: number,
   locale: string = 'en-US',
-  format: 'long' | 'short' | 'narrow' = 'long',
+  format: 'long' | 'short' | 'narrow' = 'long'
 ): string => {
   const base = new Date(2024, 0, 7 + dayIndex);
   try {
@@ -107,11 +99,7 @@ const getDayName = (
   }
 };
 
-const formatDate = (
-  date: Date,
-  pattern: string = 'yyyy-MM-dd',
-  locale?: string,
-): string => {
+const formatDate = (date: Date, pattern: string = 'yyyy-MM-dd', locale?: string): string => {
   if (!pattern) {
     return date.toLocaleDateString(locale || undefined);
   }
@@ -359,10 +347,7 @@ describe('Calendar Utils - Edge Cases & Coverage', () => {
       const firstWeek = calendar[0];
       // Check if some days are from previous month
       const prevMonthDays = firstWeek.filter((day) => day.month < 5);
-      expect(
-        prevMonthDays.length +
-          firstWeek.filter((day) => day.month === 5).length,
-      ).toBe(7);
+      expect(prevMonthDays.length + firstWeek.filter((day) => day.month === 5).length).toBe(7);
     });
 
     it('should include next month days', () => {
@@ -460,15 +445,7 @@ describe('Calendar Utils - Edge Cases & Coverage', () => {
 
   describe('getDayName - Edge Cases', () => {
     it('should return names for all 7 days', () => {
-      const days = [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-      ];
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
       for (let i = 0; i < 7; i++) {
         const name = getDayName(i);

@@ -4,10 +4,7 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "assets": [
-    "styles",
-    "docs"
-  ],
+  "assets": ["styles", "docs"],
   "allowedNonPeerDependencies": [],
   "deleteDestPath": true
 }

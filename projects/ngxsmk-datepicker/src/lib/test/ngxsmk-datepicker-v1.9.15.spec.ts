@@ -117,7 +117,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // Spy on _normalizeValue to ensure it's called
       const normalizeValueSpy = spyOn(
         component as unknown as { _normalizeValue: (v: unknown) => unknown },
-        '_normalizeValue',
+        '_normalizeValue'
       ).and.callThrough();
 
       component.writeValue(momentObj);

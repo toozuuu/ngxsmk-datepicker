@@ -2,7 +2,12 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
-**Version**: 2.2.0+ | **Last updated**: February 25, 2026
+**Version**: 2.2.1+ | **Last updated**: March 3, 2026
+
+## Stable vs experimental
+
+- **Stable**: All inputs/outputs in the reference tables below are stable unless marked **Experimental**. Stable APIs will not change in a breaking way within the same major version.
+- **Experimental**: Marked in the tables; may change in minor releases. Use with awareness.
 
 ## Versioning Policy
 
@@ -40,7 +45,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | Input | Type | Default | Status | Description | Example |
 |-------|------|---------|--------|-------------|---------|
 | `mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Stable | Selection mode | `mode="single"` or `[mode]="'range'"` |
-| `value` | `DatepickerValue` | `null` | Stable | Current value (one-way binding) | `[value]="selectedDate"` |
+| `value` | `DatepickerValue` | `null` | Stable | Current value (one-way binding). For two-way binding with a signal, use `[value]="dateSignal()"` and `(valueChange)="dateSignal.set($event)"`. | `[value]="selectedDate"` |
 | `field` | `SignalFormField \| SignalFormFieldConfig` | `null` | Stable | Signal form field (Angular 21+). Automatically tracks dirty state when using `[field]` binding. Supports direct signals, signals with properties, and resolution of nested signals. | `[field]="myForm.dateField"` |
 | `placeholder` | `string \| null` | `'Select Date'` or `'Select Time'` | Stable | Input placeholder text | `placeholder="Choose a date"` |
 | `inputId` | `string` | `''` | Stable | Custom ID for the input element | `inputId="my-date-input"` |
@@ -59,7 +64,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `timeOnly` | `boolean` | `false` | Stable | Display time picker only (no calendar). Automatically enables `showTime`. | `[timeOnly]="true"` |
 | `allowTyping` | `boolean` | `false` | Stable | Enable manual typing in the input field. Required for native validation. | `[allowTyping]="true"` |
 | `displayFormat` | `string` | `null` | Stable | Custom date format string (e.g., 'MM/DD/YYYY'). | `displayFormat="DD.MM.YYYY"` |
-| `showCalendarButton` | `boolean` | `true` | Stable | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. | `[showCalendarButton]="false"` |
+| `showCalendarButton` | `boolean` | `false` | Stable | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. | `[showCalendarButton]="true"` |
 | `minuteInterval` | `number` | `1` | Stable | Minute selection interval | `[minuteInterval]="15"` |
 | `showSeconds` | `boolean` | `false` | Stable | Show seconds in time selection | `[showSeconds]="true"` |
 | `secondInterval` | `number` | `1` | Stable | Second selection interval (e.g. 1, 5, 15) | `[secondInterval]="5"` |
@@ -2337,6 +2342,27 @@ export function normalizeDate(date: DateInput | null): Date | null;
 // From './lib/utils/calendar.utils'
 export function getDaysInMonth(year: number, month: number): number;
 export function getFirstDayOfMonth(year: number, month: number): number;
+```
+
+## Virtual scrolling
+
+Year and decade views use the internal `calculateVirtualScroll` utility and visible-index signals so that only visible items are rendered when year ranges are large (e.g. 100+ years). The main calendar grid uses lazy month rendering via `_visibleCalendarIndicesSignal`. For very large ranges, consider limiting `yearRange` for optimal performance.
+
+## Animation and reduced motion
+
+Animation duration and transitions can be configured via `provideDatepickerConfig` or the global config. The component respects the `prefers-reduced-motion` media query when `animations.respectReducedMotion` is `true` (default): transitions are disabled for users who request reduced motion.
+
+```typescript
+import { provideDatepickerConfig, DEFAULT_ANIMATION_CONFIG } from 'ngxsmk-datepicker';
+
+// In app config or providers
+provideDatepickerConfig({
+  animations: {
+    ...DEFAULT_ANIMATION_CONFIG,
+    duration: 200,
+    respectReducedMotion: true,
+  },
+})
 ```
 
 ## Keyboard Support

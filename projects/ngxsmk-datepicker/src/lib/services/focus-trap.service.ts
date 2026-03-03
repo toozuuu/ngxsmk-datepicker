@@ -7,7 +7,7 @@ interface FocusTrapState {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FocusTrapService implements OnDestroy {
   private activeTraps = new Map<ElementRef<HTMLElement>, FocusTrapState>();
@@ -17,7 +17,7 @@ export class FocusTrapService implements OnDestroy {
     'textarea:not([disabled])',
     'input:not([disabled])',
     'select:not([disabled])',
-    '[tabindex]:not([tabindex="-1"])'
+    '[tabindex]:not([tabindex="-1"])',
   ].join(', ');
 
   /**
@@ -25,7 +25,7 @@ export class FocusTrapService implements OnDestroy {
    */
   trapFocus(elementRef: ElementRef<HTMLElement>): () => void {
     if (!elementRef?.nativeElement) {
-      return () => { };
+      return () => {};
     }
 
     const element = elementRef.nativeElement;
@@ -64,7 +64,7 @@ export class FocusTrapService implements OnDestroy {
     this.activeTraps.set(elementRef, {
       element,
       handleKeyDown,
-      previousActiveElement
+      previousActiveElement,
     });
 
     // Focus first focusable element after a short delay to ensure DOM is ready
@@ -107,27 +107,27 @@ export class FocusTrapService implements OnDestroy {
   }
 
   private getFirstFocusable(element: HTMLElement): HTMLElement | null {
-    const focusableElements = Array.from(
-      element.querySelectorAll(this.focusableSelectors)
-    ) as HTMLElement[];
+    const focusableElements = Array.from(element.querySelectorAll(this.focusableSelectors)) as HTMLElement[];
 
-    return focusableElements.find(el => {
-      const style = window.getComputedStyle(el);
-      return style.display !== 'none' && style.visibility !== 'hidden';
-    }) || null;
+    return (
+      focusableElements.find((el) => {
+        const style = window.getComputedStyle(el);
+        return style.display !== 'none' && style.visibility !== 'hidden';
+      }) || null
+    );
   }
 
   private getLastFocusable(element: HTMLElement): HTMLElement | null {
-    const focusableElements = Array.from(
-      element.querySelectorAll(this.focusableSelectors)
-    ) as HTMLElement[];
+    const focusableElements = Array.from(element.querySelectorAll(this.focusableSelectors)) as HTMLElement[];
 
-    return focusableElements
-      .filter(el => {
-        const style = window.getComputedStyle(el);
-        return style.display !== 'none' && style.visibility !== 'hidden';
-      })
-      .pop() || null;
+    return (
+      focusableElements
+        .filter((el) => {
+          const style = window.getComputedStyle(el);
+          return style.display !== 'none' && style.visibility !== 'hidden';
+        })
+        .pop() || null
+    );
   }
 
   ngOnDestroy(): void {
@@ -138,4 +138,3 @@ export class FocusTrapService implements OnDestroy {
     this.activeTraps.clear();
   }
 }
-

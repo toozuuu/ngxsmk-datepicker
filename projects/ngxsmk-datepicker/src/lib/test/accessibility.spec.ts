@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { PLATFORM_ID } from '@angular/core';
 import { DatePipe } from '@angular/common';
@@ -62,8 +57,7 @@ describe('Accessibility Tests', () => {
     }));
 
     it('should have aria-expanded on toggle button', () => {
-      const toggleButton =
-        fixture.nativeElement.querySelector('[aria-expanded]');
+      const toggleButton = fixture.nativeElement.querySelector('[aria-expanded]');
       if (toggleButton) {
         const expanded = toggleButton.getAttribute('aria-expanded');
         expect(['true', 'false']).toContain(expanded);
@@ -79,9 +73,7 @@ describe('Accessibility Tests', () => {
       tick(100);
       fixture.detectChanges();
 
-      const selectedDate = fixture.nativeElement.querySelector(
-        '[aria-selected="true"]',
-      );
+      const selectedDate = fixture.nativeElement.querySelector('[aria-selected="true"]');
       // May or may not be present depending on implementation
       if (selectedDate) {
         expect(selectedDate.getAttribute('aria-selected')).toBe('true');
@@ -95,9 +87,7 @@ describe('Accessibility Tests', () => {
       fixture.detectChanges();
 
       // Dates outside range should be disabled
-      const disabledDates = fixture.nativeElement.querySelectorAll(
-        '[aria-disabled="true"]',
-      );
+      const disabledDates = fixture.nativeElement.querySelectorAll('[aria-disabled="true"]');
       // Implementation dependent
       expect(disabledDates.length).toBeGreaterThanOrEqual(0);
     });
@@ -221,12 +211,10 @@ describe('Accessibility Tests', () => {
       component.inline = true;
       fixture.detectChanges();
 
-      const dateCells =
-        fixture.nativeElement.querySelectorAll('[role="gridcell"]');
+      const dateCells = fixture.nativeElement.querySelectorAll('[role="gridcell"]');
       if (dateCells.length > 0) {
         const firstCell = dateCells[0];
-        const label =
-          firstCell.getAttribute('aria-label') || firstCell.textContent;
+        const label = firstCell.getAttribute('aria-label') || firstCell.textContent;
         expect(label).toBeTruthy();
       } else {
         // If no gridcells found, verify component is rendered
@@ -237,9 +225,7 @@ describe('Accessibility Tests', () => {
 
   describe('Color Contrast', () => {
     it('should have sufficient color contrast for text', () => {
-      const textElements = fixture.nativeElement.querySelectorAll(
-        'input, button, .ngxsmk-datepicker',
-      );
+      const textElements = fixture.nativeElement.querySelectorAll('input, button, .ngxsmk-datepicker');
 
       textElements.forEach((element: HTMLElement) => {
         const style = window.getComputedStyle(element);
@@ -272,9 +258,7 @@ describe('Accessibility Tests', () => {
       component.inline = true;
       fixture.detectChanges();
 
-      const headings = fixture.nativeElement.querySelectorAll(
-        'h1, h2, h3, h4, h5, h6',
-      );
+      const headings = fixture.nativeElement.querySelectorAll('h1, h2, h3, h4, h5, h6');
       // Should have logical heading structure if headings are used
       expect(headings.length).toBeGreaterThanOrEqual(0);
     }));
@@ -285,9 +269,7 @@ describe('Accessibility Tests', () => {
       component.inline = true;
       fixture.detectChanges();
 
-      const interactiveElements = fixture.nativeElement.querySelectorAll(
-        'button, input, [role="button"]',
-      );
+      const interactiveElements = fixture.nativeElement.querySelectorAll('button, input, [role="button"]');
 
       interactiveElements.forEach((element: HTMLElement) => {
         const rect = element.getBoundingClientRect();
@@ -327,9 +309,7 @@ describe('Accessibility Tests', () => {
 
   describe('Live Regions', () => {
     it('should have live region for dynamic content', () => {
-      const liveRegion = fixture.nativeElement.querySelector(
-        '[role="status"], [role="alert"], [aria-live]',
-      );
+      const liveRegion = fixture.nativeElement.querySelector('[role="status"], [role="alert"], [aria-live]');
       // May or may not be present depending on implementation
       if (liveRegion) {
         const role = liveRegion.getAttribute('role');
@@ -342,9 +322,7 @@ describe('Accessibility Tests', () => {
   describe('Skip Links', () => {
     it('should support skip to main content', () => {
       // Check if skip links are implemented
-      const skipLink = fixture.nativeElement.querySelector(
-        'a[href="#main-content"]',
-      );
+      const skipLink = fixture.nativeElement.querySelector('a[href="#main-content"]');
       // Optional feature
       expect(skipLink || true).toBeTruthy();
     });
@@ -353,9 +331,7 @@ describe('Accessibility Tests', () => {
   describe('High Contrast Mode', () => {
     it('should work in high contrast mode', () => {
       // Simulate high contrast mode by checking for forced colors
-      const supportsForcedColors = window.matchMedia(
-        '(forced-colors: active)',
-      ).matches;
+      const supportsForcedColors = window.matchMedia('(forced-colors: active)').matches;
 
       // Component should still function
       expect(component).toBeTruthy();
@@ -445,28 +421,15 @@ describe('Accessibility Tests', () => {
 
       interactiveElements.forEach((element: HTMLElement) => {
         const isKeyboardAccessible = supportsKeyboardNavigation(element);
-        console.log(
-          `Element ${element.tagName} keyboard support:`,
-          isKeyboardAccessible,
-        );
+        console.log(`Element ${element.tagName} keyboard support:`, isKeyboardAccessible);
 
         // Interactive elements should either be naturally keyboard accessible
         // or have explicit keyboard handlers
-        const isNative = [
-          'BUTTON',
-          'A',
-          'INPUT',
-          'SELECT',
-          'TEXTAREA',
-        ].includes(element.tagName);
+        const isNative = ['BUTTON', 'A', 'INPUT', 'SELECT', 'TEXTAREA'].includes(element.tagName);
         const hasKeyboardHandler =
-          element.hasAttribute('(keydown)') ||
-          element.hasAttribute('(keyup)') ||
-          element.hasAttribute('(keyboard)');
+          element.hasAttribute('(keydown)') || element.hasAttribute('(keyup)') || element.hasAttribute('(keyboard)');
 
-        expect(isNative || hasKeyboardHandler || isKeyboardAccessible).toBe(
-          true,
-        );
+        expect(isNative || hasKeyboardHandler || isKeyboardAccessible).toBe(true);
       });
     });
 
@@ -479,13 +442,7 @@ describe('Accessibility Tests', () => {
       interactiveElements.forEach((element: HTMLElement) => {
         const isFocusable = canFocus(element);
         const hasTabIndex = element.hasAttribute('tabindex');
-        const isNative = [
-          'BUTTON',
-          'A',
-          'INPUT',
-          'SELECT',
-          'TEXTAREA',
-        ].includes(element.tagName);
+        const isNative = ['BUTTON', 'A', 'INPUT', 'SELECT', 'TEXTAREA'].includes(element.tagName);
 
         // Element should be focusable naturally or via tabindex
         expect(isFocusable || isNative || hasTabIndex).toBe(true);
@@ -534,9 +491,7 @@ describe('Accessibility Tests', () => {
         // Focus should not be lost after selection
         const element = fixture.nativeElement.querySelector('input');
         if (element) {
-          const hasFocus =
-            element === document.activeElement ||
-            element.contains(document.activeElement);
+          const hasFocus = element === document.activeElement || element.contains(document.activeElement);
           console.log('Focus retained after selection:', hasFocus);
         }
 
@@ -579,9 +534,7 @@ describe('Accessibility Tests', () => {
       });
 
       // Check for duplicates
-      const duplicates = Array.from(idMap.entries()).filter(
-        ([, count]) => count > 1,
-      );
+      const duplicates = Array.from(idMap.entries()).filter(([, count]) => count > 1);
 
       if (duplicates.length > 0) {
         console.warn('Duplicate IDs found:', duplicates);
@@ -596,19 +549,13 @@ describe('Accessibility Tests', () => {
       const links = fixture.nativeElement.querySelectorAll('a');
 
       buttons.forEach((button: HTMLElement) => {
-        const text =
-          button.textContent?.trim() ||
-          button.getAttribute('aria-label') ||
-          button.getAttribute('title');
+        const text = button.textContent?.trim() || button.getAttribute('aria-label') || button.getAttribute('title');
         console.log('Button text:', text);
         expect(text?.length).toBeGreaterThan(0);
       });
 
       links.forEach((link: HTMLElement) => {
-        const text =
-          link.textContent?.trim() ||
-          link.getAttribute('aria-label') ||
-          link.getAttribute('title');
+        const text = link.textContent?.trim() || link.getAttribute('aria-label') || link.getAttribute('title');
         console.log('Link text:', text);
         expect(text?.length).toBeGreaterThan(0);
       });

@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { PLATFORM_ID } from '@angular/core';
@@ -12,6 +7,9 @@ import { DatePipe } from '@angular/common';
 /**
  * Integration tests for complex user flows
  * Tests complete user journeys and multi-step interactions
+ *
+ * Smoke: critical paths (open calendar, select date, range, form) are covered
+ * in "Smoke: critical paths" and "Complete Date Selection Flow" / "Form Integration Flow".
  */
 describe('Integration Flows', () => {
   let component: NgxsmkDatepickerComponent;
@@ -26,6 +24,59 @@ describe('Integration Flows', () => {
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  describe('Smoke: critical paths', () => {
+    it('smoke: opens calendar and closes', fakeAsync(() => {
+      component.toggleCalendar();
+      tick(100);
+      fixture.detectChanges();
+      expect(component.isCalendarOpen).toBe(true);
+      component.closeCalendarWithFocusRestore();
+      tick(100);
+      fixture.detectChanges();
+      expect(component.isCalendarOpen).toBe(false);
+    }));
+
+    it('smoke: selects single date', fakeAsync(() => {
+      component.toggleCalendar();
+      tick(100);
+      fixture.detectChanges();
+      const testDate = new Date(2024, 5, 15);
+      component.onDateClick(testDate);
+      tick(100);
+      fixture.detectChanges();
+      expect(component.value).toEqual(testDate);
+    }));
+
+    it('smoke: selects date range', fakeAsync(() => {
+      component.mode = 'range';
+      component.toggleCalendar();
+      tick(100);
+      fixture.detectChanges();
+      component.onDateClick(new Date(2024, 5, 10));
+      tick(100);
+      component.onDateClick(new Date(2024, 5, 20));
+      tick(100);
+      fixture.detectChanges();
+      const value = component.value as { start: Date; end: Date };
+      expect(value?.start).toBeTruthy();
+      expect(value?.end).toBeTruthy();
+    }));
+
+    it('smoke: works with reactive form control', fakeAsync(() => {
+      const formControl = new FormControl<unknown>(null);
+      component.writeValue(null);
+      component.registerOnChange((v) => formControl.setValue(v));
+      component.registerOnTouched(() => {});
+      component.toggleCalendar();
+      tick(100);
+      fixture.detectChanges();
+      component.onDateClick(new Date(2024, 5, 15));
+      tick(100);
+      fixture.detectChanges();
+      expect(formControl.value).toBeTruthy();
+    }));
   });
 
   describe('Complete Date Selection Flow', () => {
@@ -86,11 +137,7 @@ describe('Integration Flows', () => {
       tick(100);
       fixture.detectChanges();
 
-      const dates = [
-        new Date(2024, 5, 10),
-        new Date(2024, 5, 15),
-        new Date(2024, 5, 20),
-      ];
+      const dates = [new Date(2024, 5, 10), new Date(2024, 5, 15), new Date(2024, 5, 20)];
 
       // Select multiple dates
       dates.forEach((date) => {
@@ -158,9 +205,7 @@ describe('Integration Flows', () => {
       const initialMonth = component.currentMonth;
 
       // Navigate using buttons (test through DOM interaction)
-      const nextButton = fixture.nativeElement.querySelector(
-        '.ngxsmk-nav-button:last-child',
-      );
+      const nextButton = fixture.nativeElement.querySelector('.ngxsmk-nav-button:last-child');
       if (nextButton) {
         nextButton.click();
         tick(100);

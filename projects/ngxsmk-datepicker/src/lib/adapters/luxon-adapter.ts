@@ -1,14 +1,14 @@
 /**
  * Luxon Adapter Implementation
- * 
+ *
  * To use this adapter, install luxon:
  * npm install luxon
- * 
+ *
  * Then provide it in your app config:
  * ```typescript
  * import { provideDatepickerConfig } from 'ngxsmk-datepicker';
  * import { LuxonAdapter } from 'ngxsmk-datepicker/adapters/luxon-adapter';
- * 
+ *
  * provideDatepickerConfig({
  *   dateAdapter: new LuxonAdapter()
  * })
@@ -21,7 +21,15 @@ declare const require: (module: string) => unknown;
 
 export class LuxonAdapter implements DateAdapter {
   private DateTime: {
-    fromJSDate: (date: Date) => { isValid: boolean; toJSDate: () => Date; startOf: (unit: string) => { toJSDate: () => Date }; endOf: (unit: string) => { toJSDate: () => Date }; plus: (options: Record<string, number>) => { toJSDate: () => Date }; hasSame: (other: unknown, unit: string) => boolean; toFormat: (format: string, options?: Record<string, unknown>) => string };
+    fromJSDate: (date: Date) => {
+      isValid: boolean;
+      toJSDate: () => Date;
+      startOf: (unit: string) => { toJSDate: () => Date };
+      endOf: (unit: string) => { toJSDate: () => Date };
+      plus: (options: Record<string, number>) => { toJSDate: () => Date };
+      hasSame: (other: unknown, unit: string) => boolean;
+      toFormat: (format: string, options?: Record<string, unknown>) => string;
+    };
     fromISO: (value: string | unknown) => { isValid: boolean; toJSDate: () => Date };
     fromFormat: (value: string | unknown, format: string) => { isValid: boolean; toJSDate: () => Date };
   };
@@ -36,7 +44,7 @@ export class LuxonAdapter implements DateAdapter {
 
   parse(value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null {
     if (!value) return null;
-    
+
     try {
       if (value instanceof Date) {
         const dt = this.DateTime.fromJSDate(value);
@@ -46,7 +54,7 @@ export class LuxonAdapter implements DateAdapter {
         }
         return new Date(value.getTime());
       }
-      
+
       if (typeof value === 'string') {
         const parsed = this.DateTime.fromISO(value) || this.DateTime.fromFormat(value, 'yyyy-MM-dd');
         if (!parsed.isValid) {
@@ -59,22 +67,22 @@ export class LuxonAdapter implements DateAdapter {
       onError?.(error instanceof Error ? error : new Error(String(error)));
       return null;
     }
-    
+
     return null;
   }
 
   format(date: Date, formatStr: string = 'MMM dd, yyyy', locale?: string): string {
     if (!date) return '';
-    
+
     try {
       const dt = this.DateTime.fromJSDate(date);
       if (!dt.isValid) return '';
-      
+
       const options: Record<string, unknown> = {};
       if (locale) {
         options.locale = locale;
       }
-      
+
       return dt.toFormat(formatStr, options);
     } catch {
       return '';
@@ -114,4 +122,3 @@ export class LuxonAdapter implements DateAdapter {
     return dt1.hasSame(dt2, 'day');
   }
 }
-

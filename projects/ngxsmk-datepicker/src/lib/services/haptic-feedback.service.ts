@@ -2,7 +2,7 @@ import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HapticFeedbackService {
   private readonly platformId = inject(PLATFORM_ID);
@@ -17,7 +17,7 @@ export class HapticFeedbackService {
     try {
       // Very short single pulse for subtle interaction
       navigator.vibrate(5);
-    } catch { }
+    } catch {}
   }
 
   selection(): void {
@@ -25,7 +25,7 @@ export class HapticFeedbackService {
     try {
       // Tiny double pulse for selecting list items/scrolling "ticks"
       navigator.vibrate([1, 5, 1]);
-    } catch { }
+    } catch {}
   }
 
   medium(): void {
@@ -33,7 +33,7 @@ export class HapticFeedbackService {
     try {
       // Success-like double pulse
       navigator.vibrate([10, 5, 10]);
-    } catch { }
+    } catch {}
   }
 
   heavy(): void {
@@ -41,7 +41,7 @@ export class HapticFeedbackService {
     try {
       // Error-like or confirmation-like pattern
       navigator.vibrate([15, 30, 15]);
-    } catch { }
+    } catch {}
   }
 
   /**
@@ -57,4 +57,3 @@ export class HapticFeedbackService {
     }
   }
 }
-

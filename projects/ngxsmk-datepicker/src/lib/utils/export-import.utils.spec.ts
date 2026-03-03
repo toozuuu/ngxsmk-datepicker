@@ -5,7 +5,7 @@ import {
   importFromCsv,
   exportToIcs,
   importFromIcs,
-  ExportOptions
+  ExportOptions,
 } from './export-import.utils';
 import { DatepickerValue } from './calendar.utils';
 
@@ -21,10 +21,7 @@ describe('ExportImportUtils', () => {
     });
 
     it('should export date array to JSON', () => {
-      const dates = [
-        new Date('2024-01-15T10:30:00Z'),
-        new Date('2024-02-20T14:45:00Z')
-      ];
+      const dates = [new Date('2024-01-15T10:30:00Z'), new Date('2024-02-20T14:45:00Z')];
       const result = exportToJson(dates);
 
       const parsed = JSON.parse(result);
@@ -35,7 +32,7 @@ describe('ExportImportUtils', () => {
     it('should export date range to JSON', () => {
       const range: DatepickerValue = {
         start: new Date('2024-01-15T10:30:00Z'),
-        end: new Date('2024-01-20T14:45:00Z')
+        end: new Date('2024-01-20T14:45:00Z'),
       };
       const result = exportToJson(range);
 
@@ -83,10 +80,7 @@ describe('ExportImportUtils', () => {
     });
 
     it('should import date array from JSON', () => {
-      const dates = [
-        new Date('2024-01-15T10:30:00Z'),
-        new Date('2024-02-20T14:45:00Z')
-      ];
+      const dates = [new Date('2024-01-15T10:30:00Z'), new Date('2024-02-20T14:45:00Z')];
       const json = exportToJson(dates);
       const imported = importFromJson(json);
 
@@ -97,7 +91,7 @@ describe('ExportImportUtils', () => {
     it('should import date range from JSON', () => {
       const range: DatepickerValue = {
         start: new Date('2024-01-15T10:30:00Z'),
-        end: new Date('2024-01-20T14:45:00Z')
+        end: new Date('2024-01-20T14:45:00Z'),
       };
       const json = exportToJson(range);
       const imported = importFromJson(json);
@@ -132,10 +126,7 @@ describe('ExportImportUtils', () => {
     });
 
     it('should export date array to CSV', () => {
-      const dates = [
-        new Date('2024-01-15T10:30:00Z'),
-        new Date('2024-02-20T14:45:00Z')
-      ];
+      const dates = [new Date('2024-01-15T10:30:00Z'), new Date('2024-02-20T14:45:00Z')];
       const result = exportToCsv(dates);
 
       expect(result).toContain('Multiple Date');
@@ -146,7 +137,7 @@ describe('ExportImportUtils', () => {
     it('should export date range to CSV', () => {
       const range: DatepickerValue = {
         start: new Date('2024-01-15T10:30:00Z'),
-        end: new Date('2024-01-20T14:45:00Z')
+        end: new Date('2024-01-20T14:45:00Z'),
       };
       const result = exportToCsv(range);
 
@@ -166,7 +157,7 @@ describe('ExportImportUtils', () => {
     it('should use custom CSV headers', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const options: ExportOptions = {
-        csvHeaders: ['Custom1', 'Custom2', 'Custom3']
+        csvHeaders: ['Custom1', 'Custom2', 'Custom3'],
       };
       const result = exportToCsv(date, options);
 
@@ -199,10 +190,7 @@ describe('ExportImportUtils', () => {
     });
 
     it('should import date array from CSV', () => {
-      const dates = [
-        new Date('2024-01-15T10:30:00Z'),
-        new Date('2024-02-20T14:45:00Z')
-      ];
+      const dates = [new Date('2024-01-15T10:30:00Z'), new Date('2024-02-20T14:45:00Z')];
       const csv = exportToCsv(dates);
       const imported = importFromCsv(csv);
 
@@ -213,7 +201,7 @@ describe('ExportImportUtils', () => {
     it('should import date range from CSV', () => {
       const range: DatepickerValue = {
         start: new Date('2024-01-15T10:30:00Z'),
-        end: new Date('2024-01-20T14:45:00Z')
+        end: new Date('2024-01-20T14:45:00Z'),
       };
       const csv = exportToCsv(range);
       const imported = importFromCsv(csv);
@@ -261,10 +249,7 @@ describe('ExportImportUtils', () => {
     });
 
     it('should export date array to ICS', () => {
-      const dates = [
-        new Date('2024-01-15T10:30:00Z'),
-        new Date('2024-02-20T14:45:00Z')
-      ];
+      const dates = [new Date('2024-01-15T10:30:00Z'), new Date('2024-02-20T14:45:00Z')];
       const result = exportToIcs(dates);
 
       const eventCount = (result.match(/BEGIN:VEVENT/g) || []).length;
@@ -274,7 +259,7 @@ describe('ExportImportUtils', () => {
     it('should export date range to ICS', () => {
       const range: DatepickerValue = {
         start: new Date('2024-01-15T10:30:00Z'),
-        end: new Date('2024-01-20T14:45:00Z')
+        end: new Date('2024-01-20T14:45:00Z'),
       };
       const result = exportToIcs(range);
 
@@ -288,7 +273,7 @@ describe('ExportImportUtils', () => {
       const options = {
         summary: 'Test Event',
         description: 'Test Description',
-        location: 'Test Location'
+        location: 'Test Location',
       };
       const result = exportToIcs(date, options);
 
@@ -314,7 +299,7 @@ describe('ExportImportUtils', () => {
     it('should escape special characters in text fields', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const options = {
-        summary: 'Test;Event,With\\Special\nChars'
+        summary: 'Test;Event,With\\Special\nChars',
       };
       const result = exportToIcs(date, options);
 
@@ -336,7 +321,7 @@ describe('ExportImportUtils', () => {
     it('should import date range from ICS', () => {
       const range: DatepickerValue = {
         start: new Date('2024-01-15T10:30:00Z'),
-        end: new Date('2024-01-20T14:45:00Z')
+        end: new Date('2024-01-20T14:45:00Z'),
       };
       const ics = exportToIcs(range);
       const imported = importFromIcs(ics);
@@ -349,10 +334,7 @@ describe('ExportImportUtils', () => {
     });
 
     it('should import multiple events as date array', () => {
-      const dates = [
-        new Date('2024-01-15T10:30:00Z'),
-        new Date('2024-02-20T14:45:00Z')
-      ];
+      const dates = [new Date('2024-01-15T10:30:00Z'), new Date('2024-02-20T14:45:00Z')];
       const ics = exportToIcs(dates);
       const imported = importFromIcs(ics);
 
@@ -409,7 +391,7 @@ END:VCALENDAR`;
     it('should handle date format option in exportToJson', () => {
       const date = new Date('2024-01-15T10:30:45Z');
       const options: ExportOptions = {
-        dateFormat: 'YYYY-MM-DD'
+        dateFormat: 'YYYY-MM-DD',
       };
       const result = exportToJson(date, options);
       const parsed = JSON.parse(result);
@@ -422,7 +404,7 @@ END:VCALENDAR`;
     it('should handle timezone option', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const options: ExportOptions = {
-        timezone: 'America/New_York'
+        timezone: 'America/New_York',
       };
       // Timezone option is accepted but may not be fully implemented
       expect(() => exportToJson(date, options)).not.toThrow();
@@ -463,4 +445,3 @@ END:VCALENDAR`;
     });
   });
 });
-

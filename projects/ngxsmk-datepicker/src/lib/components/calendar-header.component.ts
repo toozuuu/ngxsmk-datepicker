@@ -1,4 +1,12 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+  ViewEncapsulation,
+  ViewChild,
+} from '@angular/core';
 import { NgClass } from '@angular/common';
 import { CustomSelectComponent } from './custom-select.component';
 
@@ -11,57 +19,73 @@ import { CustomSelectComponent } from './custom-select.component';
   template: `
     <div class="ngxsmk-header" [ngClass]="headerClass">
       <div class="ngxsmk-month-year-selects">
-        <ngxsmk-custom-select 
+        <ngxsmk-custom-select
           #monthSelect
-          class="month-select" 
+          class="month-select"
           [options]="monthOptions"
-          [(value)]="currentMonth" 
+          [(value)]="currentMonth"
           [disabled]="disabled"
-          (valueChange)="onMonthSelect($event)">
+          (valueChange)="onMonthSelect($event)"
+        >
         </ngxsmk-custom-select>
-        <ngxsmk-custom-select 
+        <ngxsmk-custom-select
           #yearSelect
-          class="year-select" 
-          [options]="yearOptions" 
-          [(value)]="currentYear" 
-          [disabled]="disabled" 
-          (valueChange)="onYearSelect($event)">
+          class="year-select"
+          [options]="yearOptions"
+          [(value)]="currentYear"
+          [disabled]="disabled"
+          (valueChange)="onYearSelect($event)"
+        >
         </ngxsmk-custom-select>
       </div>
       <div class="ngxsmk-nav-buttons">
-        <button 
-          type="button" 
-          class="ngxsmk-nav-button" 
+        <button
+          type="button"
+          class="ngxsmk-nav-button"
           (click)="previousMonth.emit()"
-          [disabled]="disabled || isBackArrowDisabled" 
-          [attr.aria-label]="prevMonthAriaLabel" 
-          [title]="prevMonthAriaLabel" 
-          [ngClass]="navPrevClass">
+          [disabled]="disabled || isBackArrowDisabled"
+          [attr.aria-label]="prevMonthAriaLabel"
+          [title]="prevMonthAriaLabel"
+          [ngClass]="navPrevClass"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                  d="M328 112L184 256l144 144"/>
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="48"
+              d="M328 112L184 256l144 144"
+            />
           </svg>
         </button>
-        <button 
-          type="button" 
-          class="ngxsmk-nav-button" 
+        <button
+          type="button"
+          class="ngxsmk-nav-button"
           (click)="nextMonth.emit()"
-          [disabled]="disabled" 
-          [attr.aria-label]="nextMonthAriaLabel" 
-          [title]="nextMonthAriaLabel" 
-          [ngClass]="navNextClass">
+          [disabled]="disabled"
+          [attr.aria-label]="nextMonthAriaLabel"
+          [title]="nextMonthAriaLabel"
+          [ngClass]="navNextClass"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                  d="M184 112l144 144-144 144"/>
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="48"
+              d="M184 112l144 144-144 144"
+            />
           </svg>
         </button>
       </div>
     </div>
-  `
+  `,
 })
 /**
  * The header section of the calendar, containing navigation and selection controls.
- * 
+ *
  * Includes:
  * - Month selection dropdown
  * - Year selection dropdown
@@ -96,4 +120,3 @@ export class CalendarHeaderComponent {
     this.currentYearChange.emit(value as number);
   }
 }
-

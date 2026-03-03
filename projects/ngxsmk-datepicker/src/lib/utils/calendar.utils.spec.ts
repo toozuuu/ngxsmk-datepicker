@@ -8,7 +8,7 @@ import {
   update12HourState,
   processDateRanges,
   generateYearGrid,
-  generateDecadeGrid
+  generateDecadeGrid,
 } from './calendar.utils';
 import { DateInput } from './date.utils';
 
@@ -105,7 +105,7 @@ describe('Calendar Utils', () => {
       // Mock Intl without Locale constructor
       (globalThis as unknown as Record<string, unknown>)['Intl'] = {
         ...(originalIntl as object),
-        Locale: undefined
+        Locale: undefined,
       };
 
       // Should still work with fallback
@@ -138,7 +138,7 @@ describe('Calendar Utils', () => {
       // Mock Intl without Locale constructor
       (globalThis as unknown as Record<string, unknown>)['Intl'] = {
         ...(originalIntl as object),
-        Locale: undefined
+        Locale: undefined,
       };
 
       // Unknown locale should default to Sunday (0) or use fallback logic
@@ -196,8 +196,8 @@ describe('Calendar Utils', () => {
   describe('processDateRanges', () => {
     it('should process date ranges object', () => {
       const ranges = {
-        'Today': [new Date(2025, 5, 15), new Date(2025, 5, 15)] as [DateInput, DateInput],
-        'This Week': [new Date(2025, 5, 10), new Date(2025, 5, 16)] as [DateInput, DateInput]
+        Today: [new Date(2025, 5, 15), new Date(2025, 5, 15)] as [DateInput, DateInput],
+        'This Week': [new Date(2025, 5, 10), new Date(2025, 5, 16)] as [DateInput, DateInput],
       };
 
       const result = processDateRanges(ranges);
@@ -229,8 +229,7 @@ describe('Calendar Utils', () => {
 
       expect(grid.length).toBe(12);
       expect(grid[0]).toBe(2015);
-      expect(grid[11]).toBe(2025 + (11 * 10) - 10);
+      expect(grid[11]).toBe(2025 + 11 * 10 - 10);
     });
   });
 });
-

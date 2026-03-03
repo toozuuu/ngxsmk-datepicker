@@ -56,7 +56,7 @@ export class DateSelectionService {
     if (!day || callbacks.isDateDisabled(day)) return;
 
     const dateToToggle = getStartOfDay(day);
-    
+
     if (callbacks.beforeDateSelect) {
       if (!callbacks.beforeDateSelect(day, null as DatepickerValue)) {
         return;
@@ -68,7 +68,7 @@ export class DateSelectionService {
         callbacks.onMonthYearChanged?.(day.getMonth(), day.getFullYear());
         callbacks.onCalendarGenerated?.();
       }
-      
+
       const dateWithTime = callbacks.applyTimeIfNeeded(day);
       state.selectedDate = dateWithTime;
       const value: DatepickerValue = dateWithTime;
@@ -78,10 +78,10 @@ export class DateSelectionService {
         callbacks.onMonthYearChanged?.(day.getMonth(), day.getFullYear());
         callbacks.onCalendarGenerated?.();
       }
-      
+
       const dayTime = getStartOfDay(day).getTime();
       const startTime = state.startDate ? getStartOfDay(state.startDate).getTime() : null;
-      
+
       if (!state.startDate || (state.startDate && state.endDate)) {
         state.startDate = callbacks.applyTimeIfNeeded(day);
         state.endDate = null;
@@ -92,10 +92,10 @@ export class DateSelectionService {
           state.endDate = null;
           state.hoveredDate = null;
         } else if (dayTime === startTime!) {
-            // Same day selected - no action needed
-          } else {
+          // Same day selected - no action needed
+        } else {
           const potentialEndDate = callbacks.applyTimeIfNeeded(day);
-          
+
           if (callbacks.validateRange) {
             if (!callbacks.validateRange(state.startDate, potentialEndDate)) {
               state.startDate = potentialEndDate;
@@ -105,7 +105,7 @@ export class DateSelectionService {
               return;
             }
           }
-          
+
           state.endDate = potentialEndDate;
           state.hoveredDate = null;
           const value: DatepickerValue = { start: state.startDate, end: state.endDate };
@@ -113,14 +113,14 @@ export class DateSelectionService {
           callbacks.onStateChanged?.();
         }
       }
-      
+
       state.hoveredDate = null;
     } else if (config.mode === 'multiple') {
       if (!callbacks.isCurrentMonth(day)) {
         callbacks.onMonthYearChanged?.(day.getMonth(), day.getFullYear());
         callbacks.onCalendarGenerated?.();
       }
-      
+
       if (config.recurringPattern) {
         const recurringConfig: {
           pattern: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'weekdays' | 'weekends';
@@ -132,7 +132,7 @@ export class DateSelectionService {
         } = {
           pattern: config.recurringPattern.pattern,
           startDate: config.recurringPattern.startDate,
-          interval: config.recurringPattern.interval || 1
+          interval: config.recurringPattern.interval || 1,
         };
         if (config.recurringPattern.endDate !== undefined) {
           recurringConfig.endDate = config.recurringPattern.endDate;
@@ -144,16 +144,16 @@ export class DateSelectionService {
           recurringConfig.dayOfMonth = config.recurringPattern.dayOfMonth;
         }
         const recurringDates = generateRecurringDates(recurringConfig);
-        
-        const datesWithTime = recurringDates.map(d => callbacks.applyTimeIfNeeded(d));
+
+        const datesWithTime = recurringDates.map((d) => callbacks.applyTimeIfNeeded(d));
         const uniqueDates = new Map<number, Date>();
-        datesWithTime.forEach(d => {
+        datesWithTime.forEach((d) => {
           uniqueDates.set(getStartOfDay(d).getTime(), d);
         });
         state.selectedDates = Array.from(uniqueDates.values()).sort((a, b) => a.getTime() - b.getTime());
         callbacks.onValueEmitted?.([...state.selectedDates]);
       } else {
-        const existingIndex = state.selectedDates.findIndex(d => {
+        const existingIndex = state.selectedDates.findIndex((d) => {
           const dTime = getStartOfDay(d).getTime();
           const toggleTime = dateToToggle.getTime();
           return dTime === toggleTime;
@@ -170,31 +170,36 @@ export class DateSelectionService {
       }
     }
 
-    const dateToSync = config.mode === 'single' ? state.selectedDate :
-      config.mode === 'range' ? state.startDate :
-        config.mode === 'multiple' && state.selectedDates.length > 0 ? state.selectedDates[state.selectedDates.length - 1] : null;
+    const dateToSync =
+      config.mode === 'single'
+        ? state.selectedDate
+        : config.mode === 'range'
+          ? state.startDate
+          : config.mode === 'multiple' && state.selectedDates.length > 0
+            ? state.selectedDates[state.selectedDates.length - 1]
+            : null;
 
     if (dateToSync && callbacks.afterDateSelect) {
       // We need the new value, but we'll pass null for now
       // The component should provide this
       callbacks.afterDateSelect(day, null as DatepickerValue);
     }
-    
+
     if (callbacks.onActionEmitted) {
       callbacks.onActionEmitted({
         type: 'dateSelected',
         payload: {
           mode: config.mode,
           value: null as DatepickerValue,
-          date: day
-        }
+          date: day,
+        },
       });
     }
 
     if (callbacks.shouldAutoClose?.()) {
       callbacks.onCloseCalendar?.();
     }
-    
+
     callbacks.onStateChanged?.();
   }
 
@@ -213,11 +218,11 @@ export class DateSelectionService {
 
     const value: DatepickerValue = { start: state.startDate, end: state.endDate };
     callbacks.onValueEmitted?.(value);
-    
+
     if (callbacks.shouldAutoClose?.()) {
       callbacks.onCloseCalendar?.();
     }
-    
+
     callbacks.onStateChanged?.();
   }
 
@@ -229,4 +234,3 @@ export class DateSelectionService {
     state.hoveredDate = null;
   }
 }
-

@@ -26,7 +26,7 @@ export function exportToCsv(value: DatepickerValue, options: ExportOptions = {})
   const rows: string[][] = [csvHeaders];
 
   if (value === null || value === undefined) {
-    return rows.map(row => row.join(',')).join('\n');
+    return rows.map((row) => row.join(',')).join('\n');
   }
 
   if (value instanceof Date) {
@@ -34,7 +34,7 @@ export function exportToCsv(value: DatepickerValue, options: ExportOptions = {})
     const timeStr = options.includeTime ? formatTimeForExport(value) : '';
     rows.push(['Single Date', dateStr, timeStr]);
   } else if (Array.isArray(value)) {
-    value.forEach(date => {
+    value.forEach((date) => {
       if (date instanceof Date) {
         const dateStr = formatDateForExport(date, options);
         const timeStr = options.includeTime ? formatTimeForExport(date) : '';
@@ -55,7 +55,7 @@ export function exportToCsv(value: DatepickerValue, options: ExportOptions = {})
     }
   }
 
-  return rows.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+  return rows.map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
 }
 
 export function importFromCsv(csvString: string): DatepickerValue {
@@ -70,7 +70,7 @@ export function importFromCsv(csvString: string): DatepickerValue {
   let rangeEnd: Date | null = null;
 
   for (const row of dataRows) {
-    const cells = row.split(',').map(cell => cell.trim().replace(/^"|"$/g, ''));
+    const cells = row.split(',').map((cell) => cell.trim().replace(/^"|"$/g, ''));
     if (cells.length < 2) continue;
 
     const type = cells[0];
@@ -105,11 +105,14 @@ export function importFromCsv(csvString: string): DatepickerValue {
   return null;
 }
 
-export function exportToIcs(value: DatepickerValue, options: ExportOptions & {
-  summary?: string;
-  description?: string;
-  location?: string;
-} = {}): string {
+export function exportToIcs(
+  value: DatepickerValue,
+  options: ExportOptions & {
+    summary?: string;
+    description?: string;
+    location?: string;
+  } = {}
+): string {
   const { summary = 'Date Selection', description = '', location = '' } = options;
   const lines: string[] = [
     'BEGIN:VCALENDAR',
@@ -129,13 +132,7 @@ export function exportToIcs(value: DatepickerValue, options: ExportOptions & {
   } else if (Array.isArray(value)) {
     value.forEach((date, index) => {
       if (date instanceof Date) {
-        lines.push(...createIcsEvent(
-          date,
-          date,
-          `${summary} ${index + 1}`,
-          description,
-          location
-        ));
+        lines.push(...createIcsEvent(date, date, `${summary} ${index + 1}`, description, location));
       }
     });
   } else if (typeof value === 'object' && 'start' in value && 'end' in value) {
@@ -188,11 +185,9 @@ export function importFromIcs(icsString: string): DatepickerValue {
     }
     return { start: event.start, end: event.end };
   } else {
-    return events.map(e => e.start).filter((d): d is Date => d instanceof Date);
+    return events.map((e) => e.start).filter((d): d is Date => d instanceof Date);
   }
 }
-
-
 
 function serializeDateValue(value: DatepickerValue, options: ExportOptions): unknown {
   if (value === null || value === undefined) {
@@ -211,7 +206,7 @@ function serializeDateValue(value: DatepickerValue, options: ExportOptions): unk
   if (Array.isArray(value)) {
     return {
       type: 'multiple',
-      dates: value.map(date => ({
+      dates: value.map((date) => ({
         date: formatDateForExport(date, options),
         time: options.includeTime ? formatTimeForExport(date) : undefined,
         iso: date.toISOString(),
@@ -264,9 +259,15 @@ function deserializeDateValue(data: unknown): DatepickerValue {
         .filter((d: Date | null) => d !== null) as Date[];
     }
 
-    if (obj['type'] === 'range' &&
-      typeof obj['start'] === 'object' && obj['start'] !== null && 'iso' in (obj['start'] as Record<string, unknown>) &&
-      typeof obj['end'] === 'object' && obj['end'] !== null && 'iso' in (obj['end'] as Record<string, unknown>)) {
+    if (
+      obj['type'] === 'range' &&
+      typeof obj['start'] === 'object' &&
+      obj['start'] !== null &&
+      'iso' in (obj['start'] as Record<string, unknown>) &&
+      typeof obj['end'] === 'object' &&
+      obj['end'] !== null &&
+      'iso' in (obj['end'] as Record<string, unknown>)
+    ) {
       const startObj = obj['start'] as Record<string, unknown>;
       const endObj = obj['end'] as Record<string, unknown>;
       if (typeof startObj['iso'] === 'string' && typeof endObj['iso'] === 'string') {
@@ -348,13 +349,7 @@ function parseDateFromString(dateStr: string, timeStr: string): Date {
   return new Date(dateStr + (timeStr ? ' ' + timeStr : ''));
 }
 
-function createIcsEvent(
-  start: Date,
-  end: Date,
-  summary: string,
-  description: string,
-  location: string
-): string[] {
+function createIcsEvent(start: Date, end: Date, summary: string, description: string, location: string): string[] {
   const formatIcsDate = (date: Date): string => {
     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   };
@@ -410,10 +405,5 @@ function extractIcsValue(line: string): string {
 }
 
 function escapeIcsText(text: string): string {
-  return text
-    .replace(/\\/g, '\\\\')
-    .replace(/;/g, '\\;')
-    .replace(/,/g, '\\,')
-    .replace(/\n/g, '\\n');
+  return text.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
 }
-

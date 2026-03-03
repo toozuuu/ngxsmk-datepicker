@@ -23,11 +23,7 @@ xdescribe('NgxsmkDatepickerComponent - Touch Gestures', () => {
   });
 
   describe('Swipe Gestures', () => {
-    function createTouchEvent(
-      type: string,
-      clientX: number,
-      clientY: number,
-    ): TouchEvent {
+    function createTouchEvent(type: string, clientX: number, clientY: number): TouchEvent {
       const touch = {
         clientX,
         clientY,

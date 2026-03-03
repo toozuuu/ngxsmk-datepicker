@@ -111,14 +111,8 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
     });
 
     it('should compare multiple date arrays', () => {
-      const dates1 = [
-        getStartOfDay(new Date(2025, 5, 10)),
-        getStartOfDay(new Date(2025, 5, 15)),
-      ];
-      const dates2 = [
-        getStartOfDay(new Date(2025, 5, 10)),
-        getStartOfDay(new Date(2025, 5, 15)),
-      ];
+      const dates1 = [getStartOfDay(new Date(2025, 5, 10)), getStartOfDay(new Date(2025, 5, 15))];
+      const dates2 = [getStartOfDay(new Date(2025, 5, 10)), getStartOfDay(new Date(2025, 5, 15))];
 
       expect(component['isValueEqual'](dates1, dates2)).toBe(true);
     });
@@ -235,17 +229,11 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
     it('should select predefined range', () => {
       component.mode = 'range';
       component.ranges = {
-        'Test Range': [
-          getStartOfDay(new Date(2025, 5, 10)),
-          getEndOfDay(new Date(2025, 5, 15)),
-        ],
+        'Test Range': [getStartOfDay(new Date(2025, 5, 10)), getEndOfDay(new Date(2025, 5, 15))],
       };
       fixture.detectChanges();
 
-      component.selectRange([
-        getStartOfDay(new Date(2025, 5, 10)),
-        getEndOfDay(new Date(2025, 5, 15)),
-      ]);
+      component.selectRange([getStartOfDay(new Date(2025, 5, 10)), getEndOfDay(new Date(2025, 5, 15))]);
       fixture.detectChanges();
 
       expect(component.startDate).toBeTruthy();
@@ -259,9 +247,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
       component.selectedDates = [getStartOfDay(new Date(2025, 5, 15))];
       fixture.detectChanges();
 
-      const isSelected = component.isMultipleSelected(
-        getStartOfDay(new Date(2025, 5, 15)),
-      );
+      const isSelected = component.isMultipleSelected(getStartOfDay(new Date(2025, 5, 15)));
       expect(isSelected).toBe(true);
     });
   });
@@ -378,10 +364,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
     });
 
     it('should initialize multiple dates value', () => {
-      const dates = [
-        getStartOfDay(new Date(2025, 5, 10)),
-        getStartOfDay(new Date(2025, 5, 15)),
-      ];
+      const dates = [getStartOfDay(new Date(2025, 5, 10)), getStartOfDay(new Date(2025, 5, 15))];
       component.mode = 'multiple';
       component['initializeValue'](dates);
       fixture.detectChanges();
@@ -650,8 +633,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
 
     afterEach(() => {
       if (originalMatchMedia !== undefined) {
-        (window as unknown as Record<string, unknown>)['matchMedia'] =
-          originalMatchMedia;
+        (window as unknown as Record<string, unknown>)['matchMedia'] = originalMatchMedia;
       } else {
         delete (window as unknown as Record<string, unknown>)['matchMedia'];
       }
@@ -709,9 +691,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
 
     it('should apply animation config correctly when matchMedia is available', () => {
       if (!window.matchMedia) {
-        (window as unknown as Record<string, unknown>)['matchMedia'] = ((
-          query: string,
-        ) =>
+        (window as unknown as Record<string, unknown>)['matchMedia'] = ((query: string) =>
           ({
             matches: false,
             media: query,
@@ -736,9 +716,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
     });
 
     it('should handle prefers-reduced-motion preference when matchMedia is available', () => {
-      (window as unknown as Record<string, unknown>)['matchMedia'] = ((
-        query: string,
-      ) =>
+      (window as unknown as Record<string, unknown>)['matchMedia'] = ((query: string) =>
         ({
           matches: query === '(prefers-reduced-motion: reduce)',
           media: query,
@@ -832,10 +810,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
       fixture.detectChanges();
 
       let syncCount = 0;
-      spyOn(
-        component as unknown as { syncFieldValue: () => void },
-        'syncFieldValue',
-      ).and.callFake(() => {
+      spyOn(component as unknown as { syncFieldValue: () => void }, 'syncFieldValue').and.callFake(() => {
         syncCount++;
       });
 
@@ -868,9 +843,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
         done();
       });
 
-      expect(component['activeAnimationFrames'].size).toBe(
-        initialFrameCount + 1,
-      );
+      expect(component['activeAnimationFrames'].size).toBe(initialFrameCount + 1);
     });
 
     it('should cancel all animation frames on destroy', (done) => {
@@ -919,9 +892,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
       const cleanup = () => {};
       component['passiveTouchListeners'].push(cleanup);
 
-      expect(component['passiveTouchListeners'].length).toBe(
-        initialListenerCount + 1,
-      );
+      expect(component['passiveTouchListeners'].length).toBe(initialListenerCount + 1);
 
       component.ngOnDestroy();
 
@@ -942,10 +913,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
       // Wait a bit to ensure timeout is set
       setTimeout(() => {
         // Verify timeout tracking
-        expect(
-          component['_touchListenersSetupTimeout'] !== null ||
-            component['activeTimeouts'].size > 0,
-        ).toBe(true);
+        expect(component['_touchListenersSetupTimeout'] !== null || component['activeTimeouts'].size > 0).toBe(true);
         done();
       }, 20);
     });
@@ -1006,10 +974,7 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
       fixture.detectChanges();
 
       let syncCount = 0;
-      spyOn(
-        component as unknown as { syncFieldValue: () => void },
-        'syncFieldValue',
-      ).and.callFake(() => {
+      spyOn(component as unknown as { syncFieldValue: () => void }, 'syncFieldValue').and.callFake(() => {
         syncCount++;
       });
 

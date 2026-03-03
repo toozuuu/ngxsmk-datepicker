@@ -2,7 +2,7 @@ import { Injectable, PLATFORM_ID, inject, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AriaLiveService implements OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
@@ -16,7 +16,7 @@ export class AriaLiveService implements OnDestroy {
   private readonly DEBOUNCE_DELAY = 100;
   private readonly CLEAR_DELAY = 2000;
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Announce a message to screen readers with improved timing and queue management
@@ -52,8 +52,8 @@ export class AriaLiveService implements OnDestroy {
 
     // Filter by priority and take the last one pushed (the latest)
     // We don't use sort() because timestamps might be identical in the same tick
-    const politeAnnouncements = this.announcementQueue.filter(a => a.priority === 'polite');
-    const assertiveAnnouncements = this.announcementQueue.filter(a => a.priority === 'assertive');
+    const politeAnnouncements = this.announcementQueue.filter((a) => a.priority === 'polite');
+    const assertiveAnnouncements = this.announcementQueue.filter((a) => a.priority === 'assertive');
 
     const latestPolite = politeAnnouncements[politeAnnouncements.length - 1];
     const latestAssertive = assertiveAnnouncements[assertiveAnnouncements.length - 1];
@@ -152,7 +152,7 @@ export class AriaLiveService implements OnDestroy {
       height: '1px',
       overflow: 'hidden',
       clip: 'rect(0, 0, 0, 0)',
-      clipPath: 'inset(50%)'
+      clipPath: 'inset(50%)',
     });
 
     document.body.appendChild(region);

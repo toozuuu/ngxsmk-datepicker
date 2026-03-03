@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { DatePipe } from '@angular/common';
@@ -30,8 +25,7 @@ describe('NgxsmkDatepickerComponent Input Attributes', () => {
     tick(100);
     fixture.detectChanges();
 
-    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input'))
-      .nativeElement as HTMLInputElement;
+    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input')).nativeElement as HTMLInputElement;
     expect(input.id).toBe('custom-id');
   }));
 
@@ -41,8 +35,7 @@ describe('NgxsmkDatepickerComponent Input Attributes', () => {
     tick(100);
     fixture.detectChanges();
 
-    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input'))
-      .nativeElement as HTMLInputElement;
+    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input')).nativeElement as HTMLInputElement;
     expect(input.name).toBe('custom-name');
   }));
 
@@ -52,8 +45,7 @@ describe('NgxsmkDatepickerComponent Input Attributes', () => {
     tick(100);
     fixture.detectChanges();
 
-    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input'))
-      .nativeElement as HTMLInputElement;
+    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input')).nativeElement as HTMLInputElement;
     expect(input.getAttribute('autocomplete')).toBe('on');
   }));
 
@@ -62,8 +54,7 @@ describe('NgxsmkDatepickerComponent Input Attributes', () => {
     expect(component.autocomplete).toBe('off');
 
     // Initial render
-    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input'))
-      .nativeElement as HTMLInputElement;
+    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input')).nativeElement as HTMLInputElement;
     expect(input.getAttribute('autocomplete')).toBe('off');
   });
 
@@ -73,8 +64,7 @@ describe('NgxsmkDatepickerComponent Input Attributes', () => {
     tick(100);
     fixture.detectChanges();
 
-    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input'))
-      .nativeElement as HTMLInputElement;
+    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input')).nativeElement as HTMLInputElement;
     expect(input.getAttribute('aria-invalid')).toBe('true');
   }));
 
@@ -84,8 +74,7 @@ describe('NgxsmkDatepickerComponent Input Attributes', () => {
     tick(100);
     fixture.detectChanges();
 
-    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input'))
-      .nativeElement as HTMLInputElement;
+    const input = fixture.debugElement.query(By.css('.ngxsmk-display-input')).nativeElement as HTMLInputElement;
     expect(input.getAttribute('aria-invalid')).toBe('false');
   }));
 });

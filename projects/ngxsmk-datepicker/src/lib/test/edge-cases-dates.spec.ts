@@ -13,7 +13,7 @@ describe('Date Edge Cases', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DateValidationService]
+      providers: [DateValidationService],
     });
     validationService = TestBed.inject(DateValidationService);
     adapter = new NativeDateAdapter();
@@ -23,7 +23,7 @@ describe('Date Edge Cases', () => {
     it('should handle year 0', () => {
       const date = new Date(0, 0, 1);
       date.setFullYear(0);
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, {});
         // Year 0 is valid in JavaScript Date
@@ -152,7 +152,7 @@ describe('Date Edge Cases', () => {
       const date = new Date(2024, 5, 15);
       const minDate = new Date(2024, 5, 20);
       const maxDate = new Date(2024, 5, 10);
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, { minDate, maxDate });
         // Should handle invalid constraint combination
@@ -164,7 +164,7 @@ describe('Date Edge Cases', () => {
       const date = new Date(2024, 5, 15);
       const minDate = new Date(2024, 5, 15);
       const maxDate = new Date(2024, 5, 15);
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, { minDate, maxDate });
         expect(isValid).toBe(true);
@@ -174,7 +174,7 @@ describe('Date Edge Cases', () => {
     it('should handle date exactly at minDate', () => {
       const date = new Date(2024, 5, 15);
       const minDate = new Date(2024, 5, 15);
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, { minDate });
         expect(isValid).toBe(true);
@@ -184,7 +184,7 @@ describe('Date Edge Cases', () => {
     it('should handle date exactly at maxDate', () => {
       const date = new Date(2024, 5, 15);
       const maxDate = new Date(2024, 5, 15);
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, { maxDate });
         expect(isValid).toBe(true);
@@ -194,7 +194,7 @@ describe('Date Edge Cases', () => {
     it('should handle date 1 millisecond before minDate', () => {
       const minDate = new Date(2024, 5, 15, 0, 0, 0, 0);
       const date = new Date(minDate.getTime() - 1);
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, { minDate });
         expect(isValid).toBe(false);
@@ -204,7 +204,7 @@ describe('Date Edge Cases', () => {
     it('should handle date 1 millisecond after maxDate', () => {
       const maxDate = new Date(2024, 5, 15, 23, 59, 59, 999);
       const date = new Date(maxDate.getTime() + 1);
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, { maxDate });
         expect(isValid).toBe(false);
@@ -216,7 +216,7 @@ describe('Date Edge Cases', () => {
     it('should handle start of day (00:00:00.000)', () => {
       const date = new Date(2024, 5, 15, 0, 0, 0, 0);
       const startOfDay = getStartOfDay(date);
-      
+
       expect(startOfDay.getHours()).toBe(0);
       expect(startOfDay.getMinutes()).toBe(0);
       expect(startOfDay.getSeconds()).toBe(0);
@@ -226,7 +226,7 @@ describe('Date Edge Cases', () => {
     it('should handle end of day (23:59:59.999)', () => {
       const date = new Date(2024, 5, 15, 23, 59, 59, 999);
       const endOfDay = getEndOfDay(date);
-      
+
       expect(endOfDay.getHours()).toBe(23);
       expect(endOfDay.getMinutes()).toBe(59);
       expect(endOfDay.getSeconds()).toBe(59);
@@ -254,21 +254,21 @@ describe('Date Edge Cases', () => {
     it('should handle adding 0 months', () => {
       const date = new Date(2024, 5, 15);
       const result = adapter.addMonths(date, 0);
-      
+
       expect(result.getTime()).toBe(date.getTime());
     });
 
     it('should handle adding 0 days', () => {
       const date = new Date(2024, 5, 15);
       const result = adapter.addDays(date, 0);
-      
+
       expect(result.getTime()).toBe(date.getTime());
     });
 
     it('should handle adding negative months', () => {
       const date = new Date(2024, 5, 15);
       const result = adapter.addMonths(date, -6);
-      
+
       expect(result.getFullYear()).toBe(2023);
       expect(result.getMonth()).toBe(11); // December
     });
@@ -276,14 +276,14 @@ describe('Date Edge Cases', () => {
     it('should handle adding negative days', () => {
       const date = new Date(2024, 5, 15);
       const result = adapter.addDays(date, -30);
-      
+
       expect(result.getMonth()).toBe(4); // May
     });
 
     it('should handle month rollover when adding months', () => {
       const date = new Date(2024, 11, 15); // December
       const result = adapter.addMonths(date, 2);
-      
+
       expect(result.getFullYear()).toBe(2025);
       expect(result.getMonth()).toBe(1); // February
     });
@@ -291,7 +291,7 @@ describe('Date Edge Cases', () => {
     it('should handle year rollover when adding days', () => {
       const date = new Date(2024, 11, 31); // Dec 31
       const result = adapter.addDays(date, 1);
-      
+
       expect(result.getFullYear()).toBe(2025);
       expect(result.getMonth()).toBe(0); // January
       expect(result.getDate()).toBe(1);
@@ -306,7 +306,7 @@ describe('Date Edge Cases', () => {
     it('should handle isSameDay with same date different times', () => {
       const date1 = new Date(2024, 5, 15, 10, 30, 45);
       const date2 = new Date(2024, 5, 15, 20, 15, 30);
-      
+
       expect(adapter.isSameDay(date1, date2)).toBe(true);
     });
   });
@@ -352,7 +352,7 @@ describe('Date Edge Cases', () => {
       // JavaScript Date handles year overflow
       const date = new Date(2024, 5, 15);
       date.setFullYear(10000); // Year 10000
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, {});
         expect(typeof isValid).toBe('boolean');
@@ -362,7 +362,7 @@ describe('Date Edge Cases', () => {
     it('should handle date with month overflow', () => {
       const date = new Date(2024, 5, 15);
       date.setMonth(12); // Month 12 (January of next year)
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, {});
         expect(isValid).toBe(true);
@@ -372,7 +372,7 @@ describe('Date Edge Cases', () => {
     it('should handle date with day overflow', () => {
       const date = new Date(2024, 0, 31); // Jan 31
       date.setDate(32); // Day 32 (Feb 1)
-      
+
       expect(() => {
         const isValid = validationService.isDateValid(date, {});
         expect(isValid).toBe(true);
@@ -380,4 +380,3 @@ describe('Date Edge Cases', () => {
     });
   });
 });
-

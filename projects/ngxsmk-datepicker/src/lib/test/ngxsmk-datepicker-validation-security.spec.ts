@@ -3,10 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { DatepickerParsingService } from '../services/datepicker-parsing.service';
 import { getStartOfDay } from '../utils/date.utils';
-import {
-  DateAdapter,
-  NativeDateAdapter,
-} from '../adapters/date-adapter.interface';
+import { DateAdapter, NativeDateAdapter } from '../adapters/date-adapter.interface';
 import { isDevMode } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
@@ -89,9 +86,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
           },
         });
 
-        expect(consoleWarnSpy).toHaveBeenCalledWith(
-          jasmine.stringContaining('minDate is greater than maxDate'),
-        );
+        expect(consoleWarnSpy).toHaveBeenCalledWith(jasmine.stringContaining('minDate is greater than maxDate'));
       }
     });
 
@@ -209,9 +204,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
         });
 
         expect(consoleWarnSpy).toHaveBeenCalledWith(
-          jasmine.stringContaining(
-            'timeOnly is only supported with mode="single"',
-          ),
+          jasmine.stringContaining('timeOnly is only supported with mode="single"')
         );
       }
     });
@@ -260,9 +253,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
           },
         });
 
-        expect(consoleWarnSpy).toHaveBeenCalledWith(
-          jasmine.stringContaining('minuteInterval must be at least 1'),
-        );
+        expect(consoleWarnSpy).toHaveBeenCalledWith(jasmine.stringContaining('minuteInterval must be at least 1'));
       }
     });
   });
@@ -343,9 +334,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
 
     it('should handle non-string inputs', () => {
       expect(component['sanitizeInput'](null as unknown as string)).toBe('');
-      expect(component['sanitizeInput'](undefined as unknown as string)).toBe(
-        '',
-      );
+      expect(component['sanitizeInput'](undefined as unknown as string)).toBe('');
       expect(component['sanitizeInput'](123 as unknown as string)).toBe('');
     });
 
@@ -367,10 +356,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
 
       const mockAdapter: DateAdapter = {
         ...new NativeDateAdapter(),
-        parse: (
-          value: string | Date | number | unknown,
-          onError?: (error: Error) => void,
-        ): Date | null => {
+        parse: (value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null => {
           if (typeof value === 'string' && value === 'invalid-date') {
             const error = new Error('Invalid date string');
             if (onError) {
@@ -383,22 +369,15 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
           return new NativeDateAdapter().parse(value, onError);
         },
         format: (date: Date) => new NativeDateAdapter().format(date),
-        isValid: (value: string | Date | number | unknown) =>
-          new NativeDateAdapter().isValid(value),
+        isValid: (value: string | Date | number | unknown) => new NativeDateAdapter().isValid(value),
         startOfDay: (date: Date) => new NativeDateAdapter().startOfDay(date),
         endOfDay: (date: Date) => new NativeDateAdapter().endOfDay(date),
-        addMonths: (date: Date, months: number) =>
-          new NativeDateAdapter().addMonths(date, months),
-        addDays: (date: Date, days: number) =>
-          new NativeDateAdapter().addDays(date, days),
-        isSameDay: (date1: Date | null, date2: Date | null) =>
-          new NativeDateAdapter().isSameDay(date1, date2),
+        addMonths: (date: Date, months: number) => new NativeDateAdapter().addMonths(date, months),
+        addDays: (date: Date, days: number) => new NativeDateAdapter().addDays(date, days),
+        isSameDay: (date1: Date | null, date2: Date | null) => new NativeDateAdapter().isSameDay(date1, date2),
       };
 
-      const result = parsingService.parseDateString(
-        'invalid-date',
-        mockAdapter,
-      );
+      const result = parsingService.parseDateString('invalid-date', mockAdapter);
 
       expect(result).toBeNull();
       expect(errorCallbackCalled).toBe(true);
@@ -419,10 +398,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
     });
 
     it('should warn in dev mode when parsing fails', () => {
-      const result = parsingService.parseDateString(
-        'invalid-date-string',
-        new NativeDateAdapter(),
-      );
+      const result = parsingService.parseDateString('invalid-date-string', new NativeDateAdapter());
       expect(result).toBeNull();
     });
   });
@@ -431,7 +407,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
     it('should sanitize input in onInputChange', () => {
       const sanitizeSpy = spyOn(
         component as unknown as { sanitizeInput: (v: string) => string },
-        'sanitizeInput',
+        'sanitizeInput'
       ).and.callThrough();
       component.allowTyping = true;
       fixture.detectChanges();
@@ -449,7 +425,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
     it('should sanitize input in onInputBlur', () => {
       const sanitizeSpy = spyOn(
         component as unknown as { sanitizeInput: (v: string) => string },
-        'sanitizeInput',
+        'sanitizeInput'
       ).and.callThrough();
       component.allowTyping = true;
       fixture.detectChanges();
@@ -467,7 +443,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
     it('should sanitize input in onInputKeyDown', () => {
       const sanitizeSpy = spyOn(
         component as unknown as { sanitizeInput: (v: string) => string },
-        'sanitizeInput',
+        'sanitizeInput'
       ).and.callThrough();
       component.allowTyping = true;
       fixture.detectChanges();
@@ -519,4 +495,3 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
     });
   });
 });
-

@@ -5,7 +5,7 @@ import { HolidayProvider } from '../utils/calendar.utils';
 class TestHolidayProvider implements HolidayProvider {
   private holidays: { [key: string]: string } = {
     '2025-12-25': 'Christmas',
-    '2025-01-01': 'New Year'
+    '2025-01-01': 'New Year',
   };
 
   private formatDateKey(date: Date): string {
@@ -29,7 +29,7 @@ describe('DateValidationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DateValidationService]
+      providers: [DateValidationService],
     });
     service = TestBed.inject(DateValidationService);
   });
@@ -77,7 +77,7 @@ describe('DateValidationService', () => {
       const disabledDate = new Date(2025, 5, 15);
 
       const result = service.isDateValid(date, {
-        disabledDates: [disabledDate]
+        disabledDates: [disabledDate],
       });
       expect(result).toBe(false);
     });
@@ -86,10 +86,12 @@ describe('DateValidationService', () => {
       const date = new Date(2025, 5, 15);
 
       const result = service.isDateValid(date, {
-        disabledRanges: [{
-          start: new Date(2025, 5, 10),
-          end: new Date(2025, 5, 20)
-        }]
+        disabledRanges: [
+          {
+            start: new Date(2025, 5, 10),
+            end: new Date(2025, 5, 20),
+          },
+        ],
       });
       expect(result).toBe(false);
     });
@@ -98,7 +100,7 @@ describe('DateValidationService', () => {
       const date = new Date(2025, 5, 15);
 
       const result = service.isDateValid(date, {
-        isInvalidDate: (d) => d.getDate() === 15
+        isInvalidDate: (d) => d.getDate() === 15,
       });
       expect(result).toBe(false);
     });
@@ -109,7 +111,7 @@ describe('DateValidationService', () => {
 
       const result = service.isDateValid(holidayDate, {
         disableHolidays: true,
-        holidayProvider
+        holidayProvider,
       });
       expect(result).toBe(false);
     });
@@ -120,7 +122,7 @@ describe('DateValidationService', () => {
 
       const result = service.isDateValid(holidayDate, {
         disableHolidays: false,
-        holidayProvider
+        holidayProvider,
       });
       expect(result).toBe(true);
     });
@@ -201,4 +203,3 @@ describe('DateValidationService', () => {
     });
   });
 });
-

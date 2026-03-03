@@ -1,0 +1,10 @@
+dist/
+node_modules/
+coverage/
+*.min.js
+*.min.css
+package-lock.json
+projects/ngxsmk-datepicker/src/lib/styles/datepicker.css
+projects/ngxsmk-datepicker/src/lib/styles/_legacy-datepicker.scss
+examples/react-app/src/custom-elements.d.ts
+*.md

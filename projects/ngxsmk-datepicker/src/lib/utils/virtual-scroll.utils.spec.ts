@@ -7,7 +7,7 @@ describe('VirtualScrollUtils', () => {
       const config: VirtualScrollConfig = {
         itemHeight: 50,
         containerHeight: 200,
-        overscan: 2
+        overscan: 2,
       };
 
       const result = calculateVirtualScroll(items, 0, config);
@@ -23,7 +23,7 @@ describe('VirtualScrollUtils', () => {
       const config: VirtualScrollConfig = {
         itemHeight: 50,
         containerHeight: 200,
-        overscan: 2
+        overscan: 2,
       };
 
       const result = calculateVirtualScroll(items, 1000, config);
@@ -37,7 +37,7 @@ describe('VirtualScrollUtils', () => {
       const config: VirtualScrollConfig = {
         itemHeight: 50,
         containerHeight: 200,
-        overscan: 5
+        overscan: 5,
       };
 
       const result = calculateVirtualScroll(items, 0, config);
@@ -64,4 +64,3 @@ describe('VirtualScrollUtils', () => {
     });
   });
 });
-

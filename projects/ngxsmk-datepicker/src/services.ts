@@ -1,9 +1,9 @@
 /**
  * Services entry point
- * 
+ *
  * Internal services used by the datepicker component.
  * These are exported for advanced use cases and testing.
- * 
+ *
  * @example
  * ```typescript
  * import { ValueManagementService } from 'ngxsmk-datepicker/services';
@@ -34,8 +34,4 @@ export type {
   TouchGestureCallbacks,
 } from './lib/services/touch-gesture-handler.service';
 
-export type {
-  SignalFormField,
-  FieldSyncCallbacks,
-} from './lib/services/field-sync.service';
-
+export type { SignalFormField, FieldSyncCallbacks } from './lib/services/field-sync.service';

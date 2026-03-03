@@ -84,11 +84,10 @@ export function createDateComparator() {
       return cache.get(key)!;
     }
 
-    const result = (
+    const result =
       date1.getFullYear() === date2.getFullYear() &&
       date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate()
-    );
+      date1.getDate() === date2.getDate();
 
     if (cache.size >= MAX_CACHE_SIZE) {
       const firstKey = cache.keys().next().value;
@@ -106,11 +105,7 @@ export function createDateComparator() {
 const filteredArrayCache = new Map<string, unknown[]>();
 const MAX_FILTERED_ARRAY_CACHE_SIZE = 100;
 
-export function createFilteredArray<T>(
-  source: T[],
-  filterFn: (item: T) => boolean,
-  cacheKey?: string
-): T[] {
+export function createFilteredArray<T>(source: T[], filterFn: (item: T) => boolean, cacheKey?: string): T[] {
   const key = cacheKey || JSON.stringify(source);
 
   if (filteredArrayCache.has(key)) {
@@ -160,19 +155,14 @@ export function applyDateMask(value: string, format: string): string {
 /**
  * Calculates virtual scroll window for large date ranges
  */
-export function getVirtualScrollWindow(
-  totalItems: number,
-  scrollTop: number,
-  itemHeight: number,
-  buffer: number = 5
-) {
+export function getVirtualScrollWindow(totalItems: number, scrollTop: number, itemHeight: number, buffer: number = 5) {
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - buffer);
   const visibleCount = Math.ceil(400 / itemHeight); // Approximate container height
-  const endIndex = Math.min(totalItems, startIndex + visibleCount + (buffer * 2));
+  const endIndex = Math.min(totalItems, startIndex + visibleCount + buffer * 2);
 
   return {
     startIndex,
     endIndex,
-    offsetY: startIndex * itemHeight
+    offsetY: startIndex * itemHeight,
   };
 }

@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { PLATFORM_ID } from '@angular/core';
 import { DatePipe } from '@angular/common';
@@ -45,9 +40,7 @@ describe('Performance and Memory Tests', () => {
     });
 
     it('should cleanup subscriptions on destroy', () => {
-      const subscriptions = (
-        component as unknown as Record<string, { unsubscribe: () => void }>
-      )['_subscriptions'];
+      const subscriptions = (component as unknown as Record<string, { unsubscribe: () => void }>)['_subscriptions'];
       if (subscriptions) {
         const unsubscribeSpy = spyOn(subscriptions, 'unsubscribe');
 
@@ -172,9 +165,7 @@ describe('Performance and Memory Tests', () => {
       // Navigate through 12 months using buttons
       component.inline = true;
       fixture.detectChanges();
-      const nextButton = fixture.nativeElement.querySelector(
-        '.ngxsmk-nav-button:last-child',
-      );
+      const nextButton = fixture.nativeElement.querySelector('.ngxsmk-nav-button:last-child');
       for (let i = 0; i < 12 && nextButton; i++) {
         nextButton.click();
         tick(10);
@@ -207,23 +198,19 @@ describe('Performance and Memory Tests', () => {
       component.toggleCalendar();
       fixture.detectChanges();
 
-      const openNodeCount =
-        document.body.querySelectorAll('.ngxsmk-datepicker').length;
+      const openNodeCount = document.body.querySelectorAll('.ngxsmk-datepicker').length;
 
       component.closeCalendarWithFocusRestore();
       fixture.detectChanges();
 
       // Most nodes should be cleaned up (some may remain for animations)
-      const closedNodeCount =
-        document.body.querySelectorAll('.ngxsmk-datepicker').length;
+      const closedNodeCount = document.body.querySelectorAll('.ngxsmk-datepicker').length;
       expect(closedNodeCount).toBeLessThanOrEqual(openNodeCount);
     });
 
     it('should handle repeated open/close cycles without memory growth', fakeAsync(() => {
       const initialMemory =
-        (performance as unknown as Record<string, { usedJSHeapSize: number }>)[
-          'memory'
-        ]?.usedJSHeapSize || 0;
+        (performance as unknown as Record<string, { usedJSHeapSize: number }>)['memory']?.usedJSHeapSize || 0;
 
       // Perform 50 open/close cycles
       for (let i = 0; i < 50; i++) {
@@ -237,17 +224,12 @@ describe('Performance and Memory Tests', () => {
       }
 
       // Force garbage collection if available (Node.js only)
-      if (
-        typeof (globalThis as unknown as Record<string, () => void>)['gc'] ===
-        'function'
-      ) {
+      if (typeof (globalThis as unknown as Record<string, () => void>)['gc'] === 'function') {
         (globalThis as unknown as Record<string, () => void>)['gc']();
       }
 
       const finalMemory =
-        (performance as unknown as Record<string, { usedJSHeapSize: number }>)[
-          'memory'
-        ]?.usedJSHeapSize || 0;
+        (performance as unknown as Record<string, { usedJSHeapSize: number }>)['memory']?.usedJSHeapSize || 0;
 
       // Memory growth should be minimal
       // Note: Memory measurements in test environments can be unreliable
@@ -277,9 +259,7 @@ describe('Performance and Memory Tests', () => {
     }));
 
     it('should use OnPush change detection strategy', () => {
-      const changeDetectorRef = (
-        component as unknown as Record<string, unknown>
-      )['cdr'];
+      const changeDetectorRef = (component as unknown as Record<string, unknown>)['cdr'];
       expect(changeDetectorRef).toBeDefined();
     });
   });

@@ -1,6 +1,6 @@
 /**
  * Services for the ngxsmk-datepicker component
- * 
+ *
  * These services extract business logic from the monolithic component
  * to improve maintainability, testability, and separation of concerns.
  */
@@ -13,7 +13,11 @@ export type { DatepickerTheme } from './theme-builder.service';
 export type { DatePreset } from './date-presets.service';
 export type { DateSelectionState, DateSelectionConfig, DateSelectionCallbacks } from './date-selection.service';
 export { KeyboardNavigationService } from './keyboard-navigation.service';
-export type { KeyboardNavigationState, KeyboardNavigationCallbacks, KeyboardNavigationConfig } from './keyboard-navigation.service';
+export type {
+  KeyboardNavigationState,
+  KeyboardNavigationCallbacks,
+  KeyboardNavigationConfig,
+} from './keyboard-navigation.service';
 export { TouchGestureHandlerService } from './touch-gesture-handler.service';
 export type { TouchGestureState, TouchGestureConfig, TouchGestureCallbacks } from './touch-gesture-handler.service';
 export { FieldSyncService } from './field-sync.service';
@@ -25,7 +29,10 @@ export type { LocaleData, CalendarSystem } from './locale-registry.service';
 export { TranslationRegistryService } from './translation-registry.service';
 export { DefaultTranslationService } from './translation.service';
 export type { TranslationService } from './translation.service';
-export type { DatepickerTranslations, PartialDatepickerTranslations } from '../interfaces/datepicker-translations.interface';
+export type {
+  DatepickerTranslations,
+  PartialDatepickerTranslations,
+} from '../interfaces/datepicker-translations.interface';
 
 export { FocusTrapService } from './focus-trap.service';
 export { AriaLiveService } from './aria-live.service';
@@ -36,4 +43,3 @@ export type { FormattingOptions } from './display-formatting.service';
 export { DateValidationService } from './date-validation.service';
 export type { ValidationConstraints } from './date-validation.service';
 export { HapticFeedbackService } from './haptic-feedback.service';
-

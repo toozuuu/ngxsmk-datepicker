@@ -1,14 +1,6 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
-import {
-  FieldSyncService,
-  SignalFormField,
-} from '../services/field-sync.service';
+import { FieldSyncService, SignalFormField } from '../services/field-sync.service';
 import { signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
@@ -29,9 +21,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
   describe('Schema-based required validation', () => {
     it('should recognize required validation from errors signal', fakeAsync(() => {
       // Simulate Angular Signal Forms field with required validation error
-      const errorsSignal = signal([
-        { kind: 'required', message: 'This field is required' },
-      ]);
+      const errorsSignal = signal([{ kind: 'required', message: 'This field is required' }]);
       const valueSignal = signal<Date | null>(null);
 
       const mockField = {
@@ -54,9 +44,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
     }));
 
     it('should update error state when field has validation errors', fakeAsync(() => {
-      const errorsSignal = signal([
-        { kind: 'required', message: 'This field is required' },
-      ]);
+      const errorsSignal = signal([{ kind: 'required', message: 'This field is required' }]);
       const valueSignal = signal<Date | null>(null);
 
       const mockField = {
@@ -79,9 +67,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
     }));
 
     it('should clear error state when validation errors are resolved', fakeAsync(() => {
-      const errorsSignal = signal([
-        { kind: 'required', message: 'This field is required' },
-      ]);
+      const errorsSignal = signal([{ kind: 'required', message: 'This field is required' }]);
       const valueSignal = signal<Date | null>(null);
 
       const mockField = {
@@ -139,9 +125,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
     }));
 
     it('should work with errors as function', fakeAsync(() => {
-      const errorsArray = [
-        { kind: 'required', message: 'This field is required' },
-      ];
+      const errorsArray = [{ kind: 'required', message: 'This field is required' }];
       const valueSignal = signal<Date | null>(null);
 
       const mockField = {
@@ -164,9 +148,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
     }));
 
     it('should not set required when no required error exists', fakeAsync(() => {
-      const errorsSignal = signal([
-        { kind: 'minLength', message: 'Too short' },
-      ]);
+      const errorsSignal = signal([{ kind: 'minLength', message: 'Too short' }]);
       const valueSignal = signal<Date | null>(null);
 
       const mockField = {
