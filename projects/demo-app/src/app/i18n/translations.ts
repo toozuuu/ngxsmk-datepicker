@@ -28,7 +28,7 @@ export const translations = {
       playground: 'Interactive Playground',
     },
     home: {
-      heroBadge: 'The #1 Angular DatePicker v2.2.1',
+      heroBadge: 'The #1 Angular DatePicker v2.2.2',
       heroTitle: 'The Premier Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -446,7 +446,7 @@ export const translations = {
       playground: 'Spielplatz',
     },
     home: {
-      heroBadge: 'Neu v2.2.1 Stabilität',
+      heroBadge: 'Neu v2.2.2 Stabilität',
       heroTitle: 'Der beste Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -868,7 +868,7 @@ export const translations = {
       playground: 'Laboratorio',
     },
     home: {
-      heroBadge: 'Nuevo v2.2.1 Estabilidad',
+      heroBadge: 'Nuevo v2.2.2 Estabilidad',
       heroTitle: 'El mejor Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -1289,7 +1289,7 @@ export const translations = {
       playground: 'Lekplats',
     },
     home: {
-      heroBadge: 'Ny v2.2.1 stabilitet',
+      heroBadge: 'Ny v2.2.2 stabilitet',
       heroTitle: 'Den bästa open-source',
       heroSubtitle: 'Angular datumväljare',
       heroLead:
@@ -1703,7 +1703,7 @@ export const translations = {
       playground: '플레이그라운드',
     },
     home: {
-      heroBadge: '새로운 v2.2.1 안정성',
+      heroBadge: '새로운 v2.2.2 안정성',
       heroTitle: '최고의 오픈 소스',
       heroSubtitle: 'Angular 데이트피커',
       heroLead:
@@ -2103,7 +2103,7 @@ export const translations = {
       playground: '演练场',
     },
     home: {
-      heroBadge: '全新 v2.2.1 稳定性',
+      heroBadge: '全新 v2.2.2 稳定性',
       heroTitle: '最佳开源',
       heroSubtitle: 'Angular 日期选择器',
       heroLead:
@@ -2490,7 +2490,7 @@ export const translations = {
       playground: 'プレイグラウンド',
     },
     home: {
-      heroBadge: '新しい v2.2.1 の安定性',
+      heroBadge: '新しい v2.2.2 の安定性',
       heroTitle: '最高のオープンソース',
       heroSubtitle: 'Angular デートピッカー',
       heroLead:
@@ -2895,7 +2895,7 @@ export const translations = {
       playground: 'Playground',
     },
     home: {
-      heroBadge: 'Nouvelle stabilité v2.2.1',
+      heroBadge: 'Nouvelle stabilité v2.2.2',
       heroTitle: 'Le meilleur Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:

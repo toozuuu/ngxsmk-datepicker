@@ -1,6 +1,6 @@
 # Integration Guides
 
-**Last updated:** March 3, 2026 · **Current stable:** v2.2.1
+**Last updated:** March 3, 2026 · **Current stable:** v2.2.2
 
 This document provides integration examples for using ngxsmk-datepicker with popular frameworks and libraries.
 
@@ -37,6 +37,8 @@ The datepicker is built with **accessibility in mind**: keyboard navigation (arr
 
 ## Angular Material
 
+The main `ngxsmk-datepicker` bundle does **not** import `@angular/material`, so non-Material apps are not forced to install it. If you use `mat-form-field`, install Material and add the directive as below.
+
 ### Installation
 
 ```bash
@@ -45,10 +47,29 @@ npm install @angular/material @angular/cdk ngxsmk-datepicker
 
 ### Basic Integration (Standalone Components)
 
-**Default and recommended:** Use the **`ngxsmkMatFormFieldControl`** directive on the datepicker so `mat-form-field` finds it via `@ContentChild(MatFormFieldControl)`. No provider or `main.ts` setup required. Works with Vite and all bundlers. If you see "mat-form-field must contain a MatFormFieldControl", add the directive to the datepicker host (see Issue #187).
+**Recommended:** Use the **`ngxsmkMatFormFieldControl`** directive on the datepicker so `mat-form-field` finds it. Add this directive file to your project (e.g. `ngxsmk-mat-form-field.directive.ts`) so only Material apps pull in `@angular/material`:
 
 ```typescript
-import { NgxsmkDatepickerComponent, NgxsmkDatepickerMatFormFieldControlDirective } from 'ngxsmk-datepicker';
+// ngxsmk-mat-form-field.directive.ts
+import { Directive, forwardRef } from '@angular/core';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Directive({
+  selector: 'ngxsmk-datepicker[ngxsmkMatFormFieldControl]',
+  standalone: true,
+  providers: [
+    { provide: MatFormFieldControl, useExisting: forwardRef(() => NgxsmkDatepickerComponent) },
+  ],
+})
+export class NgxsmkDatepickerMatFormFieldControlDirective {}
+```
+
+Then in your component:
+
+```typescript
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerMatFormFieldControlDirective } from './ngxsmk-mat-form-field.directive'; // your local file
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
@@ -61,6 +82,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   `
 })
 ```
+
+If you see "mat-form-field must contain a MatFormFieldControl", add the directive to the datepicker host (see Issue #187).
 
 **Alternative (legacy / when directive is not used):** In `main.ts` before bootstrap, call `NgxsmkDatepickerComponent.withMaterialSupport(MatFormFieldControl)` (and optionally set `globalThis.__NGXSMK_MAT_FORM_FIELD_CONTROL__ = MatFormFieldControl`). Then use the datepicker inside `mat-form-field` without the directive. Prefer the directive above.
 
@@ -114,12 +137,12 @@ export class DatepickerComponent {
 
 ### Integration with Non-Standalone Components (NgModules)
 
-For non-standalone components, you need to provide the Material form field control token using the `provideMaterialFormFieldControl` helper:
+Add the same directive file (see snippet above) to your project, then import it in your NgModule:
 
 ```typescript
 import { NgModule } from '@angular/core';
-import { MatFormFieldControl } from '@angular/material/form-field';
-import { NgxsmkDatepickerComponent, provideMaterialFormFieldControl } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerMatFormFieldControlDirective } from './ngxsmk-mat-form-field.directive'; // your local file
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -127,14 +150,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     NgxsmkDatepickerComponent,
+    NgxsmkDatepickerMatFormFieldControlDirective,
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule
-  ],
-  providers: [provideMaterialFormFieldControl(MatFormFieldControl)]
+  ]
 })
 export class MyModule { }
 ```
+
+Use `ngxsmkMatFormFieldControl` on the datepicker in your templates.
 
 Then use it in your component:
 

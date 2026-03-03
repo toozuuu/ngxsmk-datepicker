@@ -106,5 +106,6 @@ export { HapticFeedbackService } from './lib/services/haptic-feedback.service';
 export { FieldSyncService } from './lib/services/field-sync.service';
 export type { SignalFormField, SignalFormFieldConfig } from './lib/services/field-sync.service';
 
-export { provideMaterialFormFieldControl } from './lib/material-form-field.helper';
-export { NgxsmkDatepickerMatFormFieldControlDirective } from './lib/material-form-field.directive';
+// Material (mat-form-field) integration is optional. The main bundle does not import @angular/material.
+// To use with mat-form-field: install @angular/material and @angular/cdk, then add the directive
+// from the repo or use the snippet in INTEGRATION.md § Angular Material.

@@ -14,10 +14,11 @@ because Angular's content-child resolution does not walk up to the parent's prov
 
 ## ✅ Recommended fix: directive
 
-Add **`ngxsmkMatFormFieldControl`** on the datepicker and import the directive. This works reliably with Vite and all bundlers (same token as `mat-form-field`).
+Add **`ngxsmkMatFormFieldControl`** on the datepicker and the directive. The directive is not in the main bundle; add the file from [INTEGRATION.md § Angular Material](../../projects/ngxsmk-datepicker/docs/INTEGRATION.md#angular-material) to your project, or (in this example) use the local copy under `src/app/`.
 
 ```typescript
-import { NgxsmkDatepickerComponent, NgxsmkDatepickerMatFormFieldControlDirective } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerMatFormFieldControlDirective } from './ngxsmk-mat-form-field.directive'; // local file
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
