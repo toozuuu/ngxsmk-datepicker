@@ -3304,10 +3304,14 @@ export class NgxsmkDatepickerComponent
       this.currentMinute = 0;
       this.currentHour = (this.currentHour + 1) % 24;
     }
+    if (this.showSeconds) {
+      this.currentSecond = Math.min(59, Math.floor(now.getSeconds() / this.secondInterval) * this.secondInterval);
+    }
     this.update12HourState(this.currentHour);
     if (this.timeOnly && !this._value) {
       const today = new Date();
-      today.setHours(this.currentHour, this.currentMinute, 0, 0);
+      const sec = this.showSeconds ? this.currentSecond : 0;
+      today.setHours(this.currentHour, this.currentMinute, sec, 0);
       this.selectedDate = today;
       this.currentDate = new Date(today);
       this._currentMonth = today.getMonth();
@@ -3790,7 +3794,8 @@ export class NgxsmkDatepickerComponent
       this.currentHour = this.get24Hour(this.currentDisplayHour, this.isPm);
     }
     const newDate = new Date(date);
-    newDate.setHours(this.currentHour, this.currentMinute, 0, 0);
+    const sec = this.showSeconds ? this.currentSecond : 0;
+    newDate.setHours(this.currentHour, this.currentMinute, sec, 0);
     return newDate;
   }
 
@@ -3829,6 +3834,9 @@ export class NgxsmkDatepickerComponent
       this._currentYear = viewCenterDate.getFullYear();
       this.currentHour = viewCenterDate.getHours();
       this.currentMinute = viewCenterDate.getMinutes();
+      if (this.showSeconds) {
+        this.currentSecond = Math.min(59, Math.floor(viewCenterDate.getSeconds() / this.secondInterval) * this.secondInterval);
+      }
       this.update12HourState(this.currentHour);
       this.currentMinute = Math.floor(this.currentMinute / this.minuteInterval) * this.minuteInterval;
     }
@@ -4564,7 +4572,9 @@ export class NgxsmkDatepickerComponent
       this.emitValue(dateWithTime);
       this.action.emit({
         type: 'timeChanged',
-        payload: { hour: this.currentHour, minute: this.currentMinute },
+        payload: this.showSeconds
+          ? { hour: this.currentHour, minute: this.currentMinute, second: this.currentSecond }
+          : { hour: this.currentHour, minute: this.currentMinute },
       });
       this.scheduleChangeDetection();
       return;
@@ -4592,7 +4602,9 @@ export class NgxsmkDatepickerComponent
 
     this.action.emit({
       type: 'timeChanged',
-      payload: { hour: this.currentHour, minute: this.currentMinute },
+      payload: this.showSeconds
+        ? { hour: this.currentHour, minute: this.currentMinute, second: this.currentSecond }
+        : { hour: this.currentHour, minute: this.currentMinute },
     });
     this.scheduleChangeDetection();
   }
@@ -4948,6 +4960,9 @@ export class NgxsmkDatepickerComponent
     if (dateToSync) {
       this.update12HourState(dateToSync.getHours());
       this.currentMinute = dateToSync.getMinutes();
+      if (this.showSeconds) {
+        this.currentSecond = Math.min(59, Math.floor(dateToSync.getSeconds() / this.secondInterval) * this.secondInterval);
+      }
     }
   }
 
