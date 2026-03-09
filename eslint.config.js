@@ -35,12 +35,18 @@ module.exports = tseslint.config(
     },
   },
   {
+    files: ["**/ngxsmk-datepicker.ts", "**/ngxsmk-datepicker.ts/**", "projects/ngxsmk-datepicker/src/lib/ngxsmk-datepicker.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off"
+    }
+  },
+  {
     files: ["**/*.html"],
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
     ],
-    rules: {},
+
   }
 );
 

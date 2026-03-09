@@ -1,6 +1,6 @@
 # Visual Regression Testing Guide
 
-**Last updated:** March 3, 2026 · **Current stable:** v2.2.2
+**Last updated:** March 9, 2026 · **Current stable:** v2.2.3
 
 This document describes the visual regression testing infrastructure for `ngxsmk-datepicker`, including screenshot-based testing for themes, layouts, and component states.
 

@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker-workspace",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "engines": {
@@ -18,7 +18,6 @@
     "watch": "npx ng build --watch --configuration development",
     "test": "npx ng test ngxsmk-datepicker",
     "test:coverage": "npx ng test ngxsmk-datepicker --code-coverage --watch=false --browsers=ChromeHeadless",
-    "demo": "npx ng serve demo-app",
     "lint": "npx ng lint",
     "format": "prettier --write \"projects/**/*.{ts,html,scss,css,json}\" \"examples/**/*.{ts,html,scss,css,json}\"",
     "format:check": "prettier --check \"projects/**/*.{ts,html,scss,css,json}\" \"examples/**/*.{ts,html,scss,css,json}\"",

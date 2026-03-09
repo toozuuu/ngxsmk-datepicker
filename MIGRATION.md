@@ -2,10 +2,11 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** March 3, 2026 · **Current stable:** v2.2.2
+**Last updated:** March 9, 2026 · **Current stable:** v2.2.3
 
 ## Table of Contents
 
+- [v2.2.0 → v2.2.3](#v220---v223)
 - [v2.1.8 → v2.2.0](#v218---v219)
 - [v2.1.7 → v2.1.8](#v217---v218)
 - [v2.1.6 → v2.1.7](#v216---v217)
@@ -54,6 +55,23 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v2.2.0 → v2.2.3
+
+### Changes
+
+- **Code Quality**: Refactored static Material support methods to reduce cognitive complexity and nesting depth (ESLint `S3776`, `S2004`).
+- **Improved Coverage**: Increased function coverage to ~68.2% through new internal test suites.
+- **Stability**: Fixed regression in touch/swipe event stubs and Material Form Field integration state.
+- **Maintenance**: Marked `_allInstances` as `readonly` and removed redundant `demo` script.
+
+### Migration Steps
+
+No migration steps required.
+
+```bash
+npm install ngxsmk-datepicker@2.2.3
+```
 
 ## v2.1.8 → v2.2.0
 
@@ -248,7 +266,7 @@ npm install ngxsmk-datepicker@2.0.8
 ### Changes
 
 - **Version Update**: Updated to version 2.0.7
-- **Stable Release**: Version 2.2.2 is the current stable version
+- **Stable Release**: Version 2.2.3 is the current stable version
 - No breaking changes.
 
 ### Migration Steps

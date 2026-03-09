@@ -70,12 +70,12 @@ class CalendarMonthViewStubComponent {
   @Output() dateClick = new EventEmitter<Date>();
   @Output() dateHover = new EventEmitter<Date>();
   @Output() dateFocus = new EventEmitter<unknown>();
-  @Output() swipeStart = new EventEmitter<unknown>();
-  @Output() swipeMove = new EventEmitter<unknown>();
-  @Output() swipeEnd = new EventEmitter<unknown>();
-  @Output() touchStart = new EventEmitter<unknown>();
-  @Output() touchMove = new EventEmitter<unknown>();
-  @Output() touchEnd = new EventEmitter<unknown>();
+  @Output() swipeStart = new EventEmitter<any>();
+  @Output() swipeMove = new EventEmitter<any>();
+  @Output() swipeEnd = new EventEmitter<any>();
+  @Output() touchStart = new EventEmitter<any>();
+  @Output() touchMove = new EventEmitter<any>();
+  @Output() touchEnd = new EventEmitter<any>();
 }
 
 @Component({
