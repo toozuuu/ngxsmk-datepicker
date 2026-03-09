@@ -1,6 +1,6 @@
 # Ionic Integration Testing Guide
 
-**Last updated:** March 3, 2026 · **Current stable:** v2.2.2
+**Last updated:** March 9, 2026 · **Current stable:** v2.2.3
 
 This document provides comprehensive testing instructions for verifying ngxsmk-datepicker compatibility with Ionic Framework.
 

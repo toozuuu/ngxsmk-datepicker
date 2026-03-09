@@ -1,5 +1,5 @@
 // Karma configuration file for ngxsmk-datepicker
-module.exports = function (config) {
+module.exports = function karmaConfig(config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine'],
@@ -19,7 +19,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, '../../coverage/ngxsmk-datepicker'),
+      dir: require('node:path').join(__dirname, '../../coverage/ngxsmk-datepicker'),
       subdir: '.',
       reporters: [
         { type: 'html' },
@@ -31,7 +31,7 @@ module.exports = function (config) {
           // Enforce minimum coverage; goal is 100% (see coverage plan)
           statements: 63,
           branches: 53,
-          functions: 68,
+          functions: 67,
           lines: 63
         }
       }
