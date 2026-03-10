@@ -38,7 +38,7 @@ import {
   getStartOfWeek,
   getEndOfWeek,
 } from './utils/date.utils';
-import { formatDateWithTimezone } from './utils/timezone.utils';
+import { formatDateWithTimezone, convertTimezone, isValidTimezone } from './utils/timezone.utils';
 import { generateRecurringDates } from './utils/recurring-dates.utils';
 import {
   HolidayProvider,
@@ -414,8 +414,7 @@ interface MatFormFieldControlMock<T> {
  * @see {@link HolidayProvider} for custom holiday support
  */
 export class NgxsmkDatepickerComponent
-  implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor, MatFormFieldControlMock<DatepickerValue>
-{
+  implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor, MatFormFieldControlMock<DatepickerValue> {
   private static _idCounter = 0;
   private static readonly _allInstances = new Set<NgxsmkDatepickerComponent>();
   private static _materialSupportRegistered = false;
@@ -630,7 +629,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] calendarCount should not exceed 12 for performance reasons. ` +
-            `Received: ${value}. Setting to 12.`
+          `Received: ${value}. Setting to 12.`
         );
       }
       this._calendarCount = 12;
@@ -805,14 +804,14 @@ export class NgxsmkDatepickerComponent
         onErrorStateChanged: (hasError: boolean) => {
           this.errorState = hasError;
         },
-        onSyncError: (_error: unknown) => {},
+        onSyncError: (_error: unknown) => { },
         normalizeValue: (value: unknown) => {
           return this._normalizeValue(value);
         },
         isValueEqual: (val1: DatepickerValue, val2: DatepickerValue) => {
           return this.isValueEqual(val1, val2);
         },
-        onCalendarGenerated: () => {},
+        onCalendarGenerated: () => { },
         onStateChanged: () => {
           this.scheduleChangeDetection();
         },
@@ -852,7 +851,7 @@ export class NgxsmkDatepickerComponent
         this._errorState = hasError;
         this.stateChanges.next();
       },
-      onSyncError: (_error: unknown) => {},
+      onSyncError: (_error: unknown) => { },
       normalizeValue: (value: unknown) => {
         return this._normalizeValue(value);
       },
@@ -975,8 +974,8 @@ export class NgxsmkDatepickerComponent
 
   @Input() classes?: DatepickerClasses | undefined;
 
-  private onChange = (_: DatepickerValue) => {};
-  private onTouched = () => {};
+  private onChange = (_: DatepickerValue) => { };
+  private onTouched = () => { };
   public disabled = false;
   @Input() set disabledState(isDisabled: boolean) {
     this.setDisabledState(isDisabled);
@@ -1162,7 +1161,7 @@ export class NgxsmkDatepickerComponent
    * Now managed by CalendarGenerationService.
    */
   public weekDays: string[] = [];
-  public readonly today: Date = getStartOfDay(new Date());
+  public today: Date = getStartOfDay(new Date());
   public selectedDate: Date | null = null;
   public selectedDates: Date[] = [];
   public startDate: Date | null = null;
@@ -1889,7 +1888,7 @@ export class NgxsmkDatepickerComponent
         });
       } else if (this.mode === 'timeRange') {
         // For time range mode, show formatted start and end times
-        const today = new Date();
+        const today = this.today;
         const startDate = new Date(today);
         startDate.setHours(
           this.get24Hour(this.startDisplayHour, this.startIsPm),
@@ -2601,8 +2600,7 @@ export class NgxsmkDatepickerComponent
   }
 
   private selectToday(): void {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = this.today;
     if (this.isDateValid(today)) {
       this.focusedDate = today;
       this.onDateClick(today);
@@ -2649,8 +2647,8 @@ export class NgxsmkDatepickerComponent
   }
 
   private isDateValid(date: Date): boolean {
-    if (this.minDate && date < this.minDate) return false;
-    if (this.maxDate && date > this.maxDate) return false;
+    if (this._minDate && date.getTime() < getStartOfDay(this._minDate).getTime()) return false;
+    if (this._maxDate && date.getTime() > getEndOfDay(this._maxDate).getTime()) return false;
     if (this.isInvalidDate?.(date)) return false;
     if (this.isDateDisabledMemo(date)) return false;
 
@@ -3258,6 +3256,14 @@ export class NgxsmkDatepickerComponent
     }
   }
 
+  private _updateToday(): void {
+    let now = new Date();
+    if (this.timezone && isValidTimezone(this.timezone)) {
+      now = convertTimezone(now, this.timezone, '');
+    }
+    this.today = getStartOfDay(now);
+  }
+
   ngOnInit(): void {
     NgxsmkDatepickerComponent._allInstances.add(this);
     this.applyGlobalConfig();
@@ -3271,7 +3277,7 @@ export class NgxsmkDatepickerComponent
     this.initializeTranslations();
     if (this.timeOnly) this.showTime = true;
     this.updateRtlState();
-    this.today.setHours(0, 0, 0, 0);
+    this._updateToday();
     this.generateLocaleData();
     this.generateTimeOptions();
     this.generateYearGrid();
@@ -3511,21 +3517,14 @@ export class NgxsmkDatepickerComponent
     this.validateInputs(changes);
     let needsChangeDetection = false;
 
-    if (changes['timeOnly']) {
-      if (this.timeOnly) {
-        this.showTime = true;
-        this.generateTimeOptions();
-      }
-      needsChangeDetection = true;
+    if (changes['timeOnly'] || changes['mode']) {
+      needsChangeDetection = this.handleChangesTimeAndMode(changes) || needsChangeDetection;
     }
-    if (changes['mode']) {
-      this.initializeValue(this._value);
-      this.generateCalendar();
-      needsChangeDetection = true;
-    }
+
     if (changes['locale'] || changes['rtl']) {
       needsChangeDetection = this.handleChangesLocaleRtl(changes) || needsChangeDetection;
     }
+
     if (
       changes['weekStart'] ||
       changes['minuteInterval'] ||
@@ -3538,28 +3537,18 @@ export class NgxsmkDatepickerComponent
     }
 
     if (needsChangeDetection) this.scheduleChangeDetection();
+
     if (changes['field']) this.handleChangesField(changes);
     if (changes['value']) this.handleChangesValue(changes);
-    if (
-      changes['holidayProvider'] ||
-      changes['disableHolidays'] ||
-      changes['disabledDates'] ||
-      changes['disabledRanges']
-    ) {
-      this._updateMemoSignals();
-      this.generateCalendar();
-      this.cdr.markForCheck();
-    }
-    if (changes['translations'] || changes['translationService']) {
-      this.initializeTranslations();
-      this.scheduleChangeDetection();
-    }
+
+    this.handleChangesDisabledStates(changes);
+    this.handleChangesTranslations(changes);
+
     if (changes['startAt']) this.handleChangesStartAt();
     if (changes['minDate']) this.handleChangesMinDate();
-    if (changes['maxDate']) {
-      this.generateCalendar();
-      this.cdr.markForCheck();
-    }
+
+    this.handleChangesMaxDate(changes);
+
     if (changes['calendarViewMode']) this.handleChangesCalendarViewMode();
     this.handleChangesShowTimeInlineAndLayout(changes);
   }
@@ -3604,6 +3593,9 @@ export class NgxsmkDatepickerComponent
   }
 
   private handleChangesWeekStartAndRelated(changes: SimpleChanges): boolean {
+    if (changes['timezone']) {
+      this._updateToday();
+    }
     this.applyGlobalConfig();
     if (changes['weekStart'] || changes['yearRange']) {
       if (changes['weekStart']) {
@@ -3640,6 +3632,47 @@ export class NgxsmkDatepickerComponent
     }
   }
 
+  private handleChangesTimeAndMode(changes: SimpleChanges): boolean {
+    if (changes['timeOnly']) {
+      if (this.timeOnly) {
+        this.showTime = true;
+        this.generateTimeOptions();
+      }
+    }
+    if (changes['mode']) {
+      this.initializeValue(this._value);
+      this.generateCalendar();
+    }
+    return !!(changes['timeOnly'] || changes['mode']);
+  }
+
+  private handleChangesDisabledStates(changes: SimpleChanges): void {
+    if (
+      changes['holidayProvider'] ||
+      changes['disableHolidays'] ||
+      changes['disabledDates'] ||
+      changes['disabledRanges']
+    ) {
+      this._updateMemoSignals();
+      this.generateCalendar();
+      this.cdr.markForCheck();
+    }
+  }
+
+  private handleChangesTranslations(changes: SimpleChanges): void {
+    if (changes['translations'] || changes['translationService']) {
+      this.initializeTranslations();
+      this.scheduleChangeDetection();
+    }
+  }
+
+  private handleChangesMaxDate(changes: SimpleChanges): void {
+    if (changes['maxDate']) {
+      this.generateCalendar();
+      this.cdr.markForCheck();
+    }
+  }
+
   private handleChangesValue(changes: SimpleChanges): void {
     if (this._field) return;
     const newValue = changes['value']?.currentValue;
@@ -3664,9 +3697,8 @@ export class NgxsmkDatepickerComponent
     this.generateCalendar();
     this.cdr.markForCheck();
     if (!this._value && this._minDate) {
-      const today = new Date();
       const minDateOnly = getStartOfDay(this._minDate);
-      const todayOnly = getStartOfDay(today);
+      const todayOnly = this.today;
       if (minDateOnly.getTime() > todayOnly.getTime()) {
         this.currentDate = new Date(this._minDate);
         this._currentMonth = this.currentDate.getMonth();
@@ -3708,8 +3740,8 @@ export class NgxsmkDatepickerComponent
     if (isDevMode()) {
       console.warn(
         '[ngxsmk-datepicker] minDate is greater than maxDate. ' +
-          `minDate: ${this._minDate.toISOString()}, maxDate: ${this._maxDate.toISOString()}. ` +
-          'Adjusting maxDate to be at least 1 day after minDate.'
+        `minDate: ${this._minDate.toISOString()}, maxDate: ${this._maxDate.toISOString()}. ` +
+        'Adjusting maxDate to be at least 1 day after minDate.'
       );
     }
     const adjustedMaxDate = new Date(minStart);
@@ -3724,7 +3756,7 @@ export class NgxsmkDatepickerComponent
     if (isDevMode()) {
       console.warn(
         '[ngxsmk-datepicker] timeOnly is only supported with mode="single". ' +
-          `Current mode: "${this.mode}". timeOnly will be disabled.`
+        `Current mode: "${this.mode}". timeOnly will be disabled.`
       );
     }
     this.timeOnly = false;
@@ -3869,9 +3901,8 @@ export class NgxsmkDatepickerComponent
   private resolveViewCenterDate(initialDate: Date | null): Date | null {
     let viewCenterDate = initialDate || this._startAtDate;
     if (!viewCenterDate && this._minDate) {
-      const today = new Date();
       const minDateOnly = getStartOfDay(this._minDate);
-      const todayOnly = getStartOfDay(today);
+      const todayOnly = this.today;
       if (minDateOnly.getTime() > todayOnly.getTime()) {
         viewCenterDate = this._minDate;
       }
@@ -3945,25 +3976,25 @@ export class NgxsmkDatepickerComponent
   private _normalizeRangeValue(range: { start: unknown; end: unknown }): DatepickerValue {
     const start = this.isMomentObject(range.start)
       ? this._normalizeDate(
-          this.momentToDate(
-            range.start as {
-              toDate: () => Date;
-              utcOffset?: () => number;
-              format?: (format: string) => string;
-            }
-          )
+        this.momentToDate(
+          range.start as {
+            toDate: () => Date;
+            utcOffset?: () => number;
+            format?: (format: string) => string;
+          }
         )
+      )
       : this._normalizeDate(range.start as DateInput);
     const end = this.isMomentObject(range.end)
       ? this._normalizeDate(
-          this.momentToDate(
-            range.end as {
-              toDate: () => Date;
-              utcOffset?: () => number;
-              format?: (format: string) => string;
-            }
-          )
+        this.momentToDate(
+          range.end as {
+            toDate: () => Date;
+            utcOffset?: () => number;
+            format?: (format: string) => string;
+          }
         )
+      )
       : this._normalizeDate(range.end as DateInput);
     if (start && end) return { start, end } as DatepickerValue;
     return null;
@@ -4023,7 +4054,7 @@ export class NgxsmkDatepickerComponent
           if (!Number.isNaN(date.getTime())) {
             return date;
           }
-        } catch {}
+        } catch { }
       }
     }
     return momentObj.toDate();
@@ -4990,8 +5021,8 @@ export class NgxsmkDatepickerComponent
       },
       {
         isDateDisabled: (d) => this.isDateDisabled(d),
-        onDateClick: (_) => {},
-        changeMonth: (_) => {},
+        onDateClick: (_) => { },
+        changeMonth: (_) => { },
         onStateChanged: () => this.cdr.markForCheck(),
         onHoverChanged: (d) => {
           this.hoveredDate = d;
@@ -5026,8 +5057,8 @@ export class NgxsmkDatepickerComponent
       },
       {
         isDateDisabled: (d) => this.isDateDisabled(d),
-        onDateClick: (_) => {},
-        changeMonth: (_) => {},
+        onDateClick: (_) => { },
+        changeMonth: (_) => { },
         onStateChanged: () => this.cdr.detectChanges(),
         onHoverChanged: (d) => {
           this.hoveredDate = d;
@@ -5056,7 +5087,7 @@ export class NgxsmkDatepickerComponent
           this.setTouchHandledFlag();
           this.onDateClick(d);
         },
-        changeMonth: (_) => {},
+        changeMonth: (_) => { },
         onStateChanged: () => this.cdr.markForCheck(),
         onHoverChanged: (d) => {
           this.hoveredDate = d;
@@ -5452,7 +5483,7 @@ export class NgxsmkDatepickerComponent
       },
       {
         isDateDisabled: (d) => this.isDateDisabled(d),
-        onDateClick: (_) => {},
+        onDateClick: (_) => { },
         changeMonth: (delta) => {
           if (!this.isBackArrowDisabled || delta > 0) {
             this.changeMonth(delta);
@@ -5464,7 +5495,7 @@ export class NgxsmkDatepickerComponent
           this.generateCalendar();
         },
         onStateChanged: () => this.cdr.markForCheck(),
-        onHoverChanged: (_) => {},
+        onHoverChanged: (_) => { },
       }
     );
   }
