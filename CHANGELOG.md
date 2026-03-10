@@ -2,10 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** March 9, 2026 · **Current stable:** v2.2.3
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.2.4] - 2026-03-10
+
+### Fixed
+- **Timezone Support**: Added full support for IANA timezones in "Today" calculation. The component now correctly identifies "Today" based on the configured `timezone` input.
+- **Date Validation**: Fixed an issue where "Today" was incorrectly considered invalid if `minDate` was set to the current time. Validation now normalizes to the start of the day.
+- **Keyboard Shortcuts**: Updated "Today" selection shortcut to be timezone-aware.
 
 ## [2.2.3] - 2026-03-09
 
