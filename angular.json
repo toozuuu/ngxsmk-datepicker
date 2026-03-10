@@ -36,7 +36,10 @@
               "**/dist/**",
               "**/*.module.ts"
             ],
-            "karmaConfig": "projects/ngxsmk-datepicker/karma.conf.js"
+            "karmaConfig": "projects/ngxsmk-datepicker/karma.conf.js",
+            "scripts": [
+              "node_modules/axe-core/axe.min.js"
+            ]
           }
         },
         "lint": {

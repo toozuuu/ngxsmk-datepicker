@@ -1,6 +1,6 @@
 # Ionic Framework Integration Guide
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 This guide provides step-by-step instructions for integrating ngxsmk-datepicker with Ionic Angular applications.
 
@@ -223,4 +223,5 @@ export class DatepickerPage {
 - [Ionic Overlay System](https://ionicframework.com/docs/utilities/overlays)
 - [Ionic Theming](https://ionicframework.com/docs/theming/basics)
 - [Capacitor Keyboard Plugin](https://capacitorjs.com/docs/apis/keyboard)
+
 

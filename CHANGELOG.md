@@ -2,10 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.2.6] - 2026-03-10
+
+### Fixed
+- **Type Safety**: Fixed casing of `DatepickerValue` type export to ensure consistency across the library and consuming applications.
+- **Module Resolution**: Improved TypeScript module resolution for local library development.
+- **Date Modal**: Fixed null pointer exception in `getSelectedDates` when handling partial date ranges.
 
 ## [2.2.4] - 2026-03-10
 

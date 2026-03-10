@@ -1,6 +1,6 @@
 # Integration Guides
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 This document provides integration examples for using ngxsmk-datepicker with popular frameworks and libraries.
 
@@ -698,4 +698,5 @@ See the demo app **Integrations** page for a full "Datepicker in a modal" exampl
 - [API Documentation](./API.md)
 - [Theme Guide](./THEME-TOKENS.md)
 - [Locale Guide](./LOCALE-GUIDE.md)
+
 

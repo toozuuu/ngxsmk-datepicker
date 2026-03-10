@@ -1,6 +1,6 @@
 # Version Compatibility Matrix
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 This document provides comprehensive compatibility information for `ngxsmk-datepicker` across different Angular versions, Zone.js configurations, and SSR/CSR setups.
 
@@ -439,4 +439,5 @@ npm list @angular/core @angular/common @angular/forms
 
 ### Issue: Translations not working in SSR
 **Solution**: Translations work in SSR. Ensure locale is explicitly set if auto-detection fails on server.
+
 

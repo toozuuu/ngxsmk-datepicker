@@ -356,7 +356,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
 
       const mockAdapter: DateAdapter = {
         ...new NativeDateAdapter(),
-        parse: (value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null => {
+        parse: (value: unknown, onError?: (error: Error) => void): Date | null => {
           if (typeof value === 'string' && value === 'invalid-date') {
             const error = new Error('Invalid date string');
             if (onError) {
@@ -366,10 +366,10 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
             capturedError = error;
             return null;
           }
-          return new NativeDateAdapter().parse(value, onError);
+          return new NativeDateAdapter().parse(value as any, onError);
         },
         format: (date: Date) => new NativeDateAdapter().format(date),
-        isValid: (value: string | Date | number | unknown) => new NativeDateAdapter().isValid(value),
+        isValid: (value: unknown) => new NativeDateAdapter().isValid(value as any),
         startOfDay: (date: Date) => new NativeDateAdapter().startOfDay(date),
         endOfDay: (date: Date) => new NativeDateAdapter().endOfDay(date),
         addMonths: (date: Date, months: number) => new NativeDateAdapter().addMonths(date, months),
@@ -409,10 +409,12 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
         component as unknown as { sanitizeInput: (v: string) => string },
         'sanitizeInput'
       ).and.callThrough();
+      component.inline = false;
       component.allowTyping = true;
       fixture.detectChanges();
 
       const input = fixture.nativeElement.querySelector('input');
+      expect(input).withContext('Input element should be rendered').toBeTruthy();
       if (input) {
         input.value = '<script>alert("xss")</script>';
         input.dispatchEvent(new Event('input'));
@@ -427,10 +429,12 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
         component as unknown as { sanitizeInput: (v: string) => string },
         'sanitizeInput'
       ).and.callThrough();
+      component.inline = false;
       component.allowTyping = true;
       fixture.detectChanges();
 
       const input = fixture.nativeElement.querySelector('input');
+      expect(input).withContext('Input element should be rendered').toBeTruthy();
       if (input) {
         input.value = 'onerror=alert(1)';
         input.dispatchEvent(new Event('blur'));
@@ -445,10 +449,12 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
         component as unknown as { sanitizeInput: (v: string) => string },
         'sanitizeInput'
       ).and.callThrough();
+      component.inline = false;
       component.allowTyping = true;
       fixture.detectChanges();
 
       const input = fixture.nativeElement.querySelector('input');
+      expect(input).withContext('Input element should be rendered').toBeTruthy();
       if (input) {
         input.value = 'javascript:alert(1)';
         input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));

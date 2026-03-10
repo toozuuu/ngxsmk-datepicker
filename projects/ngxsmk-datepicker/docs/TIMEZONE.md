@@ -1,6 +1,6 @@
 # Timezone Support
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 ## Overview
 
@@ -290,4 +290,5 @@ if (isValidTimezone('America/New_York')) {
 - Use IANA timezone names (e.g., `'America/New_York'`)
 - For advanced operations, consider date-fns-tz or Luxon
 - Always send UTC timestamps to servers/APIs
+
 

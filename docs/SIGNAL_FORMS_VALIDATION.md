@@ -1,6 +1,6 @@
 # Angular Signal Forms Validation Support
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 ## Overview
 
@@ -261,3 +261,4 @@ If you encounter any issues with Signal Forms validation, please:
 2. Verify your schema is correctly defined
 3. Check the browser console for any errors
 4. Report issues at: https://github.com/NGXSMK/ngxsmk-datepicker/issues
+
