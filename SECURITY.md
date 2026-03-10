@@ -1,6 +1,6 @@
 # Security Policy
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 ## Supported Versions
 
@@ -113,4 +113,5 @@ We appreciate responsible disclosure of security vulnerabilities. Contributors w
 - [Angular Security Guide](https://angular.dev/guide/security)
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [npm Security Best Practices](https://docs.npmjs.com/security-best-practices)
+
 

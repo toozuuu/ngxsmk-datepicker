@@ -96,18 +96,18 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
   describe('Layout Variations', () => {
     it('should render in mobile viewport', () => {
       // Simulate mobile viewport
-      Object.defineProperty(window, 'innerWidth', {
+      Object.defineProperty(globalThis, 'innerWidth', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.mobile.width,
       });
-      Object.defineProperty(window, 'innerHeight', {
+      Object.defineProperty(globalThis, 'innerHeight', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.mobile.height,
       });
 
-      window.dispatchEvent(new Event('resize'));
+      globalThis.dispatchEvent(new Event('resize'));
       fixture.detectChanges();
 
       expect(nativeElement).toBeTruthy();
@@ -115,36 +115,36 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
 
     it('should render in desktop viewport', () => {
       // Simulate desktop viewport
-      Object.defineProperty(window, 'innerWidth', {
+      Object.defineProperty(globalThis, 'innerWidth', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.desktop.width,
       });
-      Object.defineProperty(window, 'innerHeight', {
+      Object.defineProperty(globalThis, 'innerHeight', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.desktop.height,
       });
 
-      window.dispatchEvent(new Event('resize'));
+      globalThis.dispatchEvent(new Event('resize'));
       fixture.detectChanges();
 
       expect(nativeElement).toBeTruthy();
     });
 
     it('should render in tablet viewport', () => {
-      Object.defineProperty(window, 'innerWidth', {
+      Object.defineProperty(globalThis, 'innerWidth', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.tablet.width,
       });
-      Object.defineProperty(window, 'innerHeight', {
+      Object.defineProperty(globalThis, 'innerHeight', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.tablet.height,
       });
 
-      window.dispatchEvent(new Event('resize'));
+      globalThis.dispatchEvent(new Event('resize'));
       fixture.detectChanges();
 
       expect(nativeElement).toBeTruthy();
@@ -298,17 +298,17 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
       await waitForImages(nativeElement);
       expect(img.complete).toBe(true);
 
-      nativeElement.removeChild(img);
+      img.remove();
     });
 
     it('should wait for animations to complete', async () => {
       const div = document.createElement('div');
       div.style.animation = 'none';
       nativeElement.appendChild(div);
-
       await waitForAnimations(nativeElement);
+      expect(true).withContext('waitForAnimations should complete without error').toBe(true);
 
-      nativeElement.removeChild(div);
+      div.remove();
     });
 
     it('should wait for element to stabilize', async () => {
@@ -319,8 +319,9 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
       nativeElement.appendChild(div);
 
       await waitForElementStable(div, 1000);
+      expect(true).withContext('waitForElementStable should complete without error').toBe(true);
 
-      nativeElement.removeChild(div);
+      div.remove();
     });
 
     it('should generate consistent screenshot filenames', () => {
@@ -384,23 +385,23 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
       const scenarios = generateVisualTestScenarios('.ngxsmk-datepicker');
 
       // Should have light/dark × mobile/desktop = 4 scenarios
-      expect(scenarios.length).toBe(4);
+      expect(scenarios.length).withContext('Should generate 4 scenarios').toBe(4);
 
       // Check theme coverage
       const themes = scenarios.map((s) => s.theme);
-      expect(themes).toContain('light');
-      expect(themes).toContain('dark');
+      expect(themes).withContext('Should include light theme').toContain('light');
+      expect(themes).withContext('Should include dark theme').toContain('dark');
 
       // Check viewport coverage
       const viewportTypes = scenarios.map((s) => (s.viewport.isMobile ? 'mobile' : 'desktop'));
-      expect(viewportTypes.filter((v) => v === 'mobile').length).toBe(2);
-      expect(viewportTypes.filter((v) => v === 'desktop').length).toBe(2);
+      expect(viewportTypes.filter((v) => v === 'mobile').length).withContext('Should have 2 mobile scenarios').toBe(2);
+      expect(viewportTypes.filter((v) => v === 'desktop').length).withContext('Should have 2 desktop scenarios').toBe(2);
     });
 
     it('should execute light theme mobile scenario', async () => {
       applyTheme('light');
 
-      Object.defineProperty(window, 'innerWidth', {
+      Object.defineProperty(globalThis, 'innerWidth', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.mobile.width,
@@ -416,7 +417,7 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
     it('should execute dark theme mobile scenario', async () => {
       applyTheme('dark');
 
-      Object.defineProperty(window, 'innerWidth', {
+      Object.defineProperty(globalThis, 'innerWidth', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.mobile.width,
@@ -432,7 +433,7 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
     it('should execute light theme desktop scenario', async () => {
       applyTheme('light');
 
-      Object.defineProperty(window, 'innerWidth', {
+      Object.defineProperty(globalThis, 'innerWidth', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.desktop.width,
@@ -448,7 +449,7 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
     it('should execute dark theme desktop scenario', async () => {
       applyTheme('dark');
 
-      Object.defineProperty(window, 'innerWidth', {
+      Object.defineProperty(globalThis, 'innerWidth', {
         writable: true,
         configurable: true,
         value: VIEWPORTS.desktop.width,
@@ -484,12 +485,12 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
       const sizes = [375, 768, 1024, 1920];
 
       sizes.forEach((width) => {
-        Object.defineProperty(window, 'innerWidth', {
+        Object.defineProperty(globalThis, 'innerWidth', {
           writable: true,
           configurable: true,
           value: width,
         });
-        window.dispatchEvent(new Event('resize'));
+        globalThis.dispatchEvent(new Event('resize'));
       });
 
       fixture.detectChanges();

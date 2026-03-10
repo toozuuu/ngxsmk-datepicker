@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to ngxsmk-datepicker! This document provides guidelines and instructions for contributing.
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 ## Code of Conduct
 
@@ -288,4 +288,5 @@ Check the [Roadmap](ROADMAP.md) to see planned features and improvements. Issues
 ## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
+
 

@@ -24,15 +24,15 @@
 
 ---
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.2.4` is live! This release adds full **IANA Timezone Support** for "Today" calculation, resolves a critical bug where "Today" could become unselectable after late-day `minDate` initializations, and ensures high-performance date validation across all configurations.
+> **Stable Release**: `v2.2.6` is live! This release adds full **IANA Timezone Support** for "Today" calculation, resolves a critical bug where "Today" could become unselectable after late-day `minDate` initializations, and ensures high-performance date validation across all configurations.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.4 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.6 or later.
 
 ---
 
@@ -590,7 +590,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.2.4 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.2.6 now features **full localization synchronization** for:
 
 - 🇺🇸 English (`en`)
 - 🇩🇪 German (`de`)
@@ -683,7 +683,7 @@ This library has been optimized for maximum performance:
 
 ## **🐛 Bug Fixes & Improvements**
 
-### **Critical Updates in v2.2.4:**
+### **Critical Updates in v2.2.6:**
 
 - ✅ **Timezone Support**: Added full support for IANA timezones in "Today" calculation.
 - ✅ **Date Validation**: Fixed "Today" unselectable bug by normalizing `minDate` boundary checks.
@@ -849,16 +849,16 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-### **v2.2.4** (Current Stable)
+### **v2.2.6** (Current Stable)
 
-- 🎉 **Version Update**: Updated to version 2.2.4.
+- 🎉 **Version Update**: Updated to version 2.2.6.
 - ✨ **Key Updates**: Optimized loading times, refined mobile header layout, and improved dropdown accessibility.
 - ✅ **Stable Release**: Full synchronization of header components with `ViewEncapsulation.None`.
 
 ### **v1.9.24**
 
 - 🎉 **Version Update**: Updated to version 1.9.24
-- ✅ **Stable Release**: Version 2.2.4 is the current stable version
+- ✅ **Stable Release**: Version 2.2.6 is the current stable version
 
 ### **v1.9.23**
 
@@ -1314,3 +1314,4 @@ If you find this library helpful, please consider:
 - 💡 **Suggesting** new features
 - 🤝 **Contributing** code improvements
 - 📢 **Sharing** with the community
+

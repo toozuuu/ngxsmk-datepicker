@@ -24,15 +24,15 @@
 
 ---
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.2.4` is live! This release adds full **IANA Timezone Support** for "Today" calculation, resolves a critical bug where "Today" could become unselectable after late-day `minDate` initializations, and ensures high-performance date validation across all configurations.
+> **Stable Release**: `v2.2.6` is live! This release adds full **IANA Timezone Support** for "Today" calculation, resolves a critical bug where "Today" could become unselectable after late-day `minDate` initializations, and ensures high-performance date validation across all configurations.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.4 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.6 or later.
 
 ---
 
@@ -139,7 +139,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.2.4
+npm install ngxsmk-datepicker@2.2.6
 ```
 
 ### Alternative installation
@@ -148,12 +148,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.2.4` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.4` |
-| **Bun** | `bun add ngxsmk-datepicker@2.2.4` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.2.4` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.2.6` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.6` |
+| **Bun** | `bun add ngxsmk-datepicker@2.2.6` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.2.6` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.2.4/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.4/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.2.6/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.6/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -604,7 +604,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.2.4 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.2.6 now features **full localization synchronization** for:
 
 - �� English (`en`)
 - �� German (`de`)
@@ -697,7 +697,7 @@ This library has been optimized for maximum performance:
 
 ## **🐛 Bug Fixes & Improvements**
 
-### **Critical Updates in v2.2.4:**
+### **Critical Updates in v2.2.6:**
 
 - ✅ **Timezone Support**: Added full support for IANA timezones in "Today" calculation.
 - ✅ **Date Validation**: Fixed "Today" unselectable bug by normalizing `minDate` boundary checks.
@@ -864,7 +864,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-**Recent:** v2.2.4 — TypeScript strictness overhaul, appendToBody/popover fixes, loading and CSS cleanup. Versions 2.0.10 and 2.0.11 are unpublished; use v2.2.4 or later.
+**Recent:** v2.2.6 — TypeScript strictness overhaul, appendToBody/popover fixes, loading and CSS cleanup. Versions 2.0.10 and 2.0.11 are unpublished; use v2.2.6 or later.
 
 For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 
@@ -918,3 +918,4 @@ If you find this library helpful, please consider:
 - 💡 **Suggesting** new features
 - 🤝 **Contributing** code improvements
 - 📢 **Sharing** with the community
+

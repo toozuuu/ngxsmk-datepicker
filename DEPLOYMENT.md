@@ -2,7 +2,7 @@
 
 This document explains how the ngxsmk-datepicker demo app is deployed to GitHub Pages.
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 ## Automatic Deployment
 
@@ -113,3 +113,4 @@ The deployed app has this structure on the gh-pages branch:
 ```
 
 This structure ensures the app works correctly with the configured base href.
+

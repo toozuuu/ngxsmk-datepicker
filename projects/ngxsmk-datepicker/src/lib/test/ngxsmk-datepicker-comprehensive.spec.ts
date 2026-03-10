@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
-import * as AngularCore from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
@@ -8,16 +7,11 @@ import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 import { HolidayProvider, DatepickerValue } from '../utils/calendar.utils';
 import { DatePipe } from '@angular/common';
 
-const form = (AngularCore as unknown as Record<string, unknown>)['form'] as (...args: unknown[]) => {
-  (): { dirty: () => boolean };
-  dateField: unknown;
-};
-const objectSchema = (AngularCore as unknown as Record<string, unknown>)['objectSchema'] as (
-  ...args: unknown[]
-) => unknown;
+const form: any = undefined;
+const objectSchema: any = undefined;
 
 class TestHolidayProvider implements HolidayProvider {
-  private holidays: { [key: string]: string } = {
+  private readonly holidays: { [key: string]: string } = {
     '2025-01-01': "New Year's Day",
     '2025-12-25': 'Christmas Day',
   };

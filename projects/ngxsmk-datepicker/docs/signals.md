@@ -1,6 +1,6 @@
 # Signals Integration Guide
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.4
+**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
 
 ngxsmk-datepicker is fully compatible with Angular Signals, providing seamless integration with both traditional reactive forms and modern signal-based patterns.
 
@@ -261,4 +261,5 @@ dateSignal = signal<DatepickerValue>(null);
 ```
 
 The datepicker supports both patterns simultaneously, so you can migrate gradually.
+
 
