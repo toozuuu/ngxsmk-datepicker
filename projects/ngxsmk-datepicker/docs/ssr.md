@@ -1,6 +1,6 @@
 # Server-Side Rendering (SSR) Guide
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
+**Last updated:** March 21, 2026 · **Current stable:** v2.2.7
 
 ngxsmk-datepicker is fully compatible with Angular Universal and server-side rendering. This guide covers SSR setup, best practices, and troubleshooting.
 

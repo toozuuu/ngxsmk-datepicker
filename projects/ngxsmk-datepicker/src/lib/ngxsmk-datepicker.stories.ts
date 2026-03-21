@@ -162,6 +162,16 @@ export const DateRange: Story = {
   },
 };
 
+/** Same calendar day as start and end (e.g. single-night booking). See GitHub #231. */
+export const RangeAllowSameDay: Story = {
+  args: {
+    mode: 'range',
+    allowSameDay: true,
+    placeholder: 'Select range (same day twice or close after one day)',
+    theme: 'light',
+  },
+};
+
 export const TimeOnly: Story = {
   args: {
     mode: 'single',

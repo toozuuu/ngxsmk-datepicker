@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to ngxsmk-datepicker! This document provides guidelines and instructions for contributing.
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
+**Last updated:** March 21, 2026 · **Current stable:** v2.2.7
 
 ## Code of Conduct
 
@@ -247,14 +247,20 @@ npx ng test ngxsmk-datepicker --include="**/issue-13.spec.ts"
 
 ## Release Process
 
-1. Update version in `package.json` and `projects/ngxsmk-datepicker/package.json`
-2. Update CHANGELOG.md with all changes
-3. Run `npm run build:optimized` to ensure build succeeds
-4. Run `npm run build:analyze` to verify bundle size
-5. Run all tests: `npm test`
-6. Create git tag: `git tag v1.x.x`
-7. Push tag: `git push origin v1.x.x`
-8. Publish to npm: `npm publish` (or use semantic-release)
+The npm package **`ngxsmk-datepicker`** is published from `dist/ngxsmk-datepicker` after an `ng-packagr` production build. The `dist/` folder is **not** committed (`/dist` is gitignored), so publishing without building produces broken tarballs (see [issue #230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
+
+### Automated (recommended)
+
+1. Merge release-worthy commits to `main` using [Conventional Commits](https://www.conventionalcommits.org/) (semantic-release uses them for versioning).
+2. Ensure the repository has an **`NPM_TOKEN`** secret (npm Automation token).
+3. The [Release workflow](.github/workflows/release.yml) runs `semantic-release`, which **builds the library in `prepare`** then publishes from `dist/ngxsmk-datepicker`.
+
+### Manual publish
+
+1. Run tests: `npm test -- --watch=false --browsers=ChromeHeadless`
+2. Run `npm run publish:patch` (or `publish:beta`) — this runs `build:optimized`, copies root docs into `dist/ngxsmk-datepicker`, then `npm publish` from that directory.
+
+Do **not** run `npm publish` from the workspace root (that package is `ngxsmk-datepicker-workspace`, not the library). Do **not** publish from `dist/ngxsmk-datepicker` unless you have just run `npm run build:optimized && npm run prepublish:copy-assets` and `node scripts/assert-dist-lib-ready.cjs` succeeds.
 
 ## Finding Issues to Work On
 

@@ -28,7 +28,7 @@ export const translations = {
       playground: 'Interactive Playground',
     },
     home: {
-      heroBadge: 'The #1 Angular DatePicker v2.2.6',
+      heroBadge: 'The #1 Angular DatePicker v2.2.7',
       heroTitle: 'The Premier Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -446,7 +446,7 @@ export const translations = {
       playground: 'Spielplatz',
     },
     home: {
-      heroBadge: 'Neu v2.2.6 Stabilität',
+      heroBadge: 'Neu v2.2.7 Stabilität',
       heroTitle: 'Der beste Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
