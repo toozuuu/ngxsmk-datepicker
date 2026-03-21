@@ -615,6 +615,11 @@ export class NgxsmkDatepickerComponent
     [key: string]: (context: KeyboardShortcutContext) => boolean;
   } | null = null;
   @Input() autoApplyClose: boolean = false;
+  /**
+   * Range mode only: allow a one-day range by clicking the same date twice, or by closing the popover
+   * with only a start date selected (start and end will both be that day).
+   */
+  @Input() allowSameDay: boolean = false;
   @Input() displayFormat?: string;
   @Input() allowTyping: boolean = false;
   private _calendarCount: number = 1;
@@ -4851,6 +4856,9 @@ export class NgxsmkDatepickerComponent
       return;
     }
     if (dayTime === startTime) {
+      if (this._tryCompleteSameDayRange()) {
+        this._announceRangeSelected();
+      }
       return;
     }
 
@@ -4869,9 +4877,29 @@ export class NgxsmkDatepickerComponent
     this.hoveredDate = null;
     this._invalidateMemoCache();
     this.emitValue({ start: this.startDate, end: this.endDate });
+    this._announceRangeSelected();
+  }
 
+  /** Completes range with end equal to start when `allowSameDay` is enabled. */
+  private _tryCompleteSameDayRange(): boolean {
+    if (!this.allowSameDay || this.mode !== 'range' || !this.startDate || this.endDate) {
+      return false;
+    }
+    const endSame = new Date(this.startDate);
+    if (this.hooks?.validateRange && !this.hooks.validateRange(this.startDate, endSame)) {
+      return false;
+    }
+    this.endDate = endSame;
+    this.hoveredDate = null;
+    this._invalidateMemoCache();
+    this.emitValue({ start: this.startDate, end: this.endDate });
+    return true;
+  }
+
+  private _announceRangeSelected(): void {
+    if (!this.startDate || !this.endDate) return;
     const startFormatted = formatDateWithTimezone(
-      this.startDate!,
+      this.startDate,
       this.locale,
       { year: 'numeric', month: 'long', day: 'numeric' },
       this.timezone
@@ -4888,6 +4916,12 @@ export class NgxsmkDatepickerComponent
         end: endFormatted,
       }) || `${startFormatted} to ${endFormatted}`;
     this.ariaLiveService.announce(msg, 'polite');
+  }
+
+  private _finalizeSameDayRangeOnClose(): void {
+    if (this._tryCompleteSameDayRange()) {
+      this._announceRangeSelected();
+    }
   }
 
   private _handlePeriodModeClick(day: Date): void {
@@ -5836,6 +5870,9 @@ export class NgxsmkDatepickerComponent
    * This improves accessibility by returning focus to the trigger element.
    */
   public closeCalendarWithFocusRestore(): void {
+    if (this.isCalendarOpen && !this.isInlineMode && !this.disabled) {
+      this._finalizeSameDayRangeOnClose();
+    }
     this.removeFocusTrap();
     this.isCalendarOpen = false;
     this.isOpeningCalendar = false;

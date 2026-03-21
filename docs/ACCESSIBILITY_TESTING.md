@@ -1,6 +1,6 @@
 # Accessibility Testing
 
-**Last updated:** March 10, 2026 · **Current stable:** v2.2.6
+**Last updated:** March 21, 2026 · **Current stable:** v2.2.7
 
 This document outlines the accessibility testing infrastructure integrated into the ngxsmk-datepicker library.
 

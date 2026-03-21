@@ -194,6 +194,24 @@ describe('DateSelectionService', () => {
       expect(state.endDate).toBeNull();
     });
 
+    it('should set end date to start when same day is selected and allowSameDay is true', () => {
+      config.allowSameDay = true;
+      const start = new Date('2024-01-15');
+      state.startDate = start;
+      const date = new Date('2024-01-15');
+
+      service.selectDate(date, state, config, callbacks);
+
+      expect(state.endDate!.getTime()).toBe(start.getTime());
+      expect(callbacks.onValueEmitted).toHaveBeenCalled();
+      const emitted = (callbacks.onValueEmitted as jasmine.Spy).calls.mostRecent().args[0] as {
+        start: Date;
+        end: Date;
+      };
+      expect(emitted.start.getTime()).toBe(start.getTime());
+      expect(emitted.end.getTime()).toBe(start.getTime());
+    });
+
     it('should validate range if validateRange is provided', () => {
       const startDate = new Date('2024-01-10');
       state.startDate = startDate;

@@ -13,6 +13,8 @@ export interface DateSelectionState {
 
 export interface DateSelectionConfig {
   mode: 'single' | 'range' | 'multiple';
+  /** When true, range mode accepts start and end on the same calendar day (second click or service consumer). */
+  allowSameDay?: boolean;
   showTime: boolean;
   timeOnly: boolean;
   currentDisplayHour: number;
@@ -92,7 +94,17 @@ export class DateSelectionService {
           state.endDate = null;
           state.hoveredDate = null;
         } else if (dayTime === startTime!) {
-          // Same day selected - no action needed
+          if (config.allowSameDay && state.startDate) {
+            const sameEnd = new Date(state.startDate);
+            if (callbacks.validateRange && !callbacks.validateRange(state.startDate, sameEnd)) {
+              callbacks.onStateChanged?.();
+              return;
+            }
+            state.endDate = sameEnd;
+            state.hoveredDate = null;
+            callbacks.onValueEmitted?.({ start: state.startDate, end: state.endDate });
+            callbacks.onStateChanged?.();
+          }
         } else {
           const potentialEndDate = callbacks.applyTimeIfNeeded(day);
 

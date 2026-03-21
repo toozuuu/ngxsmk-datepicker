@@ -20,6 +20,12 @@
       }
     ],
     [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "npm run build:optimized && npm run prepublish:copy-assets && node scripts/assert-dist-lib-ready.cjs"
+      }
+    ],
+    [
       "@semantic-release/npm",
       {
         "pkgRoot": "dist/ngxsmk-datepicker",

@@ -239,6 +239,13 @@ export class ApiComponent {
     { name: 'maxDate', type: 'Date | string', default: 'null', description: 'Maximum selectable date.' },
     { name: 'ranges', type: 'DateRange', default: 'null', description: 'Predefined range options for Range mode.' },
     {
+      name: 'allowSameDay',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Range mode: allow a one-day range (click the same date twice, or close the popover with only a start date).',
+    },
+    {
       name: 'holidayProvider',
       type: 'HolidayProvider',
       default: 'null',
