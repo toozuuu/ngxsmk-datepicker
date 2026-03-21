@@ -9,8 +9,10 @@ const libPackageJsonPath = path.join(__dirname, '..', 'projects', 'ngxsmk-datepi
 const libPackageJson = JSON.parse(fs.readFileSync(libPackageJsonPath, 'utf8'));
 const packageName = libPackageJson.name;
 
-// Version: optional first arg (e.g. 2.1.5), else from library package.json
-const versionArg = process.argv.find((a) => a.match(/^\d+\.\d+\.\d+$/));
+// Version: optional first arg (e.g. 2.1.5 or 2.2.9-beta.0), else from library package.json
+const versionArg = process.argv.find((a) =>
+  /^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(a)
+);
 const version = versionArg || libPackageJson.version;
 
 // OTP: --otp=CODE or --otp CODE
@@ -20,7 +22,8 @@ const otp = otpMatch ? otpMatch.split('=')[1] : (process.argv[process.argv.index
 if (!otp) {
   console.error('Error: OTP code is required (from npm 2FA).');
   console.error('Usage: npm run unpublish:version -- 2.1.5 --otp=YOUR_OTP');
-  console.error('   or: npm run unpublish:version -- --otp=YOUR_OTP   (unpublishes version from projects/ngxsmk-datepicker/package.json)');
+  console.error('   or: npm run unpublish:version -- 2.2.9-beta.0 --otp=YOUR_OTP');
+  console.error('   or: npm run unpublish:version -- --otp=YOUR_OTP   (uses version from projects/ngxsmk-datepicker/package.json)');
   process.exit(1);
 }
 

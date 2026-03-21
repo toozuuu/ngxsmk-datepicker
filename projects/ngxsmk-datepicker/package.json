@@ -80,8 +80,8 @@
   },
   "prepublishOnly": "node ../../scripts/assert-lib-publish-artifacts.cjs",
   "exports": {
-    "./styles/*": {
-      "default": "./styles/*"
+    ".": {
+      "import": "./fesm2022/ngxsmk-datepicker.mjs"
     }
   }
 }
