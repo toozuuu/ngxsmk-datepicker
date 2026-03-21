@@ -1,6 +1,6 @@
 # Signal Forms Integration
 
-**Last updated:** March 21, 2026 · **Current stable:** v2.2.7
+**Last updated:** March 21, 2026 · **Current stable:** v2.2.8
 
 This guide covers using ngxsmk-datepicker with Angular 21+ Signal Forms API.
 

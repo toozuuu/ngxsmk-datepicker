@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "author": {
     "name": "Sachin Dilshan",
     "url": "https://www.linkedin.com/in/sachindilshan/"
@@ -78,9 +78,10 @@
     "node": ">=20.19.0 || >=22.12.0",
     "npm": ">=10.0.0"
   },
+  "prepublishOnly": "node ../../scripts/assert-lib-publish-artifacts.cjs",
   "exports": {
-    "./styles/*": {
-      "default": "./styles/*"
+    ".": {
+      "import": "./fesm2022/ngxsmk-datepicker.mjs"
     }
   }
 }

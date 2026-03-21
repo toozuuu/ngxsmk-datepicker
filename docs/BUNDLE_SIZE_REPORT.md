@@ -1,7 +1,7 @@
 # Bundle Size Optimization Report
 
 **Generated**: March 10, 2026  
-**Version**: 2.2.7
+**Version**: 2.2.8
 
 ---
 
@@ -393,7 +393,7 @@ Track bundle size across versions:
 | 2.0.9   | 799 KB      | +19 KB | Testing utils, visual regression |
 | 2.1.1   | 805 KB      | +6 KB  | Material integration, bug fixes  |
 | 2.1.2   | 804 KB      | -1 KB  | Circular dependency fix, cleanup  |
-| 2.2.7   | 812 KB      | -      | Current stable                    |
+| 2.2.8   | 812 KB      | -      | Current stable                    |
 
 ---
 
