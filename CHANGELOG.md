@@ -2,10 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** March 21, 2026 · **Current stable:** v2.2.7
+**Last updated:** March 21, 2026 · **Current stable:** v2.2.8
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.2.8] - 2026-03-21
+
+### Fixed
+
+- **npm package**: Republished with a complete ng-packagr build. Tarballs for **2.2.3–2.2.7** on the registry were missing `fesm2022/` and `types/` (published from source without build output). **Use `ngxsmk-datepicker@2.2.8` instead of 2.2.7** for installs from npm. A `prepublishOnly` check now blocks publishing without those artifacts ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
 
 ## [2.2.7] - 2026-03-21
 
