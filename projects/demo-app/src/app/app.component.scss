@@ -188,6 +188,17 @@
   }
 }
 
+.coffee-btn {
+  color: #ff9300;
+  border-color: rgba(255, 147, 0, 0.2) !important;
+
+  &:hover {
+    color: #ffd600 !important;
+    background: rgba(255, 147, 0, 0.1) !important;
+    border-color: #ff9300 !important;
+  }
+}
+
 .mobile-menu-toggle {
   display: none;
   background: var(--color-bg-secondary);
