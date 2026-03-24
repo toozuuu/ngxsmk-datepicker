@@ -2,10 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** March 21, 2026 · **Current stable:** v2.2.8
+**Last updated:** March 24, 2026 · **Current stable:** v2.2.9
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.2.9] - 2026-03-24
+
+### Fixed
+
+- **Date Formatting**: Resolved "off-by-one" day of week shift and recursive token replacement corruption in `dateFormatPattern` logic.
+- **Build**: Resolved TypeScript type mismatch in `CustomDateFormatService` that prevented production builds.
 
 ## [2.2.8] - 2026-03-21
 

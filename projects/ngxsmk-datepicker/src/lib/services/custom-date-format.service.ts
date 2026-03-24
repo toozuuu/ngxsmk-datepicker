@@ -55,7 +55,6 @@ export class CustomDateFormatService {
       return '';
     }
 
-    let result = pattern;
     const year = date.getFullYear();
     const month = date.getMonth();
     const dayOfMonth = date.getDate();
@@ -69,45 +68,31 @@ export class CustomDateFormatService {
     const monthNames = this.getMonthNames();
     const weekdayNames = this.getWeekdayNames();
 
-    // Year
-    result = result.replace(/YYYY/g, year.toString());
-    result = result.replace(/YY/g, year.toString().slice(-2));
+    const replacements: Record<string, string> = {
+      'YYYY': year.toString(),
+      'YY': year.toString().slice(-2),
+      'MMMM': monthNames.full[month] || '',
+      'MMM': monthNames.abbreviated[month] || '',
+      'MM': (month + 1).toString().padStart(2, '0'),
+      'M': (month + 1).toString(),
+      'DDDD': weekdayNames.full[dayOfWeek] || '',
+      'DDD': weekdayNames.abbreviated[dayOfWeek] || '',
+      'DD': dayOfMonth.toString().padStart(2, '0'),
+      'D': dayOfMonth.toString(),
+      'HH': hours24.toString().padStart(2, '0'),
+      'H': hours24.toString(),
+      'hh': hours12.toString().padStart(2, '0'),
+      'h': hours12.toString(),
+      'mm': minutes.toString().padStart(2, '0'),
+      'm': minutes.toString(),
+      'ss': seconds.toString().padStart(2, '0'),
+      's': seconds.toString(),
+      'A': isAM ? 'AM' : 'PM',
+      'a': isAM ? 'am' : 'pm',
+    };
 
-    // Month
-    result = result.replace(/MMMM/g, monthNames.full[month] || '');
-    result = result.replace(/MMM/g, monthNames.abbreviated[month] || '');
-    result = result.replace(/MM/g, (month + 1).toString().padStart(2, '0'));
-    result = result.replace(/M(?!M)/g, (month + 1).toString());
-
-    // Weekday
-    result = result.replace(/DDDD/g, weekdayNames.full[dayOfWeek] || '');
-    result = result.replace(/DDD/g, weekdayNames.abbreviated[dayOfWeek] || '');
-
-    // Day
-    result = result.replace(/DD/g, dayOfMonth.toString().padStart(2, '0'));
-    result = result.replace(/D(?!D)/g, dayOfMonth.toString());
-
-    // Hour (24-hour format)
-    result = result.replace(/HH/g, hours24.toString().padStart(2, '0'));
-    result = result.replace(/H(?!H)/g, hours24.toString());
-
-    // Hour (12-hour format)
-    result = result.replace(/hh/g, hours12.toString().padStart(2, '0'));
-    result = result.replace(/h(?!h)/g, hours12.toString());
-
-    // Minutes
-    result = result.replace(/mm/g, minutes.toString().padStart(2, '0'));
-    result = result.replace(/m(?!m)/g, minutes.toString());
-
-    // Seconds
-    result = result.replace(/ss/g, seconds.toString().padStart(2, '0'));
-    result = result.replace(/s(?!s)/g, seconds.toString());
-
-    // AM/PM
-    result = result.replace(/A/g, isAM ? 'AM' : 'PM');
-    result = result.replace(/a/g, isAM ? 'am' : 'pm');
-
-    return result;
+    const regex = /YYYY|YY|MMMM|MMM|MM|M|DDDD|DDD|DD|D|HH|H|hh|h|mm|m|ss|s|[Aa]/g;
+    return pattern.replaceAll(regex, (match) => replacements[match] || match);
   }
 
   /**
@@ -123,7 +108,7 @@ export class CustomDateFormatService {
       // For now, use basic date parsing as full pattern parsing is complex
       // This can be enhanced in the future to support full pattern parsing
       const date = new Date(dateString);
-      return isNaN(date.getTime()) ? null : date;
+      return Number.isNaN(date.getTime()) ? null : date;
     } catch {
       return null;
     }
@@ -158,9 +143,7 @@ export class CustomDateFormatService {
   private getWeekdayNames(): { full: string[]; abbreviated: string[] } {
     if (!this.weekdayNames.has(this.locale)) {
       const weekdays = Array.from({ length: 7 }).map((_, i) => {
-        // Use Monday-based calculation, then convert to Sunday-first
-        const dayIndex = (i + 1) % 7;
-        const date = new Date(2000, 0, 2 + dayIndex); // Start from Sunday, Jan 2, 2000
+        const date = new Date(2000, 0, 2 + i); // Jan 2, 2000 was a Sunday
         return {
           full: date.toLocaleDateString(this.locale, { weekday: 'long' }),
           abbreviated: date.toLocaleDateString(this.locale, {
