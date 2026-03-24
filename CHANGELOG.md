@@ -2,16 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** March 24, 2026 · **Current stable:** v2.2.10
+**Last updated:** March 24, 2026 · **Current stable:** v2.2.11
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.2.10] - 2026-03-24
+## [2.2.11] - 2026-03-24
 
 ### Fixed
 
+- **Documentation**: Reduced `README.md` size to comply with npm registry metadata limits (64KB), ensuring it displays correctly on the package page.
 - **Package Config**: Fixed `exports` in `package.json` to properly expose `styles/` and `types/`. This resolves "Could not resolve ngxsmk-datepicker/styles/ionic-integration.css" errors in consuming apps.
+
+## [2.2.10] - 2026-03-24 [BROKEN - README ISSUE]
+
+### Fixed
+- Includes all fixes from v2.2.9.
 
 ## [2.2.9] - 2026-03-24 [BROKEN - PUBLISHING ISSUE]
 
