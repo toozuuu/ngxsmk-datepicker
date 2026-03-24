@@ -2,7 +2,7 @@
 
 This roadmap outlines the planned features, improvements, and enhancements for ngxsmk-datepicker. We welcome community input and contributions!
 
-**Last updated:** March 24, 2026 · **Current stable:** v2.2.9
+**Last updated:** March 24, 2026 · **Current stable:** v2.2.10
 
 ## 🎯 Current Focus (Q1 2026 - Q2 2026)
 

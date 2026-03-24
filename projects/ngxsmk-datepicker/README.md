@@ -25,15 +25,15 @@
 
 ---
 
-**Last updated:** March 24, 2026 · **Current stable:** v2.2.9
+**Last updated:** March 24, 2026 · **Current stable:** v2.2.10
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.2.9` restores correct **npm** artifacts (compiled `fesm2022/` and types), adds range-mode **`allowSameDay`** for single-day selections, and continues to ship **IANA timezone** support, validation fixes, and strict TypeScript improvements from the v2.2.x line.
+> **Stable Release**: `v2.2.10` restores correct **npm** artifacts (compiled `fesm2022/` and types), adds range-mode **`allowSameDay`** for single-day selections, and continues to ship **IANA timezone** support, validation fixes, and strict TypeScript improvements from the v2.2.x line.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.9 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.10 or later.
 
 ---
 
@@ -591,7 +591,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.2.9 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.2.10 now features **full localization synchronization** for:
 
 - 🇺🇸 English (`en`)
 - 🇩🇪 German (`de`)
@@ -850,9 +850,9 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-### **v2.2.9** (Current Stable)
+### **v2.2.10** (Current Stable)
 
-- 🎉 **Version Update**: Updated to version 2.2.9.
+- 🎉 **Version Update**: Updated to version 2.2.10.
 - 📦 **npm**: Published tarballs again include `fesm2022/` and TypeScript declarations (release pipeline runs `ng build` before publish).
 - 📅 **Range mode**: Optional `allowSameDay` for single-day ranges (double-click same date or close popover after one day).
 - ✅ **Prior fixes**: IANA timezone “Today”, `minDate` normalization, strict typings, and UI polish from v2.2.6 remain included.
@@ -860,7 +860,7 @@ For a full list of changes, please refer to the [CHANGELOG.md](https://github.co
 ### **v1.9.24**
 
 - 🎉 **Version Update**: Updated to version 1.9.24
-- ✅ **Stable Release**: Version 2.2.9 is the current stable version
+- ✅ **Stable Release**: Version 2.2.10 is the current stable version
 
 ### **v1.9.23**
 

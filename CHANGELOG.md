@@ -2,12 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** March 24, 2026 · **Current stable:** v2.2.9
+**Last updated:** March 24, 2026 · **Current stable:** v2.2.10
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.2.9] - 2026-03-24
+## [2.2.10] - 2026-03-24
+
+### Fixed
+
+- **Package Config**: Fixed `exports` in `package.json` to properly expose `styles/` and `types/`. This resolves "Could not resolve ngxsmk-datepicker/styles/ionic-integration.css" errors in consuming apps.
+
+## [2.2.9] - 2026-03-24 [BROKEN - PUBLISHING ISSUE]
 
 ### Fixed
 
